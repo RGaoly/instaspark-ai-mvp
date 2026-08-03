@@ -1,0 +1,19 @@
+{
+  "mission_id": "launch_x5_us_001",
+  "product": "Insta360 X5",
+  "market": "United States",
+  "language": "English",
+  "max_cost_usd": 12000,
+  "min_brand_safety": 72,
+  "target_topics": [
+    "cycling",
+    "travel",
+    "outdoor"
+  ],
+  "target_styles": [
+    "POV",
+    "tutorial",
+    "cinematic"
+  ],
+  "objective": "Drive awareness and early adoption among action-camera users."
+}

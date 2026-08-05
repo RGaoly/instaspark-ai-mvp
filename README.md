@@ -2,7 +2,8 @@
 
 > Evidence-grounded creator matching and localized collaboration brief generation for global product launches.
 
-这是一个面向全球新品上市场景的 AI 产品作品集项目。它将一个产品任务转化为：
+这是一个面向全球新品上市场景的 AI 产品作品集项目。访问网页看成品：https://instaspark-ai-mvp.streamlit.app
+它将一个产品任务转化为：
 
 1. 可解释的达人候选排序；
 2. 内容证据与风险提示；

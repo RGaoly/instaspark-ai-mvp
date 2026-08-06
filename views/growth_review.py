@@ -2,211 +2,141 @@ from __future__ import annotations
 
 import streamlit as st
 
-from components.data import GROWTH_KPIS
-from components.html import esc, mission_chip, page_header, pct_width
+from components.html import esc, mission_chip, page_header
 from components.shell import render_demo_notice, render_topbar
+from components.state import (
+    active_context,
+    active_context_label,
+    performance_events,
+    ranking,
+    workflow_summary,
+)
 
 
-def _kpi_strip() -> str:
-    cards = []
-    for label, value, note in GROWTH_KPIS:
-        cards.append(
-            '<div class="is-kpi-mini">'
-            f'<label>{esc(label)}</label><strong>{esc(value)}</strong><small>{esc(note)}</small>'
-            "</div>"
-        )
-    cards.append(
-        '<div class="is-kpi-mini has-donut">'
-        "<div>"
-        "<label>Budget utilization</label>"
-        "<strong>78%</strong>"
-        "<small>$56.5K / $64K</small>"
-        "</div>"
-        '<div class="is-mini-donut" style="--pct:78"><span>78</span></div>'
-        "</div>"
-    )
-    return '<div class="is-kpi-strip">' + "".join(cards) + "</div>"
+def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> str:
+    orders = sum(int(event.get("orders", 0)) for event in events)
+    revenue = sum(float(event.get("revenue_usd", 0)) for event in events)
+    spend = sum(float(event.get("spend_usd", 0)) for event in events)
+    roi = revenue / spend if spend else 0
+    adoption_base = max(sum(summary.values()) - summary.get("closed_lost", 0), 1)
+    adopted = sum(summary.get(state, 0) for state in ["approved", "contacted", "negotiating", "contracted", "content_in_review", "published", "measured"])
+    metrics = [
+        ("Shortlist adoption", f"{adopted / adoption_base:.0%}", "From this entry"),
+        ("Contacted", str(summary.get("contacted", 0)), "Audited workflow"),
+        ("Published", str(summary.get("published", 0)), "Audited workflow"),
+        ("Measured", str(summary.get("measured", 0)), "Performance linked"),
+        ("Attributed orders", f"{orders:,}", "Recorded events"),
+        ("Revenue", f"${revenue:,.0f}", "Recorded events"),
+        ("ROI", f"{roi:.2f}x", "Revenue / spend"),
+        ("Budget utilization", f"{spend / budget:.0%}" if budget else "—", f"${spend:,.0f} / ${budget:,.0f}"),
+    ]
+    return '<div class="is-kpi-strip">' + "".join(
+        '<div class="is-kpi-mini">'
+        f'<label>{esc(label)}</label><strong>{esc(value)}</strong><small>{esc(note)}</small></div>'
+        for label, value, note in metrics
+    ) + "</div>"
 
 
-def _funnel() -> str:
+def _funnel(pool: int, summary: dict[str, int], events: list[dict]) -> str:
+    active_from = lambda states: sum(summary.get(state, 0) for state in states)
     steps = [
-        ("Candidate pool", "30"),
-        ("Matched", "10"),
-        ("Contacted", "6"),
-        ("Published", "2"),
-        ("Attributed orders", "342"),
+        ("Candidate pool", pool),
+        ("Shortlisted", active_from(["shortlisted", "approved", "contacted", "negotiating", "contracted", "content_in_review", "published", "measured"])),
+        ("Contacted", active_from(["contacted", "negotiating", "contracted", "content_in_review", "published", "measured"])),
+        ("Published", active_from(["published", "measured"])),
+        ("Measured events", len(events)),
     ]
-    return (
-        '<div class="is-funnel">'
-        + "".join(
-            f'<div class="is-funnel-step"><div class="is-funnel-shape"></div>'
-            f"<b>{esc(name)}</b><small>{esc(value)}</small></div>"
-            for name, value in steps
+    return '<div class="is-funnel">' + "".join(
+        '<div class="is-funnel-step"><div class="is-funnel-shape"></div>'
+        f'<b>{esc(label)}</b><small>{value}</small></div>' for label, value in steps
+    ) + "</div>"
+
+
+def _performance_table(events: list[dict]) -> str:
+    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Content", "Market", "Orders", "Revenue", "Spend"])
+    if not events:
+        body = '<tr><td colspan="6">No performance events recorded for this entry.</td></tr>'
+    else:
+        body = "".join(
+            "<tr>"
+            f'<td>{esc(event.get("creator_id", "—"))}</td>'
+            f'<td>{esc(event.get("content_asset_id", "—"))}</td>'
+            f'<td>{esc(event.get("market", "—"))}</td>'
+            f'<td>{int(event.get("orders", 0)):,}</td>'
+            f'<td>${float(event.get("revenue_usd", 0)):,.0f}</td>'
+            f'<td>${float(event.get("spend_usd", 0)):,.0f}</td></tr>'
+            for event in events
         )
-        + "</div>"
-    )
-
-
-def _bar_chart() -> str:
-    groups = [
-        ("Travel", 112, 92),
-        ("Adventure", 82, 72),
-        ("Tech", 58, 64),
-        ("Lifestyle", 46, 54),
-        ("Micro", 34, 38),
-    ]
-    max_value = max(max(a, b) for _, a, b in groups)
-    html = []
-    for label, revenue, roi in groups:
-        html.append(
-            '<div class="is-bar-group">'
-            f'<div class="is-bar blue" style="height:{pct_width(revenue, max_value)}%"></div>'
-            f'<div class="is-bar green" style="height:{pct_width(roi, max_value)}%"></div>'
-            f'<span class="is-bar-label">{esc(label)}</span></div>'
-        )
-    return '<div class="is-bar-chart">' + "".join(html) + "</div>"
-
-
-def _market_table() -> str:
-    rows = [
-        ("🇺🇸 US", "$280,000", "$200,172", "128", "2,164", "$258,410", "5.2x"),
-        ("🇲🇽 Mexico", "$120,000", "$90,432", "72", "1,136", "$116,340", "4.0x"),
-        ("🇯🇵 Japan", "$80,000", "$59,262", "57", "492", "$106,340", "3.6x"),
-    ]
-    head = "".join(f"<th>{h}</th>" for h in ["Market", "Budget", "Spent", "Published", "Orders", "Revenue", "ROI"])
-    body = "".join("<tr>" + "".join(f"<td>{esc(x)}</td>" for x in row) + "</tr>" for row in rows)
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
 
 
-def _content_table() -> str:
-    rows = [
-        ("POV action & stunts", "3.2M", "4.8%", "$161K", "6.1x"),
-        ("Trip cameras", "2.6M", "5.4%", "$113K", "4.3x"),
-        ("AI edit & hyperlapse", "2.1M", "4.1%", "$93K", "4.1x"),
-        ("Tech reviews", "1.8M", "3.6%", "$72K", "3.2x"),
-    ]
-    head = "".join(f"<th>{h}</th>" for h in ["Content angle", "Views", "Eng. rate", "Revenue", "ROI"])
-    body = "".join("<tr>" + "".join(f"<td>{esc(x)}</td>" for x in row) + "</tr>" for row in rows)
-    return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
-
-
-def _attribution_donut() -> str:
-    return """
-    <div style="display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center">
-      <div class="is-donut" style="--pct:78;width:105px;height:105px;background:conic-gradient(#2577F1 0 45%,#16A36A 45% 67%,#7B61FF 67% 87%,#62C6C9 87% 100%)">
-        <span style="font-size:12px;text-align:center">3,842<br/><small style="font-size:6px">orders</small></span>
-      </div>
-      <div class="is-card-caption">
-        ● Affiliate link 45.3%<br/><br/>
-        ● Coupon codes 21.9%<br/><br/>
-        ● Product page assisted 19.9%<br/><br/>
-        ● View-through lift 12.8%
-      </div>
-    </div>
-    """
-
-
-def _budget_actions() -> str:
-    actions = [
-        ("green", "Increase", "Increase US travel creators", "Highest ROI cohort at 5.2x and strong order quality.", "+$64K revenue"),
-        ("orange", "Reduce", "Reduce low-publish cohorts", "Low publish rate and rising coordination cost.", "-$34K spend"),
-        ("blue", "Replicate", "Replicate Mexico POV angle", "Action content drives high ROI in Mexico.", "+$30K revenue"),
-        ("", "Custom", "Create custom action", "Build a new budget action from operator strategy.", "Human review"),
-    ]
-    return (
-        '<div class="is-budget-actions">'
-        + "".join(
-            f'<div class="is-action-card {tone}">'
-            f'<div style="margin-bottom:5px"><span class="is-badge is-badge-{"green" if tone=="green" else "orange" if tone=="orange" else "blue" if tone=="blue" else "gray"}">{esc(tag)}</span></div>'
-            f"<h4>{esc(title)}</h4><p>{esc(body)}</p>"
-            f'<div class="is-action-impact">{esc(impact)} →</div></div>'
-            for tone, tag, title, body, impact in actions
-        )
-        + "</div>"
-    )
+def _next_actions(context: dict, summary: dict[str, int], events: list[dict]) -> str:
+    actions = []
+    if summary.get("approved", 0):
+        actions.append(("blue", "Execute", "Contact approved creators", "Approved creators are waiting for outreach.", "Go to Outreach"))
+    if summary.get("published", 0) and not events:
+        actions.append(("orange", "Measure", "Attach performance evidence", "Published work has no linked attribution event.", "Add data source"))
+    if not actions:
+        actions.append(("green", "On track", "Continue the governed workflow", f'Use evidence from {context.get("title", "this entry")} for the next decision.', "Human review"))
+    return '<div class="is-budget-actions">' + "".join(
+        f'<div class="is-action-card {tone}"><div><span class="is-badge is-badge-{tone}">{esc(tag)}</span></div>'
+        f'<h4>{esc(title)}</h4><p>{esc(body)}</p><div class="is-action-impact">{esc(impact)} →</div></div>'
+        for tone, tag, title, body, impact in actions
+    ) + "</div>"
 
 
 def render() -> None:
     render_topbar()
+    context = active_context()
+    summary = workflow_summary()
+    events = performance_events()
+    ranked = ranking()
+    budget = float(context.get("budget_usd", 0))
+
     st.markdown(
         page_header(
             "Growth Review",
-            "Validate creator marketing outcomes and guide budget allocation.",
+            "Validate outcomes linked to the active entry; missing data remains explicit.",
             "Outcome learning",
             "blue",
         ),
         unsafe_allow_html=True,
     )
 
-    controls = st.columns([0.38, 0.22, 0.2, 0.1, 0.1], vertical_alignment="center")
+    controls = st.columns([0.48, 0.24, 0.18, 0.1], vertical_alignment="center")
     with controls[0]:
-        st.markdown(
-            mission_chip("Mission: Insta360 X5 AntiGravity AI Launch"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
     controls[1].selectbox(
         "Period",
-        ["May 1 - May 31, 2026", "Apr 1 - Apr 30, 2026", "Q1 2026"],
+        [context.get("campaign_dates", "Active entry period"), "All recorded events"],
         label_visibility="collapsed",
     )
-    controls[2].selectbox(
-        "Market",
-        ["All markets", "United States", "Mexico", "Japan"],
-        label_visibility="collapsed",
-    )
+    markets = context.get("markets") or [context.get("market", "All markets")]
+    controls[2].selectbox("Market", ["All markets", *markets], label_visibility="collapsed")
     controls[3].button("Export", use_container_width=True)
-    controls[4].button("Filters", use_container_width=True)
 
-    st.markdown(_kpi_strip(), unsafe_allow_html=True)
+    st.markdown(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
 
-    r1c1, r1c2 = st.columns([0.42, 0.58], gap="small")
-    with r1c1:
+    left, right = st.columns([0.38, 0.62], gap="small")
+    with left:
         st.markdown(
             '<div class="is-chart"><div class="is-chart-title">Creator funnel</div>'
-            + _funnel()
+            + _funnel(len(ranked), summary, events)
             + "</div>",
             unsafe_allow_html=True,
         )
-    with r1c2:
+    with right:
         st.markdown(
-            '<div class="is-chart"><div class="is-chart-title">Creator cohort performance &nbsp; '
-            '<span style="color:#2577F1">■ Revenue</span> '
-            '<span style="color:#16A36A">■ ROI</span></div>'
-            + _bar_chart()
-            + "</div>",
-            unsafe_allow_html=True,
-        )
-
-    r2c1, r2c2, r2c3 = st.columns([0.34, 0.34, 0.32], gap="small")
-    with r2c1:
-        st.markdown(
-            '<div class="is-card"><div class="is-panel-head">'
-            '<span class="is-panel-title">Market performance</span>'
-            '<span class="is-panel-link">View all →</span></div>'
-            f'<div class="is-panel-body">{_market_table()}</div></div>',
-            unsafe_allow_html=True,
-        )
-    with r2c2:
-        st.markdown(
-            '<div class="is-card"><div class="is-panel-head">'
-            '<span class="is-panel-title">Content breakdown</span>'
-            '<span class="is-panel-link">View all →</span></div>'
-            f'<div class="is-panel-body">{_content_table()}</div></div>',
-            unsafe_allow_html=True,
-        )
-    with r2c3:
-        st.markdown(
-            '<div class="is-card"><div class="is-panel-head">'
-            '<span class="is-panel-title">Attribution breakdown</span></div>'
-            f'<div class="is-panel-body">{_attribution_donut()}</div></div>',
+            '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Linked performance events</span>'
+            '<span class="is-panel-link">No inferred attribution</span></div>'
+            f'<div class="is-panel-body">{_performance_table(events)}</div></div>',
             unsafe_allow_html=True,
         )
 
     st.markdown(
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
-        '<span class="is-panel-title">Budget actions · Next best action</span>'
-        '<span class="is-panel-link">Human approval required</span></div>'
-        f'<div class="is-panel-body">{_budget_actions()}</div></div>',
+        '<span class="is-panel-title">Next best action</span><span class="is-panel-link">Human approval required</span></div>'
+        f'<div class="is-panel-body">{_next_actions(context, summary, events)}</div></div>',
         unsafe_allow_html=True,
     )
 

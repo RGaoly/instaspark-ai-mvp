@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import streamlit as st
 
-from components.html import ai_badge, avatar, badge, esc, page_header
+from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
 from components.shell import render_demo_notice, render_topbar
-from components.state import active_mission, ranking, select_creator
+from components.state import active_context_label, active_mission, ranking, select_creator
 
 
 def _mission_creator_cards(mission, creator) -> str:
     markets = " · ".join(mission.get("markets", ["United States", "Mexico"]))
     return f"""
     <div class="is-studio-card">
-      <h4>Mission context</h4>
+      <h4>Active entry context</h4>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:7px">
         <div class="is-camera" style="width:32px;height:52px;border-radius:8px"></div>
         <div><b style="font-size:9px">{esc(mission['product'])}</b><br/>{badge('Active','green')}</div>
@@ -46,24 +46,29 @@ def _mission_creator_cards(mission, creator) -> str:
     """
 
 
-def _brief_content(creator) -> str:
-    _ = creator
+def _brief_content(mission: dict, creator: dict) -> str:
+    product = esc(mission.get("product", "Product"))
+    objective = esc(mission.get("objective", "Validate product-market fit with creator-led content."))
+    market = esc(mission.get("market", "Target market"))
+    language = esc(mission.get("language", "Local language"))
+    topics = esc(", ".join(mission.get("target_topics", [])) or "creator-relevant use cases")
+    styles = esc(", ".join(mission.get("target_styles", [])) or "the creator's native style")
     return f"""
     <div class="is-brief-grid">
       <div class="is-brief-block">
         <h4>Objective</h4>
-        <p>Drive awareness and consideration by demonstrating all-day shooting and reframing in a real creator-led adventure.</p>
+        <p>{objective}</p>
         <h4 style="margin-top:10px">Audience</h4>
-        <p>Action-camera users, outdoor creators and travel storytellers across US + Mexico.</p>
+        <p>{market} audiences interested in {topics}.</p>
       </div>
       <div class="is-brief-block">
         <h4>Core Message</h4>
-        <p>Capture every angle without missing the moment — Insta360 X5 keeps the story open.</p>
+        <p>Show how {product} supports a credible {styles} story in the creator's own voice.</p>
         <h4 style="margin-top:10px">Must-Show</h4>
         <ul>
-          <li>8K 360 capture in motion</li>
-          <li>Reframe / Invisible Selfie Stick</li>
-          <li>Low-light or night proof</li>
+          <li>Product in a real use case</li>
+          <li>One approved value proposition</li>
+          <li>Evidence for every product claim</li>
           <li>Natural creator verdict</li>
         </ul>
       </div>
@@ -101,31 +106,31 @@ def _brief_content(creator) -> str:
     <div class="is-localized">
       <div class="is-locale-card">
         <div class="is-locale-head">
-          <h4>🇺🇸 United States · English</h4>
+          <h4>{market} · {language}</h4>
           {ai_badge("AI Generated")}
         </div>
-        <p><b>Hook</b><br/>All day. All night. All angles. This is the Insta360 X5.</p>
-        <p><b>Caption</b><br/>From sunrise rides to city nights, the X5 captures it all in stunning 8K 360.</p>
-        <p><b>CTA</b><br/>Tap the link to explore the Insta360 X5.</p>
+        <p><b>Hook</b><br/>A creator-native opening built around {topics}.</p>
+        <p><b>Caption</b><br/>See how {product} fits a real {market} use case.</p>
+        <p><b>CTA</b><br/>Use the approved campaign link to explore {product}.</p>
       </div>
       <div class="is-locale-card">
         <div class="is-locale-head">
-          <h4>🇲🇽 Mexico · Español</h4>
+          <h4>Localization guardrail</h4>
           {ai_badge("AI Generated")}
         </div>
-        <p><b>Hook</b><br/>Todo el día. Toda la noche. Todos los ángulos.</p>
-        <p><b>Caption</b><br/>Desde rutas al amanecer hasta noches en la ciudad, la X5 captura todo en 8K 360.</p>
-        <p><b>CTA</b><br/>Toca el enlace para conocer la Insta360 X5.</p>
+        <p><b>Requirement</b><br/>Adapt meaning and cultural references for {market}; do not translate claims that have not been verified.</p>
+        <p><b>Evidence</b><br/>Attach the approved product source before external review.</p>
+        <p><b>Owner</b><br/>{esc(mission.get('owner', 'Mission owner'))}</p>
       </div>
     </div>
     """
 
 
-def _right_controls() -> str:
+def _right_controls(mission: dict) -> str:
     tones = ["Adventurous", "Authentic", "Inspiring", "Innovative"]
     compliance = [
         "Brand safety cleared",
-        "Product facts verified",
+        "Product facts require source verification",
         "Disclosure guidance attached",
         "Platform format compliant",
     ]
@@ -136,7 +141,7 @@ def _right_controls() -> str:
         "Must-show features listed",
         "Shot list complete",
         "Do / Don't reviewed",
-        "Localized US + ES variants",
+        "Localized market variant",
         "CTA & disclosure present",
     ]
     return f"""
@@ -146,8 +151,8 @@ def _right_controls() -> str:
     </div>
     <div class="is-studio-card">
       <h4>Market & language</h4>
-      <p><b>Primary</b><br/>🇺🇸 United States · English</p>
-      <p><b>Additional</b><br/>🇲🇽 Mexico · Español</p>
+      <p><b>Primary</b><br/>{esc(mission.get('market', 'Target market'))} · {esc(mission.get('language', 'Local language'))}</p>
+      <p><b>Additional</b><br/>{esc(' · '.join(mission.get('markets', [])[1:]) or 'Not configured')}</p>
     </div>
     <div class="is-studio-card">
       <h4>Safety & compliance {badge('Passed','green')}</h4>
@@ -168,11 +173,19 @@ def render() -> None:
     mission = active_mission()
     ranked = ranking()
     if ranked.empty:
-        st.warning("No eligible creators available.")
+        st.warning("Link the active Creator Opportunity to a Launch Mission or choose a mission with eligible creators.")
         return
 
     creator_names = ranked.head(10)["creator_name"].tolist()
-    selected_name = st.selectbox("Creator", creator_names, label_visibility="collapsed")
+    selected_id = st.session_state.get("selected_creator_id")
+    selected_matches = ranked[ranked["creator_id"] == selected_id]
+    preferred_name = selected_matches.iloc[0]["creator_name"] if not selected_matches.empty else creator_names[0]
+    selected_name = st.selectbox(
+        "Creator",
+        creator_names,
+        index=creator_names.index(preferred_name),
+        label_visibility="collapsed",
+    )
     creator = ranked[ranked["creator_name"] == selected_name].iloc[0].to_dict()
     select_creator(creator["creator_id"])
 
@@ -187,6 +200,7 @@ def render() -> None:
             + f'<div style="margin-top:-8px;margin-bottom:10px">{ai_badge("AI Content Studio")}</div>',
             unsafe_allow_html=True,
         )
+        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
     with head_r:
         e1, e2, e3 = st.columns(3)
         with e1:
@@ -212,7 +226,7 @@ def render() -> None:
         )
         tabs = st.tabs(["Brief", "Script", "Hooks", "Captions", "Localized variants"])
         with tabs[0]:
-            st.markdown(_brief_content(creator), unsafe_allow_html=True)
+            st.markdown(_brief_content(mission, creator), unsafe_allow_html=True)
         with tabs[1]:
             st.markdown(
                 '<div class="is-card is-card-pad"><div class="is-card-title">30–60 second script</div>'
@@ -246,8 +260,8 @@ def render() -> None:
                 unsafe_allow_html=True,
             )
         with tabs[4]:
-            st.markdown(_brief_content(creator), unsafe_allow_html=True)
+            st.markdown(_brief_content(mission, creator), unsafe_allow_html=True)
     with right:
-        st.markdown(_right_controls(), unsafe_allow_html=True)
+        st.markdown(_right_controls(mission), unsafe_allow_html=True)
 
     render_demo_notice()

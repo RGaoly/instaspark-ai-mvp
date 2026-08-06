@@ -15,20 +15,32 @@ from components.html import (
     scorebar,
 )
 from components.shell import render_demo_notice, render_topbar
-from components.state import ranking, select_creator, selected_creator
+from components.state import (
+    active_context,
+    active_context_label,
+    ranking,
+    select_creator,
+    selected_creator,
+    transition_creator_state,
+)
 
 
-def _filters() -> str:
+def _filters(context: dict) -> str:
+    market = context.get("market", "Any market")
+    language = context.get("language", "Any language")
+    topics = " · ".join(context.get("target_topics", [])[:2]) or "Any topic"
+    styles = " · ".join(context.get("target_styles", [])[:2]) or "Any style"
     filters = [
-        ("Market", "US + Mexico", True),
+        ("Market", market, True),
         ("Platform", "YouTube · IG · TikTok", True),
         ("Followers", "100K – 1M", False),
         ("Avg views", "50K – 500K", False),
         ("Engagement", "≥ 2.5%", True),
-        ("Language", "EN + ES", True),
+        ("Language", language, True),
         ("Commercial", "Open to collab", False),
         ("Risk level", "Low – Medium", False),
-        ("Content style", "POV · Travel", True),
+        ("Topics", topics, True),
+        ("Content style", styles, True),
     ]
     chips = [
         f'<div class="is-filter-chip{" active" if active else ""}">{esc(label)}'
@@ -86,13 +98,13 @@ def _creator_table(ranked) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
 
 
-def _detail_panel(creator: dict) -> str:
+def _detail_panel(creator: dict, context: dict) -> str:
     reasons = list(creator.get("positives", [])[:4])
     defaults = [
-        "Strong audience overlap with action-camera buyers",
-        "Recent POV travel content matches X5 launch narrative",
-        "Commercial readiness and brand safety above threshold",
-        "Predicted performance lift vs category baseline",
+        "Eligible under the active entry's hard gates",
+        "Evidence requires operator verification before outreach",
+        "Commercial terms require direct confirmation",
+        "No outcome prediction is treated as observed performance",
     ]
     while len(reasons) < 4:
         reasons.append(defaults[len(reasons)])
@@ -135,14 +147,14 @@ def _detail_panel(creator: dict) -> str:
         <div class="is-grid-2" style="margin-top:10px">
           <div class="is-lift-panel">
             <h4>Audience overlap</h4>
-            <div class="is-donut" style="--pct:83;width:52px;height:52px"><span>83%</span></div>
-            <small style="font-size:7px;color:#879198;display:block;margin-top:6px">US outdoor + travel cohort</small>
+            <div class="is-donut" style="--pct:{creator['audience_fit']:.0f};width:52px;height:52px"><span>{creator['audience_fit']:.0f}%</span></div>
+            <small style="font-size:7px;color:#879198;display:block;margin-top:6px">{esc(context.get('market', 'Target market'))} audience cohort</small>
           </div>
           <div class="is-lift-panel">
-            <h4>Estimated performance lift</h4>
-            {scorebar('Views', 76, '#2577F1')}
-            {scorebar('Engagement', 82)}
-            {scorebar('Conversions', 68, '#F5A623')}
+            <h4>Observed-input score components</h4>
+            {scorebar('Content fit', creator['content_fit'], '#2577F1')}
+            {scorebar('Momentum', creator['momentum'])}
+            {scorebar('Commercial fit', creator['commercial_fit'], '#F5A623')}
           </div>
         </div>
       </div>
@@ -152,11 +164,15 @@ def _detail_panel(creator: dict) -> str:
 
 def render() -> None:
     render_topbar()
+    context = active_context()
     ranked = ranking()
     if ranked.empty:
-        st.warning(
-            "No creators pass the current mission gates. Adjust market, budget, or safety threshold on Launch Mission."
-        )
+        if context.get("entry_type") == "opportunity" and not context.get("mission_id"):
+            st.warning("Link this Creator Opportunity to a Launch Mission before creating Match records.")
+        else:
+            st.warning(
+                "No creators pass the active entry's gates. Adjust its market, budget, language, or safety threshold."
+            )
         return
 
     head_l, head_r = st.columns([1, 0.42], vertical_alignment="top")
@@ -164,13 +180,13 @@ def render() -> None:
         st.markdown(
             page_header(
                 "Creator Search & Match",
-                "Find creators whose content, audience and commercial readiness fit the launch mission.",
+                "Find creators whose content, audience and commercial readiness fit the active entry.",
                 "Creator discovery",
             ),
             unsafe_allow_html=True,
         )
         st.markdown(
-            mission_chip("Mission: Insta360 X5 / US + Mexico"),
+            mission_chip(active_context_label()),
             unsafe_allow_html=True,
         )
     with head_r:
@@ -186,29 +202,43 @@ def render() -> None:
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(
-        nl_search_shell("Describe the creator profile you need — ranked against the active mission"),
+        nl_search_shell("Describe the creator profile you need — ranked against the active entry"),
         unsafe_allow_html=True,
     )
     query = st.text_input(
         "Search creators",
-        value="Find mid-tier creators for cycling, surfing and travel who can demonstrate immersive POV storytelling",
+        value=(
+            f"Find creators in {context.get('market', 'the target market')} for "
+            f"{', '.join(context.get('target_topics', [])) or 'the active opportunity'}"
+        ),
         label_visibility="collapsed",
         key="creator_nl_query",
     )
     _ = query  # keep widget wired for demo interaction; ranking stays mission-aware
-    st.markdown(_filters(), unsafe_allow_html=True)
+    st.markdown(_filters(context), unsafe_allow_html=True)
 
     options = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     toolbar_left, toolbar_mid, toolbar_right = st.columns([0.65, 0.2, 0.15], vertical_alignment="center")
     with toolbar_left:
         st.markdown(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{min(8, len(ranked))} creators found · mission-aware ranking · {ai_badge("Ranked by InstaSpark AI")}'
+            f'{min(8, len(ranked))} creators found · context-aware ranking · {ai_badge("Ranked by InstaSpark AI")}'
             f'</div>',
             unsafe_allow_html=True,
         )
     with toolbar_mid:
-        selected_name = st.selectbox("Inspect creator", list(options), label_visibility="collapsed")
+        option_names = list(options)
+        selected_id = st.session_state.get("selected_creator_id")
+        preferred_name = next(
+            (name for name, creator_id in options.items() if creator_id == selected_id),
+            option_names[0],
+        )
+        selected_name = st.selectbox(
+            "Inspect creator",
+            option_names,
+            index=option_names.index(preferred_name),
+            label_visibility="collapsed",
+        )
         select_creator(options[selected_name])
     with toolbar_right:
         st.button("Sort: Match score", use_container_width=True)
@@ -218,13 +248,21 @@ def render() -> None:
         st.markdown(_creator_table(ranked), unsafe_allow_html=True)
     with aside:
         creator = selected_creator()
-        st.markdown(_detail_panel(creator), unsafe_allow_html=True)
+        st.markdown(_detail_panel(creator, context), unsafe_allow_html=True)
         a, b, c = st.columns(3)
         if a.button("Shortlist", type="primary", use_container_width=True):
             cid = creator["creator_id"]
-            if cid not in st.session_state.shortlist_ids:
-                st.session_state.shortlist_ids.append(cid)
-            st.toast("Added to shortlist")
+            try:
+                transition_creator_state(
+                    cid,
+                    "shortlisted",
+                    actor="Olivia Chen",
+                    reason="Operator shortlisted from Search & Match",
+                    evidence=list(creator.get("evidence", [])[:2]),
+                )
+                st.toast("Added to shortlist with an audit event")
+            except ValueError as exc:
+                st.info(str(exc))
         if b.button("Compare", use_container_width=True):
             cid = creator["creator_id"]
             if cid not in st.session_state.compare_ids:

@@ -4,7 +4,15 @@ import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header, scorebar
 from components.shell import render_demo_notice, render_topbar
-from components.state import ranking, save_decision
+from components.state import (
+    active_context,
+    active_context_label,
+    creator_state,
+    ranking,
+    save_decision,
+    select_creator,
+    transition_creator_state,
+)
 
 
 def _compare_grid(rows) -> str:
@@ -16,8 +24,8 @@ def _compare_grid(rows) -> str:
         ("Engagement rate", lambda r: f"{r['engagement_rate']:.1f}%"),
         ("Brand safety", lambda r: f"{r['brand_safety']:.0f}/100"),
         ("Estimated cost", lambda r: f"USD {int(r['estimated_cost_usd']):,}"),
-        ("Predicted publish rate", lambda r: f"{int(45+r['commercial_fit']*.4)}%"),
-        ("Predicted orders", lambda r: f"{int(r['total_score']*12):,}"),
+        ("Posting consistency", lambda r: f"{float(r['posting_consistency']) * 100:.0f}%"),
+        ("Historical reliability", lambda r: f"{float(r['historical_reliability']) * 100:.0f}%"),
         ("Recommended market", lambda r: r["primary_market"]),
     ]
     cells = [
@@ -43,7 +51,7 @@ def _compare_grid(rows) -> str:
     return '<div class="is-compare-grid">' + "".join(cells) + "</div>"
 
 
-def _evidence_panel(creator) -> str:
+def _evidence_panel(creator, context: dict) -> str:
     evidence = list(creator.get("evidence", [])[:3])
     while len(evidence) < 3:
         evidence.append("Representative content evidence available for review")
@@ -59,7 +67,7 @@ def _evidence_panel(creator) -> str:
             f'<div class="is-risk"><div class="is-video" style="width:96px;aspect-ratio:16/9;flex:0 0 96px;border-radius:8px"></div>'
             f'<div><b>{esc(item)}</b>'
             f'<div class="is-evidence-meta">{tag_html}<span class="is-evidence-tag">{42 + idx * 18}s</span></div>'
-            f'<small style="margin-top:4px">Matched to X5 immersive storytelling brief</small></div></div>'
+            f'<small style="margin-top:4px">Matched to {esc(context.get("title", "the active entry"))}</small></div></div>'
         )
     return (
         '<div class="is-card"><div class="is-panel-head">'
@@ -119,9 +127,13 @@ def _risk_panel(creator) -> str:
 
 def render() -> None:
     render_topbar()
+    context = active_context()
     ranked = ranking()
     if ranked.empty:
-        st.warning("No eligible creators available.")
+        if context.get("entry_type") == "opportunity" and not context.get("mission_id"):
+            st.warning("Link this Creator Opportunity to a Launch Mission before comparing Match records.")
+        else:
+            st.warning("No eligible creators available.")
         return
 
     head_l, head_r = st.columns([1, 0.28], vertical_alignment="top")
@@ -135,7 +147,7 @@ def render() -> None:
             unsafe_allow_html=True,
         )
         st.markdown(
-            mission_chip("Insta360 X5 Launch - Japan Active", light=True),
+            mission_chip(active_context_label(), light=True),
             unsafe_allow_html=True,
         )
     with head_r:
@@ -148,20 +160,31 @@ def render() -> None:
         if not ranked[ranked["creator_id"] == cid].empty
     ][:3]
     if len(default_names) < 3:
-        default_names = ranked.head(3)["creator_name"].tolist()
+        default_names.extend(
+            name
+            for name in ranked["creator_name"].tolist()
+            if name not in default_names
+        )
+        default_names = default_names[:3]
     selected_names = st.multiselect(
         "Creators to compare", list(name_to_id), default=default_names, max_selections=3
     )
-    compare = ranked[ranked["creator_name"].isin(selected_names)].head(3)
+    compare = (
+        ranked.set_index("creator_name").loc[selected_names].reset_index()
+        if selected_names
+        else ranked.head(3)
+    )
     if compare.empty:
         compare = ranked.head(3)
 
     st.markdown(_compare_grid(compare), unsafe_allow_html=True)
     focus = compare.iloc[0]
+    select_creator(focus["creator_id"])
+    focus_state = creator_state(focus["creator_id"])
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
-        st.markdown(_evidence_panel(focus), unsafe_allow_html=True)
+        st.markdown(_evidence_panel(focus, context), unsafe_allow_html=True)
     with c2:
         st.markdown(_drivers_panel(focus), unsafe_allow_html=True)
     with c3:
@@ -170,22 +193,59 @@ def render() -> None:
     st.markdown(
         f'<div class="is-action-bar">'
         f'<div><b>Ready to take action on {esc(focus["creator_name"])}?</b>'
-        f'<small>Evidence reviewed · score drivers weighted · risks flagged for operator judgment.</small></div>'
+        f'<small>Current state: {esc(focus_state.replace("_", " ").title())} · evidence and risks require operator judgment.</small></div>'
         f'<div class="is-action-bar-actions"></div></div>',
         unsafe_allow_html=True,
     )
     _, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
     with a:
-        if st.button("Approve Outreach", type="primary", use_container_width=True):
-            save_decision(focus["creator_id"], "Approved", "Strong evidence and mission fit")
-            st.success("Approved and moved to Outreach Operations.")
+        if focus_state == "qualified":
+            if st.button("Add to Shortlist", type="primary", use_container_width=True):
+                transition_creator_state(
+                    focus["creator_id"],
+                    "shortlisted",
+                    actor=context.get("owner", "Operator"),
+                    reason="Evidence reviewed in Creator Compare",
+                    evidence=list(focus.get("evidence", [])[:2]),
+                )
+                st.success("Shortlisted with an audit event. Review once more to approve outreach.")
+                st.rerun()
+        elif focus_state == "shortlisted":
+            if st.button("Approve Outreach", type="primary", use_container_width=True):
+                save_decision(
+                    focus["creator_id"],
+                    "Approved",
+                    "Strong evidence and active-entry fit",
+                    reason_code="strong_fit",
+                    note="Evidence, score drivers and risks reviewed in Creator Compare.",
+                    evidence=list(focus.get("evidence", [])),
+                )
+                st.success("Approved and linked to one OutreachCase.")
+                st.rerun()
+        else:
+            st.button("Approval recorded", disabled=True, use_container_width=True)
     with b:
         if st.button("Request Review", use_container_width=True):
-            save_decision(focus["creator_id"], "Review", "Additional rights and availability checks")
+            save_decision(
+                focus["creator_id"],
+                "Review",
+                "Additional rights and availability checks",
+                reason_code="needs_review",
+                note="Rights or availability evidence is incomplete.",
+                evidence=list(focus.get("evidence", [])),
+            )
             st.info("Review request logged.")
     with c:
-        if st.button("Reject", use_container_width=True):
-            save_decision(focus["creator_id"], "Rejected", "Risk or cost concern")
-            st.warning("Rejection recorded with a reason code.")
+        if st.button("Reject", use_container_width=True, disabled=focus_state in {"contracted", "content_in_review", "published", "measured", "closed_lost"}):
+            save_decision(
+                focus["creator_id"],
+                "Rejected",
+                "Risk or cost concern",
+                reason_code="risk_or_cost",
+                note="Rejected after operator review of the active context.",
+                evidence=list(focus.get("evidence", [])),
+            )
+            st.warning("Rejection recorded with a reason code and terminal state.")
+            st.rerun()
 
     render_demo_notice()

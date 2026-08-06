@@ -2,15 +2,16 @@
 
 ## Goal
 
-Establish a stable six-module Streamlit product shell aligned with the original
-InstaSpark AI construction blueprint:
+Establish a stable dual-entry, seven-route Streamlit product shell aligned with
+the InstaSpark AI P0 product contract:
 
 1. Launch Mission
-2. Creator Search & Match
-3. Creator Compare
-4. Content Studio
-5. Outreach Operations
-6. Growth Review
+2. Creator Opportunity
+3. Creator Search & Match
+4. Creator Compare
+5. Content Studio
+6. Outreach Operations
+7. Growth Review
 
 ## Deliverables
 
@@ -24,7 +25,9 @@ InstaSpark AI construction blueprint:
 ## Acceptance criteria
 
 - `streamlit run app.py` opens Mission Control.
-- All six pages can be opened from the sidebar.
+- Both entry pages and all five shared-workspace pages can be opened from the sidebar.
+- All downstream pages derive their label and filters from one active context.
+- State changes follow the shared collaboration state machine and retain audit evidence.
 - All pages share the same visual system.
 - No page raises an exception.
 - Existing scoring tests continue to pass.

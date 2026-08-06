@@ -8,6 +8,7 @@ from components.theme import inject_theme
 from views import (
     content_studio,
     creator_compare,
+    creator_opportunity,
     creator_search,
     growth_review,
     launch_mission,
@@ -27,6 +28,7 @@ bootstrap_state()
 
 pages = [
     st.Page(launch_mission.render, title="Launch Mission", url_path="launch-mission", default=True),
+    st.Page(creator_opportunity.render, title="Creator Opportunity", url_path="creator-opportunity"),
     st.Page(creator_search.render, title="Creator Search & Match", url_path="creator-search"),
     st.Page(creator_compare.render, title="Creator Compare", url_path="creator-compare"),
     st.Page(content_studio.render, title="Content Studio", url_path="content-studio"),

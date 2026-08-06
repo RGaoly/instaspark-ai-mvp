@@ -48,16 +48,22 @@ def inject_theme() -> None:
           --orange-soft: {TOKENS['orange_soft']};
           --red: {TOKENS['red']};
           --red-soft: {TOKENS['red_soft']};
-          --radius: 12px;
-          --shadow: 0 8px 28px rgba(14, 31, 43, 0.055);
+          --radius: 14px;
+          --radius-sm: 10px;
+          --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(14, 31, 43, 0.045);
+          --shadow-hover: 0 2px 4px rgba(16, 24, 40, 0.06), 0 14px 32px rgba(14, 31, 43, 0.08);
+          --ease: cubic-bezier(0.22, 1, 0.36, 1);
         }}
 
         html, body, [class*="css"] {{
           font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
                        "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
         }}
 
         .stApp {{ background: var(--page); color: var(--ink); }}
+        .stApp * {{ box-sizing: border-box; }}
 
         [data-testid="stHeader"] {{
           background: transparent;
@@ -85,21 +91,24 @@ def inject_theme() -> None:
 
         [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] {{
           min-height: 38px;
-          border-radius: 8px;
-          padding: 8px 11px;
-          color: #4B555D;
+          border-radius: 10px;
+          padding: 8px 12px;
+          color: #5B6670;
           font-size: 13px;
-          font-weight: 650;
-          transition: background .16s ease, color .16s ease;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
         }}
         [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"]:hover {{
           background: #F1F4F5;
           color: var(--ink);
+          transform: translateX(1px);
         }}
         [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"][aria-current="page"] {{
           background: #EEF1F2;
           color: var(--ink);
           font-weight: 800;
+          box-shadow: inset 3px 0 0 var(--yellow);
         }}
 
         [data-testid="stSidebar"] hr {{
@@ -175,39 +184,75 @@ def inject_theme() -> None:
         }}
 
         .is-topbar {{
-          height: 49px;
+          height: 56px;
           display: grid;
-          grid-template-columns: minmax(280px, 1fr) auto;
+          grid-template-columns: minmax(320px, 1fr) auto;
           align-items: center;
           gap: 20px;
-          margin-bottom: 18px;
+          margin: -4px 0 20px;
+          padding-bottom: 14px;
           border-bottom: 1px solid var(--line);
         }}
-        .is-search {{
-          max-width: 440px;
-          color: #89939A;
-          font-size: 12px;
+        .is-search-pill {{
+          max-width: 520px;
+          height: 40px;
+          padding: 0 12px 0 14px;
+          color: #8A949C;
+          font-size: 13px;
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 10px;
+          background: #F8FAFB;
+          border: 1px solid #E3E8EB;
+          border-radius: 12px;
+          transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+        }}
+        .is-search-pill:hover {{
+          border-color: #C9D3D8;
+          background: #FFFFFF;
+          box-shadow: 0 0 0 3px rgba(37, 119, 241, 0.08);
+        }}
+        .is-search-placeholder {{ flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+        .is-kbd {{
+          flex: 0 0 auto;
+          min-width: 34px;
+          height: 22px;
+          padding: 0 7px;
+          border-radius: 7px;
+          border: 1px solid #E3E8EB;
+          background: #FFFFFF;
+          color: #8A949C;
+          font-family: inherit;
+          font-size: 11px;
+          font-weight: 700;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }}
         .is-search-icon {{
-          width: 15px; height: 15px; border: 1.8px solid #7D8991; border-radius: 50%; position: relative;
+          width: 15px; height: 15px; border: 1.8px solid #8A949C; border-radius: 50%; position: relative; flex: 0 0 15px;
         }}
         .is-search-icon:after {{
-          content: ""; width: 6px; height: 1.8px; background: #7D8991; position: absolute;
+          content: ""; width: 6px; height: 1.8px; background: #8A949C; position: absolute;
           right: -5px; bottom: -2px; transform: rotate(45deg); border-radius: 4px;
         }}
-        .is-userbar {{ display:flex; align-items:center; gap:14px; color:#58636B; font-size:11px; }}
-        .is-bell {{ position:relative; width:16px; height:16px; border:1.5px solid #6C7880; border-radius:8px 8px 5px 5px; }}
-        .is-bell:after {{ content:""; width:5px; height:5px; background:var(--yellow); border-radius:50%; position:absolute; right:-4px; top:-3px; }}
+        .is-userbar {{ display:flex; align-items:center; gap:14px; color:#58636B; font-size:12px; }}
+        .is-global {{
+          padding: 6px 10px;
+          border-radius: 9px;
+          border: 1px solid transparent;
+          transition: background .16s var(--ease), border-color .16s var(--ease);
+        }}
+        .is-global:hover {{ background: #F1F4F5; border-color: #E3E8EB; }}
+        .is-bell {{ position:relative; width:16px; height:16px; border:1.5px solid #6C7880; border-radius:8px 8px 5px 5px; cursor:pointer; }}
+        .is-bell:after {{ content:""; width:6px; height:6px; background:var(--yellow); border-radius:50%; position:absolute; right:-4px; top:-3px; box-shadow:0 0 0 2px #fff; }}
         .is-avatar {{
-          width:29px; height:29px; border-radius:50%; display:grid; place-items:center;
-          background:linear-gradient(135deg,#EFC9A8,#8C4D30); color:white; font-weight:850; font-size:10px;
+          width:32px; height:32px; border-radius:50%; display:grid; place-items:center;
+          background:linear-gradient(135deg,#EFC9A8,#8C4D30); color:white; font-weight:850; font-size:11px;
           box-shadow:0 0 0 2px white, 0 0 0 3px #D9E0E3;
         }}
         .is-user-name {{ font-weight:800; color:#20262B; line-height:1.15; }}
-        .is-user-role {{ font-size:9px; color:#8B949A; line-height:1.2; }}
+        .is-user-role {{ font-size:10px; color:#8B949A; line-height:1.2; }}
 
         .is-page-head {{
           display:flex;
@@ -217,16 +262,16 @@ def inject_theme() -> None:
           margin-bottom:14px;
         }}
         .is-page-title {{
-          font-size: 25px;
+          font-size: 28px;
           font-weight: 900;
-          letter-spacing: -0.035em;
+          letter-spacing: -0.04em;
           line-height: 1.08;
           margin: 0;
         }}
         .is-page-subtitle {{
-          margin-top:5px;
+          margin-top:6px;
           color:var(--muted);
-          font-size:12px;
+          font-size:13px;
           line-height:1.5;
         }}
         .is-badge {{
@@ -251,31 +296,53 @@ def inject_theme() -> None:
           border:1px solid var(--line);
           border-radius:var(--radius);
           box-shadow:var(--shadow);
+          transition: box-shadow .22s var(--ease), transform .22s var(--ease), border-color .22s var(--ease);
+        }}
+        .is-card:hover {{
+          box-shadow: var(--shadow-hover);
+          border-color: #D0DADF;
         }}
         .is-card-flat {{ box-shadow:none; }}
         .is-card-pad {{ padding:14px 15px; }}
-        .is-card-title {{ font-size:12px; font-weight:850; color:#20262B; }}
-        .is-card-caption {{ color:var(--muted); font-size:10px; line-height:1.45; }}
+        .is-card-title {{ font-size:13px; font-weight:850; color:#20262B; letter-spacing:-0.01em; }}
+        .is-card-caption {{ color:var(--muted); font-size:11px; line-height:1.45; }}
 
         .is-metric-grid {{
           display:grid;
           grid-template-columns:repeat(6,minmax(0,1fr));
-          gap:9px;
-          margin:10px 0 13px;
+          gap:10px;
+          margin:4px 0 14px;
         }}
         .is-metric {{
           background:white;
           border:1px solid var(--line);
-          border-radius:10px;
-          padding:11px 12px 9px;
-          min-height:78px;
+          border-radius:var(--radius);
+          padding:14px 14px 12px;
+          min-height:108px;
           box-shadow:var(--shadow);
+          transition: box-shadow .22s var(--ease), transform .22s var(--ease), border-color .22s var(--ease);
         }}
-        .is-metric-label {{ color:#4F5A62; font-size:9.5px; font-weight:700; }}
-        .is-metric-value {{ color:#171B1F; font-size:21px; font-weight:900; letter-spacing:-.035em; margin-top:6px; line-height:1; }}
-        .is-metric-delta {{ color:var(--green); font-size:8.5px; font-weight:800; margin-top:5px; }}
-        .is-metric-note {{ color:#879097; font-size:8px; margin-top:4px; }}
-        .is-spark {{ width:100%; height:16px; margin-top:4px; }}
+        .is-metric:hover {{
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-hover);
+          border-color: #D0DADF;
+        }}
+        .is-metric-top {{
+          display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;
+        }}
+        .is-metric-icon {{
+          width:22px; height:22px; border-radius:7px; background:var(--blue-soft);
+          display:grid; place-content:center; gap:2px; padding:5px 6px;
+        }}
+        .is-metric-icon i {{
+          display:block; width:10px; height:2px; border-radius:1px; background:var(--blue); font-style:normal;
+        }}
+        .is-metric-icon i.thin {{ width:6px; opacity:.55; }}
+        .is-metric-label {{ color:#5B6670; font-size:11px; font-weight:650; letter-spacing:-0.01em; }}
+        .is-metric-value {{ color:#111317; font-size:24px; font-weight:900; letter-spacing:-.04em; line-height:1; }}
+        .is-metric-delta {{ color:var(--green); font-size:11px; font-weight:750; margin-top:6px; }}
+        .is-metric-note {{ color:#879097; font-size:10px; margin-top:4px; }}
+        .is-spark {{ width:100%; height:22px; margin-top:8px; display:block; }}
 
         .is-grid-2 {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }}
         .is-grid-3 {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }}
@@ -285,11 +352,15 @@ def inject_theme() -> None:
 
         .is-panel-head {{
           display:flex; justify-content:space-between; align-items:center;
-          padding:12px 14px 8px;
+          padding:14px 16px 10px;
         }}
-        .is-panel-body {{ padding:8px 14px 13px; }}
-        .is-panel-title {{ font-size:12px; font-weight:850; color:#1A2025; }}
-        .is-panel-link {{ font-size:9px; color:#7D888F; }}
+        .is-panel-body {{ padding:8px 16px 16px; }}
+        .is-panel-title {{ font-size:13px; font-weight:850; color:#1A2025; letter-spacing:-0.01em; }}
+        .is-panel-link {{
+          font-size:11px; color:#2577F1; font-weight:650; cursor:pointer;
+          transition: opacity .16s var(--ease);
+        }}
+        .is-panel-link:hover {{ opacity: 0.75; }}
 
         .is-kpi-strip {{
           display:grid;
@@ -334,15 +405,17 @@ def inject_theme() -> None:
 
         .is-product-card {{
           display:grid;
-          grid-template-columns:180px 1fr 120px;
-          gap:14px;
+          grid-template-columns:148px 1fr 132px;
+          gap:18px;
           align-items:stretch;
-          padding:13px;
+          padding:18px;
         }}
         .is-product-visual {{
-          min-height:122px;
-          border-radius:9px;
-          background:linear-gradient(145deg,#E4F2FA 0%,#A4D8F3 50%,#3D87BB 100%);
+          min-height:148px;
+          border-radius:14px;
+          background:
+            radial-gradient(circle at 78% 18%, rgba(255,255,255,.55), transparent 28%),
+            linear-gradient(145deg,#E8F4FB 0%,#A8D6F0 48%,#3D87BB 100%);
           display:grid;
           place-items:center;
           overflow:hidden;
@@ -352,51 +425,64 @@ def inject_theme() -> None:
           content:""; position:absolute; width:150px; height:150px; border:18px solid rgba(255,255,255,.22); border-radius:50%; right:-45px; top:-55px;
         }}
         .is-camera {{
-          width:55px; height:90px; background:linear-gradient(145deg,#26313B,#0D1116);
-          border-radius:13px; box-shadow:0 13px 20px rgba(3,20,34,.26); transform:rotate(-7deg); position:relative;
+          width:58px; height:96px; background:linear-gradient(145deg,#2A3642,#0D1116);
+          border-radius:14px; box-shadow:0 16px 28px rgba(3,20,34,.28); transform:rotate(-8deg); position:relative;
         }}
         .is-camera:before {{
-          content:""; width:38px; height:38px; border-radius:50%; position:absolute; left:8px; top:10px;
+          content:""; width:40px; height:40px; border-radius:50%; position:absolute; left:9px; top:12px;
           background:radial-gradient(circle,#101317 0 16%,#3A4E60 17% 34%,#0B0E12 35% 55%,#75899A 56% 63%,#11151A 64%);
           box-shadow:0 0 0 3px #323D46;
         }}
         .is-camera:after {{
-          content:"X5"; color:#D8E1E7; font-size:9px; font-weight:900; position:absolute; left:20px; bottom:12px;
+          content:"X5"; color:#D8E1E7; font-size:10px; font-weight:900; position:absolute; left:20px; bottom:14px; letter-spacing:.04em;
         }}
-        .is-product-info {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px 14px; align-content:start; }}
-        .is-field label {{ color:#8B959B; font-size:7.5px; text-transform:uppercase; letter-spacing:.05em; font-weight:800; display:block; }}
-        .is-field strong {{ font-size:10px; color:#252B30; display:block; margin-top:3px; line-height:1.35; }}
-        .is-health {{ border-left:1px solid var(--line); padding-left:13px; display:flex; flex-direction:column; justify-content:center; align-items:center; }}
+        .is-product-info {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 18px; align-content:center; }}
+        .is-field label {{ color:#8B959B; font-size:10px; text-transform:uppercase; letter-spacing:.06em; font-weight:750; display:block; }}
+        .is-field strong {{ font-size:13px; color:#1A2025; display:block; margin-top:4px; line-height:1.35; font-weight:750; letter-spacing:-0.01em; }}
+        .is-health {{ border-left:1px solid var(--line); padding-left:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; }}
         .is-donut {{
           --pct:86;
-          width:58px; height:58px; border-radius:50%;
+          width:78px; height:78px; border-radius:50%;
           background:conic-gradient(var(--green) calc(var(--pct)*1%), #E7ECEE 0);
           position:relative; display:grid; place-items:center;
         }}
-        .is-donut:before {{ content:""; width:43px; height:43px; border-radius:50%; background:white; position:absolute; }}
-        .is-donut span {{ position:relative; font-size:14px; font-weight:900; color:#1C2429; }}
-        .is-health b {{ font-size:9px; color:var(--green); margin-top:5px; }}
-        .is-health small {{ font-size:7.5px; color:#8B949A; }}
+        .is-donut:before {{ content:""; width:58px; height:58px; border-radius:50%; background:white; position:absolute; }}
+        .is-donut span {{ position:relative; font-size:20px; font-weight:900; color:#1C2429; letter-spacing:-0.04em; }}
+        .is-health b {{ font-size:12px; color:var(--green); margin-top:8px; }}
+        .is-health small {{ font-size:11px; color:#8B949A; }}
 
-        .is-workflow {{ display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:8px; }}
+        .is-workflow {{ display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:10px; }}
         .is-workflow-item {{ text-align:center; position:relative; padding:0 4px; }}
-        .is-workflow-item:not(:last-child):after {{ content:""; height:2px; background:#E1E6E8; position:absolute; top:15px; left:58%; right:-42%; }}
+        .is-workflow-item:not(:last-child):after {{ content:""; height:2px; background:#E1E6E8; position:absolute; top:17px; left:58%; right:-42%; }}
         .is-workflow-item.done:not(:last-child):after {{ background:var(--yellow); }}
         .is-workflow-icon {{
-          width:31px; height:31px; border-radius:50%; border:1px solid var(--line); background:#F0F3F4;
-          display:grid; place-items:center; margin:0 auto 6px; font-size:10px; font-weight:850; position:relative; z-index:1;
+          width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:#F0F3F4;
+          display:grid; place-items:center; margin:0 auto 8px; font-size:11px; font-weight:850; position:relative; z-index:1;
+          transition: transform .18s var(--ease), box-shadow .18s var(--ease);
         }}
+        .is-workflow-item:hover .is-workflow-icon {{ transform: scale(1.06); }}
         .is-workflow-item.done .is-workflow-icon {{ background:#121518; color:white; border-color:#121518; }}
-        .is-workflow-item.active .is-workflow-icon {{ background:var(--yellow); color:#17191B; border-color:var(--yellow); }}
-        .is-workflow-item b {{ font-size:8px; display:block; }}
-        .is-workflow-item small {{ font-size:7px; color:#90999F; line-height:1.25; display:block; margin-top:2px; }}
+        .is-workflow-item.active .is-workflow-icon {{
+          background:var(--yellow); color:#17191B; border-color:var(--yellow);
+          box-shadow: 0 0 0 4px rgba(255, 214, 0, 0.22);
+        }}
+        .is-workflow-item b {{ font-size:11px; display:block; letter-spacing:-0.01em; }}
+        .is-workflow-item small {{ font-size:10px; color:#90999F; line-height:1.25; display:block; margin-top:3px; }}
 
         .is-list {{ list-style:none; margin:0; padding:0; }}
-        .is-list li {{ display:grid; grid-template-columns:23px 1fr; gap:8px; padding:7px 0; border-bottom:1px solid #EDF0F1; }}
+        .is-list li {{
+          display:grid; grid-template-columns:24px 1fr; gap:10px; padding:10px 0;
+          border-bottom:1px solid #EDF0F1;
+          transition: background .16s var(--ease);
+        }}
         .is-list li:last-child {{ border-bottom:0; }}
-        .is-list-num {{ width:20px; height:20px; border-radius:50%; background:var(--yellow); display:grid; place-items:center; font-size:8px; font-weight:900; }}
-        .is-list b {{ font-size:9px; display:block; }}
-        .is-list small {{ font-size:7.5px; color:#8A949A; line-height:1.35; display:block; margin-top:1px; }}
+        .is-list li:hover {{ background: #FAFBFC; }}
+        .is-list-num {{
+          width:22px; height:22px; border-radius:50%; background:var(--yellow);
+          display:grid; place-items:center; font-size:10px; font-weight:900;
+        }}
+        .is-list b {{ font-size:12px; display:block; letter-spacing:-0.01em; }}
+        .is-list small {{ font-size:11px; color:#8A949A; line-height:1.4; display:block; margin-top:2px; }}
 
         .is-table {{ width:100%; border-collapse:separate; border-spacing:0; font-size:9px; }}
         .is-table th {{
@@ -533,23 +619,35 @@ def inject_theme() -> None:
         .is-action-impact {{ font-size:7.5px; font-weight:850; margin-top:7px; }}
 
         .stButton > button {{
-          min-height:32px;
-          border-radius:7px;
+          min-height:36px;
+          border-radius:10px;
           border:1px solid #D6DEE1;
           background:white;
           color:#232A2F;
-          font-size:11px;
-          font-weight:750;
+          font-size:13px;
+          font-weight:700;
           box-shadow:none;
+          transition: transform .16s var(--ease), box-shadow .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
         }}
-        .stButton > button:hover {{ border-color:#AEB9BE; color:#111317; }}
+        .stButton > button:hover {{
+          border-color:#AEB9BE;
+          color:#111317;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(14,31,43,.08);
+        }}
         .stButton > button[kind="primary"] {{
           background:var(--yellow);
           border-color:var(--yellow);
           color:#171A1D;
-          font-weight:900;
+          font-weight:850;
         }}
-        .stButton > button[kind="primary"]:hover {{ background:#EFC900; border-color:#EFC900; }}
+        .stButton > button[kind="primary"]:hover {{
+          background:#F0C800;
+          border-color:#F0C800;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(255, 214, 0, 0.35);
+        }}
+        .stButton > button:active {{ transform: translateY(0); }}
 
         [data-testid="stSelectbox"] label, [data-testid="stTextInput"] label,
         [data-testid="stMultiSelect"] label, [data-testid="stNumberInput"] label,

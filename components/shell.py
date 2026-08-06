@@ -38,10 +38,14 @@ def render_topbar() -> None:
     st.markdown(
         """
         <div class="is-topbar">
-          <div class="is-search"><span class="is-search-icon"></span>Search missions, creators, content...</div>
+          <div class="is-search-pill">
+            <span class="is-search-icon"></span>
+            <span class="is-search-placeholder">Search missions, creators, content...</span>
+            <kbd class="is-kbd">⌘K</kbd>
+          </div>
           <div class="is-userbar">
-            <span>◉ &nbsp;Global⌄</span>
-            <span class="is-bell"></span>
+            <span class="is-global">◉ &nbsp;Global⌄</span>
+            <span class="is-bell" title="Notifications"></span>
             <span class="is-avatar">OC</span>
             <span><span class="is-user-name">Olivia Chen</span><span class="is-user-role">Global Marketing</span></span>
           </div>

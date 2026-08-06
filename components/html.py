@@ -50,13 +50,17 @@ def sparkline(values: Sequence[float], color: str = "#2577F1") -> str:
 def metric_cards(metrics: Iterable[tuple[str, str, str, str]]) -> str:
     cards = []
     for idx, (label, value, delta, note) in enumerate(metrics):
+        note_html = f'<div class="is-metric-note">{esc(note)}</div>' if note else ""
         cards.append(
             '<div class="is-metric">'
+            '<div class="is-metric-top">'
             f'<div class="is-metric-label">{esc(label)}</div>'
+            '<div class="is-metric-icon"><i></i><i class="thin"></i></div>'
+            '</div>'
             f'<div class="is-metric-value">{esc(value)}</div>'
             f'<div class="is-metric-delta">{esc(delta)}</div>'
             f'{sparkline(SPARKLINES[idx % len(SPARKLINES)])}'
-            f'<div class="is-metric-note">{esc(note)}</div>'
+            f'{note_html}'
             '</div>'
         )
     return '<div class="is-metric-grid">' + "".join(cards) + '</div>'

@@ -28,7 +28,7 @@ def bootstrap_state() -> None:
     defaults: dict[str, Any] = {
         "mission": {
             **_load_default_mission(),
-            "markets": ["United States", "Mexico"],
+            "markets": ["US", "Mexico", "Japan"],
             "campaign_dates": "May 12 - Jul 12, 2026",
             "budget_usd": 1_250_000,
             "owner": "Olivia Chen",

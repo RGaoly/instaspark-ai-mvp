@@ -34,9 +34,9 @@ def _product_card(mission: dict) -> str:
     <div class="is-card is-product-card">
       <div class="is-product-visual"><div class="is-camera"></div></div>
       <div>
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
           {badge('Launch Mission','blue')}
-          <b style="font-size:15px">{mission['product']}</b>
+          <b style="font-size:16px;letter-spacing:-0.02em">{mission['product']}</b>
         </div>
         <div class="is-product-info">
           <div class="is-field"><label>Target markets</label><strong>{markets}</strong></div>
@@ -79,9 +79,9 @@ def _workflow_card() -> str:
 
 def _actions_card() -> str:
     actions = [
-        ("Approve 10 matched creators", "High fit for US audience & travel"),
+        ("Approve 24 matched creators", "High fit for US audience & travel"),
         ("Review content briefs", "4 drafts awaiting feedback"),
-        ("Boost outreach in Mexico", "Engagement rate showing up"),
+        ("Boost outreach in Mexico", "Engagement rate showing uplift"),
         ("Optimize budget allocation", "Shift budget to top-performing markets"),
     ]
     rows = []
@@ -161,7 +161,6 @@ def render() -> None:
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
-    st.markdown(_process_strip(), unsafe_allow_html=True)
     st.markdown(_product_card(mission), unsafe_allow_html=True)
     st.markdown(metric_cards(MISSION_METRICS), unsafe_allow_html=True)
 

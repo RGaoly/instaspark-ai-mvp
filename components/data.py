@@ -22,12 +22,12 @@ SPARKLINES = [
 ]
 
 MISSION_METRICS = [
-    ("Candidate pool", "30", "+18.2% vs last 7 days", ""),
-    ("Matched creators", "10", "+24.2%", ""),
-    ("Outreach sent", "6", "+16.5%", ""),
-    ("Active collaborations", "4", "+12.8%", ""),
-    ("Published videos", "2", "+27.5%", ""),
-    ("Attributed orders", "342", "+31.4%", "Revenue USD 51,280"),
+    ("Candidates Pool", "18,732", "+18.2% vs last 7 days", ""),
+    ("Matched Creators", "1,245", "+24.2%", ""),
+    ("Outreach Sent", "856", "+16.5%", ""),
+    ("Active Collaborations", "128", "+12.8%", ""),
+    ("Published Videos", "86", "+27.5%", ""),
+    ("Attributed Orders", "2,341", "+31.4%", "Revenue USD 358,719"),
 ]
 
 UPCOMING_TASKS = [

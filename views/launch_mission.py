@@ -1,11 +1,19 @@
 from __future__ import annotations
 
+from uuid import uuid4
+
 import streamlit as st
 
-from components.data import MISSION_METRICS, NOTIFICATIONS, UPCOMING_TASKS
 from components.html import badge, metric_cards, page_header
 from components.shell import render_demo_notice, render_topbar
-from components.state import active_mission
+from components.state import (
+    active_mission,
+    missions,
+    ranking,
+    save_mission,
+    set_active_context,
+    workflow_summary,
+)
 
 
 def _process_strip() -> str:
@@ -55,14 +63,19 @@ def _product_card(mission: dict) -> str:
     """
 
 
-def _workflow_card() -> str:
+def _workflow_card(summary: dict[str, int]) -> str:
+    matched = summary.get("qualified", 0) + summary.get("shortlisted", 0)
+    approved = summary.get("approved", 0)
+    contacted = summary.get("contacted", 0)
+    published = summary.get("published", 0)
+    measured = summary.get("measured", 0)
     steps = [
         ("01", "Mission setup", "Completed", "done"),
-        ("02", "Creator match", "In progress", "done"),
-        ("03", "Content studio", "In progress", "active"),
-        ("04", "Outreach", "Upcoming", ""),
-        ("05", "Review", "Upcoming", ""),
-        ("06", "Optimization", "Upcoming", ""),
+        ("02", "Creator match", f"{matched} evaluated", "done" if matched else "active"),
+        ("03", "Approval", f"{approved} approved", "done" if approved else "active"),
+        ("04", "Outreach", f"{contacted} contacted", "done" if contacted else ""),
+        ("05", "Publish", f"{published} published", "done" if published else ""),
+        ("06", "Measurement", f"{measured} measured", "done" if measured else ""),
     ]
     items = []
     for num, title, state, cls in steps:
@@ -77,12 +90,12 @@ def _workflow_card() -> str:
     )
 
 
-def _actions_card() -> str:
+def _actions_card(summary: dict[str, int], market: str) -> str:
     actions = [
-        ("Approve 24 matched creators", "High fit for US audience & travel"),
-        ("Review content briefs", "4 drafts awaiting feedback"),
-        ("Boost outreach in Mexico", "Engagement rate showing uplift"),
-        ("Optimize budget allocation", "Shift budget to top-performing markets"),
+        (f'Review {summary.get("shortlisted", 0)} shortlisted creators', f"Evidence review for {market}"),
+        (f'Contact {summary.get("approved", 0)} approved creators', "Advance audited outreach cases"),
+        (f'Review {summary.get("content_in_review", 0)} content assets', "Verify claims and localization"),
+        (f'Measure {summary.get("published", 0)} published collaborations', "Attach sourced performance events"),
     ]
     rows = []
     for idx, (title, note) in enumerate(actions, 1):
@@ -96,15 +109,28 @@ def _actions_card() -> str:
     )
 
 
-def _tasks_notifications() -> str:
+def _tasks_notifications(mission: dict) -> str:
+    market = mission.get("market", "Target market")
+    owner = mission.get("owner", "Mission owner")
+    upcoming_tasks = [
+        ("NEXT", "01", f"Approve creator shortlist ({market})", owner),
+        ("NEXT", "02", "Content brief evidence review", owner),
+        ("NEXT", "03", f"{market} outreach plan", owner),
+        ("NEXT", "04", "Budget and measurement review", owner),
+    ]
     tasks = []
-    for month, day, title, note in UPCOMING_TASKS:
+    for month, day, title, note in upcoming_tasks:
         tasks.append(
             '<li><span class="is-list-num" style="border-radius:6px;background:#F1F4F5;color:#4A565E">'
             f'{day}</span><span><b>{title}</b><small>{month} · {note}</small></span></li>'
         )
+    notifications = [
+        ("Context synchronized", f'All pages now use {mission.get("name", mission.get("product", "this mission"))}.', "now"),
+        ("State machine active", "Every creator transition records actor, reason and evidence.", "now"),
+        ("Attribution guardrail", "Unsourced outcomes remain explicitly empty.", "now"),
+    ]
     notes = []
-    for idx, (title, note, when) in enumerate(NOTIFICATIONS):
+    for idx, (title, note, when) in enumerate(notifications):
         notes.append(
             f'<li><span class="is-list-num" style="background:{"#EAF2FF" if idx == 0 else "#E9F8F1" if idx == 1 else "#FFF4E4"};color:#34424A">•</span>'
             f'<span><b>{title}</b><small>{note} · {when}</small></span></li>'
@@ -121,7 +147,21 @@ def _tasks_notifications() -> str:
 
 def render() -> None:
     render_topbar()
+    mission_records = missions()
+    mission_by_name = {item.get("name", item["mission_id"]): item["mission_id"] for item in mission_records}
+    preferred_id = st.session_state.pop("pending_mission_id", st.session_state.get("active_mission_id"))
+    mission_names = list(mission_by_name)
+    preferred_name = next((name for name, mission_id in mission_by_name.items() if mission_id == preferred_id), mission_names[0])
+    selected_name = st.selectbox(
+        "Open launch mission",
+        mission_names,
+        index=mission_names.index(preferred_name),
+        label_visibility="collapsed",
+    )
+    set_active_context("mission", mission_by_name[selected_name])
     mission = active_mission()
+    summary = workflow_summary()
+    ranked = ranking()
 
     left, right = st.columns([1, 0.26], vertical_alignment="top")
     with left:
@@ -149,29 +189,50 @@ def render() -> None:
             budget = c3.number_input("Budget (USD)", min_value=10000, value=int(mission["budget_usd"]), step=10000)
             objective = st.text_area("Launch objective", mission["objective"])
             if st.button("Save mission", type="primary"):
-                st.session_state.mission = {
-                    **mission,
+                saved = {
+                    "mission_id": f"mission_{uuid4().hex[:8]}",
+                    "name": f"{product} · {market} Launch",
                     "product": product,
                     "market": market,
+                    "markets": [market],
                     "language": "Spanish" if market == "Mexico" else "English",
+                    "languages": ["Spanish" if market == "Mexico" else "English"],
                     "budget_usd": budget,
+                    "max_cost_usd": mission.get("max_cost_usd", 12000),
+                    "min_brand_safety": mission.get("min_brand_safety", 72),
+                    "target_topics": mission.get("target_topics", []),
+                    "target_styles": mission.get("target_styles", []),
                     "objective": objective,
+                    "campaign_dates": mission.get("campaign_dates", "Not scheduled"),
+                    "owner": mission.get("owner", "Olivia Chen"),
+                    "status": "Draft",
+                    "health_score": 0,
                 }
+                save_mission(saved)
+                st.session_state.pending_mission_id = saved["mission_id"]
                 st.session_state.show_mission_form = False
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
     st.markdown(_product_card(mission), unsafe_allow_html=True)
-    st.markdown(metric_cards(MISSION_METRICS), unsafe_allow_html=True)
+    metrics = [
+        ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
+        ("Shortlisted", str(summary.get("shortlisted", 0)), "Unified workflow", ""),
+        ("Approved", str(summary.get("approved", 0)), "Human decisions", ""),
+        ("Contacted", str(summary.get("contacted", 0)), "Audited outreach", ""),
+        ("Published", str(summary.get("published", 0)), "Linked workflow", ""),
+        ("Measured", str(summary.get("measured", 0)), "Sourced events only", ""),
+    ]
+    st.markdown(metric_cards(metrics), unsafe_allow_html=True)
 
     main, side = st.columns([1, 0.34], gap="small", vertical_alignment="top")
     with main:
         c1, c2 = st.columns([1.25, 0.85], gap="small")
         with c1:
-            st.markdown(_workflow_card(), unsafe_allow_html=True)
+            st.markdown(_workflow_card(summary), unsafe_allow_html=True)
         with c2:
-            st.markdown(_actions_card(), unsafe_allow_html=True)
+            st.markdown(_actions_card(summary, mission.get("market", "Target market")), unsafe_allow_html=True)
     with side:
-        st.markdown(_tasks_notifications(), unsafe_allow_html=True)
+        st.markdown(_tasks_notifications(mission), unsafe_allow_html=True)
 
     render_demo_notice()

@@ -6,11 +6,12 @@ Rebuild the Streamlit front end to match the visual and workflow language in the
 InstaSpark AI opening report, especially pages 9-15:
 
 1. Launch Mission Dashboard
-2. Creator Search & Match
-3. Creator Compare
-4. Content Studio
-5. Outreach Operations
-6. Growth Review
+2. Creator Opportunity
+3. Creator Search & Match
+4. Creator Compare
+5. Content Studio
+6. Outreach Operations
+7. Growth Review
 
 ## Design principles
 

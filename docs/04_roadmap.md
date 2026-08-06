@@ -16,6 +16,16 @@
 - [ ] 评测结果页面
 - [ ] 真实用户访谈记录
 
+## P0 — Dual-entry product foundation
+- [x] Launch Mission / Creator Opportunity 并列入口
+- [x] Mission、Opportunity、Creator、Match、Decision、OutreachCase、ContentAsset、PerformanceEvent 对象契约
+- [x] 全工作区统一活动上下文
+- [x] Creator collaboration 状态机与审计事件
+- [x] Approved → OutreachCase 幂等交接
+- [x] P0 结构与领域测试
+- [ ] 数据库持久化与多人权限（P1）
+- [ ] 公开、无需登录的 Pilot 环境（P2）
+
 ## V1 — Evidence-grounded matching
 - [ ] 接入公开达人主页和公开视频
 - [ ] ASR / OCR / 视觉标签

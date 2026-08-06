@@ -2,145 +2,173 @@ from __future__ import annotations
 
 import streamlit as st
 
-from components.data import OUTREACH_COLUMNS
-from components.html import avatar, badge, esc, page_header
+from components.html import avatar, badge, esc, mission_chip, page_header
 from components.shell import render_demo_notice, render_topbar
+from components.state import (
+    active_context,
+    active_context_label,
+    allowed_next_creator_states,
+    transition_creator_state,
+    workflow_board,
+    workflow_events,
+)
 
 
 STAGE_TONES = {
-    "Shortlisted": "gray",
-    "Contact Drafted": "blue",
-    "Outreach Sent": "yellow",
-    "Replied": "green",
-    "Negotiating": "orange",
+    "shortlisted": "gray",
+    "approved": "blue",
+    "contacted": "yellow",
+    "negotiating": "orange",
+    "contracted": "green",
+    "content_in_review": "blue",
+    "published": "green",
+    "measured": "green",
+    "closed_lost": "gray",
 }
 
 
-def _kanban() -> str:
+def _stage_label(stage: str) -> str:
+    return stage.replace("_", " ").title()
+
+
+def _kanban(board: dict[str, list[dict]]) -> str:
     columns = []
     color_idx = 0
-    for stage, people in OUTREACH_COLUMNS.items():
+    for stage, people in board.items():
         cards = []
         for person in people:
-            name, niche, market, followers, next_action = person
+            name = person["creator_name"]
+            topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
+            market = person.get("primary_market", "—")
+            followers = f'{int(person.get("followers", 0)) / 1000:.0f}K'
+            next_states = person.get("next_states", [])
+            next_action = _stage_label(next_states[0]) if next_states else "Complete"
             cards.append(
                 '<div class="is-kanban-card">'
                 f'<div class="is-kanban-person">{avatar(name, color_idx)}'
-                f'<span><b>{esc(name)}</b><small>@{esc(name.lower().replace(" ", ""))}</small></span></div>'
-                f'<div class="is-kanban-tags">{badge(niche, "gray")} {badge(market, "blue")}</div>'
-                f'<div class="is-kanban-meta">'
-                f'<span>Market</span><strong>{esc(market)}</strong>'
-                f'<span>Niche</span><strong>{esc(niche)}</strong>'
+                f'<span><b>{esc(name)}</b><small>{esc(person["creator_id"])}</small></span></div>'
+                f'<div class="is-kanban-tags">{badge(topics, "gray")} {badge(market, "blue")}</div>'
+                f'<div class="is-kanban-meta"><span>Market</span><strong>{esc(market)}</strong>'
                 f'<span>Audience</span><strong>{esc(followers)}</strong>'
-                f'</div>'
-                f'<div class="is-kanban-next">{esc(next_action)} →</div>'
-                "</div>"
+                f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
+                f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
+                f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
             )
             color_idx += 1
         tone = STAGE_TONES.get(stage, "gray")
+        label = _stage_label(stage)
         columns.append(
-            f'<div class="is-kanban-col">'
-            f'<div class="is-kanban-head">'
-            f'<span style="display:flex;align-items:center;gap:6px">{esc(stage)} {badge(stage.split()[0], tone)}</span>'
-            f'<span class="is-kanban-count">{len(people)}</span></div>'
-            f'{"".join(cards)}</div>'
+            '<div class="is-kanban-col">'
+            f'<div class="is-kanban-head"><span style="display:flex;align-items:center;gap:6px">'
+            f'{esc(label)} {badge(label.split()[0], tone)}</span>'
+            f'<span class="is-kanban-count">{len(people)}</span></div>{"".join(cards)}</div>'
         )
+    if not columns:
+        return '<div class="is-card is-card-pad">No creators have entered this workflow yet.</div>'
     return '<div style="overflow-x:auto"><div class="is-kanban">' + "".join(columns) + "</div></div>"
 
 
-def _list_view() -> str:
+def _list_view(board: dict[str, list[dict]]) -> str:
     rows = []
-    for stage, people in OUTREACH_COLUMNS.items():
-        for name, niche, market, followers, next_action in people:
+    for stage, people in board.items():
+        for person in people:
+            name = person["creator_name"]
+            topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
+            next_states = person.get("next_states", [])
+            next_action = _stage_label(next_states[0]) if next_states else "Complete"
             rows.append(
                 "<tr>"
-                f"<td><div class=\"is-creator-cell\">{avatar(name, len(rows))}"
-                f"<span><b>{esc(name)}</b><small>{esc(niche)}</small></span></div></td>"
-                f"<td>{esc(stage)}</td>"
-                f"<td>{esc(market)}</td>"
-                f"<td>{esc(followers)}</td>"
-                f"<td><span class=\"is-panel-link\">{esc(next_action)} →</span></td>"
-                "</tr>"
+                f'<td><div class="is-creator-cell">{avatar(name, len(rows))}'
+                f'<span><b>{esc(name)}</b><small>{esc(topics)}</small></span></div></td>'
+                f'<td>{esc(_stage_label(stage))}</td>'
+                f'<td>{esc(person.get("primary_market", "—"))}</td>'
+                f'<td>{esc(person.get("outreach_case_id", "Pending approval"))}</td>'
+                f'<td>{esc(person.get("owner", "Not assigned"))}</td>'
+                f'<td><span class="is-panel-link">{esc(next_action)} →</span></td></tr>'
             )
-    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Stage", "Market", "Audience", "Next action"])
+    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Stage", "Market", "OutreachCase", "Owner", "Next action"])
     return (
         f'<div class="is-card is-card-pad"><table class="is-table"><thead><tr>{head}</tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table></div>'
     )
 
 
+def _event_log(events: list[dict]) -> str:
+    if not events:
+        return '<div class="is-card is-card-pad">No workflow events recorded for this entry.</div>'
+    cards = []
+    for event in reversed(events[-12:]):
+        cards.append(
+            '<div class="is-card is-card-pad">'
+            f'<div class="is-card-title">{esc(event["creator_id"])} · '
+            f'{esc(_stage_label(event["from_state"]))} → {esc(_stage_label(event["to_state"]))}</div>'
+            f'<div class="is-card-caption">{esc(event["reason"])} · {esc(event["actor"])} · '
+            f'{esc(event["occurred_at"])}</div></div>'
+        )
+    return '<div class="is-grid-3">' + "".join(cards) + "</div>"
+
+
 def render() -> None:
     render_topbar()
+    context = active_context()
+    board = workflow_board()
 
-    head_l, head_r = st.columns([1, 0.22], vertical_alignment="top")
+    head_l, head_r = st.columns([1, 0.4], vertical_alignment="top")
     with head_l:
         st.markdown(
             page_header(
                 "Outreach Operations",
-                "Manage outreach, replies, samples, approvals, publishing and exception handling.",
+                "Move creators through one governed workflow with auditable state changes.",
                 "Execution collaboration",
             ),
             unsafe_allow_html=True,
         )
+        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
     with head_r:
-        st.button("+ Start outreach", type="primary", use_container_width=True)
+        people = [person for stage in board.values() for person in stage]
+        if people:
+            creator_by_label = {
+                f'{person["creator_name"]} · {_stage_label(person["state"])}': person
+                for person in people
+            }
+            selected_label = st.selectbox("Creator workflow", list(creator_by_label))
+            selected = creator_by_label[selected_label]
+            next_states = allowed_next_creator_states(selected["creator_id"])
+            if next_states:
+                target = st.selectbox("Next state", next_states, format_func=_stage_label)
+                reason = st.text_input("Transition reason", "Operator completed the required review")
+                if st.button("Advance workflow", type="primary", use_container_width=True):
+                    try:
+                        transition_creator_state(
+                            selected["creator_id"],
+                            target,
+                            actor=context.get("owner", "Operator"),
+                            reason=reason,
+                            evidence=[f'outreach://{selected.get("outreach_case_id", "workflow-review")}'],
+                        )
+                    except ValueError as exc:
+                        st.error(str(exc))
+                    else:
+                        st.success(f'Advanced to {_stage_label(target)} with an audit event.')
+                        st.rerun()
 
-    f1, f2, f3 = st.columns([0.55, 0.25, 0.2], vertical_alignment="center")
-    with f1:
-        st.markdown(
-            '<div class="is-view-tabs">'
-            '<span class="is-view-tab active">Workflow Board</span>'
-            '<span class="is-view-tab">List</span>'
-            '<span class="is-view-tab">Calendar</span>'
-            '<span class="is-view-tab">Analytics</span>'
-            "</div>",
-            unsafe_allow_html=True,
-        )
-    with f2:
-        st.selectbox(
-            "Market",
-            ["All markets", "United States", "Mexico", "Japan"],
-            label_visibility="collapsed",
-        )
-    with f3:
-        st.button("Filter", use_container_width=True)
-
-    tabs = st.tabs(["Workflow Board", "List", "Calendar", "Analytics"])
+    tabs = st.tabs(["Workflow Board", "List", "Audit Log", "Stage Metrics"])
     with tabs[0]:
-        st.markdown(_kanban(), unsafe_allow_html=True)
+        st.markdown(_kanban(board), unsafe_allow_html=True)
     with tabs[1]:
-        st.markdown(_list_view(), unsafe_allow_html=True)
+        st.markdown(_list_view(board), unsafe_allow_html=True)
     with tabs[2]:
-        events = [
-            (20, "Approve shortlist", "US · 11:00"),
-            (21, "Brief review", "Ops · 14:00"),
-            (22, "Mexico outreach", "LATAM · 10:30"),
-            (23, "Budget review", "Finance · 13:30"),
-        ]
-        st.markdown(
-            '<div class="is-grid-4">'
-            + "".join(
-                f'<div class="is-card is-card-pad"><div class="is-card-title">May {day}</div>'
-                f'<div class="is-card-caption" style="margin-top:6px"><b>{esc(title)}</b><br/>{esc(note)}</div></div>'
-                for day, title, note in events
-            )
-            + "</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(_event_log(workflow_events()), unsafe_allow_html=True)
     with tabs[3]:
-        metrics = [
-            ("Reply SLA", "92%", "+4.2%"),
-            ("Draft approval", "78%", "+9.0%"),
-            ("Sample delivered", "84%", "+6.1%"),
-            ("Publish on time", "71%", "+3.4%"),
-        ]
+        metrics = [(_stage_label(stage), str(len(people)), "Current entry") for stage, people in board.items()]
+        if not metrics:
+            metrics = [("Workflow records", "0", "Start by shortlisting a creator")]
         st.markdown(
             '<div class="is-grid-4">'
             + "".join(
-                f'<div class="is-metric"><div class="is-metric-label">{esc(l)}</div>'
-                f'<div class="is-metric-value">{esc(v)}</div>'
-                f'<div class="is-metric-delta">{esc(d)}</div></div>'
-                for l, v, d in metrics
+                f'<div class="is-metric"><div class="is-metric-label">{esc(label)}</div>'
+                f'<div class="is-metric-value">{esc(value)}</div><div class="is-metric-delta">{esc(note)}</div></div>'
+                for label, value, note in metrics
             )
             + "</div>",
             unsafe_allow_html=True,

@@ -14,19 +14,23 @@ def render_sidebar(pages: Sequence[st.Page]) -> None:
             <div class="is-sidebar-brand">
               <div class="is-sidebar-logo">InstaSpark AI<small>for Insta360</small></div>
             </div>
-            <div class="is-nav-section">Workspace</div>
+            <div class="is-nav-section">Start from</div>
             """,
             unsafe_allow_html=True,
         )
-        for page in pages:
+        for page in pages[:2]:
+            st.page_link(page, label=page.title)
+
+        st.markdown('<div class="is-nav-section">Shared workspace</div>', unsafe_allow_html=True)
+        for page in pages[2:]:
             st.page_link(page, label=page.title)
 
         st.markdown(
             """
             <div class="is-toolkit">
-              <b>Insta360 X5<br/>Launch Toolkit</b>
-              <span>US · Mexico creator pilot</span>
-              <button>View toolkit →</button>
+              <b>Dual-entry<br/>Operations Toolkit</b>
+              <span>Mission-first · Creator-first</span>
+              <button>View P0 contract →</button>
             </div>
             <div class="is-support">Need help?<br/><b style="color:#3F4A51">Contact support →</b></div>
             """,

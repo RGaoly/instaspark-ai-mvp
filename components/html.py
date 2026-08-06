@@ -110,6 +110,25 @@ def page_header(title: str, subtitle: str, badge_text: str | None = None, badge_
     )
 
 
+def mission_chip(text: str, *, light: bool = False) -> str:
+    cls = "is-mission-chip is-light" if light else "is-mission-chip"
+    return f'<span class="{cls}"><span class="is-mission-dot"></span>{esc(text)}</span>'
+
+
+def ai_badge(text: str = "AI Generated") -> str:
+    return f'<span class="is-ai-badge">{esc(text)}</span>'
+
+
+def nl_search_shell(hint: str) -> str:
+    return (
+        '<div class="is-nl-search">'
+        '<span class="is-nl-icon">✦</span>'
+        '<span class="is-nl-label">NL Search</span>'
+        f'<span class="is-nl-hint">{esc(hint)}</span>'
+        '</div>'
+    )
+
+
 def card(title: str, body: str, *, flat: bool = False) -> str:
     cls = "is-card is-card-flat is-card-pad" if flat else "is-card is-card-pad"
     return f'<div class="{cls}"><div class="is-card-title">{esc(title)}</div><div class="is-card-caption" style="margin-top:5px">{esc(body)}</div></div>'

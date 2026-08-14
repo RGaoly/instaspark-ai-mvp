@@ -1250,6 +1250,11 @@ ZH: dict[str, str] = {
     "AI-Generated Brief": "AI 生成的 Brief",
     "Start from": "从这里开始",
     "Shared workspace": "共享工作区",
+    "Open": "打开",
+    "Mission": "任务",
+    "Creator": "创作者",
+    "Opportunity": "机会",
+    "No matches for this search": "没有匹配的结果",
 }
 
 

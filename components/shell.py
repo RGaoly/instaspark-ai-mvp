@@ -6,8 +6,22 @@ import streamlit as st
 
 from components.html import esc
 from components.i18n import is_zh, lhtml, set_language, t
-from components.state import reset_demo
+from components.search import search_workspace
+from components.state import (
+    creators,
+    missions,
+    opportunity_records,
+    reset_demo,
+    select_creator,
+    set_active_context,
+)
 from infra.auth import current_display_name, current_role, logout
+
+_KIND_LABELS = {
+    "mission": "Mission",
+    "opportunity": "Opportunity",
+    "creator": "Creator",
+}
 
 
 def _sync_language_switcher() -> None:
@@ -79,6 +93,19 @@ def render_sidebar(pages: Sequence[st.Page]) -> None:
         )
 
 
+def _open_search_hit(hit: dict) -> None:
+    if hit["kind"] == "mission":
+        set_active_context("launch_mission", hit["id"])
+    elif hit["kind"] == "opportunity":
+        set_active_context("creator_opportunity", hit["id"])
+    else:
+        select_creator(hit["id"])
+    st.session_state.global_search = ""
+    page = (st.session_state.get("_nav_pages") or {}).get(hit["page"])
+    if page is not None:
+        st.switch_page(page)
+
+
 def render_topbar() -> None:
     display_name = current_display_name()
     initials = "".join(word[0] for word in display_name.split() if word)[:2].upper() or "?"
@@ -88,25 +115,54 @@ def render_topbar() -> None:
         f'<a href="?lang=en" target="_top" class="{"active" if not is_zh() else ""}">EN</a>'
         f'<a href="?lang=zh" target="_top" class="{"active" if is_zh() else ""}">中文</a></div>'
     )
-    st.markdown(
-        f"""
-        <div class="is-topbar">
-          <div class="is-search-pill">
-            <span class="is-search-icon"></span>
-            <span class="is-search-placeholder">{t("Search missions, creators, content...")}</span>
-            <kbd class="is-kbd">⌘K</kbd>
-          </div>
-          <div class="is-userbar">
-            {language_links}
-            <span class="is-global">◉ &nbsp;{t("Global")}⌄</span>
-            <span class="is-bell" title="{t('Notifications')}"></span>
-            <span class="is-avatar">{esc(initials)}</span>
-            <span><span class="is-user-name">{esc(display_name)}</span><span class="is-user-role">{role_label}</span></span>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    search_col, user_col = st.columns([1.55, 1], vertical_alignment="center")
+    with search_col:
+        query = st.text_input(
+            "Workspace search",
+            key="global_search",
+            placeholder=t("Search missions, creators, content..."),
+            label_visibility="collapsed",
+        )
+    with user_col:
+        st.markdown(
+            f"""
+            <div class="is-userbar">
+              {language_links}
+              <span class="is-global">◉ &nbsp;{t("Global")}⌄</span>
+              <span class="is-bell" title="{t('Notifications')}"></span>
+              <span class="is-avatar">{esc(initials)}</span>
+              <span><span class="is-user-name">{esc(display_name)}</span><span class="is-user-role">{role_label}</span></span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    needle = str(query or "").strip()
+    if not needle:
+        return
+
+    hits = search_workspace(
+        needle,
+        creators=creators(),
+        missions=missions(),
+        opportunities=opportunity_records(),
     )
+    with st.container(border=True):
+        if not hits:
+            st.caption(t("No matches for this search"))
+        for hit in hits:
+            kind = t(_KIND_LABELS.get(hit["kind"], hit["kind"]))
+            action, body = st.columns([0.16, 1], vertical_alignment="center")
+            with action:
+                if st.button(t("Open"), key=f"gs_{hit['kind']}_{hit['id']}", use_container_width=True):
+                    _open_search_hit(hit)
+            with body:
+                st.markdown(
+                    f'<div class="is-search-hit"><b>{esc(kind)}</b>'
+                    f'<span class="is-search-hit-title">{esc(hit["title"])}</span>'
+                    f'<span class="is-search-hit-sub">{esc(hit["subtitle"])}</span></div>',
+                    unsafe_allow_html=True,
+                )
 
 
 def render_demo_notice() -> None:

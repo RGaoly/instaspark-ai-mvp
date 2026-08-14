@@ -213,6 +213,42 @@ def inject_theme() -> None:
           box-shadow: 0 0 0 3px rgba(37, 119, 241, 0.08);
         }}
         .is-search-placeholder {{ flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+        .st-key-global_search {{
+          max-width: 560px;
+          margin: -4px 0 8px;
+        }}
+        .st-key-global_search [data-testid="stTextInput"] input {{
+          height: 40px !important;
+          min-height: 40px !important;
+          border-radius: 12px !important;
+          border: 1px solid #E3E8EB !important;
+          background-color: #F8FAFB !important;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' fill='none' stroke='%238A949C' stroke-width='1.8'%3E%3Ccircle cx='6.5' cy='6.5' r='5.2'/%3E%3Cpath d='M10.4 10.4L13.5 13.5' stroke-linecap='round'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: 14px 50%;
+          background-size: 15px 15px;
+          font-size: 13px !important;
+          padding-left: 38px !important;
+        }}
+        .st-key-global_search [data-testid="stTextInput"] input:focus {{
+          background-color: #FFFFFF !important;
+          border-color: #C9D3D8 !important;
+          box-shadow: 0 0 0 3px rgba(37, 119, 241, 0.08) !important;
+        }}
+        .is-search-hit {{
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: 2px 0 4px;
+        }}
+        .is-search-hit b {{
+          font-size: 9px;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+          color: #8A949C;
+        }}
+        .is-search-hit-title {{ font-size: 13px; font-weight: 700; color: #111317; }}
+        .is-search-hit-sub {{ font-size: 11px; color: #69757E; }}
         .is-kbd {{
           flex: 0 0 auto;
           min-width: 34px;

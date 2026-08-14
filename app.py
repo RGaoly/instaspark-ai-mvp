@@ -57,6 +57,16 @@ pages = [
     st.Page(growth_review.render, title="Growth Review", url_path="growth-review"),
 ]
 
+st.session_state["_nav_pages"] = {
+    "launch-mission": pages[0],
+    "creator-opportunity": pages[1],
+    "creator-search": pages[2],
+    "creator-compare": pages[3],
+    "content-studio": pages[4],
+    "outreach-operations": pages[5],
+    "growth-review": pages[6],
+}
+
 router = st.navigation(pages, position="hidden")
 render_sidebar(pages)
 router.run()

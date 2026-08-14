@@ -3,6 +3,7 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import esc, mission_chip, page_header
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import (
     active_context,
@@ -11,6 +12,7 @@ from components.state import (
     ranking,
     workflow_summary,
 )
+from components.ui import md
 
 
 def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> str:
@@ -93,7 +95,7 @@ def render() -> None:
     ranked = ranking()
     budget = float(context.get("budget_usd", 0))
 
-    st.markdown(
+    md(
         page_header(
             "Growth Review",
             "Validate outcomes linked to the active entry; missing data remains explicit.",
@@ -105,35 +107,35 @@ def render() -> None:
 
     controls = st.columns([0.48, 0.24, 0.18, 0.1], vertical_alignment="center")
     with controls[0]:
-        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
+        md(mission_chip(active_context_label()), unsafe_allow_html=True)
     controls[1].selectbox(
-        "Period",
+        t("Period"),
         [context.get("campaign_dates", "Active entry period"), "All recorded events"],
         label_visibility="collapsed",
     )
     markets = context.get("markets") or [context.get("market", "All markets")]
-    controls[2].selectbox("Market", ["All markets", *markets], label_visibility="collapsed")
-    controls[3].button("Export", use_container_width=True)
+    controls[2].selectbox(t("Market"), ["All markets", *markets], label_visibility="collapsed")
+    controls[3].button(t("Export"), use_container_width=True)
 
-    st.markdown(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
+    md(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
 
     left, right = st.columns([0.38, 0.62], gap="small")
     with left:
-        st.markdown(
+        md(
             '<div class="is-chart"><div class="is-chart-title">Creator funnel</div>'
             + _funnel(len(ranked), summary, events)
             + "</div>",
             unsafe_allow_html=True,
         )
     with right:
-        st.markdown(
+        md(
             '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Linked performance events</span>'
             '<span class="is-panel-link">No inferred attribution</span></div>'
             f'<div class="is-panel-body">{_performance_table(events)}</div></div>',
             unsafe_allow_html=True,
         )
 
-    st.markdown(
+    md(
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
         '<span class="is-panel-title">Next best action</span><span class="is-panel-link">Human approval required</span></div>'
         f'<div class="is-panel-body">{_next_actions(context, summary, events)}</div></div>',

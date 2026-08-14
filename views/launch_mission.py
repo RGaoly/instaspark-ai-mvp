@@ -5,6 +5,7 @@ from uuid import uuid4
 import streamlit as st
 
 from components.html import badge, metric_cards, page_header
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import (
     active_mission,
@@ -14,6 +15,7 @@ from components.state import (
     set_active_context,
     workflow_summary,
 )
+from components.ui import md
 
 
 def _process_strip() -> str:
@@ -153,7 +155,7 @@ def render() -> None:
     mission_names = list(mission_by_name)
     preferred_name = next((name for name, mission_id in mission_by_name.items() if mission_id == preferred_id), mission_names[0])
     selected_name = st.selectbox(
-        "Open launch mission",
+        t("Open launch mission"),
         mission_names,
         index=mission_names.index(preferred_name),
         label_visibility="collapsed",
@@ -165,7 +167,7 @@ def render() -> None:
 
     left, right = st.columns([1, 0.26], vertical_alignment="top")
     with left:
-        st.markdown(
+        md(
             page_header(
                 "Launch Mission Dashboard",
                 "Realtime overview of global creator growth operations.",
@@ -176,19 +178,19 @@ def render() -> None:
     with right:
         b1, b2 = st.columns(2)
         with b1:
-            st.button("Export", use_container_width=True)
+            st.button(t("Export"), use_container_width=True)
         with b2:
-            if st.button("+ New Mission", type="primary", use_container_width=True):
+            if st.button(t("+ New Mission"), type="primary", use_container_width=True):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form
 
     if st.session_state.show_mission_form:
-        with st.expander("Create a new launch mission", expanded=True):
+        with st.expander(t("Create a new launch mission"), expanded=True):
             c1, c2, c3 = st.columns(3)
-            product = c1.text_input("Product", mission["product"])
-            market = c2.selectbox("Primary market", ["United States", "Mexico", "Japan"])
-            budget = c3.number_input("Budget (USD)", min_value=10000, value=int(mission["budget_usd"]), step=10000)
-            objective = st.text_area("Launch objective", mission["objective"])
-            if st.button("Save mission", type="primary"):
+            product = c1.text_input(t("Product"), mission["product"])
+            market = c2.selectbox(t("Primary market"), ["United States", "Mexico", "Japan"])
+            budget = c3.number_input(t("Budget (USD)"), min_value=10000, value=int(mission["budget_usd"]), step=10000)
+            objective = st.text_area(t("Launch objective"), mission["objective"])
+            if st.button(t("Save mission"), type="primary"):
                 saved = {
                     "mission_id": f"mission_{uuid4().hex[:8]}",
                     "name": f"{product} · {market} Launch",
@@ -214,7 +216,7 @@ def render() -> None:
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
-    st.markdown(_product_card(mission), unsafe_allow_html=True)
+    md(_product_card(mission), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
         ("Shortlisted", str(summary.get("shortlisted", 0)), "Unified workflow", ""),
@@ -223,16 +225,16 @@ def render() -> None:
         ("Published", str(summary.get("published", 0)), "Linked workflow", ""),
         ("Measured", str(summary.get("measured", 0)), "Sourced events only", ""),
     ]
-    st.markdown(metric_cards(metrics), unsafe_allow_html=True)
+    md(metric_cards(metrics), unsafe_allow_html=True)
 
     main, side = st.columns([1, 0.34], gap="small", vertical_alignment="top")
     with main:
         c1, c2 = st.columns([1.25, 0.85], gap="small")
         with c1:
-            st.markdown(_workflow_card(summary), unsafe_allow_html=True)
+            md(_workflow_card(summary), unsafe_allow_html=True)
         with c2:
-            st.markdown(_actions_card(summary, mission.get("market", "Target market")), unsafe_allow_html=True)
+            md(_actions_card(summary, mission.get("market", "Target market")), unsafe_allow_html=True)
     with side:
-        st.markdown(_tasks_notifications(mission), unsafe_allow_html=True)
+        md(_tasks_notifications(mission), unsafe_allow_html=True)
 
     render_demo_notice()

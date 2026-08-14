@@ -14,6 +14,7 @@ from components.html import (
     score_ring,
     scorebar,
 )
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import (
     active_context,
@@ -23,6 +24,7 @@ from components.state import (
     selected_creator,
     transition_creator_state,
 )
+from components.ui import md
 
 
 def _filters(context: dict) -> str:
@@ -177,7 +179,7 @@ def render() -> None:
 
     head_l, head_r = st.columns([1, 0.42], vertical_alignment="top")
     with head_l:
-        st.markdown(
+        md(
             page_header(
                 "Creator Search & Match",
                 "Find creators whose content, audience and commercial readiness fit the active entry.",
@@ -185,28 +187,28 @@ def render() -> None:
             ),
             unsafe_allow_html=True,
         )
-        st.markdown(
+        md(
             mission_chip(active_context_label()),
             unsafe_allow_html=True,
         )
     with head_r:
-        st.markdown('<div class="is-header-actions">', unsafe_allow_html=True)
+        md('<div class="is-header-actions">', unsafe_allow_html=True)
         b1, b2 = st.columns(2)
         with b1:
-            st.button("Save Search", use_container_width=True)
+            st.button(t("Save Search"), use_container_width=True)
         with b2:
-            if st.button("Generate Brief", type="primary", use_container_width=True):
+            if st.button(t("Generate Brief"), type="primary", use_container_width=True):
                 creator = selected_creator()
                 st.session_state.selected_creator_id = creator["creator_id"]
-                st.toast("Creator selected for Content Studio")
-        st.markdown("</div>", unsafe_allow_html=True)
+                st.toast(t("Creator selected for Content Studio"))
+        md("</div>", unsafe_allow_html=True)
 
-    st.markdown(
+    md(
         nl_search_shell("Describe the creator profile you need — ranked against the active entry"),
         unsafe_allow_html=True,
     )
     query = st.text_input(
-        "Search creators",
+        t("Search creators"),
         value=(
             f"Find creators in {context.get('market', 'the target market')} for "
             f"{', '.join(context.get('target_topics', [])) or 'the active opportunity'}"
@@ -215,12 +217,12 @@ def render() -> None:
         key="creator_nl_query",
     )
     _ = query  # keep widget wired for demo interaction; ranking stays mission-aware
-    st.markdown(_filters(context), unsafe_allow_html=True)
+    md(_filters(context), unsafe_allow_html=True)
 
     options = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     toolbar_left, toolbar_mid, toolbar_right = st.columns([0.65, 0.2, 0.15], vertical_alignment="center")
     with toolbar_left:
-        st.markdown(
+        md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
             f'{min(8, len(ranked))} creators found · context-aware ranking · {ai_badge("Ranked by InstaSpark AI")}'
             f'</div>',
@@ -234,23 +236,23 @@ def render() -> None:
             option_names[0],
         )
         selected_name = st.selectbox(
-            "Inspect creator",
+            t("Inspect creator"),
             option_names,
             index=option_names.index(preferred_name),
             label_visibility="collapsed",
         )
         select_creator(options[selected_name])
     with toolbar_right:
-        st.button("Sort: Match score", use_container_width=True)
+        st.button(t("Sort: Match score"), use_container_width=True)
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
-        st.markdown(_creator_table(ranked), unsafe_allow_html=True)
+        md(_creator_table(ranked), unsafe_allow_html=True)
     with aside:
         creator = selected_creator()
-        st.markdown(_detail_panel(creator, context), unsafe_allow_html=True)
+        md(_detail_panel(creator, context), unsafe_allow_html=True)
         a, b, c = st.columns(3)
-        if a.button("Shortlist", type="primary", use_container_width=True):
+        if a.button(t("Shortlist"), type="primary", use_container_width=True):
             cid = creator["creator_id"]
             try:
                 transition_creator_state(
@@ -260,16 +262,16 @@ def render() -> None:
                     reason="Operator shortlisted from Search & Match",
                     evidence=list(creator.get("evidence", [])[:2]),
                 )
-                st.toast("Added to shortlist with an audit event")
+                st.toast(t("Added to shortlist with an audit event"))
             except ValueError as exc:
                 st.info(str(exc))
-        if b.button("Compare", use_container_width=True):
+        if b.button(t("Compare"), use_container_width=True):
             cid = creator["creator_id"]
             if cid not in st.session_state.compare_ids:
                 st.session_state.compare_ids = (st.session_state.compare_ids + [cid])[-3:]
-            st.toast("Added to compare set")
-        if c.button("Generate brief", use_container_width=True):
+            st.toast(t("Added to compare set"))
+        if c.button(t("Generate brief"), use_container_width=True):
             st.session_state.selected_creator_id = creator["creator_id"]
-            st.toast("Creator selected for Content Studio")
+            st.toast(t("Creator selected for Content Studio"))
 
     render_demo_notice()

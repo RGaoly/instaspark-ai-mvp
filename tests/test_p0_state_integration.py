@@ -171,3 +171,40 @@ def test_workflow_board_is_derived_from_current_context(session):
     assert sum(len(records) for records in board.values()) == 3
     assert set(board) == {"shortlisted"}
     assert {record["creator_id"] for record in board["shortlisted"]} == set(session.shortlist_ids)
+
+
+def test_human_decision_is_written_to_sqlite(session):
+    from infra import repository
+
+    state.set_active_context("opportunity", "OPP-003")
+    state.save_decision(
+        "C009",
+        "Rejected",
+        "Evidence did not pass qualification",
+        reason_code="opportunity_rejected",
+    )
+
+    rows = repository.load_decisions()
+    assert len(rows) == 1
+    assert rows[0]["creator_id"] == "C009"
+    assert rows[0]["decision"] == "Rejected"
+    assert rows[0]["reason"] == "Evidence did not pass qualification"
+
+
+def test_operator_work_survives_a_new_session(session, monkeypatch):
+    state.set_active_context("opportunity", "OPP-002")
+    state.save_decision(
+        "C003",
+        "Approved",
+        "Evidence and commercial fit approved",
+        reason_code="strong_fit",
+    )
+
+    fresh = SessionState()
+    monkeypatch.setattr(state.st, "session_state", fresh)
+    state.bootstrap_state()
+
+    assert fresh["active_entry_type"] == "opportunity"
+    assert fresh["active_opportunity_id"] == "OPP-002"
+    assert any(item["creator_id"] == "C003" and item["decision"] == "Approved" for item in fresh["decision_log"])
+    assert state.creator_state("C003") == "approved"

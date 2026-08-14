@@ -50,12 +50,16 @@ discovered → qualified → shortlisted → approved → contacted → negotiat
 
 ## Quick start
 
+Requires Python 3.12.
+
 ```bash
-python -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 streamlit run app.py
 ```
+
+Default login: `admin` / `admin123`. A read-only viewer is available as `demo` / `demo123`.
 
 运行测试：
 
@@ -67,12 +71,15 @@ pytest -q
 
 ```text
 .
-├── .github/workflows/tests.yml    # CI test gate
-├── app.py                         # 双入口与共享工作区路由
+├── .github/workflows/ci.yml       # pytest + Docker build
+├── app.py                         # 登录门禁、双入口与共享工作区路由
 ├── components/
-│   ├── state.py                   # 活动上下文、状态迁移与 session store
+│   ├── auth.py                    # 登录页
+│   ├── i18n.py                    # 中英切换
+│   ├── state.py                   # 活动上下文、状态迁移、SQLite 镜像
 │   ├── shell.py
 │   ├── html.py
+│   ├── ui.py                      # 本地化 markdown 渲染
 │   └── theme.py
 ├── data/
 │   ├── creators.csv
@@ -87,13 +94,14 @@ pytest -q
 │   ├── 05_phase0_architecture.md
 │   ├── 05_phase0_ui_system.md
 │   └── 06_p0_product_contract.md
+├── infra/
+│   ├── auth.py                    # PBKDF2 用户校验
+│   ├── config.py
+│   ├── database.py                # SQLite schema
+│   └── repository.py
 ├── services/
-│   ├── mission_service.py
 │   ├── opportunity_service.py
-│   ├── matching_service.py
-│   ├── content_service.py
-│   ├── campaign_service.py
-│   └── learning_service.py
+│   └── llm_service.py             # OpenAI-compatible provider, template fallback
 ├── src/
 │   ├── brief.py
 │   ├── data_loader.py
@@ -108,16 +116,11 @@ pytest -q
 │   ├── outreach_operations.py
 │   └── growth_review.py
 └── tests/
-    ├── test_scoring.py
-    ├── test_domain.py
-    ├── test_phase0_ui.py
-    ├── test_p0_product_contract.py
-    └── test_p0_state_integration.py
 ```
 
 ## P0 boundaries
 
-P0 已建立双入口信息架构、核心对象契约、统一 session 上下文、状态机和审计边界。数据仍为合成数据，状态只保存在当前 Streamlit session；数据库、多用户权限、实时平台采集、真实消息发送、模型生成和归因管线属于后续阶段。完整验收契约见 [`docs/06_p0_product_contract.md`](docs/06_p0_product_contract.md)。
+P0 已建立双入口信息架构、核心对象契约、统一活动上下文、状态机和审计边界。登录、中英切换和 SQLite 持久化已经接上：刷新浏览器后，决策日志、外联案件和创作者状态会从 `data/instaspark.db` 恢复。数据仍为合成数据。实时平台采集、真实消息发送、归因管线和角色强制（viewer 只读）属于后续阶段。完整验收契约见 [`docs/06_p0_product_contract.md`](docs/06_p0_product_contract.md)。
 
 ## Deployment
 

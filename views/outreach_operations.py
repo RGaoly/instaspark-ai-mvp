@@ -3,6 +3,7 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import (
     active_context,
@@ -12,6 +13,7 @@ from components.state import (
     workflow_board,
     workflow_events,
 )
+from components.ui import labels, md
 
 
 STAGE_TONES = {
@@ -115,7 +117,7 @@ def render() -> None:
 
     head_l, head_r = st.columns([1, 0.4], vertical_alignment="top")
     with head_l:
-        st.markdown(
+        md(
             page_header(
                 "Outreach Operations",
                 "Move creators through one governed workflow with auditable state changes.",
@@ -123,7 +125,7 @@ def render() -> None:
             ),
             unsafe_allow_html=True,
         )
-        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
+        md(mission_chip(active_context_label()), unsafe_allow_html=True)
     with head_r:
         people = [person for stage in board.values() for person in stage]
         if people:
@@ -131,13 +133,13 @@ def render() -> None:
                 f'{person["creator_name"]} · {_stage_label(person["state"])}': person
                 for person in people
             }
-            selected_label = st.selectbox("Creator workflow", list(creator_by_label))
+            selected_label = st.selectbox(t("Creator workflow"), list(creator_by_label))
             selected = creator_by_label[selected_label]
             next_states = allowed_next_creator_states(selected["creator_id"])
             if next_states:
-                target = st.selectbox("Next state", next_states, format_func=_stage_label)
-                reason = st.text_input("Transition reason", "Operator completed the required review")
-                if st.button("Advance workflow", type="primary", use_container_width=True):
+                target = st.selectbox(t("Next state"), next_states, format_func=_stage_label)
+                reason = st.text_input(t("Transition reason"), "Operator completed the required review")
+                if st.button(t("Advance workflow"), type="primary", use_container_width=True):
                     try:
                         transition_creator_state(
                             selected["creator_id"],
@@ -152,18 +154,18 @@ def render() -> None:
                         st.success(f'Advanced to {_stage_label(target)} with an audit event.')
                         st.rerun()
 
-    tabs = st.tabs(["Workflow Board", "List", "Audit Log", "Stage Metrics"])
+    tabs = st.tabs(labels(["Workflow Board", "List", "Audit Log", "Stage Metrics"]))
     with tabs[0]:
-        st.markdown(_kanban(board), unsafe_allow_html=True)
+        md(_kanban(board), unsafe_allow_html=True)
     with tabs[1]:
-        st.markdown(_list_view(board), unsafe_allow_html=True)
+        md(_list_view(board), unsafe_allow_html=True)
     with tabs[2]:
-        st.markdown(_event_log(workflow_events()), unsafe_allow_html=True)
+        md(_event_log(workflow_events()), unsafe_allow_html=True)
     with tabs[3]:
         metrics = [(_stage_label(stage), str(len(people)), "Current entry") for stage, people in board.items()]
         if not metrics:
             metrics = [("Workflow records", "0", "Start by shortlisting a creator")]
-        st.markdown(
+        md(
             '<div class="is-grid-4">'
             + "".join(
                 f'<div class="is-metric"><div class="is-metric-label">{esc(label)}</div>'

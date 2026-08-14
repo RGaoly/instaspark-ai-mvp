@@ -3,6 +3,7 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header, scorebar
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import (
     active_context,
@@ -13,6 +14,7 @@ from components.state import (
     select_creator,
     transition_creator_state,
 )
+from components.ui import md
 
 
 def _compare_grid(rows) -> str:
@@ -138,7 +140,7 @@ def render() -> None:
 
     head_l, head_r = st.columns([1, 0.28], vertical_alignment="top")
     with head_l:
-        st.markdown(
+        md(
             page_header(
                 "Creator Compare",
                 "Compare shortlisted creators and review rationale before approving outreach.",
@@ -146,12 +148,12 @@ def render() -> None:
             ),
             unsafe_allow_html=True,
         )
-        st.markdown(
+        md(
             mission_chip(active_context_label(), light=True),
             unsafe_allow_html=True,
         )
     with head_r:
-        st.button("Export", use_container_width=True)
+        st.button(t("Export"), use_container_width=True)
 
     name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     default_names = [
@@ -177,20 +179,20 @@ def render() -> None:
     if compare.empty:
         compare = ranked.head(3)
 
-    st.markdown(_compare_grid(compare), unsafe_allow_html=True)
+    md(_compare_grid(compare), unsafe_allow_html=True)
     focus = compare.iloc[0]
     select_creator(focus["creator_id"])
     focus_state = creator_state(focus["creator_id"])
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
-        st.markdown(_evidence_panel(focus, context), unsafe_allow_html=True)
+        md(_evidence_panel(focus, context), unsafe_allow_html=True)
     with c2:
-        st.markdown(_drivers_panel(focus), unsafe_allow_html=True)
+        md(_drivers_panel(focus), unsafe_allow_html=True)
     with c3:
-        st.markdown(_risk_panel(focus), unsafe_allow_html=True)
+        md(_risk_panel(focus), unsafe_allow_html=True)
 
-    st.markdown(
+    md(
         f'<div class="is-action-bar">'
         f'<div><b>Ready to take action on {esc(focus["creator_name"])}?</b>'
         f'<small>Current state: {esc(focus_state.replace("_", " ").title())} · evidence and risks require operator judgment.</small></div>'
@@ -200,7 +202,7 @@ def render() -> None:
     _, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
     with a:
         if focus_state == "qualified":
-            if st.button("Add to Shortlist", type="primary", use_container_width=True):
+            if st.button(t("Add to Shortlist"), type="primary", use_container_width=True):
                 transition_creator_state(
                     focus["creator_id"],
                     "shortlisted",
@@ -211,7 +213,7 @@ def render() -> None:
                 st.success("Shortlisted with an audit event. Review once more to approve outreach.")
                 st.rerun()
         elif focus_state == "shortlisted":
-            if st.button("Approve Outreach", type="primary", use_container_width=True):
+            if st.button(t("Approve Outreach"), type="primary", use_container_width=True):
                 save_decision(
                     focus["creator_id"],
                     "Approved",
@@ -223,9 +225,9 @@ def render() -> None:
                 st.success("Approved and linked to one OutreachCase.")
                 st.rerun()
         else:
-            st.button("Approval recorded", disabled=True, use_container_width=True)
+            st.button(t("Approval recorded"), disabled=True, use_container_width=True)
     with b:
-        if st.button("Request Review", use_container_width=True):
+        if st.button(t("Request Review"), use_container_width=True):
             save_decision(
                 focus["creator_id"],
                 "Review",
@@ -236,7 +238,7 @@ def render() -> None:
             )
             st.info("Review request logged.")
     with c:
-        if st.button("Reject", use_container_width=True, disabled=focus_state in {"contracted", "content_in_review", "published", "measured", "closed_lost"}):
+        if st.button(t("Reject"), use_container_width=True, disabled=focus_state in {"contracted", "content_in_review", "published", "measured", "closed_lost"}):
             save_decision(
                 focus["creator_id"],
                 "Rejected",

@@ -1,0 +1,122 @@
+"""Authentication module — user management, password hashing, session helpers.
+
+Uses PBKDF2-HMAC-SHA256 (built-in hashlib) for password hashing.
+Default users are seeded on first run.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import secrets
+from typing import Any
+
+import streamlit as st
+
+from infra.config import (
+    DEFAULT_ADMIN_DISPLAY_NAME,
+    DEFAULT_ADMIN_PASSWORD,
+    DEFAULT_ADMIN_USERNAME,
+    DEFAULT_DEMO_DISPLAY_NAME,
+    DEFAULT_DEMO_PASSWORD,
+    DEFAULT_DEMO_USERNAME,
+    PBKDF2_HASH_ALGORITHM,
+    PBKDF2_ITERATIONS,
+    SALT_LENGTH,
+)
+from infra.database import get_connection, init_db
+
+
+def _hash_password(password: str, salt: str) -> str:
+    return hashlib.pbkdf2_hmac(
+        PBKDF2_HASH_ALGORITHM,
+        password.encode("utf-8"),
+        salt.encode("utf-8"),
+        PBKDF2_ITERATIONS,
+    ).hex()
+
+
+def _generate_salt() -> str:
+    return secrets.token_hex(SALT_LENGTH)
+
+
+def create_user(username: str, display_name: str, password: str, role: str = "admin") -> None:
+    salt = _generate_salt()
+    password_hash = _hash_password(password, salt)
+    conn = get_connection()
+    try:
+        conn.execute(
+            "INSERT INTO users (username, display_name, password_hash, salt, role) VALUES (?, ?, ?, ?, ?)",
+            (username, display_name, password_hash, salt, role),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def verify_user(username: str, password: str) -> dict[str, Any] | None:
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT id, username, display_name, password_hash, salt, role FROM users WHERE username = ?",
+            (username,),
+        ).fetchone()
+        if not row:
+            return None
+        expected_hash = _hash_password(password, row["salt"])
+        if not secrets.compare_digest(expected_hash, row["password_hash"]):
+            return None
+        return {"id": row["id"], "username": row["username"], "display_name": row["display_name"], "role": row["role"]}
+    finally:
+        conn.close()
+
+
+def count_users() -> int:
+    conn = get_connection()
+    try:
+        row = conn.execute("SELECT COUNT(*) AS cnt FROM users").fetchone()
+        return row["cnt"]
+    finally:
+        conn.close()
+
+
+def seed_default_users() -> None:
+    """Create default admin and demo users if the users table is empty."""
+    if count_users() > 0:
+        return
+    create_user(DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_DISPLAY_NAME, DEFAULT_ADMIN_PASSWORD, role="admin")
+    create_user(DEFAULT_DEMO_USERNAME, DEFAULT_DEMO_DISPLAY_NAME, DEFAULT_DEMO_PASSWORD, role="viewer")
+
+
+def is_authenticated() -> bool:
+    """Return True if a user is logged in."""
+    return bool(st.session_state.get("auth_user"))
+
+
+def current_user() -> dict[str, Any]:
+    return st.session_state.get("auth_user", {"display_name": "Guest", "role": "viewer", "username": "guest"})
+
+
+def current_display_name() -> str:
+    return current_user().get("display_name", "Guest")
+
+
+def current_role() -> str:
+    return current_user().get("role", "viewer")
+
+
+def login(username: str, password: str) -> bool:
+    user = verify_user(username, password)
+    if user:
+        st.session_state.auth_user = user
+        return True
+    return False
+
+
+def logout() -> None:
+    st.session_state.pop("auth_user", None)
+
+
+def init_auth() -> None:
+    """Initialize auth — ensure DB and default users exist."""
+    init_db()
+    seed_default_users()

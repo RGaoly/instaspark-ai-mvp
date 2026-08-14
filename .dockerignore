@@ -1,0 +1,53 @@
+# ─── .dockerignore ─────────────────────────────────────────────
+# Exclude files not needed in the Docker image
+# ───────────────────────────────────────────────────────────────
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+tests/
+TEST_RESULT.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment & secrets
+.env
+
+# Database files (runtime-generated, not baked into image)
+data/instaspark.db
+data/instaspark.db-wal
+data/instaspark.db-shm
+
+# Git
+.git/
+.gitignore
+
+# CI
+.github/
+
+# Documentation (not needed at runtime)
+docs/
+PHASE0_INSTALL.md
+PHASE0_UI_INSTALL.md
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml

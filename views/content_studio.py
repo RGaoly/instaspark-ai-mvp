@@ -3,8 +3,10 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
 from components.state import active_context_label, active_mission, ranking, select_creator
+from components.ui import labels, md
 
 
 def _mission_creator_cards(mission, creator) -> str:
@@ -181,7 +183,7 @@ def render() -> None:
     selected_matches = ranked[ranked["creator_id"] == selected_id]
     preferred_name = selected_matches.iloc[0]["creator_name"] if not selected_matches.empty else creator_names[0]
     selected_name = st.selectbox(
-        "Creator",
+        t("Creator"),
         creator_names,
         index=creator_names.index(preferred_name),
         label_visibility="collapsed",
@@ -191,7 +193,7 @@ def render() -> None:
 
     head_l, head_r = st.columns([1, 0.55], vertical_alignment="top")
     with head_l:
-        st.markdown(
+        md(
             page_header(
                 "Content Studio",
                 "Create localized, on-brand content briefs and collaboration materials.",
@@ -200,35 +202,35 @@ def render() -> None:
             + f'<div style="margin-top:-8px;margin-bottom:10px">{ai_badge("AI Content Studio")}</div>',
             unsafe_allow_html=True,
         )
-        st.markdown(mission_chip(active_context_label()), unsafe_allow_html=True)
+        md(mission_chip(active_context_label()), unsafe_allow_html=True)
     with head_r:
         e1, e2, e3 = st.columns(3)
         with e1:
-            st.button("Export Brief", use_container_width=True)
+            st.button(t("Export Brief"), use_container_width=True)
         with e2:
-            if st.button("Regenerate", use_container_width=True):
+            if st.button(t("Regenerate"), use_container_width=True):
                 st.session_state.brief_version += 1
-                st.toast("New brief version generated")
+                st.toast(t("New brief version generated"))
                 st.rerun()
         with e3:
-            st.button("Send to Creator", type="primary", use_container_width=True)
+            st.button(t("Send to Creator"), type="primary", use_container_width=True)
 
     left, center, right = st.columns([0.18, 0.58, 0.24], gap="small", vertical_alignment="top")
     with left:
-        st.markdown(_mission_creator_cards(mission, creator), unsafe_allow_html=True)
+        md(_mission_creator_cards(mission, creator), unsafe_allow_html=True)
     with center:
-        st.markdown(
+        md(
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
             f'<span style="font-size:11px;color:#69757E;font-weight:650">'
             f'AI-generated collaboration brief · Version {st.session_state.brief_version}</span>'
             f'{ai_badge("Localized")}</div>',
             unsafe_allow_html=True,
         )
-        tabs = st.tabs(["Brief", "Script", "Hooks", "Captions", "Localized variants"])
+        tabs = st.tabs(labels(["Brief", "Script", "Hooks", "Captions", "Localized variants"]))
         with tabs[0]:
-            st.markdown(_brief_content(mission, creator), unsafe_allow_html=True)
+            md(_brief_content(mission, creator), unsafe_allow_html=True)
         with tabs[1]:
-            st.markdown(
+            md(
                 '<div class="is-card is-card-pad"><div class="is-card-title">30–60 second script</div>'
                 '<div class="is-card-caption" style="margin-top:8px;line-height:1.7">'
                 "0–3s: immersive hook. 3–15s: creator challenge. 15–35s: product proof in action. "
@@ -241,7 +243,7 @@ def render() -> None:
                 "What if you never missed the shot?",
                 "This ride changed after I stopped choosing the frame.",
             ]
-            st.markdown(
+            md(
                 '<div class="is-grid-3">'
                 + "".join(
                     f'<div class="is-card is-card-pad"><b style="font-size:10px">Hook {i}</b>'
@@ -252,7 +254,7 @@ def render() -> None:
                 unsafe_allow_html=True,
             )
         with tabs[3]:
-            st.markdown(
+            md(
                 '<div class="is-card is-card-pad"><div class="is-card-title">Caption variants</div>'
                 '<div class="is-card-caption" style="margin-top:8px">'
                 "Platform-native captions for TikTok, Instagram Reels and YouTube Shorts, "
@@ -260,8 +262,8 @@ def render() -> None:
                 unsafe_allow_html=True,
             )
         with tabs[4]:
-            st.markdown(_brief_content(mission, creator), unsafe_allow_html=True)
+            md(_brief_content(mission, creator), unsafe_allow_html=True)
     with right:
-        st.markdown(_right_controls(mission), unsafe_allow_html=True)
+        md(_right_controls(mission), unsafe_allow_html=True)
 
     render_demo_notice()

@@ -6,7 +6,9 @@ import streamlit as st
 
 from components import state as state_store
 from components.html import badge, esc, page_header
+from components.i18n import t
 from components.shell import render_demo_notice, render_topbar
+from components.ui import md
 from services.opportunity_service import (
     OPPORTUNITY_STATUSES,
     create_opportunity,
@@ -79,15 +81,15 @@ def _context_caption(opportunity: dict | None) -> str:
 
 
 def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> None:
-    st.markdown("#### Opportunity pipeline")
+    md("#### Opportunity pipeline")
     filter_left, filter_right = st.columns(2)
     status_options = ["All", *[_status_label(status) for status in OPPORTUNITY_STATUSES]]
     selected_status = filter_left.selectbox(
-        "Status", status_options, key="opportunity_status_filter"
+        t("Status"), status_options, key="opportunity_status_filter"
     )
     markets = sorted({item["market"] for item in opportunities if item.get("market")})
     selected_market = filter_right.selectbox(
-        "Market", ["All", *markets], key="opportunity_market_filter"
+        t("Market"), ["All", *markets], key="opportunity_market_filter"
     )
 
     filtered = [
@@ -107,7 +109,7 @@ def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> 
         with st.container(border=True):
             summary, status_col, action = st.columns([0.64, 0.2, 0.16], vertical_alignment="center")
             with summary:
-                st.markdown(
+                md(
                     f"**{esc(opportunity['title'])}**  \n"
                     f"{esc(creator_name)} · {esc(opportunity['market'])} · "
                     f"{esc(opportunity['language'])}  \n"
@@ -115,7 +117,7 @@ def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> 
                     unsafe_allow_html=True,
                 )
             with status_col:
-                st.markdown(
+                md(
                     badge(_status_label(opportunity["status"]), _status_tone(opportunity["status"])),
                     unsafe_allow_html=True,
                 )
@@ -124,7 +126,7 @@ def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> 
                     and st.session_state.get("active_opportunity_id")
                     == opportunity["opportunity_id"]
                 ):
-                    st.caption("Active context")
+                    st.caption(t("Active context"))
             with action:
                 label = "Selected" if is_selected else "View"
                 if st.button(
@@ -140,11 +142,11 @@ def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> 
 def _render_detail(opportunity: dict, creator: dict | None) -> None:
     creator = creator or {}
     creator_name = creator.get("creator_name", opportunity["creator_id"])
-    st.markdown("#### Opportunity detail")
+    md("#### Opportunity detail")
     with st.container(border=True):
         title_col, action_col = st.columns([0.72, 0.28], vertical_alignment="top")
         with title_col:
-            st.markdown(f"### {esc(opportunity['title'])}", unsafe_allow_html=True)
+            md(f"### {esc(opportunity['title'])}", unsafe_allow_html=True)
             st.caption(
                 f"{opportunity['opportunity_id']} · {creator_name} · "
                 f"{opportunity['market']} · {opportunity['language']}"
@@ -166,23 +168,23 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                 st.rerun()
 
         facts = st.columns(5)
-        facts[0].metric("Type", _status_label(opportunity["opportunity_type"]))
-        facts[1].metric("Status", _status_label(opportunity["status"]))
-        facts[2].metric("Source", opportunity["source"])
-        facts[3].metric("Owner", opportunity["owner"])
+        facts[0].metric(t("Type"), _status_label(opportunity["opportunity_type"]))
+        facts[1].metric(t("Status"), _status_label(opportunity["status"]))
+        facts[2].metric(t("Source"), opportunity["source"])
+        facts[3].metric(t("Owner"), opportunity["owner"])
         linked = opportunity.get("linked_mission_id") or "Not linked"
-        facts[4].metric("Linked mission", linked)
+        facts[4].metric(t("Linked mission"), linked)
 
-        st.markdown("**Opportunity hypothesis**")
+        md("**Opportunity hypothesis**")
         st.write(opportunity["hypothesis"])
-        st.markdown("**Evidence**")
+        md("**Evidence**")
         if opportunity["evidence"]:
             for item in opportunity["evidence"]:
-                st.markdown(f"- {esc(item)}", unsafe_allow_html=True)
+                md(f"- {esc(item)}", unsafe_allow_html=True)
         else:
-            st.caption("No evidence has been recorded yet.")
+            st.caption(t("No evidence has been recorded yet."))
 
-        st.markdown("**Suggested next action**")
+        md("**Suggested next action**")
         st.write(opportunity["suggested_action"])
 
         created_at = opportunity.get("created_at", "")
@@ -205,22 +207,22 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
             st.divider()
             creator_id = opportunity["creator_id"]
             current_state = state_store.creator_state(creator_id)
-            st.markdown(f"**Collaboration state:** `{_status_label(current_state)}`")
+            md(f"**Collaboration state:** `{_status_label(current_state)}`")
             next_states = state_store.allowed_next_creator_states(creator_id)
             if next_states:
                 transition_col, reason_col = st.columns([0.35, 0.65])
                 target_state = transition_col.selectbox(
-                    "Next state",
+                    t("Next state"),
                     next_states,
                     format_func=_status_label,
                     key=f"opportunity_next_{opportunity['opportunity_id']}",
                 )
                 reason = reason_col.text_input(
-                    "Decision reason",
+                    t("Decision reason"),
                     "Opportunity evidence reviewed by the owner",
                     key=f"opportunity_reason_{opportunity['opportunity_id']}",
                 )
-                if st.button("Apply governed transition", use_container_width=True):
+                if st.button(t("Apply governed transition"), use_container_width=True):
                     try:
                         if target_state == "approved":
                             state_store.save_decision(
@@ -267,12 +269,12 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                     mission_labels[0],
                 )
                 selected_mission = st.selectbox(
-                    "Linked launch mission",
+                    t("Linked launch mission"),
                     mission_labels,
                     index=mission_labels.index(default_label),
                     key=f"opportunity_mission_{opportunity['opportunity_id']}",
                 )
-                if st.button("Link mission and preserve opportunity evidence", use_container_width=True):
+                if st.button(t("Link mission and preserve opportunity evidence"), use_container_width=True):
                     state_store.link_opportunity_to_mission(
                         opportunity["opportunity_id"], mission_by_label[selected_mission]
                     )
@@ -280,7 +282,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                     st.rerun()
 
                 if not current_mission_id and st.button(
-                    "Create a launch mission from this opportunity",
+                    t("Create a launch mission from this opportunity"),
                     use_container_width=True,
                 ):
                     mission_id = f'mission_{opportunity["opportunity_id"].lower().replace("-", "_")}'
@@ -311,7 +313,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
 
 
 def _render_create_form(creators: list[dict]) -> None:
-    with st.expander("Create Opportunity", expanded=False):
+    with st.expander(t("Create Opportunity"), expanded=False):
         creator_options = {
             f"{record['creator_name']} · {record['creator_id']}": str(record["creator_id"])
             for record in creators
@@ -319,30 +321,30 @@ def _render_create_form(creators: list[dict]) -> None:
         current_mission_id = st.session_state.get("active_mission_id")
         with st.form("create_creator_opportunity", clear_on_submit=False):
             c1, c2 = st.columns(2)
-            creator_label = c1.selectbox("Creator", list(creator_options))
-            title = c2.text_input("Opportunity title")
-            source = c1.text_input("Source", placeholder="Social listening, nomination, inbound…")
-            owner = c2.text_input("Owner", placeholder="Team or operator")
+            creator_label = c1.selectbox(t("Creator"), list(creator_options))
+            title = c2.text_input(t("Opportunity title"))
+            source = c1.text_input(t("Source"), placeholder=t("Social listening, nomination, inbound…"))
+            owner = c2.text_input(t("Owner"), placeholder=t("Team or operator"))
             opportunity_type = c1.selectbox(
-                "Opportunity type",
+                t("Opportunity type"),
                 ["social_signal", "performance_signal", "regional_nomination", "inbound"],
             )
-            market = c1.text_input("Market")
-            language = c2.text_input("Language")
+            market = c1.text_input(t("Market"))
+            language = c2.text_input(t("Language"))
             hypothesis = st.text_area(
-                "Hypothesis",
-                placeholder="Why is this creator an opportunity, and what should the team test?",
+                t("Hypothesis"),
+                placeholder=t("Why is this creator an opportunity, and what should the team test?"),
             )
             evidence = st.text_area(
-                "Evidence",
-                placeholder="Enter one evidence item per line.",
+                t("Evidence"),
+                placeholder=t("Enter one evidence item per line."),
             )
             suggested_action = st.text_input(
-                "Suggested next action",
+                t("Suggested next action"),
                 "Review evidence and qualify the opportunity",
             )
             link_to_mission = st.checkbox(
-                "Link to the current mission",
+                t("Link to the current mission"),
                 value=False,
                 disabled=not bool(current_mission_id),
             )
@@ -386,7 +388,7 @@ def render() -> None:
 
     header_left, header_right = st.columns([0.7, 0.3], vertical_alignment="top")
     with header_left:
-        st.markdown(
+        md(
             page_header(
                 "Creator Opportunity",
                 "Capture creator-led signals, evaluate the evidence and turn qualified opportunities into active work.",
@@ -396,7 +398,7 @@ def render() -> None:
         )
         st.caption(_context_caption(active))
     with header_right:
-        st.metric("Open opportunities", len(opportunities))
+        st.metric(t("Open opportunities"), len(opportunities))
 
     _render_create_form(creators)
     list_col, detail_col = st.columns([0.48, 0.52], gap="small", vertical_alignment="top")

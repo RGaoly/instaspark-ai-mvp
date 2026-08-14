@@ -8,6 +8,8 @@ from typing import Any
 
 import streamlit as st
 
+from infra import repository
+from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
 from src.domain import WORKFLOW_STATES, EntryType, can_transition, transition_event
 from src.scoring import rank_creators
@@ -17,6 +19,26 @@ ROOT = Path(__file__).resolve().parents[1]
 CREATORS_PATH = ROOT / "data" / "creators.csv"
 MISSION_PATH = ROOT / "data" / "launch_mission.json"
 OPPORTUNITIES_PATH = ROOT / "data" / "creator_opportunities.json"
+
+# Session keys mirrored into SQLite so a browser refresh does not discard
+# operator work. Derived caches such as `matches` are recomputed instead.
+_PERSISTED_KEYS = (
+    "mission",
+    "missions",
+    "opportunities",
+    "active_entry_type",
+    "active_mission_id",
+    "active_opportunity_id",
+    "shortlist_ids",
+    "selected_creator_id",
+    "compare_ids",
+    "decision_log",
+    "creator_workflows",
+    "outreach_cases",
+    "content_assets",
+    "performance_events",
+    "brief_version",
+)
 
 ENTRY_ALIASES = {
     "mission": EntryType.LAUNCH_MISSION.value,
@@ -92,7 +114,22 @@ def _seed_workflows() -> dict[str, dict[str, Any]]:
     return records
 
 
+def persist_state() -> None:
+    """Mirror the persisted session keys into SQLite."""
+    for key in _PERSISTED_KEYS:
+        if key in st.session_state:
+            repository.save_state(key, st.session_state[key])
+
+
+def reset_demo() -> None:
+    """Clear persisted state and session so the next run reseeds from defaults."""
+    reset_db()
+    for key in (*_PERSISTED_KEYS, "matches", "_state_restored", "show_mission_form"):
+        st.session_state.pop(key, None)
+
+
 def bootstrap_state() -> None:
+    init_db()
     mission = _mission_seed()
     eligible_ids = rank_creators(_load_creators(), mission)["creator_id"].tolist()
     shortlist_ids = eligible_ids[:3]
@@ -118,6 +155,15 @@ def bootstrap_state() -> None:
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = deepcopy(value)
+
+    if not st.session_state.get("_state_restored"):
+        stored = repository.load_all_state()
+        for key, value in stored.items():
+            if key in _PERSISTED_KEYS:
+                st.session_state[key] = value
+        st.session_state["_state_restored"] = True
+        if not stored:
+            persist_state()
 
 
 def creators():
@@ -231,6 +277,7 @@ def set_active_context(entry_type: str, entry_id: str) -> dict[str, Any]:
         st.session_state.active_entry_type = normalized
         _ensure_workflow_record(opportunity.get("creator_id"), opportunity.get("status", "discovered"))
     st.session_state.active_entry_type = normalized
+    persist_state()
     return active_context()
 
 
@@ -252,6 +299,7 @@ def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
     records = [item for item in st.session_state.opportunities if item.get("opportunity_id") != opportunity_id]
     records.append(deepcopy(opportunity))
     st.session_state.opportunities = records
+    persist_state()
     return deepcopy(opportunity)
 
 
@@ -262,6 +310,7 @@ def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[st
     if opportunity is None:
         raise ValueError(f"Unknown opportunity: {opportunity_id}")
     opportunity["linked_mission_id"] = mission_id
+    persist_state()
     return deepcopy(opportunity)
 
 
@@ -318,6 +367,7 @@ def select_creator(creator_id: str) -> None:
     if creator_id not in set(creators()["creator_id"]):
         raise ValueError(f"Unknown creator: {creator_id}")
     st.session_state.selected_creator_id = creator_id
+    persist_state()
 
 
 def selected_creator() -> dict[str, Any]:
@@ -404,6 +454,7 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
     st.session_state.outreach_cases.append(case)
+    persist_state()
     return deepcopy(case)
 
 
@@ -451,6 +502,14 @@ def transition_creator_state(
             case["next_action"] = (
                 f'Advance to {next_states[0].replace("_", " ")}' if next_states else "Workflow complete"
             )
+    repository.append_creator_event(
+        creator_id,
+        "State change",
+        f'{event["from_state"]} → {to_state}',
+        reason,
+        actor,
+    )
+    persist_state()
     return deepcopy(record)
 
 
@@ -533,6 +592,8 @@ def save_decision(
             evidence=evidence or ["decision://human-rejection"],
         )
     st.session_state.decision_log.append(record)
+    repository.append_decision(creator_id, decision, reason)
+    persist_state()
     return deepcopy(record)
 
 

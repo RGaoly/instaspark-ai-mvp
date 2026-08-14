@@ -1,0 +1,31 @@
+# ─── docker-compose.yml for InstaSparkAI ───────────────────────
+# Quick start: docker compose up --build
+# ───────────────────────────────────────────────────────────────
+
+services:
+  instaspark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: instaspark
+    ports:
+      - "8501:8501"
+    volumes:
+      # Persist SQLite database across container restarts
+      - db_data:/app/data
+      # Mount .env file for configuration (create from .env.example)
+      - ./.env:/app/.env:ro
+    environment:
+      # Override any .env values here if needed
+      - LLM_API_KEY=${LLM_API_KEY:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+volumes:
+  db_data:
+    driver: local

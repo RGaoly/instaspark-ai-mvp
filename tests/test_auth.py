@@ -87,6 +87,16 @@ def test_create_user_duplicate_username_raises():
         create_user("dup", "Second", "pass2")
 
 
+def test_login_page_does_not_render_an_empty_card():
+    from pathlib import Path
+
+    source = (Path(__file__).resolve().parents[1] / "components" / "auth.py").read_text(encoding="utf-8")
+    assert "auth-card" not in source
+    assert "auth-hero" in source
+    assert 'key="auth_username"' in source
+    assert 'key="auth_submit"' in source
+
+
 def test_password_hash_not_stored_in_plaintext():
     create_user("secure", "Secure User", "plaintext_pw")
     conn = get_connection()

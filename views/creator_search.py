@@ -16,7 +16,7 @@ from components.html import (
 )
 from components.i18n import t
 from components.positioning import live_lookup_caption, why_not_ttcm_html
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
@@ -243,13 +243,18 @@ def render() -> None:
         md('<div class="is-header-actions">', unsafe_allow_html=True)
         b1, b2 = st.columns(2)
         with b1:
-            st.button(t("Save Search"), use_container_width=True)
+            st.button(
+                t("Save Search"),
+                use_container_width=True,
+                disabled=True,
+                help=t("Not wired in this demo"),
+            )
         with b2:
             if st.button(t("Generate Brief"), type="primary", use_container_width=True):
                 if not ranked.empty:
                     creator = selected_creator()
                     st.session_state.selected_creator_id = creator["creator_id"]
-                    st.toast(t("Creator selected for Content Studio"))
+                    open_workspace_page("content-studio")
         md("</div>", unsafe_allow_html=True)
 
     _render_live_lookup(context)
@@ -303,7 +308,12 @@ def render() -> None:
         )
         select_creator(options[selected_name])
     with toolbar_right:
-        st.button(t("Sort: Match score"), use_container_width=True)
+        st.button(
+            t("Sort: Match score"),
+            use_container_width=True,
+            disabled=True,
+            help=t("Results are already ranked by match score"),
+        )
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
@@ -335,9 +345,9 @@ def render() -> None:
             cid = creator["creator_id"]
             if cid not in st.session_state.compare_ids:
                 st.session_state.compare_ids = (st.session_state.compare_ids + [cid])[-3:]
-            st.toast(t("Added to compare set"))
+            open_workspace_page("creator-compare")
         if c.button(t("Generate brief"), use_container_width=True):
             st.session_state.selected_creator_id = creator["creator_id"]
-            st.toast(t("Creator selected for Content Studio"))
+            open_workspace_page("content-studio")
 
     render_demo_notice()

@@ -4,7 +4,7 @@ import streamlit as st
 
 from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import render_demo_notice, render_topbar, render_write_guard
 from components.state import active_context_label, active_mission, ranking, select_creator
 from components.ui import labels, md
 from services.llm_service import (
@@ -253,7 +253,12 @@ def render() -> None:
     with head_r:
         e1, e2, e3 = st.columns(3)
         with e1:
-            st.button(t("Export Brief"), use_container_width=True)
+            st.button(
+                t("Export Brief"),
+                use_container_width=True,
+                disabled=True,
+                help=t("Not wired in this demo"),
+            )
         with e2:
             if st.button(t("Regenerate"), use_container_width=True):
                 st.session_state.brief_version += 1
@@ -264,7 +269,8 @@ def render() -> None:
                 t("Send to Creator"),
                 type="primary",
                 use_container_width=True,
-                disabled=writes_locked(),
+                disabled=True,
+                help=t("External send is not wired in this demo"),
             )
         render_write_guard()
 

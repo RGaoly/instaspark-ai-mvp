@@ -133,7 +133,7 @@ def render() -> None:
     )
     markets = context.get("markets") or [context.get("market", "All markets")]
     controls[2].selectbox(t("Market"), ["All markets", *markets], label_visibility="collapsed")
-    controls[3].button(t("Export"), use_container_width=True)
+    controls[3].button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
 
     md(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
     st.caption(

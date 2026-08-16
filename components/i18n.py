@@ -1296,6 +1296,9 @@ ZH: dict[str, str] = {
     "YouTube channel attached as evidence": "已将 YouTube 频道挂为证据",
     "Live YouTube Data API results. Attach a channel as evidence; it does not enter the ranked catalog.": "YouTube Data API 实时结果。可挂为证据，不会进入排序目录。",
     "Set YOUTUBE_API_KEY to search public YouTube channels. The ranked table below remains the demo catalog.": "配置 YOUTUBE_API_KEY 后可搜索公开 YouTube 频道。下方排序表仍是演示目录。",
+    "Not wired in this demo": "本演示未接线",
+    "Results are already ranked by match score": "结果已按匹配分排序",
+    "External send is not wired in this demo": "本演示不发送到站外",
 }
 
 

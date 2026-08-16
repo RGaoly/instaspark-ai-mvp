@@ -199,7 +199,7 @@ def render() -> None:
             unsafe_allow_html=True,
         )
     with head_r:
-        st.button(t("Export"), use_container_width=True)
+        st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
 
     name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     default_names = [

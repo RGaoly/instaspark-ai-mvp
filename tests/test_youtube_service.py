@@ -3,12 +3,14 @@ from __future__ import annotations
 from services import youtube_service
 
 
-def test_youtube_unavailable_without_key():
+def test_youtube_unavailable_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
     assert youtube_service.is_youtube_available() is False
     assert youtube_service.youtube_status_label() == "YouTube lookup off"
 
 
-def test_search_channels_does_not_invent_rows_without_key():
+def test_search_channels_does_not_invent_rows_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
     result = youtube_service.search_channels("action camera")
     assert result["available"] is False
     assert result["items"] == []

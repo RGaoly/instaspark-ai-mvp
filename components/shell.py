@@ -108,7 +108,11 @@ def _open_search_hit(hit: dict) -> None:
     else:
         select_creator(hit["id"])
     st.session_state.global_search = ""
-    page = (st.session_state.get("_nav_pages") or {}).get(hit["page"])
+    open_workspace_page(hit["page"])
+
+
+def open_workspace_page(url_path: str) -> None:
+    page = (st.session_state.get("_nav_pages") or {}).get(url_path)
     if page is not None:
         st.switch_page(page)
 

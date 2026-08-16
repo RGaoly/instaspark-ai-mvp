@@ -179,7 +179,7 @@ def render() -> None:
     with right:
         b1, b2 = st.columns(2)
         with b1:
-            st.button(t("Export"), use_container_width=True)
+            st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
         with b2:
             if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form

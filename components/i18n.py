@@ -1299,6 +1299,18 @@ ZH: dict[str, str] = {
     "Not wired in this demo": "本演示未接线",
     "Results are already ranked by match score": "结果已按匹配分排序",
     "External send is not wired in this demo": "本演示不发送到站外",
+    "Record performance event (demo)": "录入效果事件（演示）",
+    "Approve a creator first to mint a coupon, then record the conversion here.": "请先批准创作者以生成优惠码，再到这里录入转化。",
+    "Revenue USD": "收入（美元）",
+    "Spend USD": "花费（美元）",
+    "Record event": "录入事件",
+    "Performance event recorded. ROI uses this event, not a forecast.": "效果事件已录入。ROI 只统计该事件，不是预测。",
+    "Record the conversion on Growth Review": "请到增长复盘页录入转化",
+    "Coupons are tracking assets, not conversions. ROI stays 0x until an operator records an event.": "优惠码是追踪资产，不是转化。在运营录入效果事件之前，ROI 一直是 0x。",
+    "Use the expander below": "请使用下方折叠面板",
+    "Live evidence: {n} attached": "实时证据：{n} 条已挂接",
+    "Mission fit": "任务匹配",
+    "Mission fit is market + language. Overlap ≠ mission fit.": "任务匹配看市场与语言。受众重合度不等于任务匹配。",
 }
 
 

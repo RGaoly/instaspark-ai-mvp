@@ -238,6 +238,51 @@ def test_approval_issues_unique_coupons_per_creator(session):
     assert len(state.tracking_assets()) == 2
 
 
+def test_record_performance_event_drives_roi_and_survives_reload(session, monkeypatch):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    decision = state.save_decision(creator_id, "Approved", "Approve so a coupon exists")
+
+    assert state.performance_events() == []
+    assert decision["coupon"].startswith(f"X5-{creator_id}-")
+
+    event = state.record_performance_event(
+        creator_id,
+        orders=8,
+        revenue_usd=2400,
+        spend_usd=800,
+        coupon=decision["coupon"],
+        utm=decision.get("deeplink"),
+        note="Operator-entered conversion",
+    )
+
+    events = state.performance_events()
+    assert len(events) == 1
+    assert event["entry_id"] == session.active_mission_id
+    assert event["coupon"] == decision["coupon"]
+    revenue = sum(float(item["revenue_usd"]) for item in events)
+    spend = sum(float(item["spend_usd"]) for item in events)
+    roi = revenue / spend
+    assert roi == pytest.approx(3.0)
+    assert roi != pytest.approx(4.56)
+
+    fresh = SessionState()
+    monkeypatch.setattr(state.st, "session_state", fresh)
+    state.bootstrap_state()
+    restored = state.performance_events()
+    assert len(restored) == 1
+    assert restored[0]["revenue_usd"] == 2400
+    assert restored[0]["spend_usd"] == 800
+
+
+def test_viewer_cannot_record_performance_event(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        state.record_performance_event(creator_id, orders=1, revenue_usd=100, spend_usd=50)
+
+
 def test_live_youtube_evidence_attaches_once_and_blocks_viewer(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
@@ -259,3 +304,30 @@ def test_live_youtube_evidence_attaches_once_and_blocks_viewer(session):
             creator_id,
             {**channel, "channel_id": "UC999", "url": "https://www.youtube.com/channel/UC999"},
         )
+
+
+def test_live_evidence_is_visible_on_compare_and_outreach(session):
+    from views import creator_compare, outreach_operations
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.attach_live_evidence(
+        creator_id,
+        {
+            "channel_id": "UC123",
+            "title": "Trail Cam Live",
+            "url": "https://www.youtube.com/channel/UC123",
+            "source": "youtube_data_api",
+        },
+    )
+    panel = creator_compare._evidence_panel(ranked.iloc[0].to_dict(), state.active_context())
+    assert "Trail Cam Live" in panel
+    assert "https://www.youtube.com/channel/UC123" in panel
+    assert "youtube_data_api" in panel
+    assert panel.index("Trail Cam Live") < panel.index("is-video")
+    live_block = panel.split("is-video", 1)[0]
+    assert 'class="is-video"' not in live_block
+
+    state.save_decision(creator_id, "Approved", "Need the creator on the outreach board")
+    html = outreach_operations._kanban(state.workflow_board())
+    assert "Live evidence: 1 attached" in html

@@ -82,6 +82,10 @@ def test_unwired_chrome_buttons_are_disabled():
     _assert_label_disabled(compare, "Export")
     _assert_label_disabled(growth, "Export")
 
+    assert "Record performance event (demo)" in growth
+    assert "Add data source" not in growth
+    assert "record_performance_event" in growth
+
     assert 'open_workspace_page("content-studio")' in search
     assert 'open_workspace_page("creator-compare")' in search
     assert 'help=t("External send is not wired in this demo")' in studio

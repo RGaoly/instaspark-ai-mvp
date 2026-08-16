@@ -100,7 +100,7 @@ def _creator_table(ranked) -> str:
         "Followers",
         "Avg views",
         "Eng. rate",
-        "Audience fit",
+        "Mission fit",
         "Content fit",
         "Commercial",
         "Match score",
@@ -318,6 +318,7 @@ def render() -> None:
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
         md(_creator_table(ranked), unsafe_allow_html=True)
+        st.caption(t("Mission fit is market + language. Overlap ≠ mission fit."))
     with aside:
         creator = selected_creator()
         shortlist_ids = list(st.session_state.get("shortlist_ids") or [])

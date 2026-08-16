@@ -342,6 +342,26 @@ def inject_theme() -> None:
         .is-card-pad {{ padding:14px 15px; }}
         .is-card-title {{ font-size:13px; font-weight:850; color:#20262B; letter-spacing:-0.01em; }}
         .is-card-caption {{ color:var(--muted); font-size:11px; line-height:1.45; }}
+        .is-scope-note {{
+          background:#F7FBFF;
+          border:1px solid #D6E6F8;
+          border-radius:var(--radius);
+          padding:14px 16px 12px;
+          margin:0 0 14px;
+        }}
+        .is-scope-note.compact {{ padding:10px 12px; margin:8px 0 0; }}
+        .is-scope-kicker {{
+          font-size:10px; font-weight:800; letter-spacing:.04em; color:#1F67CF; text-transform:uppercase;
+        }}
+        .is-scope-note h4 {{
+          margin:6px 0 8px; font-size:14px; letter-spacing:-0.02em; color:#1A2025;
+        }}
+        .is-scope-note ul {{ margin:0; padding-left:16px; }}
+        .is-scope-note li {{
+          font-size:12px; line-height:1.45; color:#4A565E; margin:0 0 6px;
+        }}
+        .is-scope-note li b {{ color:#1A2025; }}
+        .is-scope-note small {{ display:block; margin-top:6px; color:#69757E; font-size:11px; }}
 
         .is-metric-grid {{
           display:grid;

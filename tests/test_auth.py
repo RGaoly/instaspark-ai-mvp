@@ -103,6 +103,8 @@ def test_login_page_does_not_render_an_empty_card():
     assert source.index('st.session_state.get("login_language_switcher")') < source.index(
         "Product finds creator."
     )
+    assert "Not TikTok Creator Marketplace" in source
+    assert "auth-why" in source
 
 
 def test_password_hash_not_stored_in_plaintext():

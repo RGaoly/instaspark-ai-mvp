@@ -6,6 +6,7 @@ import streamlit as st
 
 from components.html import badge, metric_cards, page_header
 from components.i18n import t
+from components.positioning import why_not_ttcm_html
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
@@ -183,6 +184,8 @@ def render() -> None:
             if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form
     render_write_guard()
+    with st.expander(t("Why this is not TikTok Creator Marketplace"), expanded=False):
+        md(why_not_ttcm_html(), unsafe_allow_html=True)
 
     if st.session_state.show_mission_form:
         with st.expander(t("Create a new launch mission"), expanded=True):

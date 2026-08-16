@@ -236,3 +236,26 @@ def test_approval_issues_unique_coupons_per_creator(session):
     assert first["coupon"].startswith(f"X5-{first_id}-")
     assert second["coupon"].startswith(f"X5-{second_id}-")
     assert len(state.tracking_assets()) == 2
+
+
+def test_live_youtube_evidence_attaches_once_and_blocks_viewer(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    channel = {
+        "channel_id": "UC123",
+        "title": "Trail Cam",
+        "url": "https://www.youtube.com/channel/UC123",
+        "source": "youtube_data_api",
+        "country": "US",
+        "subscriber_count": 12000,
+    }
+    first = state.attach_live_evidence(creator_id, channel)
+    second = state.attach_live_evidence(creator_id, channel)
+    assert first == second
+    assert len(state.live_evidence_for(creator_id)) == 1
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        state.attach_live_evidence(
+            creator_id,
+            {**channel, "channel_id": "UC999", "url": "https://www.youtube.com/channel/UC999"},
+        )

@@ -41,6 +41,7 @@ _PERSISTED_KEYS = (
     "content_assets",
     "performance_events",
     "brief_version",
+    "live_evidence",
 )
 
 ENTRY_ALIASES = {
@@ -155,6 +156,7 @@ def bootstrap_state() -> None:
         "performance_events": [],
         "brief_version": 1,
         "show_mission_form": False,
+        "live_evidence": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -168,6 +170,7 @@ def bootstrap_state() -> None:
         st.session_state["_state_restored"] = True
         if not stored:
             persist_state()
+    st.session_state.setdefault("live_evidence", [])
 
 
 def creators():
@@ -732,5 +735,58 @@ def tracking_assets() -> list[dict[str, Any]]:
             if case.get("entry_type") == entry_type
             and case.get("entry_id") == entry_id
             and case.get("coupon")
+        ]
+    )
+
+
+def attach_live_evidence(creator_id: str, channel: dict[str, Any]) -> dict[str, Any]:
+    """Attach a labeled live-platform channel as evidence on the selected creator."""
+    require_write()
+    if creator_id not in set(creators()["creator_id"]):
+        raise ValueError(f"Unknown creator: {creator_id}")
+    channel_id = str(channel.get("channel_id") or "").strip()
+    url = str(channel.get("url") or "").strip()
+    if not channel_id or not url:
+        raise ValueError("A live channel requires channel_id and url")
+    context = active_context()
+    existing = next(
+        (
+            item
+            for item in st.session_state.live_evidence
+            if item["creator_id"] == creator_id
+            and item["channel_id"] == channel_id
+            and item["entry_type"] == context["entry_type"]
+            and item["entry_id"] == context["entry_id"]
+        ),
+        None,
+    )
+    if existing is not None:
+        return deepcopy(existing)
+    record = {
+        "creator_id": creator_id,
+        "channel_id": channel_id,
+        "title": channel.get("title") or channel_id,
+        "url": url,
+        "source": channel.get("source") or "youtube_data_api",
+        "country": channel.get("country"),
+        "subscriber_count": channel.get("subscriber_count"),
+        "attached_at": datetime.now(timezone.utc).isoformat(),
+        "entry_type": context["entry_type"],
+        "entry_id": context["entry_id"],
+    }
+    st.session_state.live_evidence.append(record)
+    persist_state()
+    return deepcopy(record)
+
+
+def live_evidence_for(creator_id: str) -> list[dict[str, Any]]:
+    entry_type, entry_id = _current_root()
+    return deepcopy(
+        [
+            item
+            for item in st.session_state.get("live_evidence", [])
+            if item.get("creator_id") == creator_id
+            and item.get("entry_type") == entry_type
+            and item.get("entry_id") == entry_id
         ]
     )

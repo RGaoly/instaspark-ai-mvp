@@ -15,10 +15,13 @@ from components.html import (
     scorebar,
 )
 from components.i18n import t
+from components.positioning import live_lookup_caption, why_not_ttcm_html
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
+    attach_live_evidence,
+    live_evidence_for,
     ranking,
     select_creator,
     selected_creator,
@@ -26,6 +29,7 @@ from components.state import (
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort
+from services.youtube_service import search_channels, youtube_status_label
 
 
 def _filters(context: dict) -> str:
@@ -52,6 +56,40 @@ def _filters(context: dict) -> str:
     ]
     chips.append('<div class="is-filter-chip" style="min-width:74px">More filters<b>＋</b></div>')
     return '<div class="is-filter-row">' + "".join(chips) + "</div>"
+
+
+def _render_live_lookup(context: dict) -> None:
+    default_query = (
+        " ".join(context.get("target_topics") or [])
+        or str(context.get("product") or "action camera")
+    )
+    with st.expander(f"{t('Live YouTube lookup')} · {t(youtube_status_label())}", expanded=False):
+        md(why_not_ttcm_html(compact=True), unsafe_allow_html=True)
+        st.caption(live_lookup_caption())
+        query = st.text_input(t("YouTube query"), value=default_query, key="youtube_lookup_query")
+        if st.button(t("Search YouTube"), use_container_width=True, key="youtube_lookup_go"):
+            st.session_state["_youtube_lookup"] = search_channels(query)
+        result = st.session_state.get("_youtube_lookup")
+        if not result:
+            return
+        if result.get("error"):
+            st.info(result["error"])
+        for item in result.get("items") or []:
+            cols = st.columns([0.46, 0.16, 0.16, 0.22], vertical_alignment="center")
+            cols[0].markdown(f"**{item['title']}**")
+            cols[1].caption(str(item.get("country") or "—"))
+            subscribers = item.get("subscriber_count")
+            cols[2].caption(f"{subscribers:,} subs" if subscribers else "Subs hidden")
+            if cols[3].button(
+                t("Attach as evidence"),
+                key=f"yt_attach_{item['channel_id']}",
+                disabled=writes_locked() or not st.session_state.get("selected_creator_id"),
+            ):
+                try:
+                    attach_live_evidence(st.session_state.selected_creator_id, item)
+                    st.toast(t("YouTube channel attached as evidence"))
+                except (ValueError, PermissionError) as exc:
+                    st.error(str(exc))
 
 
 def _creator_table(ranked) -> str:
@@ -125,6 +163,17 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
     overlap = overlap_vs_cohort(creator, cohort)
     overlap_pct = round(overlap["mean_jaccard"] * 100)
     score = float(creator["total_score"])
+    live_rows = live_evidence_for(creator["creator_id"])
+    live_html = (
+        "".join(
+            f'<div class="is-reason"><span class="is-reason-icon">▶</span>'
+            f'<span><b>{esc(item.get("title", "YouTube"))}</b>'
+            f'<small>{esc(item.get("source", "youtube_data_api"))} · {esc(item.get("url", ""))}</small></span></div>'
+            for item in live_rows[:3]
+        )
+        if live_rows
+        else '<small style="color:#879198">No live YouTube evidence attached. Lookup is optional and labeled.</small>'
+    )
     return f"""
     <div class="is-card">
       <div class="is-panel-body">
@@ -164,6 +213,8 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
             {scorebar('Commercial fit', creator['commercial_fit'], '#F5A623')}
           </div>
         </div>
+        <div class="is-card-title" style="margin:10px 0 6px">Live platform evidence</div>
+        {live_html}
       </div>
     </div>
     """
@@ -173,14 +224,6 @@ def render() -> None:
     render_topbar()
     context = active_context()
     ranked = ranking()
-    if ranked.empty:
-        if context.get("entry_type") == "opportunity" and not context.get("mission_id"):
-            st.warning("Link this Creator Opportunity to a Launch Mission before creating Match records.")
-        else:
-            st.warning(
-                "No creators pass the active entry's gates. Adjust its market, budget, language, or safety threshold."
-            )
-        return
 
     head_l, head_r = st.columns([1, 0.42], vertical_alignment="top")
     with head_l:
@@ -203,10 +246,22 @@ def render() -> None:
             st.button(t("Save Search"), use_container_width=True)
         with b2:
             if st.button(t("Generate Brief"), type="primary", use_container_width=True):
-                creator = selected_creator()
-                st.session_state.selected_creator_id = creator["creator_id"]
-                st.toast(t("Creator selected for Content Studio"))
+                if not ranked.empty:
+                    creator = selected_creator()
+                    st.session_state.selected_creator_id = creator["creator_id"]
+                    st.toast(t("Creator selected for Content Studio"))
         md("</div>", unsafe_allow_html=True)
+
+    _render_live_lookup(context)
+    if ranked.empty:
+        if context.get("entry_type") == "opportunity" and not context.get("mission_id"):
+            st.warning("Link this Creator Opportunity to a Launch Mission before creating Match records.")
+        else:
+            st.warning(
+                "No creators pass the active entry's gates. Adjust its market, budget, language, or safety threshold."
+            )
+        render_demo_notice()
+        return
 
     md(
         nl_search_shell("Describe the creator profile you need — ranked against the active entry"),

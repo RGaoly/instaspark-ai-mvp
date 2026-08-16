@@ -1,8 +1,11 @@
 """Centralized configuration management for InstaSparkAI.
 
-Loads environment variables from a ``.env`` file at the project root.
-All configuration values have sensible defaults so the app runs out-of-the-box
-in development, while production deployments can override via environment variables.
+Cloud-relevant secrets resolve in this order (first non-empty wins):
+``st.secrets``, ``os.environ``, then a local ``.env`` via python-dotenv.
+Missing Streamlit secrets must never crash the app.
+
+Local ``streamlit run`` still uses a project-root ``.env``. Streamlit Cloud
+Secrets live in ``st.secrets`` and are not the same as ``os.environ``.
 """
 
 from __future__ import annotations
@@ -12,9 +15,54 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load .env from project root (two levels up from this file)
+# Project root is one level up from this file (infra/)
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
-load_dotenv(_PROJECT_ROOT / ".env")
+
+
+def _running_on_streamlit_cloud() -> bool:
+    """Skip local dotenv on Cloud so an empty .env cannot blank secrets."""
+    return Path("/mount/src").exists()
+
+
+if not _running_on_streamlit_cloud():
+    load_dotenv(_PROJECT_ROOT / ".env")
+
+
+def _nonempty(value: object | None) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _from_streamlit_secrets(key: str) -> str | None:
+    """Read a top-level Streamlit secret. Never raise if secrets are absent."""
+    try:
+        import streamlit as st
+
+        secrets = st.secrets
+        if key in secrets:
+            return _nonempty(secrets[key])
+        return _nonempty(secrets.get(key))
+    except Exception:
+        # FileNotFoundError, StreamlitSecretNotFoundError, missing runtime, etc.
+        return None
+
+
+def _from_environ(key: str) -> str | None:
+    return _nonempty(os.environ.get(key))
+
+
+def _resolve_secret(key: str, default: str) -> str:
+    """First non-empty value from st.secrets, then os.environ, else default.
+
+    Local dotenv values are already in ``os.environ`` after ``load_dotenv``.
+    Whitespace-only values are treated as missing.
+    """
+    for candidate in (_from_streamlit_secrets(key), _from_environ(key)):
+        if candidate is not None:
+            return candidate
+    return default
 
 
 def _get_str(key: str, default: str) -> str:
@@ -79,12 +127,13 @@ OPPORTUNITY_LOW_CONFIDENCE_THRESHOLD: int = _get_int("OPPORTUNITY_LOW_CONFIDENCE
 
 # ─── External Services ─────────────────────────────────────────
 # LLM provider config — supports any OpenAI-compatible API (OpenAI, DeepSeek, etc.)
-LLM_API_KEY: str = _get_str("LLM_API_KEY", "")
-LLM_BASE_URL: str = _get_str("LLM_BASE_URL", "https://api.deepseek.com")
-LLM_MODEL: str = _get_str("LLM_MODEL", "deepseek-chat")
+# Cloud: App settings → Secrets. Local: .env. See _resolve_secret.
+LLM_API_KEY: str = _resolve_secret("LLM_API_KEY", "")
+LLM_BASE_URL: str = _resolve_secret("LLM_BASE_URL", "https://api.deepseek.com")
+LLM_MODEL: str = _resolve_secret("LLM_MODEL", "deepseek-chat")
 LLM_MAX_TOKENS: int = _get_int("LLM_MAX_TOKENS", 2000)
 LLM_TEMPERATURE: float = _get_float("LLM_TEMPERATURE", 0.7)
 FEISHU_APP_ID: str = _get_str("FEISHU_APP_ID", "")
 FEISHU_APP_SECRET: str = _get_str("FEISHU_APP_SECRET", "")
-YOUTUBE_API_KEY: str = _get_str("YOUTUBE_API_KEY", "")
+YOUTUBE_API_KEY: str = _resolve_secret("YOUTUBE_API_KEY", "")
 YOUTUBE_API_TIMEOUT_SECONDS: int = _get_int("YOUTUBE_API_TIMEOUT_SECONDS", 8)

@@ -14,6 +14,7 @@ from services.llm_service import (
     generate_hooks,
     generate_localized_content,
     generate_script,
+    generation_mode_label,
     is_llm_available,
 )
 
@@ -24,6 +25,7 @@ from services.llm_service import (
 def test_llm_not_available_without_key():
     """In test env, no API key is set, so LLM should be unavailable."""
     assert is_llm_available() is False
+    assert generation_mode_label() == "Template demo"
 
 
 def test_call_llm_returns_none_without_key():
@@ -121,13 +123,11 @@ def test_generate_hooks_returns_list():
     assert len(hooks) == 3
 
 
-def test_generate_hooks_are_non_empty_strings():
+def test_generate_hooks_are_grounded_in_product():
     mission = {"product": "Insta360 X5", "target_topics": ["adventure"]}
     creator = {"creator_name": "Test Creator"}
     hooks = generate_hooks(mission, creator)
-    for hook in hooks:
-        assert isinstance(hook, str)
-        assert len(hook) > 0
+    assert any("Insta360 X5" in hook for hook in hooks)
 
 
 # ─── generate_script ───────────────────────────────────────────

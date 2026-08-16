@@ -58,3 +58,30 @@ def test_no_known_invalid_streamlit_icons():
         source = path.read_text(encoding="utf-8")
         for pattern in invalid:
             assert pattern not in source, f"Invalid icon usage in {path}"
+
+
+def _assert_label_disabled(source: str, label: str) -> None:
+    marker = f't("{label}")'
+    assert marker in source, label
+    window = source.split(marker, 1)[1][:320]
+    assert "disabled=True" in window, f"{label} is still live"
+
+
+def test_unwired_chrome_buttons_are_disabled():
+    search = (ROOT / "views/creator_search.py").read_text(encoding="utf-8")
+    studio = (ROOT / "views/content_studio.py").read_text(encoding="utf-8")
+    launch = (ROOT / "views/launch_mission.py").read_text(encoding="utf-8")
+    compare = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
+    growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
+
+    _assert_label_disabled(search, "Save Search")
+    _assert_label_disabled(search, "Sort: Match score")
+    _assert_label_disabled(studio, "Export Brief")
+    _assert_label_disabled(studio, "Send to Creator")
+    _assert_label_disabled(launch, "Export")
+    _assert_label_disabled(compare, "Export")
+    _assert_label_disabled(growth, "Export")
+
+    assert 'open_workspace_page("content-studio")' in search
+    assert 'open_workspace_page("creator-compare")' in search
+    assert 'help=t("External send is not wired in this demo")' in studio

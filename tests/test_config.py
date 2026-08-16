@@ -103,10 +103,18 @@ def test_opportunity_thresholds_are_ints():
 
 
 def test_external_service_keys_default_empty():
-    from infra.config import FEISHU_APP_ID, FEISHU_APP_SECRET, LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
+    from infra.config import (
+        FEISHU_APP_ID,
+        FEISHU_APP_SECRET,
+        LLM_API_KEY,
+        LLM_BASE_URL,
+        LLM_MODEL,
+        YOUTUBE_API_KEY,
+    )
 
     # In test environment, API key should be empty (no real key)
     assert isinstance(LLM_API_KEY, str)
+    assert isinstance(YOUTUBE_API_KEY, str)
     assert isinstance(FEISHU_APP_ID, str)
     assert isinstance(FEISHU_APP_SECRET, str)
 

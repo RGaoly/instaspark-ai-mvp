@@ -15,7 +15,7 @@ from components.state import (
     select_creator,
     set_active_context,
 )
-from infra.auth import current_display_name, current_role, logout
+from infra.auth import can_write, current_display_name, current_role, logout
 
 _KIND_LABELS = {
     "mission": "Mission",
@@ -69,10 +69,17 @@ def render_sidebar(pages: Sequence[st.Page]) -> None:
         for page in pages[2:]:
             st.page_link(page, label=t(page.title))
 
-        if st.button(t("Reset demo"), use_container_width=True, key="reset_demo"):
+        if st.button(
+            t("Reset demo"),
+            use_container_width=True,
+            key="reset_demo",
+            disabled=not can_write(),
+        ):
             reset_demo()
             st.toast(t("Demo reset to the opening state"))
             st.rerun()
+        if not can_write():
+            st.caption(t("Viewer role is read-only. Sign in as admin to approve, save, or advance workflow."))
 
         if st.button(t("Sign out"), use_container_width=True, key="logout_btn"):
             logout()
@@ -101,7 +108,11 @@ def _open_search_hit(hit: dict) -> None:
     else:
         select_creator(hit["id"])
     st.session_state.global_search = ""
-    page = (st.session_state.get("_nav_pages") or {}).get(hit["page"])
+    open_workspace_page(hit["page"])
+
+
+def open_workspace_page(url_path: str) -> None:
+    page = (st.session_state.get("_nav_pages") or {}).get(url_path)
     if page is not None:
         st.switch_page(page)
 
@@ -172,3 +183,12 @@ def render_demo_notice() -> None:
             "not affiliated with or deployed at Insta360."
         )
     )
+
+
+def writes_locked() -> bool:
+    return not can_write()
+
+
+def render_write_guard() -> None:
+    if writes_locked():
+        st.caption(t("Viewer role is read-only. Sign in as admin to approve, save, or advance workflow."))

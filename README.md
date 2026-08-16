@@ -35,6 +35,17 @@ discovered → qualified → shortlisted → approved → contacted → negotiat
 
 项目使用公开结构和合成数据，不代表 Insta360 官方产品，也不包含任何内部数据。
 
+## Why this is not TikTok Creator Marketplace
+
+TikTok Creator Marketplace books TikTok creators, pays them, and attributes on TikTok. InstaSpark is the brand-side workspace that sits **before** that booking rail:
+
+1. Dual entry — launch mission and inbound opportunity share one state machine.
+2. Mix risk — shortlist Jaccard and product-grounded briefs before spend.
+3. Tracking assets — unique UTM coupons minted on approve; ROI stays empty until performance events exist.
+4. Optional live lookup — set `YOUTUBE_API_KEY` to search public YouTube channels from Creator Search. Hits attach as labeled evidence; they do **not** enter the ranked catalog.
+
+This demo does not ingest TikTok or Instagram, does not pay creators, and does not claim first-party conversion.
+
 ## Demo scope
 
 - 示例 SKU：Insta360 X5
@@ -79,6 +90,7 @@ pytest -q
 │   ├── state.py                   # 活动上下文、状态迁移、SQLite 镜像
 │   ├── shell.py
 │   ├── html.py
+│   ├── positioning.py             # Why-not-TTCM copy
 │   ├── ui.py                      # 本地化 markdown 渲染
 │   └── theme.py
 ├── data/
@@ -101,8 +113,10 @@ pytest -q
 │   └── repository.py
 ├── services/
 │   ├── opportunity_service.py
-│   └── llm_service.py             # OpenAI-compatible provider, template fallback
+│   ├── llm_service.py             # OpenAI-compatible provider, template fallback
+│   └── youtube_service.py         # optional YouTube Data API lookup
 ├── src/
+│   ├── audience.py                # synthetic shortlist Jaccard
 │   ├── brief.py
 │   ├── data_loader.py
 │   ├── domain.py                  # 核心对象与统一状态机
@@ -120,11 +134,41 @@ pytest -q
 
 ## P0 boundaries
 
-P0 已建立双入口信息架构、核心对象契约、统一活动上下文、状态机和审计边界。登录、中英切换和 SQLite 持久化已经接上：刷新浏览器后，决策日志、外联案件和创作者状态会从 `data/instaspark.db` 恢复。数据仍为合成数据。实时平台采集、真实消息发送、归因管线和角色强制（viewer 只读）属于后续阶段。完整验收契约见 [`docs/06_p0_product_contract.md`](docs/06_p0_product_contract.md)。
+P0 已建立双入口信息架构、核心对象契约、统一活动上下文、状态机和审计边界。登录、中英切换、SQLite 持久化和 viewer 写保护已经接上：`demo` 账号不能审批；刷新浏览器后，决策日志、外联案件、优惠码和创作者状态会从 `data/instaspark.db` 恢复。排序目录仍为合成数据。YouTube Data API 是可选的实时查询，与目录分开标注。TikTok / Instagram 采集、真实打款和一方归因不属于本演示。完整验收契约见 [`docs/06_p0_product_contract.md`](docs/06_p0_product_contract.md)。
 
 ## Deployment
 
-Streamlit Community Cloud 可直接以 `app.py` 为入口、`requirements.txt` 为依赖部署。本地启动是当前的可复现基线。托管实例若重定向到登录页，需由 workspace 管理员开放应用或授予访问权限；仓库本身不会绕过该访问控制。
+Hosted demo: **https://instaspark-ai-mvp.streamlit.app**. Streamlit Cloud deploys from GitHub `main` (`app.py` + `requirements.txt`). Local `streamlit run app.py` remains the reproducible baseline.
+
+If the hosted app redirects to a Streamlit login page, a workspace admin must make the app public or grant access. This repository cannot bypass that control.
+
+### Streamlit Cloud secrets
+
+After this branch is merged to `main`, Cloud rebuilds automatically. Live YouTube lookup and live Content Studio need secrets on the Cloud app. **Never put a real key in GitHub, README, screenshots, or a committed `.env`.**
+
+1. Open [share.streamlit.io](https://share.streamlit.io) and select the app that serves https://instaspark-ai-mvp.streamlit.app.
+2. Go to **App settings → Secrets**.
+3. Paste TOML using the **same names** as `.env.example`. Save. Reboot the app if Cloud does not restart on its own.
+
+Required for live YouTube lookup on Creator Search:
+
+```toml
+YOUTUBE_API_KEY = "..."
+```
+
+Optional for live Content Studio (otherwise the studio stays on the deterministic mock):
+
+```toml
+LLM_API_KEY = "..."
+LLM_BASE_URL = "https://api.deepseek.com"
+LLM_MODEL = "deepseek-chat"
+```
+
+`YOUTUBE_API_KEY` only attaches a public channel as labeled evidence. The ranked creator table stays the synthetic demo catalog. Without the YouTube secret, Search still works; the live lookup reports that the key is not configured.
+
+Demo logins (Cloud and local): `admin` / `admin123` can write; `demo` / `demo123` is a read-only viewer.
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for Docker and other hosts.
 
 ## Evaluation
 

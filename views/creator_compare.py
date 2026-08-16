@@ -4,7 +4,7 @@ import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header, scorebar
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
@@ -15,12 +15,58 @@ from components.state import (
     transition_creator_state,
 )
 from components.ui import md
+from src.audience import overlap_vs_cohort, shortlist_overlap_report
+
+
+def _geo_split(row) -> str:
+    markets = list(row.get("markets") or [row.get("primary_market")])
+    markets = [str(item) for item in markets if str(item).strip()]
+    if not markets:
+        return "Not declared · demo catalog"
+    if len(markets) == 1:
+        return f"{markets[0]} 100% · modeled demo split"
+    share = 100 // len(markets)
+    remainder = 100 - share * len(markets)
+    parts = []
+    for idx, market in enumerate(markets):
+        pct = share + (remainder if idx == 0 else 0)
+        parts.append(f"{market} {pct}%")
+    return " · ".join(parts) + " · modeled demo split"
+
+
+def _overlap_panel(report: dict, focus: dict) -> str:
+    vs = overlap_vs_cohort(focus, report.get("_rows") or [])
+    pair_html = "".join(
+        f'<div class="is-check"><i>{int(item["jaccard"] * 100)}</i>'
+        f'{esc(item["left_name"])} × {esc(item["right_name"])} · Jaccard {item["jaccard"]:.0%}</div>'
+        for item in report.get("pairwise", [])
+    ) or '<div class="is-check"><i>—</i>Need two or more creators to compute overlap.</div>'
+    lift_html = "".join(
+        f'<div class="is-check"><i>+{item["incremental_segments"]}</i>'
+        f'{esc(item["creator_name"])} · +{item["marginal_followers"]:,} modeled followers · '
+        f'{item["incremental_share"]:.0%} new segments</div>'
+        for item in report.get("incremental", [])
+    )
+    return (
+        '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
+        '<span class="is-panel-title">Shortlist overlap &amp; marginal reach</span>'
+        '<span class="is-panel-link">Synthetic cohorts · not platform unique reach</span></div>'
+        '<div class="is-panel-body"><div class="is-grid-2">'
+        f'<div><div class="is-card-title" style="margin-bottom:6px">Pairwise Jaccard</div>{pair_html}'
+        f'<small style="color:#879198;display:block;margin-top:6px">'
+        f'Focus vs peers mean {vs["mean_jaccard"]:.0%} · max {vs["max_jaccard"]:.0%}</small></div>'
+        f'<div><div class="is-card-title" style="margin-bottom:6px">Incremental reach (ranked order)</div>{lift_html}'
+        f'<small style="color:#879198;display:block;margin-top:6px">'
+        f'Union {report.get("union_segments", 0)} segments · '
+        f'{report.get("sum_marginal_followers", 0):,} modeled unique followers</small></div>'
+        "</div></div></div>"
+    )
 
 
 def _compare_grid(rows) -> str:
     creators = [row for _, row in rows.iterrows()]
     labels = [
-        ("Audience geography", lambda r: f"{r['primary_market']} 62% · Other 38%"),
+        ("Audience geography", lambda r: _geo_split(r)),
         ("Niche", lambda r: " · ".join(r["topics"][:3])),
         ("Avg views (last 10)", lambda r: f"{int(r['followers']*r['engagement_rate']/100*4)/1000:.0f}K"),
         ("Engagement rate", lambda r: f"{r['engagement_rate']:.1f}%"),
@@ -153,7 +199,7 @@ def render() -> None:
             unsafe_allow_html=True,
         )
     with head_r:
-        st.button(t("Export"), use_container_width=True)
+        st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
 
     name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     default_names = [
@@ -183,6 +229,10 @@ def render() -> None:
     focus = compare.iloc[0]
     select_creator(focus["creator_id"])
     focus_state = creator_state(focus["creator_id"])
+    compare_rows = compare.to_dict("records")
+    overlap_report = shortlist_overlap_report(compare_rows)
+    overlap_report["_rows"] = compare_rows
+    md(_overlap_panel(overlap_report, focus.to_dict()), unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
@@ -199,10 +249,12 @@ def render() -> None:
         f'<div class="is-action-bar-actions"></div></div>',
         unsafe_allow_html=True,
     )
+    locked = writes_locked()
+    render_write_guard()
     _, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
     with a:
         if focus_state == "qualified":
-            if st.button(t("Add to Shortlist"), type="primary", use_container_width=True):
+            if st.button(t("Add to Shortlist"), type="primary", use_container_width=True, disabled=locked):
                 transition_creator_state(
                     focus["creator_id"],
                     "shortlisted",
@@ -213,7 +265,7 @@ def render() -> None:
                 st.success("Shortlisted with an audit event. Review once more to approve outreach.")
                 st.rerun()
         elif focus_state == "shortlisted":
-            if st.button(t("Approve Outreach"), type="primary", use_container_width=True):
+            if st.button(t("Approve Outreach"), type="primary", use_container_width=True, disabled=locked):
                 save_decision(
                     focus["creator_id"],
                     "Approved",
@@ -222,12 +274,12 @@ def render() -> None:
                     note="Evidence, score drivers and risks reviewed in Creator Compare.",
                     evidence=list(focus.get("evidence", [])),
                 )
-                st.success("Approved and linked to one OutreachCase.")
+                st.success("Approved and linked to one OutreachCase with a unique coupon and UTM deeplink.")
                 st.rerun()
         else:
             st.button(t("Approval recorded"), disabled=True, use_container_width=True)
     with b:
-        if st.button(t("Request Review"), use_container_width=True):
+        if st.button(t("Request Review"), use_container_width=True, disabled=locked):
             save_decision(
                 focus["creator_id"],
                 "Review",
@@ -238,7 +290,11 @@ def render() -> None:
             )
             st.info("Review request logged.")
     with c:
-        if st.button(t("Reject"), use_container_width=True, disabled=focus_state in {"contracted", "content_in_review", "published", "measured", "closed_lost"}):
+        if st.button(
+            t("Reject"),
+            use_container_width=True,
+            disabled=locked or focus_state in {"contracted", "content_in_review", "published", "measured", "closed_lost"},
+        ):
             save_decision(
                 focus["creator_id"],
                 "Rejected",

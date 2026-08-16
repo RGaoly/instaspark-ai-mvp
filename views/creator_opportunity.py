@@ -7,7 +7,7 @@ import streamlit as st
 from components import state as state_store
 from components.html import badge, esc, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.ui import md
 from services.opportunity_service import (
     OPPORTUNITY_STATUSES,
@@ -222,7 +222,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                     "Opportunity evidence reviewed by the owner",
                     key=f"opportunity_reason_{opportunity['opportunity_id']}",
                 )
-                if st.button(t("Apply governed transition"), use_container_width=True):
+                if st.button(t("Apply governed transition"), use_container_width=True, disabled=writes_locked()):
                     try:
                         if target_state == "approved":
                             state_store.save_decision(
@@ -250,7 +250,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                                 reason=reason,
                                 evidence=opportunity["evidence"] or ["opportunity://manual-review"],
                             )
-                    except ValueError as exc:
+                    except (ValueError, PermissionError) as exc:
                         st.error(str(exc))
                     else:
                         st.success(f"Moved to {_status_label(target_state)} with an audit event.")
@@ -274,7 +274,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                     index=mission_labels.index(default_label),
                     key=f"opportunity_mission_{opportunity['opportunity_id']}",
                 )
-                if st.button(t("Link mission and preserve opportunity evidence"), use_container_width=True):
+                if st.button(t("Link mission and preserve opportunity evidence"), use_container_width=True, disabled=writes_locked()):
                     state_store.link_opportunity_to_mission(
                         opportunity["opportunity_id"], mission_by_label[selected_mission]
                     )
@@ -284,6 +284,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                 if not current_mission_id and st.button(
                     t("Create a launch mission from this opportunity"),
                     use_container_width=True,
+                    disabled=writes_locked(),
                 ):
                     mission_id = f'mission_{opportunity["opportunity_id"].lower().replace("-", "_")}'
                     generated_mission = {
@@ -349,7 +350,10 @@ def _render_create_form(creators: list[dict]) -> None:
                 disabled=not bool(current_mission_id),
             )
             submitted = st.form_submit_button(
-                "Create opportunity", type="primary", use_container_width=True
+                "Create opportunity",
+                type="primary",
+                use_container_width=True,
+                disabled=writes_locked(),
             )
 
         if submitted:
@@ -397,6 +401,7 @@ def render() -> None:
             unsafe_allow_html=True,
         )
         st.caption(_context_caption(active))
+        render_write_guard()
     with header_right:
         st.metric(t("Open opportunities"), len(opportunities))
 

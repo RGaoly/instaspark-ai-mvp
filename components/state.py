@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -9,6 +11,7 @@ from typing import Any
 import streamlit as st
 
 from infra import repository
+from infra.auth import require_write
 from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
 from src.domain import WORKFLOW_STATES, EntryType, can_transition, transition_event
@@ -38,6 +41,7 @@ _PERSISTED_KEYS = (
     "content_assets",
     "performance_events",
     "brief_version",
+    "live_evidence",
 )
 
 ENTRY_ALIASES = {
@@ -123,6 +127,7 @@ def persist_state() -> None:
 
 def reset_demo() -> None:
     """Clear persisted state and session so the next run reseeds from defaults."""
+    require_write()
     reset_db()
     for key in (*_PERSISTED_KEYS, "matches", "_state_restored", "show_mission_form"):
         st.session_state.pop(key, None)
@@ -151,6 +156,7 @@ def bootstrap_state() -> None:
         "performance_events": [],
         "brief_version": 1,
         "show_mission_form": False,
+        "live_evidence": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -164,6 +170,7 @@ def bootstrap_state() -> None:
         st.session_state["_state_restored"] = True
         if not stored:
             persist_state()
+    st.session_state.setdefault("live_evidence", [])
 
 
 def creators():
@@ -282,6 +289,7 @@ def set_active_context(entry_type: str, entry_id: str) -> dict[str, Any]:
 
 
 def save_mission(mission: dict[str, Any]) -> dict[str, Any]:
+    require_write()
     mission_id = str(mission.get("mission_id", "")).strip()
     if not mission_id:
         raise ValueError("mission_id is required")
@@ -293,6 +301,7 @@ def save_mission(mission: dict[str, Any]) -> dict[str, Any]:
 
 
 def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
+    require_write()
     opportunity_id = str(opportunity.get("opportunity_id", "")).strip()
     if not opportunity_id:
         raise ValueError("opportunity_id is required")
@@ -304,6 +313,7 @@ def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
 
 
 def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[str, Any]:
+    require_write()
     if mission_id not in st.session_state.missions:
         raise ValueError(f"Unknown mission: {mission_id}")
     opportunity = _opportunity_by_id(opportunity_id)
@@ -409,9 +419,39 @@ def allowed_next_creator_states(creator_id: str) -> list[str]:
     return [state for state in WORKFLOW_STATES if can_transition(current, state)]
 
 
+def _tracking_assets(creator_id: str, entry_id: str) -> dict[str, str]:
+    """Stable unique coupon + UTM deeplink for one creator in one root context."""
+
+    campaign = re.sub(r"[^a-z0-9]+", "-", str(entry_id).lower()).strip("-")[:32] or "launch"
+    content = re.sub(r"[^a-z0-9]+", "-", str(creator_id).lower()).strip("-") or "creator"
+    digest = hashlib.sha256(f"{entry_id}:{creator_id}".encode()).hexdigest()[:6].upper()
+    coupon = f"X5-{creator_id}-{digest}"
+    deeplink = (
+        "https://store.insta360.com/"
+        f"?utm_source=instaspark&utm_medium=creator"
+        f"&utm_campaign={campaign}&utm_content={content}&coupon={coupon}"
+    )
+    return {
+        "coupon": coupon,
+        "deeplink": deeplink,
+        "utm_source": "instaspark",
+        "utm_medium": "creator",
+        "utm_campaign": campaign,
+        "utm_content": content,
+    }
+
+
+def _attach_tracking(case: dict[str, Any], creator_id: str, entry_id: str) -> dict[str, Any]:
+    if case.get("coupon") and case.get("deeplink"):
+        return case
+    case.update(_tracking_assets(creator_id, entry_id))
+    return case
+
+
 def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str, Any]:
     """Create at most one active case for a creator and root context."""
 
+    require_write()
     context = active_context()
     entry_type, entry_id = _current_root()
     current_state = creator_state(creator_id)
@@ -438,6 +478,8 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
         None,
     )
     if existing is not None:
+        _attach_tracking(existing, creator_id, entry_id)
+        persist_state()
         return deepcopy(existing)
     case = {
         "outreach_case_id": f"outreach_{entry_id}_{creator_id}",
@@ -453,6 +495,7 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
+    _attach_tracking(case, creator_id, entry_id)
     st.session_state.outreach_cases.append(case)
     persist_state()
     return deepcopy(case)
@@ -466,6 +509,7 @@ def transition_creator_state(
     reason: str,
     evidence: list[str] | tuple[str, ...] | str,
 ) -> dict[str, Any]:
+    require_write()
     record = _ensure_workflow_record(creator_id)
     entry_type, entry_id = _current_root()
     context = active_context()
@@ -522,6 +566,7 @@ def save_decision(
     note: str | None = None,
     evidence: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
+    require_write()
     context = active_context()
     if not str(reason).strip():
         raise ValueError("decision reason is required")
@@ -557,7 +602,13 @@ def save_decision(
         "published",
         "measured",
     }:
-        ensure_outreach_case(creator_id, owner=existing["actor"])
+        case = ensure_outreach_case(creator_id, owner=existing["actor"])
+        if case.get("coupon") and not existing.get("coupon"):
+            existing["coupon"] = case["coupon"]
+            existing["deeplink"] = case.get("deeplink")
+            existing["utm_campaign"] = case.get("utm_campaign")
+            existing["utm_content"] = case.get("utm_content")
+            persist_state()
         return deepcopy(existing)
     record = {
         "decision_id": f'decision_{len(st.session_state.decision_log) + 1:04d}',
@@ -583,6 +634,21 @@ def save_decision(
             reason=reason,
             evidence=evidence or ["decision://human-approval"],
         )
+        case = next(
+            (
+                item
+                for item in st.session_state.outreach_cases
+                if item["creator_id"] == creator_id
+                and item["entry_type"] == context["entry_type"]
+                and item["entry_id"] == context["entry_id"]
+            ),
+            None,
+        )
+        if case:
+            record["coupon"] = case.get("coupon")
+            record["deeplink"] = case.get("deeplink")
+            record["utm_campaign"] = case.get("utm_campaign")
+            record["utm_content"] = case.get("utm_content")
     elif decision == "Rejected":
         transition_creator_state(
             creator_id,
@@ -655,5 +721,72 @@ def performance_events() -> list[dict[str, Any]]:
             for event in st.session_state.performance_events
             if event.get("entry_type") == context["entry_type"]
             and event.get("entry_id") == context["entry_id"]
+        ]
+    )
+
+
+def tracking_assets() -> list[dict[str, Any]]:
+    """Issued coupon / UTM records for the active root — not conversion events."""
+    entry_type, entry_id = _current_root()
+    return deepcopy(
+        [
+            case
+            for case in st.session_state.outreach_cases
+            if case.get("entry_type") == entry_type
+            and case.get("entry_id") == entry_id
+            and case.get("coupon")
+        ]
+    )
+
+
+def attach_live_evidence(creator_id: str, channel: dict[str, Any]) -> dict[str, Any]:
+    """Attach a labeled live-platform channel as evidence on the selected creator."""
+    require_write()
+    if creator_id not in set(creators()["creator_id"]):
+        raise ValueError(f"Unknown creator: {creator_id}")
+    channel_id = str(channel.get("channel_id") or "").strip()
+    url = str(channel.get("url") or "").strip()
+    if not channel_id or not url:
+        raise ValueError("A live channel requires channel_id and url")
+    context = active_context()
+    existing = next(
+        (
+            item
+            for item in st.session_state.live_evidence
+            if item["creator_id"] == creator_id
+            and item["channel_id"] == channel_id
+            and item["entry_type"] == context["entry_type"]
+            and item["entry_id"] == context["entry_id"]
+        ),
+        None,
+    )
+    if existing is not None:
+        return deepcopy(existing)
+    record = {
+        "creator_id": creator_id,
+        "channel_id": channel_id,
+        "title": channel.get("title") or channel_id,
+        "url": url,
+        "source": channel.get("source") or "youtube_data_api",
+        "country": channel.get("country"),
+        "subscriber_count": channel.get("subscriber_count"),
+        "attached_at": datetime.now(timezone.utc).isoformat(),
+        "entry_type": context["entry_type"],
+        "entry_id": context["entry_id"],
+    }
+    st.session_state.live_evidence.append(record)
+    persist_state()
+    return deepcopy(record)
+
+
+def live_evidence_for(creator_id: str) -> list[dict[str, Any]]:
+    entry_type, entry_id = _current_root()
+    return deepcopy(
+        [
+            item
+            for item in st.session_state.get("live_evidence", [])
+            if item.get("creator_id") == creator_id
+            and item.get("entry_type") == entry_type
+            and item.get("entry_id") == entry_id
         ]
     )

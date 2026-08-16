@@ -6,7 +6,8 @@ import streamlit as st
 
 from components.html import badge, metric_cards, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.positioning import why_not_ttcm_html
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
     missions,
@@ -178,10 +179,13 @@ def render() -> None:
     with right:
         b1, b2 = st.columns(2)
         with b1:
-            st.button(t("Export"), use_container_width=True)
+            st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
         with b2:
-            if st.button(t("+ New Mission"), type="primary", use_container_width=True):
+            if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form
+    render_write_guard()
+    with st.expander(t("Why this is not TikTok Creator Marketplace"), expanded=False):
+        md(why_not_ttcm_html(), unsafe_allow_html=True)
 
     if st.session_state.show_mission_form:
         with st.expander(t("Create a new launch mission"), expanded=True):
@@ -190,7 +194,7 @@ def render() -> None:
             market = c2.selectbox(t("Primary market"), ["United States", "Mexico", "Japan"])
             budget = c3.number_input(t("Budget (USD)"), min_value=10000, value=int(mission["budget_usd"]), step=10000)
             objective = st.text_area(t("Launch objective"), mission["objective"])
-            if st.button(t("Save mission"), type="primary"):
+            if st.button(t("Save mission"), type="primary", disabled=writes_locked()):
                 saved = {
                     "mission_id": f"mission_{uuid4().hex[:8]}",
                     "name": f"{product} · {market} Launch",

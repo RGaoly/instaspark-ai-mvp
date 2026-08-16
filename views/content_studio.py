@@ -4,9 +4,17 @@ import streamlit as st
 
 from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard
 from components.state import active_context_label, active_mission, ranking, select_creator
 from components.ui import labels, md
+from services.llm_service import (
+    generate_brief,
+    generate_hooks,
+    generate_localized_content,
+    generate_script,
+    generation_mode_label,
+    is_llm_available,
+)
 
 
 def _mission_creator_cards(mission, creator) -> str:
@@ -170,6 +178,38 @@ def _right_controls(mission: dict) -> str:
     """
 
 
+def _studio_pack(mission: dict, creator: dict) -> dict:
+    cache_key = f"{creator['creator_id']}:{st.session_state.get('brief_version', 1)}"
+    store = st.session_state.setdefault("_content_studio_cache", {})
+    if cache_key not in store:
+        store[cache_key] = {
+            "brief": generate_brief(mission, creator),
+            "script": generate_script(mission, creator),
+            "hooks": generate_hooks(mission, creator),
+            "localized": generate_localized_content(mission, creator),
+            "llm": is_llm_available(),
+        }
+    return store[cache_key]
+
+
+def _localized_html(items: list[dict], mission: dict) -> str:
+    cards = []
+    for item in items:
+        cards.append(
+            '<div class="is-locale-card">'
+            '<div class="is-locale-head">'
+            f'<h4>{esc(item.get("market", mission.get("market", "Market")))} · {esc(item.get("language", ""))}</h4>'
+            f'{ai_badge(generation_mode_label())}'
+            "</div>"
+            f'<p><b>Hook</b><br/>{esc(item.get("hook", ""))}</p>'
+            f'<p><b>Caption</b><br/>{esc(item.get("caption", ""))}</p>'
+            f'<p><b>CTA</b><br/>{esc(item.get("cta", ""))}</p>'
+            f'<p><b>Disclosure</b><br/>{esc(item.get("disclosure", "#ad"))}</p>'
+            "</div>"
+        )
+    return '<div class="is-localized">' + "".join(cards) + "</div>"
+
+
 def render() -> None:
     render_topbar()
     mission = active_mission()
@@ -190,6 +230,8 @@ def render() -> None:
     )
     creator = ranked[ranked["creator_name"] == selected_name].iloc[0].to_dict()
     select_creator(creator["creator_id"])
+    pack = _studio_pack(mission, creator)
+    mode = generation_mode_label()
 
     head_l, head_r = st.columns([1, 0.55], vertical_alignment="top")
     with head_l:
@@ -199,21 +241,38 @@ def render() -> None:
                 "Create localized, on-brand content briefs and collaboration materials.",
                 None,
             )
-            + f'<div style="margin-top:-8px;margin-bottom:10px">{ai_badge("AI Content Studio")}</div>',
+            + f'<div style="margin-top:-8px;margin-bottom:10px">{ai_badge(mode)}</div>',
             unsafe_allow_html=True,
         )
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
+        st.caption(
+            t("Grounded in the active mission")
+            + f": {mission.get('product', 'Product')} · {mission.get('market', 'Market')} · "
+            + str(mission.get("objective", ""))[:120]
+        )
     with head_r:
         e1, e2, e3 = st.columns(3)
         with e1:
-            st.button(t("Export Brief"), use_container_width=True)
+            st.button(
+                t("Export Brief"),
+                use_container_width=True,
+                disabled=True,
+                help=t("Not wired in this demo"),
+            )
         with e2:
             if st.button(t("Regenerate"), use_container_width=True):
                 st.session_state.brief_version += 1
                 st.toast(t("New brief version generated"))
                 st.rerun()
         with e3:
-            st.button(t("Send to Creator"), type="primary", use_container_width=True)
+            st.button(
+                t("Send to Creator"),
+                type="primary",
+                use_container_width=True,
+                disabled=True,
+                help=t("External send is not wired in this demo"),
+            )
+        render_write_guard()
 
     left, center, right = st.columns([0.18, 0.58, 0.24], gap="small", vertical_alignment="top")
     with left:
@@ -222,27 +281,17 @@ def render() -> None:
         md(
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
             f'<span style="font-size:11px;color:#69757E;font-weight:650">'
-            f'AI-generated collaboration brief · Version {st.session_state.brief_version}</span>'
-            f'{ai_badge("Localized")}</div>',
+            f'{esc(mode)} collaboration brief · Version {st.session_state.brief_version}</span>'
+            f'{ai_badge(mode)}</div>',
             unsafe_allow_html=True,
         )
         tabs = st.tabs(labels(["Brief", "Script", "Hooks", "Captions", "Localized variants"]))
         with tabs[0]:
-            md(_brief_content(mission, creator), unsafe_allow_html=True)
+            st.markdown(pack["brief"])
         with tabs[1]:
-            md(
-                '<div class="is-card is-card-pad"><div class="is-card-title">30–60 second script</div>'
-                '<div class="is-card-caption" style="margin-top:8px;line-height:1.7">'
-                "0–3s: immersive hook. 3–15s: creator challenge. 15–35s: product proof in action. "
-                "35–48s: reframing reveal. 48–60s: creator verdict and CTA.</div></div>",
-                unsafe_allow_html=True,
-            )
+            st.markdown(pack["script"])
         with tabs[2]:
-            hooks = [
-                "One camera. Every angle.",
-                "What if you never missed the shot?",
-                "This ride changed after I stopped choosing the frame.",
-            ]
+            hooks = pack["hooks"]
             md(
                 '<div class="is-grid-3">'
                 + "".join(
@@ -254,15 +303,20 @@ def render() -> None:
                 unsafe_allow_html=True,
             )
         with tabs[3]:
+            captions = [item.get("caption", "") for item in pack["localized"]]
+            if not captions:
+                captions = ["No caption generated for this mission yet."]
             md(
                 '<div class="is-card is-card-pad"><div class="is-card-title">Caption variants</div>'
-                '<div class="is-card-caption" style="margin-top:8px">'
-                "Platform-native captions for TikTok, Instagram Reels and YouTube Shorts, "
-                "including disclosure and CTA guidance.</div></div>",
+                + "".join(
+                    f'<div class="is-card-caption" style="margin-top:8px">{esc(text)}</div>'
+                    for text in captions
+                )
+                + "</div>",
                 unsafe_allow_html=True,
             )
         with tabs[4]:
-            md(_brief_content(mission, creator), unsafe_allow_html=True)
+            md(_localized_html(pack["localized"], mission), unsafe_allow_html=True)
     with right:
         md(_right_controls(mission), unsafe_allow_html=True)
 

@@ -17,6 +17,7 @@ from components.state import (
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
+from src.domain import match_fit_label, match_tier
 
 
 def _geo_split(row) -> str:
@@ -69,7 +70,7 @@ def _compare_grid(rows) -> str:
     labels = [
         ("Audience geography", lambda r: _geo_split(r)),
         ("Niche", lambda r: " · ".join(r["topics"][:3])),
-        ("Avg views (last 10)", lambda r: f"{int(r['followers']*r['engagement_rate']/100*4)/1000:.0f}K"),
+        ("Modeled est. views", lambda r: f"{int(r['followers']*r['engagement_rate']/100*4)/1000:.0f}K"),
         ("Engagement rate", lambda r: f"{r['engagement_rate']:.1f}%"),
         ("Brand safety", lambda r: f"{r['brand_safety']:.0f}/100"),
         ("Estimated cost", lambda r: f"USD {int(r['estimated_cost_usd']):,}"),
@@ -83,8 +84,9 @@ def _compare_grid(rows) -> str:
     ]
     for idx, r in enumerate(creators):
         score = float(r["total_score"])
-        fit = "High Fit" if score >= 85 else "Strong Fit" if score >= 80 else "Good Fit"
-        tone = "blue" if score >= 85 else "green" if score >= 80 else "gray"
+        fit = match_fit_label(score)
+        tier = match_tier(score)
+        tone = {"Excellent": "blue", "Strong": "green", "Moderate": "gray", "Weak": "orange"}.get(tier, "gray")
         cells.append(
             f'<div class="is-compare-head {"selected" if idx == 0 else ""}">'
             f'<div class="is-creator-cell">{avatar(r["creator_name"], idx)}'
@@ -114,26 +116,21 @@ def _evidence_panel(creator, context: dict) -> str:
             f'<div class="is-evidence-meta"><span class="is-evidence-tag">{esc(source)}</span></div>'
             f'<small style="margin-top:4px">{esc(url)}</small></div></div>'
         )
-    evidence = list(creator.get("evidence", [])[:3])
-    while len(evidence) < 3:
-        evidence.append("Representative content evidence available for review")
-    tags = [
-        ("POV", "Nature", "Travel"),
-        ("Action", "Product", "Reveal"),
-        ("Night", "City", "Lifestyle"),
-    ]
-    for idx, item in enumerate(evidence):
-        tag_html = "".join(f'<span class="is-evidence-tag">{esc(tag)}</span>' for tag in tags[idx])
+    for item in list(creator.get("evidence", [])[:3]):
         items.append(
-            f'<div class="is-risk"><div class="is-video" style="width:96px;aspect-ratio:16/9;flex:0 0 96px;border-radius:8px"></div>'
-            f'<div><b>{esc(item)}</b>'
-            f'<div class="is-evidence-meta">{tag_html}<span class="is-evidence-tag">{42 + idx * 18}s</span></div>'
-            f'<small style="margin-top:4px">Matched to {esc(context.get("title", "the active entry"))}</small></div></div>'
+            f'<div class="is-risk"><div><b>{esc(item)}</b>'
+            f'<small style="margin-top:4px">Catalog evidence · {esc(context.get("title", "the active entry"))}</small>'
+            "</div></div>"
+        )
+    if not items:
+        items.append(
+            '<div class="is-risk"><div><b>No live or catalog evidence attached.</b>'
+            "<small>Attach a YouTube channel from Search, or review catalog notes.</small></div></div>"
         )
     return (
         '<div class="is-card"><div class="is-panel-head">'
         '<span class="is-panel-title">Evidence explorer</span>'
-        '<span class="is-panel-link">View more content →</span></div>'
+        '<span class="is-panel-link">View more content (not wired)</span></div>'
         f'<div class="is-panel-body">{"".join(items)}</div></div>'
     )
 
@@ -163,14 +160,32 @@ def _drivers_panel(creator) -> str:
     )
 
 
+def _warning_severity(warning: str) -> str:
+    text = str(warning)
+    high_markers = ("下滑", "decline", "上限", "报价接近预算", "brand safety", "品牌安全")
+    lowered = text.lower()
+    if any(marker in text or marker.lower() in lowered for marker in high_markers):
+        return "High"
+    return "Medium"
+
+
 def _risk_panel(creator) -> str:
-    risks = list(creator.get("warnings", [])[:3])
-    while len(risks) < 3:
-        risks.append("Confirm availability and usage rights")
-    levels = ["Medium", "Medium", "High"]
+    risks = [str(item) for item in list(creator.get("warnings", [])) if str(item).strip()]
+    if not risks:
+        return (
+            '<div class="is-card"><div class="is-panel-head">'
+            '<span class="is-panel-title">Potential risks</span>'
+            f'{badge("None recorded", "gray")}</div>'
+            '<div class="is-panel-body"><div class="is-risk">'
+            "<span><b>No catalog warnings for this creator.</b>"
+            "<small>Operator review is still required before outreach.</small></span></div></div></div>"
+        )
+    levels = [_warning_severity(risk) for risk in risks]
+    medium_n = sum(1 for level in levels if level == "Medium")
+    high_n = sum(1 for level in levels if level == "High")
+    summary = f"{medium_n} Medium · {high_n} High"
     rows = []
-    for idx, risk in enumerate(risks):
-        level = levels[idx]
+    for risk, level in zip(risks, levels):
         cls = " high" if level == "High" else ""
         badge_cls = "high" if level == "High" else "medium"
         rows.append(
@@ -181,7 +196,7 @@ def _risk_panel(creator) -> str:
     return (
         '<div class="is-card"><div class="is-panel-head">'
         '<span class="is-panel-title">Potential risks</span>'
-        f'{badge("2 Medium · 1 High", "orange")}</div>'
+        f'{badge(summary, "orange" if high_n else "gray")}</div>'
         f'<div class="is-panel-body">{"".join(rows)}</div></div>'
     )
 

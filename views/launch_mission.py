@@ -10,11 +10,14 @@ from components.positioning import why_not_ttcm_html
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
+    mission_health_snapshot,
     missions,
     ranking,
     save_mission,
     set_active_context,
+    tracking_assets,
     workflow_summary,
+    performance_events,
 )
 from components.ui import md
 
@@ -39,8 +42,9 @@ def _process_strip() -> str:
     return '<div class="is-process-scroll"><div class="is-process">' + "".join(html) + '</div></div>'
 
 
-def _product_card(mission: dict) -> str:
+def _product_card(mission: dict, health: dict) -> str:
     markets = " / ".join(mission.get("markets", [mission.get("market", "United States")]))
+    score = int(health.get("score", 0))
     return f"""
     <div class="is-card is-product-card">
       <div class="is-product-visual"><div class="is-camera"></div></div>
@@ -59,8 +63,9 @@ def _product_card(mission: dict) -> str:
         </div>
       </div>
       <div class="is-health">
-        <div class="is-donut" style="--pct:{mission.get('health_score',86)}"><span>{mission.get('health_score',86)}</span></div>
-        <b>Healthy</b><small>On track</small>
+        <div class="is-donut" style="--pct:{score}"><span>{score}</span></div>
+        <b>{health.get("label", "Needs shortlist")}</b>
+        <small>{health.get("note", "Computed from the active workflow")}</small>
       </div>
     </div>
     """
@@ -93,12 +98,12 @@ def _workflow_card(summary: dict[str, int]) -> str:
     )
 
 
-def _actions_card(summary: dict[str, int], market: str) -> str:
+def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_n: int) -> str:
     actions = [
-        (f'Review {summary.get("shortlisted", 0)} shortlisted creators', f"Evidence review for {market}"),
-        (f'Contact {summary.get("approved", 0)} approved creators', "Advance audited outreach cases"),
-        (f'Review {summary.get("content_in_review", 0)} content assets', "Verify claims and localization"),
-        (f'Measure {summary.get("published", 0)} published collaborations', "Attach sourced performance events"),
+        (f'Review {summary.get("shortlisted", 0)} currently shortlisted creators', f"Evidence review for {market}"),
+        (f'Contact {summary.get("approved", 0)} currently approved creators', "Advance audited outreach cases"),
+        (f'{tracking_n} tracking assets issued', "Coupons and UTM links, not conversions"),
+        (f'{events_n} performance events recorded', "Sourced conversions only"),
     ]
     rows = []
     for idx, (title, note) in enumerate(actions, 1):
@@ -140,7 +145,7 @@ def _tasks_notifications(mission: dict) -> str:
         )
     return (
         '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Upcoming tasks</span>'
-        '<span class="is-panel-link">View all (8)</span></div><div class="is-panel-body"><ul class="is-list">'
+        '<span class="is-panel-link">Checklist for this demo</span></div><div class="is-panel-body"><ul class="is-list">'
         + "".join(tasks) + '</ul></div></div>'
         '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Team notifications</span>'
         '<span class="is-panel-link">View all</span></div><div class="is-panel-body"><ul class="is-list">'
@@ -165,6 +170,9 @@ def render() -> None:
     mission = active_mission()
     summary = workflow_summary()
     ranked = ranking()
+    health = mission_health_snapshot()
+    tracking_n = len(tracking_assets())
+    events_n = len(performance_events())
 
     left, right = st.columns([1, 0.26], vertical_alignment="top")
     with left:
@@ -212,7 +220,6 @@ def render() -> None:
                     "campaign_dates": mission.get("campaign_dates", "Not scheduled"),
                     "owner": mission.get("owner", "Olivia Chen"),
                     "status": "Draft",
-                    "health_score": 0,
                 }
                 save_mission(saved)
                 st.session_state.pending_mission_id = saved["mission_id"]
@@ -220,7 +227,7 @@ def render() -> None:
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
-    md(_product_card(mission), unsafe_allow_html=True)
+    md(_product_card(mission, health), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
         ("Shortlisted", str(summary.get("shortlisted", 0)), "Unified workflow", ""),
@@ -237,7 +244,7 @@ def render() -> None:
         with c1:
             md(_workflow_card(summary), unsafe_allow_html=True)
         with c2:
-            md(_actions_card(summary, mission.get("market", "Target market")), unsafe_allow_html=True)
+            md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n), unsafe_allow_html=True)
     with side:
         md(_tasks_notifications(mission), unsafe_allow_html=True)
 

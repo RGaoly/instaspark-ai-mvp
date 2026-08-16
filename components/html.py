@@ -4,7 +4,7 @@ import html
 import math
 from typing import Iterable, Sequence
 
-from components.data import AVATAR_GRADIENTS, SPARKLINES
+from components.data import AVATAR_GRADIENTS
 
 
 def esc(value: object) -> str:
@@ -49,7 +49,7 @@ def sparkline(values: Sequence[float], color: str = "#2577F1") -> str:
 
 def metric_cards(metrics: Iterable[tuple[str, str, str, str]]) -> str:
     cards = []
-    for idx, (label, value, delta, note) in enumerate(metrics):
+    for label, value, delta, note in metrics:
         note_html = f'<div class="is-metric-note">{esc(note)}</div>' if note else ""
         cards.append(
             '<div class="is-metric">'
@@ -59,7 +59,6 @@ def metric_cards(metrics: Iterable[tuple[str, str, str, str]]) -> str:
             '</div>'
             f'<div class="is-metric-value">{esc(value)}</div>'
             f'<div class="is-metric-delta">{esc(delta)}</div>'
-            f'{sparkline(SPARKLINES[idx % len(SPARKLINES)])}'
             f'{note_html}'
             '</div>'
         )

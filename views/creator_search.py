@@ -29,6 +29,7 @@ from components.state import (
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort
+from src.domain import match_label, match_tier
 from services.youtube_service import search_channels, youtube_status_label
 
 
@@ -55,7 +56,11 @@ def _filters(context: dict) -> str:
         for label, value, active in filters
     ]
     chips.append('<div class="is-filter-chip" style="min-width:74px">More filters<b>＋</b></div>')
-    return '<div class="is-filter-row">' + "".join(chips) + "</div>"
+    return (
+        '<div class="is-filter-row">' + "".join(chips) + "</div>"
+        '<small style="color:#879198;display:block;margin:4px 0 8px">'
+        "Filter chips are illustrative (demo) and do not change ranking.</small>"
+    )
 
 
 def _render_live_lookup(context: dict) -> None:
@@ -98,7 +103,7 @@ def _creator_table(ranked) -> str:
         "Creator",
         "Niche & market",
         "Followers",
-        "Avg views",
+        "Modeled est. views",
         "Eng. rate",
         "Mission fit",
         "Content fit",
@@ -111,13 +116,7 @@ def _creator_table(ranked) -> str:
         selected = row["creator_id"] == st.session_state.selected_creator_id
         name = row["creator_name"]
         topics = " · ".join(row["topics"][:2])
-        tier = (
-            "Excellent"
-            if row["total_score"] >= 85
-            else "Very good"
-            if row["total_score"] >= 78
-            else "Good"
-        )
+        tier = match_tier(row["total_score"])
         rows.append(
             f'<tr class="{"is-selected" if selected else ""}">'
             f'<td>{"●" if selected else "○"}</td>'
@@ -153,7 +152,7 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
         "Audience–mission fit",
         "Content evidence",
         "Commercial readiness",
-        "Predicted lift",
+        "Operator caveat",
     ]
     reason_html = "".join(
         '<div class="is-reason"><span class="is-reason-icon">✓</span>'
@@ -180,12 +179,12 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
         <div class="is-profile-head">
           {avatar(creator['creator_name'], 2, 'profile')}
           <div>
-            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Verified','blue')}</div>
+            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')}</div>
             <div class="is-socials">Instagram · TikTok · YouTube · {esc(creator.get('primary_market',''))}</div>
           </div>
           <div class="is-detail-score">
             {score_ring(score)}
-            <span class="is-match-label">Excellent Match</span>
+            <span class="is-match-label">{esc(match_label(score))}</span>
           </div>
         </div>
         <div class="is-tabs">
@@ -196,8 +195,6 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
         </div>
         <div class="is-card-title" style="margin-bottom:6px">Top reasons</div>
         {reason_html}
-        <div class="is-card-title" style="margin:10px 0 6px">Example content evidence</div>
-        <div class="is-video-row"><div class="is-video"></div><div class="is-video"></div><div class="is-video"></div></div>
         <div class="is-grid-2" style="margin-top:10px">
           <div class="is-lift-panel">
             <h4>Shortlist overlap</h4>
@@ -282,6 +279,7 @@ def render() -> None:
         key="creator_nl_query",
     )
     _ = query  # keep widget wired for demo interaction; ranking stays mission-aware
+    st.caption(t("Ranking uses mission-aware rules, not this query."))
     md(_filters(context), unsafe_allow_html=True)
 
     options = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}

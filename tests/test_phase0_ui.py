@@ -89,3 +89,27 @@ def test_unwired_chrome_buttons_are_disabled():
     assert 'open_workspace_page("content-studio")' in search
     assert 'open_workspace_page("creator-compare")' in search
     assert 'help=t("External send is not wired in this demo")' in studio
+
+
+def test_honesty_chrome_is_not_hardcoded_pretty():
+    launch = (ROOT / "views/launch_mission.py").read_text(encoding="utf-8")
+    search = (ROOT / "views/creator_search.py").read_text(encoding="utf-8")
+    compare = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
+    studio = (ROOT / "views/content_studio.py").read_text(encoding="utf-8")
+
+    assert "health_score" not in launch
+    assert "<b>Healthy</b>" not in launch
+    assert "content_in_review" not in launch
+    assert "badge('Verified'" not in search
+    assert "Excellent Match" not in search
+    assert "is-video" not in search
+    assert "match_label" in search
+    assert "Modeled est. views" in search
+    assert "Ranking uses mission-aware rules, not this query." in search
+    assert "42 + idx * 18" not in compare
+    assert "View more content →" not in compare
+    assert "2 Medium · 1 High" not in compare
+    assert "match_fit_label" in compare
+    assert "badge('Passed'" not in studio
+    assert "8/8" not in studio
+    assert "Not assessed in this demo" in studio

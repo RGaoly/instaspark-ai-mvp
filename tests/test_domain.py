@@ -8,6 +8,11 @@ from src.domain import (
     OutreachCase,
     WORKFLOW_STATES,
     can_transition,
+    match_fit_label,
+    match_label,
+    match_tier,
+    mission_health,
+    pipeline_counts,
     transition_event,
 )
 
@@ -195,3 +200,55 @@ def test_timestamp_must_be_timezone_aware():
             entry_id="opportunity-7",
             timestamp=datetime(2026, 8, 6, 9, 30),
         )
+
+
+@pytest.mark.parametrize(
+    ("score", "tier", "match", "fit"),
+    [
+        (80, "Excellent", "Excellent Match", "Excellent Fit"),
+        (79.9, "Strong", "Strong Match", "Strong Fit"),
+        (70, "Strong", "Strong Match", "Strong Fit"),
+        (55, "Moderate", "Moderate Match", "Moderate Fit"),
+        (54.9, "Weak", "Weak Match", "Weak Fit"),
+        (0, "Weak", "Weak Match", "Weak Fit"),
+    ],
+)
+def test_match_tier_labels(score, tier, match, fit):
+    assert match_tier(score) == tier
+    assert match_label(score) == match
+    assert match_fit_label(score) == fit
+
+
+def test_mission_health_bands_from_pipeline_counts():
+    needs = mission_health(
+        shortlisted=0, approved=0, outreach=0, measured=0, tracking_assets=0, performance_events=0
+    )
+    matching = mission_health(
+        shortlisted=3, approved=0, outreach=0, measured=0, tracking_assets=0, performance_events=0
+    )
+    outreach = mission_health(
+        shortlisted=3, approved=1, outreach=0, measured=0, tracking_assets=1, performance_events=0
+    )
+    measured = mission_health(
+        shortlisted=3, approved=1, outreach=1, measured=0, tracking_assets=1, performance_events=1
+    )
+
+    assert needs["band"] == "needs_shortlist" and needs["score"] == 28
+    assert needs["label"] == "Needs shortlist"
+    assert matching["band"] == "matching" and matching["score"] == 54
+    assert matching["label"] == "Matching in progress"
+    assert outreach["band"] == "outreach_live" and outreach["score"] == 72
+    assert outreach["note"] == "No conversions yet"
+    assert measured["band"] == "measured" and measured["score"] == 88
+    assert measured["label"] == "Measured"
+
+
+def test_pipeline_counts_treat_later_states_as_shortlisted():
+    summary = {state: 0 for state in WORKFLOW_STATES}
+    summary["approved"] = 1
+    summary["published"] = 1
+    counts = pipeline_counts(summary)
+    assert counts["shortlisted"] == 2
+    assert counts["approved"] == 2
+    assert counts["outreach"] == 1
+    assert counts["measured"] == 0

@@ -9,6 +9,7 @@ from components.state import (
     active_context,
     active_context_label,
     creator_state,
+    live_evidence_for,
     ranking,
     save_decision,
     select_creator,
@@ -81,8 +82,9 @@ def _compare_grid(rows) -> str:
         '<b>3 creators selected</b><br/><small>Select up to 3 to compare</small></div>'
     ]
     for idx, r in enumerate(creators):
-        fit = "High Fit" if idx == 0 else "Strong Fit" if r["total_score"] >= 80 else "Good Fit"
-        tone = "blue" if idx == 0 else "green" if r["total_score"] >= 80 else "gray"
+        score = float(r["total_score"])
+        fit = "High Fit" if score >= 85 else "Strong Fit" if score >= 80 else "Good Fit"
+        tone = "blue" if score >= 85 else "green" if score >= 80 else "gray"
         cells.append(
             f'<div class="is-compare-head {"selected" if idx == 0 else ""}">'
             f'<div class="is-creator-cell">{avatar(r["creator_name"], idx)}'
@@ -100,6 +102,18 @@ def _compare_grid(rows) -> str:
 
 
 def _evidence_panel(creator, context: dict) -> str:
+    live_rows = live_evidence_for(creator["creator_id"])
+    items = []
+    for item in live_rows:
+        title = item.get("title") or "YouTube"
+        url = item.get("url") or ""
+        source = item.get("source") or "youtube_data_api"
+        items.append(
+            f'<div class="is-risk"><div>'
+            f'<b><a href="{esc(url)}" target="_blank" rel="noopener noreferrer">{esc(title)}</a></b>'
+            f'<div class="is-evidence-meta"><span class="is-evidence-tag">{esc(source)}</span></div>'
+            f'<small style="margin-top:4px">{esc(url)}</small></div></div>'
+        )
     evidence = list(creator.get("evidence", [])[:3])
     while len(evidence) < 3:
         evidence.append("Representative content evidence available for review")
@@ -108,9 +122,8 @@ def _evidence_panel(creator, context: dict) -> str:
         ("Action", "Product", "Reveal"),
         ("Night", "City", "Lifestyle"),
     ]
-    items = []
     for idx, item in enumerate(evidence):
-        tag_html = "".join(f'<span class="is-evidence-tag">{esc(t)}</span>' for t in tags[idx])
+        tag_html = "".join(f'<span class="is-evidence-tag">{esc(tag)}</span>' for tag in tags[idx])
         items.append(
             f'<div class="is-risk"><div class="is-video" style="width:96px;aspect-ratio:16/9;flex:0 0 96px;border-radius:8px"></div>'
             f'<div><b>{esc(item)}</b>'
@@ -127,10 +140,10 @@ def _evidence_panel(creator, context: dict) -> str:
 
 def _drivers_panel(creator) -> str:
     drivers = [
-        ("Audience match", creator["audience_fit"], "28%"),
+        ("Mission fit", creator["audience_fit"], "28%"),
         ("Engagement quality", creator["momentum"], "18%"),
         ("Content relevance", creator["content_fit"], "24%"),
-        ("Performance prediction", creator["commercial_fit"], "18%"),
+        ("Commercial fit", creator["commercial_fit"], "18%"),
         ("Brand safety", creator["brand_safety"], "12%"),
     ]
     rows = "".join(
@@ -233,6 +246,7 @@ def render() -> None:
     overlap_report = shortlist_overlap_report(compare_rows)
     overlap_report["_rows"] = compare_rows
     md(_overlap_panel(overlap_report, focus.to_dict()), unsafe_allow_html=True)
+    st.caption(t("Mission fit is market + language. Overlap ≠ mission fit."))
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:

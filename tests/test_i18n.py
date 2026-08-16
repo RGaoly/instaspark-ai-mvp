@@ -13,6 +13,9 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Opportunity Inbox", language="zh") == "机会收件箱"
     assert translate("Growth Review", language="zh") == "增长复盘"
     assert translate("Growth Review", language="en") == "Growth Review"
+    assert translate("Record performance event (demo)", language="zh") == "录入效果事件（演示）"
+    assert translate("Mission fit", language="zh") == "任务匹配"
+    assert translate("Live evidence: {n} attached", language="zh", n=2) == "实时证据：2 条已挂接"
 
 
 def test_longest_first_localization_preserves_compound_terms():

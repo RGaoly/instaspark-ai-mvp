@@ -9,6 +9,7 @@ from components.state import (
     active_context,
     active_context_label,
     allowed_next_creator_states,
+    live_evidence_for,
     transition_creator_state,
     workflow_board,
     workflow_events,
@@ -45,6 +46,12 @@ def _kanban(board: dict[str, list[dict]]) -> str:
             followers = f'{int(person.get("followers", 0)) / 1000:.0f}K'
             next_states = person.get("next_states", [])
             next_action = _stage_label(next_states[0]) if next_states else "Complete"
+            live_n = len(live_evidence_for(person["creator_id"]))
+            live_line = (
+                f'<div class="is-kanban-next">{esc(t("Live evidence: {n} attached", n=live_n))}</div>'
+                if live_n
+                else ""
+            )
             cards.append(
                 '<div class="is-kanban-card">'
                 f'<div class="is-kanban-person">{avatar(name, color_idx)}'
@@ -55,6 +62,7 @@ def _kanban(board: dict[str, list[dict]]) -> str:
                 f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
                 f'<span>Coupon</span><strong>{esc(person.get("coupon") or "Issued on approve")}</strong>'
                 f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
+                f'{live_line}'
                 f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
             )
             color_idx += 1
@@ -127,6 +135,8 @@ def render() -> None:
             unsafe_allow_html=True,
         )
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
+        if board.get("measured"):
+            st.caption(t("Record the conversion on Growth Review"))
     with head_r:
         people = [person for stage in board.values() for person in stage]
         if people:

@@ -725,6 +725,50 @@ def performance_events() -> list[dict[str, Any]]:
     )
 
 
+def record_performance_event(
+    creator_id: str,
+    orders: int,
+    revenue_usd: float,
+    spend_usd: float,
+    *,
+    coupon: str | None = None,
+    utm: str | None = None,
+    content_asset_id: str | None = None,
+    note: str | None = None,
+) -> dict[str, Any]:
+    """Append one operator-recorded conversion for the active root. Never inferred."""
+
+    require_write()
+    if creator_id not in set(creators()["creator_id"]):
+        raise ValueError(f"Unknown creator: {creator_id}")
+    orders_n = int(orders)
+    revenue_n = float(revenue_usd)
+    spend_n = float(spend_usd)
+    if orders_n < 0 or revenue_n < 0 or spend_n < 0:
+        raise ValueError("orders, revenue_usd and spend_usd must be non-negative")
+    context = active_context()
+    record = {
+        "event_id": f"perf_{len(st.session_state.performance_events) + 1:04d}",
+        "creator_id": creator_id,
+        "orders": orders_n,
+        "revenue_usd": revenue_n,
+        "spend_usd": spend_n,
+        "coupon": coupon or None,
+        "utm": utm or None,
+        "content_asset_id": content_asset_id or None,
+        "note": note or None,
+        "market": context.get("market"),
+        "entry_type": context["entry_type"],
+        "entry_id": context["entry_id"],
+        "mission_id": context.get("mission_id"),
+        "opportunity_id": context.get("opportunity_id"),
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+    }
+    st.session_state.performance_events.append(record)
+    persist_state()
+    return deepcopy(record)
+
+
 def tracking_assets() -> list[dict[str, Any]]:
     """Issued coupon / UTM records for the active root — not conversion events."""
     entry_type, entry_id = _current_root()

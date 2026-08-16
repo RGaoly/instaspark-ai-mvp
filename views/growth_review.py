@@ -4,16 +4,29 @@ import streamlit as st
 
 from components.html import esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
+    creators,
     performance_events,
     ranking,
+    record_performance_event,
     tracking_assets,
+    workflow_board,
     workflow_summary,
 )
 from components.ui import md
+
+_OUTREACH_STATES = {
+    "approved",
+    "contacted",
+    "negotiating",
+    "contracted",
+    "content_in_review",
+    "published",
+    "measured",
+}
 
 
 def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> str:
@@ -89,19 +102,86 @@ def _tracking_table(assets: list[dict]) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
 
 
-def _next_actions(context: dict, summary: dict[str, int], events: list[dict]) -> str:
+def _recordable_creators() -> list[tuple[str, str, dict]]:
+    """Approved / coupon-bearing creators for the active entry, names for the form."""
+
+    assets = {item["creator_id"]: item for item in tracking_assets()}
+    names = {row["creator_id"]: row["creator_name"] for _, row in creators().iterrows()}
+    ordered: list[str] = []
+    for creator_id in assets:
+        if creator_id not in ordered:
+            ordered.append(creator_id)
+    for stage, people in workflow_board().items():
+        if stage not in _OUTREACH_STATES:
+            continue
+        for person in people:
+            creator_id = person.get("creator_id")
+            if creator_id and creator_id not in ordered:
+                ordered.append(creator_id)
+    return [(creator_id, names.get(creator_id, creator_id), assets.get(creator_id, {})) for creator_id in ordered]
+
+
+def _next_actions(context: dict, summary: dict[str, int], events: list[dict], assets: list[dict]) -> str:
     actions = []
     if summary.get("approved", 0):
         actions.append(("blue", "Execute", "Contact approved creators", "Approved creators are waiting for outreach.", "Go to Outreach"))
-    if summary.get("published", 0) and not events:
-        actions.append(("orange", "Measure", "Attach performance evidence", "Published work has no linked attribution event.", "Add data source"))
+    if not events and (assets or summary.get("published", 0)):
+        actions.append(
+            (
+                "orange",
+                "Measure",
+                "Record the conversion on Growth Review",
+                "Coupons are tracking assets, not conversions. ROI stays 0x until an operator records an event.",
+                "Use the expander below",
+            )
+        )
     if not actions:
         actions.append(("green", "On track", "Continue the governed workflow", f'Use evidence from {context.get("title", "this entry")} for the next decision.', "Human review"))
     return '<div class="is-budget-actions">' + "".join(
         f'<div class="is-action-card {tone}"><div><span class="is-badge is-badge-{tone}">{esc(tag)}</span></div>'
-        f'<h4>{esc(title)}</h4><p>{esc(body)}</p><div class="is-action-impact">{esc(impact)} →</div></div>'
+        f'<h4>{esc(title)}</h4><p>{esc(body)}</p><div class="is-action-impact">{esc(impact)}</div></div>'
         for tone, tag, title, body, impact in actions
     ) + "</div>"
+
+
+def _render_record_form() -> None:
+    with st.expander(t("Record performance event (demo)"), expanded=False):
+        render_write_guard()
+        recordable = _recordable_creators()
+        if not recordable:
+            st.caption(t("Approve a creator first to mint a coupon, then record the conversion here."))
+            return
+        labels = [f"{name} · {creator_id}" for creator_id, name, _ in recordable]
+        choice = st.selectbox(t("Creator"), labels, key="perf_event_creator")
+        selected = recordable[labels.index(choice)]
+        creator_id, _name, asset = selected
+        coupon = str(asset.get("coupon") or "")
+        utm = str(asset.get("deeplink") or asset.get("utm_campaign") or "")
+        if coupon:
+            st.caption(f'{t("Coupon")}: {coupon}')
+        locked = writes_locked()
+        with st.form("record_performance_event_form"):
+            orders = st.number_input(t("Orders"), min_value=0, step=1, value=0)
+            revenue_usd = st.number_input(t("Revenue USD"), min_value=0.0, step=50.0, value=0.0)
+            spend_usd = st.number_input(t("Spend USD"), min_value=0.0, step=50.0, value=0.0)
+            note = st.text_input(t("Note"), value="")
+            submitted = st.form_submit_button(t("Record event"), type="primary", disabled=locked)
+        if submitted:
+            try:
+                record_performance_event(
+                    creator_id,
+                    int(orders),
+                    float(revenue_usd),
+                    float(spend_usd),
+                    coupon=coupon or None,
+                    utm=utm or None,
+                    note=note.strip() or None,
+                )
+            except (ValueError, PermissionError) as exc:
+                st.error(str(exc))
+            else:
+                st.success(t("Performance event recorded. ROI uses this event, not a forecast."))
+                st.rerun()
 
 
 def render() -> None:
@@ -167,8 +247,10 @@ def render() -> None:
     md(
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
         '<span class="is-panel-title">Next best action</span><span class="is-panel-link">Human approval required</span></div>'
-        f'<div class="is-panel-body">{_next_actions(context, summary, events)}</div></div>',
+        f'<div class="is-panel-body">{_next_actions(context, summary, events, assets)}</div></div>',
         unsafe_allow_html=True,
     )
+
+    _render_record_form()
 
     render_demo_notice()

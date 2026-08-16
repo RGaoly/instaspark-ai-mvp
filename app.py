@@ -30,11 +30,17 @@ st.set_page_config(
 if "language" not in st.session_state:
     st.session_state.language = DEFAULT_LANGUAGE
 
-# The topbar switches language via ?lang= so it works inside the HTML shell.
+# Topbar HTML links still use ?lang=; apply once then drop it so a stale
+# zh query cannot pin the session after the operator switches back to EN.
 _requested_language = st.query_params.get("lang")
 if _requested_language in {"en", "zh"}:
     set_language(_requested_language)
-    st.query_params.clear()
+    st.session_state["login_language_switcher"] = _requested_language
+    st.session_state["language_switcher"] = _requested_language
+    try:
+        del st.query_params["lang"]
+    except KeyError:
+        pass
 
 inject_theme()
 init_auth()

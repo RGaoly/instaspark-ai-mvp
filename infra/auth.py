@@ -104,6 +104,35 @@ def current_role() -> str:
     return current_user().get("role", "viewer")
 
 
+WRITE_ROLES = frozenset({"admin"})
+
+
+def can_write() -> bool:
+    """Return True unless a logged-in non-admin is present.
+
+    Pytest and other service-layer callers bootstrap state without ``auth_user``.
+    Those paths stay writable. A signed-in viewer is read-only.
+    """
+    user = st.session_state.get("auth_user")
+    if not user:
+        return True
+    return str(user.get("role", "viewer")) in WRITE_ROLES
+
+
+def require_role(*roles: str) -> None:
+    user = st.session_state.get("auth_user")
+    if not user:
+        return
+    allowed = {str(role) for role in roles}
+    if str(user.get("role", "viewer")) not in allowed:
+        raise PermissionError(f"Requires role: {', '.join(sorted(allowed))}")
+
+
+def require_write() -> None:
+    if not can_write():
+        raise PermissionError("Viewer role is read-only. An admin must approve this action.")
+
+
 def login(username: str, password: str) -> bool:
     user = verify_user(username, password)
     if user:

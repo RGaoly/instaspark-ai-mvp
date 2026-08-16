@@ -10,6 +10,7 @@ from components.state import (
     active_context_label,
     performance_events,
     ranking,
+    tracking_assets,
     workflow_summary,
 )
 from components.ui import md
@@ -29,7 +30,7 @@ def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> st
         ("Measured", str(summary.get("measured", 0)), "Performance linked"),
         ("Attributed orders", f"{orders:,}", "Recorded events"),
         ("Revenue", f"${revenue:,.0f}", "Recorded events"),
-        ("ROI", f"{roi:.2f}x", "Revenue / spend"),
+        ("ROI", f"{roi:.2f}x", "Recorded events only · 0x if empty"),
         ("Budget utilization", f"{spend / budget:.0%}" if budget else "—", f"${spend:,.0f} / ${budget:,.0f}"),
     ]
     return '<div class="is-kpi-strip">' + "".join(
@@ -72,6 +73,22 @@ def _performance_table(events: list[dict]) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
 
 
+def _tracking_table(assets: list[dict]) -> str:
+    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Coupon", "UTM campaign", "Deeplink"])
+    if not assets:
+        body = '<tr><td colspan="4">No tracking assets issued yet. Approve outreach to mint a coupon and UTM deeplink.</td></tr>'
+    else:
+        body = "".join(
+            "<tr>"
+            f'<td>{esc(item.get("creator_id", "—"))}</td>'
+            f'<td>{esc(item.get("coupon", "—"))}</td>'
+            f'<td>{esc(item.get("utm_campaign", "—"))}</td>'
+            f'<td>{esc(item.get("deeplink", "—"))}</td></tr>'
+            for item in assets
+        )
+    return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
+
+
 def _next_actions(context: dict, summary: dict[str, int], events: list[dict]) -> str:
     actions = []
     if summary.get("approved", 0):
@@ -92,6 +109,7 @@ def render() -> None:
     context = active_context()
     summary = workflow_summary()
     events = performance_events()
+    assets = tracking_assets()
     ranked = ranking()
     budget = float(context.get("budget_usd", 0))
 
@@ -118,6 +136,9 @@ def render() -> None:
     controls[3].button(t("Export"), use_container_width=True)
 
     md(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
+    st.caption(
+        t("ROI uses recorded performance events only. Empty events equal 0x — this is not a modeled forecast.")
+    )
 
     left, right = st.columns([0.38, 0.62], gap="small")
     with left:
@@ -134,6 +155,14 @@ def render() -> None:
             f'<div class="is-panel-body">{_performance_table(events)}</div></div>',
             unsafe_allow_html=True,
         )
+
+    md(
+        '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
+        '<span class="is-panel-title">Issued tracking assets</span>'
+        '<span class="is-panel-link">Minted on approve · not conversions</span></div>'
+        f'<div class="is-panel-body">{_tracking_table(assets)}</div></div>',
+        unsafe_allow_html=True,
+    )
 
     md(
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'

@@ -147,8 +147,13 @@ def test_ranking_materializes_match_and_decision_references_it(session):
     assert session.decision_log[-1]["match_id"] == match["match_id"]
     assert session.decision_log[-1]["reason_code"] == "strong_fit"
     assert session.decision_log[-1]["note"] == "Top-ranked shortlisted creator approved"
+    assert first["coupon"].startswith(f"X5-{creator_id}-")
+    assert "utm_source=instaspark" in first["deeplink"]
+    assert "utm_medium=creator" in first["deeplink"]
     assert len(session.decision_log) == 1
     assert len(session.outreach_cases) == 1
+    assert session.outreach_cases[0]["coupon"] == first["coupon"]
+    assert state.tracking_assets()[0]["coupon"] == first["coupon"]
 
 
 def test_switching_roots_isolates_creator_workflow_state(session):
@@ -208,3 +213,26 @@ def test_operator_work_survives_a_new_session(session, monkeypatch):
     assert fresh["active_opportunity_id"] == "OPP-002"
     assert any(item["creator_id"] == "C003" and item["decision"] == "Approved" for item in fresh["decision_log"])
     assert state.creator_state("C003") == "approved"
+
+
+def test_viewer_cannot_save_decision_or_reset(session):
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    with pytest.raises(PermissionError, match="read-only"):
+        state.save_decision(creator_id, "Approved", "Viewer should not approve")
+    with pytest.raises(PermissionError, match="read-only"):
+        state.reset_demo()
+
+
+def test_approval_issues_unique_coupons_per_creator(session):
+    ranked = state.ranking()
+    first_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    first = state.save_decision(first_id, "Approved", "Approve first shortlist")
+    second = state.save_decision(second_id, "Approved", "Approve second shortlist")
+    assert first["coupon"] != second["coupon"]
+    assert first["deeplink"] != second["deeplink"]
+    assert first["coupon"].startswith(f"X5-{first_id}-")
+    assert second["coupon"].startswith(f"X5-{second_id}-")
+    assert len(state.tracking_assets()) == 2

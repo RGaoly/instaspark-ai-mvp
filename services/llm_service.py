@@ -31,6 +31,45 @@ def is_llm_available() -> bool:
     return bool(LLM_API_KEY.strip())
 
 
+def generation_mode_label() -> str:
+    """Operator-facing source label for generated copy."""
+    return "AI generated" if is_llm_available() else "Template demo"
+
+
+def _join(values: Any, fallback: str = "") -> str:
+    if values is None:
+        return fallback
+    if isinstance(values, (list, tuple)):
+        text = ", ".join(str(item) for item in values if str(item).strip())
+        return text or fallback
+    text = str(values).strip()
+    return text or fallback
+
+
+def _grounding_facts(mission: dict[str, Any], creator: dict[str, Any]) -> str:
+    """Facts the model (or template) must stay inside — no invented specs."""
+    return (
+        f"Product: {mission.get('product', 'the product')}\n"
+        f"Mission title: {mission.get('title') or mission.get('name') or 'Active launch'}\n"
+        f"Objective: {mission.get('objective', 'Validate product-market fit with creator-led content.')}\n"
+        f"Primary market: {mission.get('market', 'global')}\n"
+        f"Language: {mission.get('language', 'local language')}\n"
+        f"Markets: {_join(mission.get('markets'), mission.get('market', 'global'))}\n"
+        f"Target topics: {_join(mission.get('target_topics'), 'creator-relevant use cases')}\n"
+        f"Target styles: {_join(mission.get('target_styles'), 'the creator native style')}\n"
+        f"Budget USD: {mission.get('budget_usd', 0)}\n"
+        f"Owner: {mission.get('owner', 'Mission owner')}\n"
+        f"Creator: {creator.get('creator_name', 'the creator')}\n"
+        f"Creator id: {creator.get('creator_id', 'unknown')}\n"
+        f"Creator market: {creator.get('primary_market', mission.get('market', 'global'))}\n"
+        f"Creator topics: {_join(creator.get('topics'), 'not specified')}\n"
+        f"Creator styles: {_join(creator.get('styles'), 'not specified')}\n"
+        f"Followers: {int(creator.get('followers') or 0):,}\n"
+        f"Engagement rate: {creator.get('engagement_rate', 'n/a')}\n"
+        "Constraint: do not invent product specifications, prices, or unverified claims."
+    )
+
+
 def _call_llm(system_prompt: str, user_prompt: str) -> str | None:
     """Call LLM Chat Completions API and return the response text.
 
@@ -68,26 +107,18 @@ def generate_brief(mission: dict[str, Any], creator: dict[str, Any]) -> str:
     """
     product = mission.get("product", "the product")
     market = mission.get("market", "global")
-    scenario = ", ".join(mission.get("target_topics", ["storytelling"]))
+    scenario = _join(mission.get("target_topics"), "storytelling")
     creator_name = creator.get("creator_name", "the creator")
-    objective = mission.get("objective", "Drive awareness and consideration")
 
     if is_llm_available():
         system_prompt = (
             "You are a brand marketing strategist. Generate a concise, "
             "actionable creator collaboration brief in Markdown format. "
             "Include sections: Objective, Audience, Core Message, Must-Show, "
-            "Shot List, Do/Don't. Keep it under 400 words."
+            "Shot List, Do/Don't. Stay inside the supplied facts. "
+            "Do not invent product specs. Keep it under 400 words."
         )
-        user_prompt = (
-            f"Product: {product}\n"
-            f"Market: {market}\n"
-            f"Creator: {creator_name}\n"
-            f"Content themes: {scenario}\n"
-            f"Mission objective: {objective}\n"
-            f"Budget: USD {mission.get('budget_usd', 0):,.0f}\n"
-        )
-        result = _call_llm(system_prompt, user_prompt)
+        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
         if result:
             return result
 
@@ -159,13 +190,7 @@ def generate_localized_content(
             "market, language, flag, hook, caption, cta, disclosure. "
             "Keep hooks under 15 words, captions under 40 words."
         )
-        user_prompt = (
-            f"Product: {product}\n"
-            f"Creator: {creator_name}\n"
-            f"Markets: {', '.join(markets)}\n"
-            f"Content themes: {', '.join(mission.get('target_topics', ['storytelling']))}\n"
-        )
-        result = _call_llm(system_prompt, user_prompt)
+        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
         if result:
             try:
                 parsed = json.loads(result)
@@ -220,30 +245,26 @@ def generate_hooks(mission: dict[str, Any], creator: dict[str, Any]) -> list[str
     Falls back to mock hooks when LLM is unavailable.
     """
     product = mission.get("product", "the product")
-    scenario = ", ".join(mission.get("target_topics", ["storytelling"]))
+    scenario = _join(mission.get("target_topics"), "storytelling")
 
     if is_llm_available():
         system_prompt = (
             "You are a social media copywriter. Generate exactly 3 short, "
             "punchy hooks for a creator collaboration video. "
+            "Stay inside the supplied product, market and creator facts. "
             "Return one hook per line, no numbering or bullets."
         )
-        user_prompt = (
-            f"Product: {product}\n"
-            f"Creator: {creator.get('creator_name', 'the creator')}\n"
-            f"Content themes: {scenario}\n"
-        )
-        result = _call_llm(system_prompt, user_prompt)
+        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
         if result:
             hooks = [line.strip() for line in result.strip().split("\n") if line.strip()]
             if hooks:
                 return hooks[:3]
 
-    # Fallback: mock hooks
+    # Fallback: mock hooks grounded in mission facts
     return [
-        "One camera. Every angle.",
-        "What if you never missed the shot?",
-        f"This ride changed after I stopped choosing the frame.",
+        f"One camera. Every angle. This is the {product}.",
+        f"What if you never missed the {scenario} shot?",
+        f"I stopped choosing the frame. {product} kept the story open.",
     ]
 
 
@@ -256,29 +277,25 @@ def generate_script(mission: dict[str, Any], creator: dict[str, Any]) -> str:
     Falls back to mock script when LLM is unavailable.
     """
     product = mission.get("product", "the product")
-    scenario = ", ".join(mission.get("target_topics", ["storytelling"]))
+    scenario = _join(mission.get("target_topics"), "storytelling")
+    market = mission.get("market", "the target market")
 
     if is_llm_available():
         system_prompt = (
             "You are a video script writer. Generate a concise 30-60 second "
             "script outline for a creator collaboration video. Include timestamps "
-            "and scene descriptions. Keep it under 200 words."
+            "and scene descriptions. Stay inside the supplied facts. "
+            "Do not invent product specs. Keep it under 200 words."
         )
-        user_prompt = (
-            f"Product: {product}\n"
-            f"Creator: {creator.get('creator_name', 'the creator')}\n"
-            f"Content themes: {scenario}\n"
-            f"Market: {mission.get('market', 'global')}\n"
-        )
-        result = _call_llm(system_prompt, user_prompt)
+        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
         if result:
             return result
 
     # Fallback: mock script
     return (
-        "0-3s: Immersive hook — creator in action with product\n"
-        "3-15s: Creator challenge — setting up the shot\n"
-        "15-35s: Product proof — key feature demonstrated in real use\n"
+        f"0-3s: Immersive hook — {creator.get('creator_name', 'the creator')} in {market} with {product}\n"
+        f"3-15s: Creator challenge — setting up a real {scenario} shot\n"
+        f"15-35s: Product proof — {product} demonstrated in a live use case\n"
         "35-48s: Reframing reveal — showing the unique angle\n"
-        "48-60s: Creator verdict and CTA"
+        f"48-60s: Creator verdict and CTA for {product}"
     )

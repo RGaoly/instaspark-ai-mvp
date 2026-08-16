@@ -15,7 +15,7 @@ from components.html import (
     scorebar,
 )
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
@@ -25,6 +25,7 @@ from components.state import (
     transition_creator_state,
 )
 from components.ui import md
+from src.audience import overlap_vs_cohort
 
 
 def _filters(context: dict) -> str:
@@ -100,7 +101,7 @@ def _creator_table(ranked) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
 
 
-def _detail_panel(creator: dict, context: dict) -> str:
+def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
     reasons = list(creator.get("positives", [])[:4])
     defaults = [
         "Eligible under the active entry's hard gates",
@@ -121,6 +122,8 @@ def _detail_panel(creator: dict, context: dict) -> str:
         f'<span><b>{esc(reason_labels[i])}</b><small>{esc(reason)}</small></span></div>'
         for i, reason in enumerate(reasons)
     )
+    overlap = overlap_vs_cohort(creator, cohort)
+    overlap_pct = round(overlap["mean_jaccard"] * 100)
     score = float(creator["total_score"])
     return f"""
     <div class="is-card">
@@ -148,9 +151,11 @@ def _detail_panel(creator: dict, context: dict) -> str:
         <div class="is-video-row"><div class="is-video"></div><div class="is-video"></div><div class="is-video"></div></div>
         <div class="is-grid-2" style="margin-top:10px">
           <div class="is-lift-panel">
-            <h4>Audience overlap</h4>
-            <div class="is-donut" style="--pct:{creator['audience_fit']:.0f};width:52px;height:52px"><span>{creator['audience_fit']:.0f}%</span></div>
-            <small style="font-size:7px;color:#879198;display:block;margin-top:6px">{esc(context.get('market', 'Target market'))} audience cohort</small>
+            <h4>Shortlist overlap</h4>
+            <div class="is-donut" style="--pct:{overlap_pct};width:52px;height:52px"><span>{overlap_pct}%</span></div>
+            <small style="font-size:7px;color:#879198;display:block;margin-top:6px">
+            Mean Jaccard vs {overlap['peers']} shortlist peers · synthetic cohorts, not platform unique reach.
+            Audience–mission fit (score driver) is {creator['audience_fit']:.0f}.</small>
           </div>
           <div class="is-lift-panel">
             <h4>Observed-input score components</h4>
@@ -224,7 +229,7 @@ def render() -> None:
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{min(8, len(ranked))} creators found · context-aware ranking · {ai_badge("Ranked by InstaSpark AI")}'
+            f'{min(8, len(ranked))} creators found · rule-based ranking · demo catalog · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -250,9 +255,15 @@ def render() -> None:
         md(_creator_table(ranked), unsafe_allow_html=True)
     with aside:
         creator = selected_creator()
-        md(_detail_panel(creator, context), unsafe_allow_html=True)
+        shortlist_ids = list(st.session_state.get("shortlist_ids") or [])
+        if len(shortlist_ids) < 2:
+            shortlist_ids = ranked.head(3)["creator_id"].tolist()
+        cohort = ranked[ranked["creator_id"].isin(shortlist_ids)].to_dict("records")
+        md(_detail_panel(creator, context, cohort), unsafe_allow_html=True)
         a, b, c = st.columns(3)
-        if a.button(t("Shortlist"), type="primary", use_container_width=True):
+        locked = writes_locked()
+        render_write_guard()
+        if a.button(t("Shortlist"), type="primary", use_container_width=True, disabled=locked):
             cid = creator["creator_id"]
             try:
                 transition_creator_state(
@@ -263,7 +274,7 @@ def render() -> None:
                     evidence=list(creator.get("evidence", [])[:2]),
                 )
                 st.toast(t("Added to shortlist with an audit event"))
-            except ValueError as exc:
+            except (ValueError, PermissionError) as exc:
                 st.info(str(exc))
         if b.button(t("Compare"), use_container_width=True):
             cid = creator["creator_id"]

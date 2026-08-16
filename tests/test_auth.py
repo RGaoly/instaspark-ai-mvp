@@ -7,9 +7,12 @@ import pytest
 from infra.auth import (
     _hash_password,
     _generate_salt,
+    can_write,
     create_user,
     verify_user,
     count_users,
+    require_role,
+    require_write,
     seed_default_users,
 )
 from infra.database import get_connection, init_db, reset_db
@@ -95,6 +98,11 @@ def test_login_page_does_not_render_an_empty_card():
     assert "auth-hero" in source
     assert 'key="auth_username"' in source
     assert 'key="auth_submit"' in source
+    assert "st.segmented_control" in source
+    assert 'key="login_language_switcher"' in source
+    assert source.index('st.session_state.get("login_language_switcher")') < source.index(
+        "Product finds creator."
+    )
 
 
 def test_password_hash_not_stored_in_plaintext():
@@ -106,3 +114,47 @@ def test_password_hash_not_stored_in_plaintext():
         assert len(row["password_hash"]) == 64  # SHA-256 hex digest
     finally:
         conn.close()
+
+
+class _Session(dict):
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError as exc:
+            raise AttributeError(name) from exc
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+
+def test_can_write_defaults_open_without_login(monkeypatch):
+    from infra import auth
+
+    fake = _Session()
+    monkeypatch.setattr(auth.st, "session_state", fake)
+    assert can_write() is True
+    require_write()
+
+
+def test_viewer_cannot_write(monkeypatch):
+    from infra import auth
+
+    fake = _Session()
+    fake.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    monkeypatch.setattr(auth.st, "session_state", fake)
+    assert can_write() is False
+    with pytest.raises(PermissionError, match="read-only"):
+        require_write()
+    with pytest.raises(PermissionError, match="admin"):
+        require_role("admin")
+
+
+def test_admin_can_write(monkeypatch):
+    from infra import auth
+
+    fake = _Session()
+    fake.auth_user = {"username": "admin", "role": "admin", "display_name": "Admin"}
+    monkeypatch.setattr(auth.st, "session_state", fake)
+    assert can_write() is True
+    require_write()
+    require_role("admin")

@@ -4,7 +4,7 @@ import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
@@ -53,6 +53,7 @@ def _kanban(board: dict[str, list[dict]]) -> str:
                 f'<div class="is-kanban-meta"><span>Market</span><strong>{esc(market)}</strong>'
                 f'<span>Audience</span><strong>{esc(followers)}</strong>'
                 f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
+                f'<span>Coupon</span><strong>{esc(person.get("coupon") or "Issued on approve")}</strong>'
                 f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
                 f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
             )
@@ -139,7 +140,13 @@ def render() -> None:
             if next_states:
                 target = st.selectbox(t("Next state"), next_states, format_func=_stage_label)
                 reason = st.text_input(t("Transition reason"), "Operator completed the required review")
-                if st.button(t("Advance workflow"), type="primary", use_container_width=True):
+                render_write_guard()
+                if st.button(
+                    t("Advance workflow"),
+                    type="primary",
+                    use_container_width=True,
+                    disabled=writes_locked(),
+                ):
                     try:
                         transition_creator_state(
                             selected["creator_id"],
@@ -148,11 +155,14 @@ def render() -> None:
                             reason=reason,
                             evidence=[f'outreach://{selected.get("outreach_case_id", "workflow-review")}'],
                         )
-                    except ValueError as exc:
+                    except (ValueError, PermissionError) as exc:
                         st.error(str(exc))
                     else:
                         st.success(f'Advanced to {_stage_label(target)} with an audit event.')
                         st.rerun()
+            if selected.get("coupon"):
+                st.caption(f'{t("Coupon")}: {selected["coupon"]}')
+                st.caption(selected.get("deeplink", ""))
 
     tabs = st.tabs(labels(["Workflow Board", "List", "Audit Log", "Stage Metrics"]))
     with tabs[0]:

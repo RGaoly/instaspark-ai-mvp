@@ -138,7 +138,37 @@ P0 已建立双入口信息架构、核心对象契约、统一活动上下文�
 
 ## Deployment
 
-Streamlit Community Cloud 可直接以 `app.py` 为入口、`requirements.txt` 为依赖部署。本地启动是当前的可复现基线。托管实例若重定向到登录页，需由 workspace 管理员开放应用或授予访问权限；仓库本身不会绕过该访问控制。
+Hosted demo: **https://instaspark-ai-mvp.streamlit.app**. Streamlit Cloud deploys from GitHub `main` (`app.py` + `requirements.txt`). Local `streamlit run app.py` remains the reproducible baseline.
+
+If the hosted app redirects to a Streamlit login page, a workspace admin must make the app public or grant access. This repository cannot bypass that control.
+
+### Streamlit Cloud secrets
+
+After this branch is merged to `main`, Cloud rebuilds automatically. Live YouTube lookup and live Content Studio need secrets on the Cloud app. **Never put a real key in GitHub, README, screenshots, or a committed `.env`.**
+
+1. Open [share.streamlit.io](https://share.streamlit.io) and select the app that serves https://instaspark-ai-mvp.streamlit.app.
+2. Go to **App settings → Secrets**.
+3. Paste TOML using the **same names** as `.env.example`. Save. Reboot the app if Cloud does not restart on its own.
+
+Required for live YouTube lookup on Creator Search:
+
+```toml
+YOUTUBE_API_KEY = "..."
+```
+
+Optional for live Content Studio (otherwise the studio stays on the deterministic mock):
+
+```toml
+LLM_API_KEY = "..."
+LLM_BASE_URL = "https://api.deepseek.com"
+LLM_MODEL = "deepseek-chat"
+```
+
+`YOUTUBE_API_KEY` only attaches a public channel as labeled evidence. The ranked creator table stays the synthetic demo catalog. Without the YouTube secret, Search still works; the live lookup reports that the key is not configured.
+
+Demo logins (Cloud and local): `admin` / `admin123` can write; `demo` / `demo123` is a read-only viewer.
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for Docker and other hosts.
 
 ## Evaluation
 

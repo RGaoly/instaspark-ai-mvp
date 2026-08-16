@@ -144,11 +144,12 @@ If the hosted app redirects to a Streamlit login page, a workspace admin must ma
 
 ### Streamlit Cloud secrets
 
-After this branch is merged to `main`, Cloud rebuilds automatically. Live YouTube lookup and live Content Studio need secrets on the Cloud app. **Never put a real key in GitHub, README, screenshots, or a committed `.env`.**
+After this branch is merged to `main`, Cloud rebuilds automatically. Live YouTube lookup and live Content Studio need secrets on the Cloud app. The running process reads **App settings → Secrets** via `st.secrets` (not only `.env` / `os.environ`). **Never put a real key in GitHub, README, screenshots, or a committed `.env`.**
 
 1. Open [share.streamlit.io](https://share.streamlit.io) and select the app that serves https://instaspark-ai-mvp.streamlit.app.
 2. Go to **App settings → Secrets**.
-3. Paste TOML using the **same names** as `.env.example`. Save. Reboot the app if Cloud does not restart on its own.
+3. Paste TOML using the **same names** as `.env.example`. Click **Save**.
+4. After Save, wait about one minute **or** reboot from the Streamlit Cloud menu (three dots → **Reboot**). A greyed-out Save button means there are no pending editor edits — it does **not** mean the running process has already reloaded secrets.
 
 Required for live YouTube lookup on Creator Search:
 

@@ -15,20 +15,26 @@ import json
 import logging
 from typing import Any
 
-from infra.config import (
-    LLM_API_KEY,
-    LLM_BASE_URL,
-    LLM_MAX_TOKENS,
-    LLM_MODEL,
-    LLM_TEMPERATURE,
-)
+from infra.config import LLM_MAX_TOKENS, LLM_TEMPERATURE, _resolve_secret
 
 logger = logging.getLogger(__name__)
 
 
+def _llm_api_key() -> str:
+    return _resolve_secret("LLM_API_KEY", "")
+
+
+def _llm_base_url() -> str:
+    return _resolve_secret("LLM_BASE_URL", "https://api.deepseek.com")
+
+
+def _llm_model() -> str:
+    return _resolve_secret("LLM_MODEL", "deepseek-chat")
+
+
 def is_llm_available() -> bool:
     """Return True if an LLM API key is configured."""
-    return bool(LLM_API_KEY.strip())
+    return bool(_llm_api_key())
 
 
 def generation_mode_label() -> str:
@@ -81,9 +87,9 @@ def _call_llm(system_prompt: str, user_prompt: str) -> str | None:
     try:
         from openai import OpenAI
 
-        client = OpenAI(api_key=LLM_API_KEY, base_url=LLM_BASE_URL)
+        client = OpenAI(api_key=_llm_api_key(), base_url=_llm_base_url())
         response = client.chat.completions.create(
-            model=LLM_MODEL,
+            model=_llm_model(),
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},

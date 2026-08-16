@@ -140,3 +140,90 @@ def test_config_values_match_defaults():
     assert DEFAULT_ADMIN_DISPLAY_NAME == "Olivia Chen"
     assert PBKDF2_ITERATIONS == 260_000
     assert SALT_LENGTH == 16
+
+
+def test_resolve_secret_prefers_st_secrets_over_env(monkeypatch):
+    """Cloud App settings → Secrets must win over os.environ (placeholder only)."""
+    import sys
+    import types
+
+    from infra import config
+
+    fake_st = types.SimpleNamespace(
+        secrets={
+            "YOUTUBE_API_KEY": "test-secret-value",
+            "LLM_API_KEY": "test-secret-value",
+            "LLM_BASE_URL": "https://example.test/v1",
+            "LLM_MODEL": "test-model",
+        }
+    )
+    monkeypatch.setitem(sys.modules, "streamlit", fake_st)
+    monkeypatch.setenv("YOUTUBE_API_KEY", "env-should-not-win")
+    monkeypatch.setenv("LLM_API_KEY", "env-should-not-win")
+    monkeypatch.setenv("LLM_BASE_URL", "https://env.example/v1")
+    monkeypatch.setenv("LLM_MODEL", "env-model")
+
+    assert config._from_streamlit_secrets("YOUTUBE_API_KEY") == "test-secret-value"
+    assert config._resolve_secret("YOUTUBE_API_KEY", "") == "test-secret-value"
+    assert config._resolve_secret("LLM_API_KEY", "") == "test-secret-value"
+    assert config._resolve_secret("LLM_BASE_URL", "https://api.deepseek.com") == "https://example.test/v1"
+    assert config._resolve_secret("LLM_MODEL", "deepseek-chat") == "test-model"
+
+
+def test_resolve_secret_falls_back_to_environ_when_secrets_empty(monkeypatch):
+    import sys
+    import types
+
+    from infra import config
+
+    monkeypatch.setitem(sys.modules, "streamlit", types.SimpleNamespace(secrets={}))
+    monkeypatch.setenv("YOUTUBE_API_KEY", "test-secret-value")
+    assert config._resolve_secret("YOUTUBE_API_KEY", "") == "test-secret-value"
+
+
+def test_resolve_secret_skips_whitespace_only_st_secrets(monkeypatch):
+    import sys
+    import types
+
+    from infra import config
+
+    monkeypatch.setitem(
+        sys.modules,
+        "streamlit",
+        types.SimpleNamespace(secrets={"YOUTUBE_API_KEY": "   "}),
+    )
+    monkeypatch.setenv("YOUTUBE_API_KEY", "test-secret-value")
+    assert config._from_streamlit_secrets("YOUTUBE_API_KEY") is None
+    assert config._resolve_secret("YOUTUBE_API_KEY", "") == "test-secret-value"
+
+
+def test_missing_streamlit_secrets_do_not_crash(monkeypatch):
+    import sys
+
+    from infra import config
+
+    class _MissingSecrets:
+        @property
+        def secrets(self):
+            raise FileNotFoundError("No secrets.toml")
+
+    monkeypatch.setitem(sys.modules, "streamlit", _MissingSecrets())
+    monkeypatch.delenv("YOUTUBE_API_KEY", raising=False)
+    assert config._from_streamlit_secrets("YOUTUBE_API_KEY") is None
+    assert config._resolve_secret("YOUTUBE_API_KEY", "") == ""
+
+
+def test_youtube_service_reads_mocked_st_secrets(monkeypatch):
+    import sys
+    import types
+
+    from services import youtube_service
+
+    monkeypatch.setitem(
+        sys.modules,
+        "streamlit",
+        types.SimpleNamespace(secrets={"YOUTUBE_API_KEY": "test-secret-value"}),
+    )
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", None)
+    assert youtube_service.is_youtube_available() is True
+    assert youtube_service.youtube_status_label() == "YouTube Data API live"

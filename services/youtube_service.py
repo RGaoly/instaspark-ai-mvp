@@ -14,15 +14,24 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
-from infra.config import YOUTUBE_API_KEY, YOUTUBE_API_TIMEOUT_SECONDS
+from infra.config import YOUTUBE_API_TIMEOUT_SECONDS, _resolve_secret
 
 logger = logging.getLogger(__name__)
 
 YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3"
 
+# Tests monkeypatch this name. None means resolve live (st.secrets → env → dotenv).
+YOUTUBE_API_KEY: str | None = None
+
+
+def _youtube_api_key() -> str:
+    if YOUTUBE_API_KEY is not None:
+        return str(YOUTUBE_API_KEY).strip()
+    return _resolve_secret("YOUTUBE_API_KEY", "")
+
 
 def is_youtube_available() -> bool:
-    return bool(YOUTUBE_API_KEY.strip())
+    return bool(_youtube_api_key())
 
 
 def youtube_status_label() -> str:
@@ -30,7 +39,7 @@ def youtube_status_label() -> str:
 
 
 def _request(path: str, params: dict[str, str]) -> dict[str, Any]:
-    query = urllib.parse.urlencode({**params, "key": YOUTUBE_API_KEY})
+    query = urllib.parse.urlencode({**params, "key": _youtube_api_key()})
     url = f"{YOUTUBE_API_BASE}/{path}?{query}"
     request = urllib.request.Request(
         url,

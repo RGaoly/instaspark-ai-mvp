@@ -123,6 +123,12 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Checklist for this demo" not in launch
     assert "View all (8)" not in launch
     assert "Content brief evidence review" not in launch
+    assert "opportunities_for_mission" in launch
+    assert "Linked creator opportunities" in launch
+    opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
+    assert "save_opportunity" in opportunity
+    assert "_render_mission_link" in opportunity
+    assert "health_score" not in opportunity
     growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
     assert "filter_performance_events" in growth
     assert 'key="growth_period"' in growth

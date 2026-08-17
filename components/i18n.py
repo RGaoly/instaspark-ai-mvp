@@ -1385,6 +1385,19 @@ ZH: dict[str, str] = {
     "Saved briefs · 0 is honest": "已保存简报 · 0 为真实值",
     "Measured events": "已衡量事件",
     "Measured": "已衡量",
+    "Linked creator opportunities": "已关联的创作者机会",
+    "No creator opportunities are linked to this mission.": "当前任务尚未关联创作者机会。",
+    "Open opportunity": "打开机会",
+    "Link this Creator Opportunity to a Launch Mission before creating Match records.": "请先把该创作者机会关联到发起任务，再生成匹配记录。",
+    "Not linked": "未关联",
+    "No launch missions are available to link.": "没有可关联的发起任务。",
+    "Mission linked; the Creator Opportunity remains the active root context.": "任务已关联；创作者机会仍是当前根上下文。",
+    "Draft mission created and linked without changing the Opportunity root.": "已创建并关联草稿任务，机会根上下文未改变。",
+    "Created {opportunity_id} and set it as the active workspace context.": "已创建 {opportunity_id}，并设为当前工作区上下文。",
+    "Mission context is active. Select an opportunity below when you want to work from the creator-first entry.": "当前是任务上下文。若要从创作者入口开始，请在下方选择一个机会。",
+    "Active opportunity": "当前机会",
+    "Activate opportunity": "激活该机会",
+    "Creator Opportunity is now the active workspace context.": "创作者机会现为当前工作区上下文。",
 }
 
 

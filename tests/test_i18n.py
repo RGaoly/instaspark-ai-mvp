@@ -21,6 +21,15 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Not assessed in this demo", language="zh") == "本演示未评估"
     assert translate("Shortlist creators", language="zh") == "将创作者加入入围名单"
     assert translate("Last 7 days", language="zh") == "最近 7 天"
+    assert translate("Linked creator opportunities", language="zh") == "已关联的创作者机会"
+    assert (
+        translate(
+            "Created {opportunity_id} and set it as the active workspace context.",
+            language="zh",
+            opportunity_id="OPP-004",
+        )
+        == "已创建 OPP-004，并设为当前工作区上下文。"
+    )
     assert translate(
         "ROI uses recorded performance events in the selected period and market. Empty set equals 0x.",
         language="zh",

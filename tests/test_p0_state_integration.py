@@ -549,3 +549,76 @@ def test_viewer_cannot_save_content_asset(session):
         state.save_content_asset(creator_id, "Viewer brief", "Should not persist")
     assert state.content_assets() == []
     assert state.content_assets_in_review_count() == 0
+
+
+def test_save_linked_opportunity_activates_ranking_and_origin_shortlist(session):
+    from services.opportunity_service import create_opportunity
+
+    record = create_opportunity(
+        session.opportunities,
+        creator_id="C004",
+        title="Mexico bilingual test",
+        source="Operator capture",
+        market="Mexico",
+        language="Spanish",
+        hypothesis="Creator-first signal should drive the workspace.",
+        evidence=["opportunity://manual"],
+        owner="Regional Creator Team",
+        linked_mission_id="launch_x5_us_001",
+    )
+    saved = state.save_opportunity(record)
+    context = state.active_context()
+    assert context["entry_type"] == "opportunity"
+    assert context["opportunity_id"] == saved["opportunity_id"]
+    assert context["mission_id"] == "launch_x5_us_001"
+    assert session.selected_creator_id == "C004"
+    assert session.shortlist_ids == ["C004"]
+    assert session.compare_ids == ["C004"]
+    ranked = state.ranking()
+    assert not ranked.empty
+    assert "C004" in set(ranked["creator_id"])
+    linked = state.opportunities_for_mission("launch_x5_us_001")
+    assert saved["opportunity_id"] in {item["opportunity_id"] for item in linked}
+
+
+def test_save_unlinked_opportunity_activates_without_inventing_matches(session):
+    from services.opportunity_service import create_opportunity
+
+    record = create_opportunity(
+        session.opportunities,
+        creator_id="C009",
+        title="Unlinked signal",
+        source="Nomination",
+        market="Mexico",
+        language="Spanish",
+        hypothesis="Qualify before linking a mission.",
+        evidence=["opportunity://manual"],
+        owner="Mexico Marketing",
+    )
+    state.save_opportunity(record)
+    assert state.active_context()["entry_type"] == "opportunity"
+    assert state.active_context()["mission_id"] is None
+    assert state.ranking().empty
+    assert session.shortlist_ids == ["C009"]
+
+
+def test_link_opportunity_is_visible_on_mission_and_preserves_evidence(session):
+    original = next(item for item in session.opportunities if item["opportunity_id"] == "OPP-001")
+    evidence = list(original["evidence"])
+    linked = state.link_opportunity_to_mission("OPP-001", "launch_x5_us_001")
+    assert linked["linked_mission_id"] == "launch_x5_us_001"
+    assert linked["evidence"] == evidence
+    visible = {item["opportunity_id"] for item in state.opportunities_for_mission("launch_x5_us_001")}
+    assert {"OPP-001", "OPP-002"} <= visible
+    assert "OPP-003" not in visible
+    assert state.active_context()["entry_type"] == "mission"
+
+
+def test_switching_to_opportunity_replaces_then_restores_mission_shortlist(session):
+    original = list(session.shortlist_ids)
+    assert original
+    state.set_active_context("opportunity", "OPP-002")
+    assert session.shortlist_ids == ["C003"]
+    assert session.compare_ids == ["C003"]
+    state.set_active_context("mission", "launch_x5_us_001")
+    assert session.shortlist_ids == original

@@ -239,7 +239,7 @@ def render() -> None:
     _render_live_lookup(context)
     if ranked.empty:
         if context.get("entry_type") == "opportunity" and not context.get("mission_id"):
-            st.warning("Link this Creator Opportunity to a Launch Mission before creating Match records.")
+            st.warning(t("Link this Creator Opportunity to a Launch Mission before creating Match records."))
         else:
             st.warning(
                 "No creators pass the active entry's gates. Adjust its market, budget, language, or safety threshold."
@@ -310,7 +310,7 @@ def render() -> None:
     with aside:
         creator = selected_creator()
         shortlist_ids = list(st.session_state.get("shortlist_ids") or [])
-        if len(shortlist_ids) < 2:
+        if not shortlist_ids:
             shortlist_ids = visible.head(3)["creator_id"].tolist()
         cohort = visible[visible["creator_id"].isin(shortlist_ids)].to_dict("records")
         if not cohort:

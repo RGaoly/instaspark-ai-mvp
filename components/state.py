@@ -15,6 +15,7 @@ from infra.auth import require_write
 from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
 from src.domain import (
+    HEALTH_SHORTLISTED_STATES,
     WORKFLOW_STATES,
     EntryType,
     can_transition,
@@ -217,6 +218,36 @@ def _opportunity_by_id(opportunity_id: str | None) -> dict[str, Any] | None:
     )
 
 
+def _shortlist_ids_from_workflows(entry_type: str, entry_id: str) -> list[str]:
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for record in st.session_state.creator_workflows.values():
+        if (
+            record.get("entry_type") == entry_type
+            and record.get("entry_id") == entry_id
+            and record.get("state") in HEALTH_SHORTLISTED_STATES
+        ):
+            creator_id = record.get("creator_id")
+            if creator_id and creator_id not in seen:
+                seen.add(creator_id)
+                ordered.append(creator_id)
+    return ordered
+
+
+def opportunities_for_mission(mission_id: str | None) -> list[dict[str, Any]]:
+    """Opportunities linked to this mission. Empty is honest."""
+
+    if not mission_id:
+        return []
+    return deepcopy(
+        [
+            item
+            for item in st.session_state.opportunities
+            if item.get("linked_mission_id") == mission_id
+        ]
+    )
+
+
 def active_context() -> dict[str, Any]:
     """Return one defensive, page-safe view of the active root context."""
 
@@ -292,6 +323,21 @@ def set_active_context(entry_type: str, entry_id: str) -> dict[str, Any]:
         st.session_state.active_opportunity_id = None
         mission_rank = rank_creators(creators(), st.session_state.missions[entry_id])
         eligible_ids = mission_rank["creator_id"].tolist() if not mission_rank.empty else []
+        eligible_set = set(eligible_ids)
+        workflow_shortlist = [
+            creator_id
+            for creator_id in _shortlist_ids_from_workflows(normalized, entry_id)
+            if creator_id in eligible_set
+        ]
+        if workflow_shortlist:
+            st.session_state.shortlist_ids = workflow_shortlist
+        else:
+            current = [
+                creator_id
+                for creator_id in st.session_state.get("shortlist_ids", [])
+                if creator_id in eligible_set
+            ]
+            st.session_state.shortlist_ids = current or eligible_ids[:3]
         if st.session_state.get("selected_creator_id") not in eligible_ids:
             st.session_state.selected_creator_id = eligible_ids[0] if eligible_ids else None
         st.session_state.compare_ids = [
@@ -303,11 +349,14 @@ def set_active_context(entry_type: str, entry_id: str) -> dict[str, Any]:
         opportunity = _opportunity_by_id(entry_id)
         if opportunity is None:
             raise ValueError(f"Unknown opportunity: {entry_id}")
+        origin = opportunity.get("creator_id")
         st.session_state.active_opportunity_id = entry_id
-        st.session_state.selected_creator_id = opportunity.get("creator_id")
-        st.session_state.compare_ids = [opportunity.get("creator_id")] if opportunity.get("creator_id") else []
+        st.session_state.selected_creator_id = origin
+        st.session_state.compare_ids = [origin] if origin else []
+        st.session_state.shortlist_ids = [origin] if origin else []
         st.session_state.active_entry_type = normalized
-        _ensure_workflow_record(opportunity.get("creator_id"), opportunity.get("status", "discovered"))
+        if origin:
+            _ensure_workflow_record(origin, opportunity.get("status", "discovered"))
     st.session_state.active_entry_type = normalized
     persist_state()
     return active_context()
@@ -333,7 +382,7 @@ def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
     records = [item for item in st.session_state.opportunities if item.get("opportunity_id") != opportunity_id]
     records.append(deepcopy(opportunity))
     st.session_state.opportunities = records
-    persist_state()
+    set_active_context(EntryType.CREATOR_OPPORTUNITY.value, opportunity_id)
     return deepcopy(opportunity)
 
 

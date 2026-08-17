@@ -262,6 +262,8 @@ def test_record_performance_event_drives_roi_and_survives_reload(session, monkey
         note="Operator-entered conversion",
     )
 
+    assert state.creator_state(creator_id) == "approved"
+
     events = state.performance_events()
     assert len(events) == 1
     assert event["entry_id"] == session.active_mission_id
@@ -286,9 +288,14 @@ def test_record_performance_event_drives_roi_and_survives_reload(session, monkey
 def test_viewer_cannot_record_performance_event(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve before viewer tries to record")
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    assert state.creator_state(creator_id) == "published"
     session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
     with pytest.raises(PermissionError, match="read-only"):
         state.record_performance_event(creator_id, orders=1, revenue_usd=100, spend_usd=50)
+    assert state.creator_state(creator_id) == "published"
+    assert state.performance_events_for(creator_id) == []
 
 
 def test_live_youtube_evidence_attaches_once_and_blocks_viewer(session):
@@ -951,13 +958,6 @@ def test_published_does_not_create_performance_events_and_measured_needs_one(ses
     assert state.creator_state(creator_id) == "published"
 
     state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
-    state.transition_creator_state(
-        creator_id,
-        "measured",
-        actor="Operator",
-        reason="Conversion recorded on Growth Review",
-        evidence=["growth://performance-event"],
-    )
     assert state.creator_state(creator_id) == "measured"
     assert len(state.performance_events_for(creator_id)) == 1
     assert any(
@@ -965,6 +965,37 @@ def test_published_does_not_create_performance_events_and_measured_needs_one(ses
         and event["reason"] == "Conversion recorded on Growth Review"
         for event in state.workflow_events_for(creator_id)
     )
+
+
+def test_approved_record_does_not_skip_to_measured(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so a coupon exists")
+    assert state.creator_state(creator_id) == "approved"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=80, spend_usd=20)
+    assert state.creator_state(creator_id) == "approved"
+    assert len(state.performance_events_for(creator_id)) == 1
+
+
+def test_second_event_on_measured_is_idempotent(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert state.creator_state(creator_id) == "measured"
+
+    second = state.record_performance_event(creator_id, orders=2, revenue_usd=90, spend_usd=30)
+    assert second["orders"] == 2
+    assert state.creator_state(creator_id) == "measured"
+    assert len(state.performance_events_for(creator_id)) == 2
+    measured_hops = [
+        event
+        for event in state.workflow_events_for(creator_id)
+        if event["to_state"] == "measured"
+    ]
+    assert len(measured_hops) == 1
 
 
 def test_kanban_keeps_empty_domain_columns_and_shows_growth_next_after_published(session):
@@ -1009,6 +1040,7 @@ def test_published_with_zero_events_next_action_page_is_growth_review(session):
     assert session.perf_event_creator == f"{name} · {creator_id}"
 
     state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert state.creator_state(creator_id) == "measured"
     assert state.next_outreach_action_page(creator_id) is None
 
 

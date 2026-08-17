@@ -564,6 +564,7 @@ CONTACT_PACK_STATES = frozenset(
 # discovered / qualified stay on Search and Opportunity; there is no in_outreach.
 OUTREACH_BOARD_STATES: tuple[str, ...] = WORKFLOW_STATES[2:]
 MEASURED_REQUIRES_EVENTS = "Mark measured only after recording events"
+GROWTH_MEASURED_REASON = "Conversion recorded on Growth Review"
 DEFAULT_OUTREACH_TONE = "Professional"
 
 
@@ -934,6 +935,31 @@ def _creator_has_performance_event(creator_id: str) -> bool:
     return any(event.get("creator_id") == creator_id for event in performance_events())
 
 
+def _advance_published_to_measured(creator_id: str) -> bool:
+    """Move published → measured after a real event. No skip, no rewind.
+
+    Already-measured is a no-op. Earlier states stay put. Measured still
+    requires at least one event; the caller must persist the event first.
+    """
+
+    current = creator_state(creator_id)
+    if current == "measured":
+        return False
+    if current != "published":
+        return False
+    context = active_context()
+    user = st.session_state.get("auth_user") or {}
+    actor = str(user.get("display_name") or context.get("owner") or "Operator")
+    transition_creator_state(
+        creator_id,
+        "measured",
+        actor=actor,
+        reason=GROWTH_MEASURED_REASON,
+        evidence=["growth://performance-event"],
+    )
+    return True
+
+
 def record_performance_event(
     creator_id: str,
     orders: int,
@@ -978,6 +1004,7 @@ def record_performance_event(
     }
     st.session_state.performance_events.append(record)
     persist_state()
+    _advance_published_to_measured(creator_id)
     return deepcopy(record)
 
 

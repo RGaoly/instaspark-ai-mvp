@@ -4,14 +4,16 @@ import streamlit as st
 
 from components.html import esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
+    creator_state,
     creators,
     performance_events,
     ranking,
     record_performance_event,
+    select_creator,
     tracking_assets,
     workflow_board,
     workflow_summary,
@@ -173,6 +175,19 @@ def _prefill_record_form(recordable: list[tuple[str, str, dict]], *, force: bool
             return
 
 
+def _render_post_record_handoff() -> None:
+    if st.session_state.pop("growth_event_toast", False):
+        if st.session_state.pop("growth_moved_to_measured", False):
+            st.toast(t("Performance event recorded. Creator moved to Measured."))
+        else:
+            st.toast(t("Performance event recorded. ROI uses this event, not a forecast."))
+    if not st.session_state.get("growth_open_outreach"):
+        return
+    if st.button(t("Open Outreach"), type="primary"):
+        st.session_state.pop("growth_open_outreach", None)
+        open_workspace_page("outreach-operations")
+
+
 def _render_record_form() -> None:
     expand = bool(st.session_state.pop("growth_record_event_open", False))
     with st.expander(t("Record performance event (demo)"), expanded=expand):
@@ -199,6 +214,7 @@ def _render_record_form() -> None:
             submitted = st.form_submit_button(t("Record event"), type="primary", disabled=locked)
         if submitted:
             try:
+                before = creator_state(creator_id)
                 record_performance_event(
                     creator_id,
                     int(orders),
@@ -211,7 +227,12 @@ def _render_record_form() -> None:
             except (ValueError, PermissionError) as exc:
                 st.error(str(exc))
             else:
-                st.success(t("Performance event recorded. ROI uses this event, not a forecast."))
+                select_creator(creator_id)
+                st.session_state["growth_event_toast"] = True
+                st.session_state["growth_open_outreach"] = True
+                st.session_state["outreach_focus_creator_id"] = creator_id
+                if before == "published" and creator_state(creator_id) == "measured":
+                    st.session_state["growth_moved_to_measured"] = True
                 st.rerun()
 
 
@@ -304,6 +325,7 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
+    _render_post_record_handoff()
     _render_record_form()
 
     render_demo_notice()

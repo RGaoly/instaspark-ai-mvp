@@ -106,6 +106,10 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "in_outreach" not in outreach
     assert 'open_workspace_page("growth-review")' in outreach
     assert 'open_workspace_page("content-studio")' in outreach
+    assert 'open_workspace_page("outreach-operations")' in growth
+    assert 't("Open Outreach")' in growth
+    assert "st.toast" in growth
+    assert "growth_open_outreach" in growth
     assert "Create a brief in Content Studio" in outreach
     assert "growth_record_event_open" in growth
 

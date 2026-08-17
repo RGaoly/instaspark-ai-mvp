@@ -55,6 +55,11 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Record a conversion on Growth Review", language="zh") == "请到增长复盘页录入转化"
     assert translate("Create a brief in Content Studio", language="zh") == "请到内容工作室创建简报"
     assert translate("Audit timeline", language="zh") == "审计时间线"
+    assert translate("Open Outreach", language="zh") == "打开外联"
+    assert (
+        translate("Performance event recorded. Creator moved to Measured.", language="zh")
+        == "效果事件已录入。创作者已进入已衡量。"
+    )
 
 
 def test_longest_first_localization_preserves_compound_terms():

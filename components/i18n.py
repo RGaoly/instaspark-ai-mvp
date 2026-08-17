@@ -1415,6 +1415,18 @@ ZH: dict[str, str] = {
     "Active opportunity": "当前机会",
     "Activate opportunity": "激活该机会",
     "Creator Opportunity is now the active workspace context.": "创作者机会现为当前工作区上下文。",
+    "Contact pack": "联络包",
+    "Contact packs": "联络包",
+    "Copy pack": "复制联络包",
+    "Copy below": "请在下方复制",
+    "Refresh outreach message": "重新生成外联文案",
+    "Outreach message refreshed. Nothing was sent externally.": "外联文案已更新，未向外部发送。",
+    "Generate a copyable outreach pack. Nothing is sent externally.": "生成可复制的外联联络包。不会发送到站外。",
+    "No outreach contact pack until a creator is approved.": "创作者获批前没有外联联络包。",
+    "Use the copy control on the pack. External send stays disabled.": "请用联络包上的复制控件。站外发送保持禁用。",
+    "Brief excerpt": "简报摘录",
+    "No brief saved yet": "尚未保存简报",
+    "UTM link": "UTM 链接",
 }
 
 

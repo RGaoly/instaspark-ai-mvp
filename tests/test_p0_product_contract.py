@@ -79,6 +79,8 @@ def test_state_exposes_active_context_and_transition_boundaries():
         "set_active_context",
         "transition_creator_state",
         "ensure_outreach_case",
+        "contact_pack_for",
+        "refresh_outreach_message",
         "opportunities_for_mission",
     }
 

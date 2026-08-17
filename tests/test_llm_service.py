@@ -7,6 +7,7 @@ exercise the deterministic fallback paths.
 from __future__ import annotations
 
 from services.llm_service import (
+    DEFAULT_OUTREACH_TONE,
     _call_llm,
     _grounding_facts,
     _mock_brief,
@@ -14,6 +15,7 @@ from services.llm_service import (
     generate_brief,
     generate_hooks,
     generate_localized_content,
+    generate_outreach_message,
     generate_script,
     generation_mode_label,
     is_llm_available,
@@ -202,3 +204,50 @@ def test_generate_brief_grounding_includes_selected_tone_and_checklist():
     script = generate_script(mission, creator, tone="Adventurous", checklist=["Native hook in first 2s"])
     assert "Adventurous" in script
     assert "Native hook in first 2s" in script
+
+
+def test_generate_outreach_message_template_includes_coupon_utm_and_tone():
+    assert is_llm_available() is False
+    mission = {
+        "product": "Insta360 X5",
+        "market": "United States",
+        "objective": "Validate product-market fit with creator-led content.",
+        "owner": "Olivia Chen",
+        "target_topics": ["adventure"],
+    }
+    creator = {
+        "creator_name": "Alex Rivera",
+        "creator_id": "C017",
+        "primary_market": "United States",
+        "topics": ["adventure", "travel"],
+    }
+    coupon = "X5-C017-ABCDEF"
+    deeplink = (
+        "https://store.insta360.com/?utm_source=instaspark&utm_medium=creator"
+        "&utm_campaign=launch-x5&utm_content=c017&coupon=X5-C017-ABCDEF"
+    )
+    message = generate_outreach_message(
+        mission,
+        creator,
+        coupon=coupon,
+        deeplink=deeplink,
+        brief_excerpt="Show the product in a real use case.",
+        tone="Adventurous",
+    )
+    assert coupon in message
+    assert deeplink in message
+    assert "Adventurous" in message
+    assert "Show the product in a real use case." in message
+    assert "Insta360 X5" in message
+    defaulted = generate_outreach_message(mission, creator, coupon=coupon, deeplink=deeplink)
+    assert DEFAULT_OUTREACH_TONE in defaulted
+    facts = _grounding_facts(
+        mission,
+        creator,
+        tone="Professional",
+        coupon=coupon,
+        deeplink=deeplink,
+        brief_excerpt="Show the product in a real use case.",
+    )
+    assert f"Coupon: {coupon}" in facts
+    assert f"UTM deeplink: {deeplink}" in facts

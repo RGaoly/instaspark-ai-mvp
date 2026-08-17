@@ -544,6 +544,75 @@ def _attach_tracking(case: dict[str, Any], creator_id: str, entry_id: str) -> di
     return case
 
 
+CONTACT_PACK_STATES = frozenset(
+    {
+        "approved",
+        "contacted",
+        "negotiating",
+        "contracted",
+        "content_in_review",
+    }
+)
+DEFAULT_OUTREACH_TONE = "Professional"
+
+
+def _creator_record(creator_id: str) -> dict[str, Any]:
+    matches = creators()[creators()["creator_id"] == creator_id]
+    if matches.empty:
+        return {"creator_id": creator_id, "creator_name": creator_id}
+    return matches.iloc[0].to_dict()
+
+
+def _session_outreach_tone() -> str:
+    tone = str(st.session_state.get("studio_brand_tone") or "").strip()
+    return tone or DEFAULT_OUTREACH_TONE
+
+
+def _latest_brief_excerpt(creator_id: str) -> str:
+    assets = [
+        item
+        for item in content_assets()
+        if item.get("creator_id") == creator_id and (item.get("excerpt") or item.get("body"))
+    ]
+    if not assets:
+        return ""
+    latest = max(assets, key=lambda item: str(item.get("created_at") or ""))
+    return str(latest.get("excerpt") or latest.get("body") or "").strip()
+
+
+def _live_case_for(creator_id: str) -> dict[str, Any] | None:
+    entry_type, entry_id = _current_root()
+    return next(
+        (
+            case
+            for case in st.session_state.outreach_cases
+            if case["creator_id"] == creator_id
+            and case["entry_type"] == entry_type
+            and case["entry_id"] == entry_id
+            and case.get("status") != "closed_lost"
+        ),
+        None,
+    )
+
+
+def _fill_outreach_message(case: dict[str, Any], creator_id: str, *, force: bool = False) -> None:
+    if case.get("outreach_message") and not force:
+        return
+    from services.llm_service import generate_outreach_message, generation_mode_label
+
+    tone = _session_outreach_tone()
+    case["outreach_message"] = generate_outreach_message(
+        active_mission(),
+        _creator_record(creator_id),
+        coupon=case.get("coupon"),
+        deeplink=case.get("deeplink"),
+        brief_excerpt=_latest_brief_excerpt(creator_id),
+        tone=tone,
+    )
+    case["outreach_tone"] = tone
+    case["outreach_source"] = generation_mode_label()
+
+
 def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str, Any]:
     """Create at most one active case for a creator and root context."""
 
@@ -575,6 +644,7 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
     )
     if existing is not None:
         _attach_tracking(existing, creator_id, entry_id)
+        _fill_outreach_message(existing, creator_id)
         persist_state()
         return deepcopy(existing)
     case = {
@@ -593,6 +663,7 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
     _attach_tracking(case, creator_id, entry_id)
+    _fill_outreach_message(case, creator_id)
     st.session_state.outreach_cases.append(case)
     persist_state()
     return deepcopy(case)
@@ -895,6 +966,90 @@ def tracking_assets() -> list[dict[str, Any]]:
             and case.get("coupon")
         ]
     )
+
+
+def format_contact_pack(pack: dict[str, Any]) -> str:
+    """Plain-text pack for Streamlit copy. Empty optional sections are omitted."""
+
+    message = str(pack.get("outreach_message") or "").strip()
+    coupon = str(pack.get("coupon") or "").strip()
+    deeplink = str(pack.get("deeplink") or "").strip()
+    excerpt = str(pack.get("brief_excerpt") or "").strip()
+    urls = [str(url).strip() for url in pack.get("live_evidence_urls") or [] if str(url).strip()]
+    blocks: list[str] = []
+    if message:
+        blocks.append(message)
+    if coupon:
+        blocks.append(f"Coupon: {coupon}")
+    if deeplink:
+        blocks.append(f"UTM: {deeplink}")
+    if excerpt:
+        blocks.append(f"Brief excerpt: {excerpt}")
+    if urls:
+        blocks.append("Live evidence:\n" + "\n".join(urls))
+    return "\n\n".join(blocks).strip() + ("\n" if blocks else "")
+
+
+def contact_pack_for(creator_id: str) -> dict[str, Any]:
+    """Read-only contact pack for an outreach-stage creator. Does not send."""
+
+    current_state = creator_state(creator_id)
+    case = _live_case_for(creator_id)
+    if case is None:
+        raise ValueError("An OutreachCase requires an approved creator collaboration")
+    message = str(case.get("outreach_message") or "").strip()
+    if not message:
+        from services.llm_service import generate_outreach_message, generation_mode_label
+
+        tone = str(case.get("outreach_tone") or "").strip() or _session_outreach_tone()
+        message = generate_outreach_message(
+            active_mission(),
+            _creator_record(creator_id),
+            coupon=case.get("coupon"),
+            deeplink=case.get("deeplink"),
+            brief_excerpt=_latest_brief_excerpt(creator_id),
+            tone=tone,
+        )
+        source = generation_mode_label()
+    else:
+        tone = str(case.get("outreach_tone") or "").strip()
+        source = str(case.get("outreach_source") or "")
+    creator = _creator_record(creator_id)
+    return {
+        "creator_id": creator_id,
+        "creator_name": creator.get("creator_name", creator_id),
+        "outreach_case_id": case.get("outreach_case_id"),
+        "state": current_state,
+        "outreach_message": message,
+        "coupon": case.get("coupon") or "",
+        "deeplink": case.get("deeplink") or "",
+        "utm_campaign": case.get("utm_campaign") or "",
+        "utm_content": case.get("utm_content") or "",
+        "brief_excerpt": _latest_brief_excerpt(creator_id),
+        "live_evidence_urls": [
+            str(item.get("url")).strip()
+            for item in live_evidence_for(creator_id)
+            if str(item.get("url") or "").strip()
+        ],
+        "tone": tone,
+        "source": source,
+    }
+
+
+def refresh_outreach_message(creator_id: str, *, tone: str | None = None) -> dict[str, Any]:
+    """Regenerate and persist the outreach note. Writers only; does not send."""
+
+    require_write()
+    if tone:
+        st.session_state.studio_brand_tone = str(tone).strip()
+    ensure_outreach_case(creator_id)
+    live = _live_case_for(creator_id)
+    if live is None:
+        raise ValueError("An OutreachCase requires an approved creator collaboration")
+    _fill_outreach_message(live, creator_id, force=True)
+    live["updated_at"] = datetime.now(timezone.utc).isoformat()
+    persist_state()
+    return contact_pack_for(creator_id)
 
 
 def attach_live_evidence(creator_id: str, channel: dict[str, Any]) -> dict[str, Any]:

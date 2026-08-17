@@ -44,6 +44,12 @@ def test_core_navigation_has_chinese_labels():
         "ROI uses recorded performance events in the selected period and market. Empty set equals 0x.",
         language="zh",
     ) == "ROI 只统计所选周期和市场内已录入的效果事件。筛空则为 0x。"
+    assert translate("Contact pack", language="zh") == "联络包"
+    assert translate("Refresh outreach message", language="zh") == "重新生成外联文案"
+    assert (
+        translate("External send is not wired in this demo", language="zh")
+        == "本演示不发送到站外"
+    )
 
 
 def test_longest_first_localization_preserves_compound_terms():

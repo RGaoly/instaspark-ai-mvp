@@ -78,6 +78,8 @@ def test_unwired_chrome_buttons_are_disabled():
     _assert_label_disabled(search, "Sort: Match score")
     _assert_label_disabled(studio, "Export Brief")
     _assert_label_disabled(studio, "Send to Creator")
+    outreach = (ROOT / "views/outreach_operations.py").read_text(encoding="utf-8")
+    _assert_label_disabled(outreach, "Send to Creator")
     _assert_label_disabled(launch, "Export")
     _assert_label_disabled(compare, "Export")
     _assert_label_disabled(growth, "Export")
@@ -89,6 +91,12 @@ def test_unwired_chrome_buttons_are_disabled():
     assert 'open_workspace_page("content-studio")' in search
     assert 'open_workspace_page("creator-compare")' in search
     assert 'help=t("External send is not wired in this demo")' in studio
+    assert 'help=t("External send is not wired in this demo")' in outreach
+    assert "contact_pack_for" in outreach
+    assert "format_contact_pack" in outreach
+    assert "Refresh outreach message" in outreach
+    assert "st.code" in outreach
+    assert "disabled=writes_locked()" in outreach
 
 
 def test_honesty_chrome_is_not_hardcoded_pretty():

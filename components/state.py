@@ -14,7 +14,14 @@ from infra import repository
 from infra.auth import require_write
 from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
-from src.domain import WORKFLOW_STATES, EntryType, can_transition, transition_event
+from src.domain import (
+    WORKFLOW_STATES,
+    EntryType,
+    can_transition,
+    mission_health,
+    pipeline_counts,
+    transition_event,
+)
 from src.scoring import rank_creators
 
 
@@ -82,7 +89,6 @@ def _mission_seed() -> dict[str, Any]:
         "budget_usd": raw.get("budget_usd", 1_250_000),
         "owner": raw.get("owner", "Olivia Chen"),
         "status": raw.get("status", "Active"),
-        "health_score": raw.get("health_score", 86),
     }
 
 
@@ -711,6 +717,20 @@ def workflow_summary() -> dict[str, int]:
         if record["entry_type"] == entry_type and record["entry_id"] == entry_id:
             summary[record["state"]] += 1
     return summary
+
+
+def mission_health_snapshot() -> dict[str, Any]:
+    """Compute Launch health at render time. Does not persist or seed a score."""
+
+    counts = pipeline_counts(workflow_summary())
+    return mission_health(
+        shortlisted=counts["shortlisted"],
+        approved=counts["approved"],
+        outreach=counts["outreach"],
+        measured=counts["measured"],
+        tracking_assets=len(tracking_assets()),
+        performance_events=len(performance_events()),
+    )
 
 
 def performance_events() -> list[dict[str, Any]]:

@@ -7,6 +7,7 @@ from components.i18n import t
 from components.shell import render_demo_notice, render_topbar, render_write_guard
 from components.state import active_context_label, active_mission, ranking, select_creator
 from components.ui import labels, md
+from src.domain import match_tier
 from services.llm_service import (
     generate_brief,
     generate_hooks,
@@ -36,7 +37,7 @@ def _mission_creator_cards(mission, creator) -> str:
         <span><b>{esc(creator['creator_name'])}</b><small>{esc(creator['primary_market'])}</small></span></div>
       <p><b>Creator tone</b><br/>Energetic, authentic, cinematic, practical.</p>
       <p><b>Common structure</b><br/>Hook → story → proof → CTA</p>
-      <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · Excellent</p>
+      <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · {match_tier(creator.get('total_score', 0))}</p>
     </div>
     <div class="is-studio-card">
       <h4>Platform requirements</h4>
@@ -138,22 +139,6 @@ def _brief_content(mission: dict, creator: dict) -> str:
 
 def _right_controls(mission: dict) -> str:
     tones = ["Adventurous", "Authentic", "Inspiring", "Innovative"]
-    compliance = [
-        "Brand safety cleared",
-        "Product facts require source verification",
-        "Disclosure guidance attached",
-        "Platform format compliant",
-    ]
-    quality = [
-        "Objective aligned to mission",
-        "Audience defined",
-        "Core message locked",
-        "Must-show features listed",
-        "Shot list complete",
-        "Do / Don't reviewed",
-        "Localized market variant",
-        "CTA & disclosure present",
-    ]
     return f"""
     <div class="is-studio-card">
       <h4>Brand tone</h4>
@@ -165,15 +150,15 @@ def _right_controls(mission: dict) -> str:
       <p><b>Additional</b><br/>{esc(' · '.join(mission.get('markets', [])[1:]) or 'Not configured')}</p>
     </div>
     <div class="is-studio-card">
-      <h4>Safety & compliance {badge('Passed','green')}</h4>
-      {''.join(f'<div class="is-check"><i>✓</i>{esc(c)}</div>' for c in compliance)}
+      <h4>Safety & compliance {badge('Not assessed in this demo','gray')}</h4>
+      <p>This demo does not run a compliance checker on generated copy.</p>
     </div>
     <div class="is-studio-card">
       <div class="is-quality-head">
         <h4 style="margin:0">Quality checklist</h4>
-        <span class="is-quality-score">8/8</span>
+        <span class="is-quality-score">Not assessed</span>
       </div>
-      {''.join(f'<div class="is-check"><i>✓</i>{esc(c)}</div>' for c in quality)}
+      <p>Checklist items are a writing prompt, not an automated pass.</p>
     </div>
     """
 

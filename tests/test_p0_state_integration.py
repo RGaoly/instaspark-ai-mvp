@@ -324,10 +324,59 @@ def test_live_evidence_is_visible_on_compare_and_outreach(session):
     assert "Trail Cam Live" in panel
     assert "https://www.youtube.com/channel/UC123" in panel
     assert "youtube_data_api" in panel
-    assert panel.index("Trail Cam Live") < panel.index("is-video")
-    live_block = panel.split("is-video", 1)[0]
-    assert 'class="is-video"' not in live_block
+    assert "is-video" not in panel
+    assert "42s" not in panel
+    assert "60s" not in panel
+    assert "78s" not in panel
+    assert "View more content (not wired)" in panel
 
     state.save_decision(creator_id, "Approved", "Need the creator on the outreach board")
     html = outreach_operations._kanban(state.workflow_board())
     assert "Live evidence: 1 attached" in html
+
+
+def test_mission_health_moves_with_shortlist_approve_and_performance_event(session):
+    for record in session.creator_workflows.values():
+        record["state"] = "qualified"
+    session.shortlist_ids = []
+    empty = state.mission_health_snapshot()
+    assert empty["band"] == "needs_shortlist"
+    assert empty["score"] == 28
+    assert empty["counts"]["shortlisted"] == 0
+    assert empty["counts"]["performance_events"] == 0
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.transition_creator_state(
+        creator_id,
+        "shortlisted",
+        actor="Olivia Chen",
+        reason="Operator shortlisted from Search",
+        evidence=["search://shortlist"],
+    )
+    matching = state.mission_health_snapshot()
+    assert matching["band"] == "matching"
+    assert matching["score"] == 54
+    assert matching["counts"]["shortlisted"] >= 1
+    assert matching["counts"]["approved"] == 0
+
+    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    live = state.mission_health_snapshot()
+    assert live["band"] == "outreach_live"
+    assert live["score"] == 72
+    assert live["counts"]["approved"] >= 1
+    assert live["counts"]["tracking_assets"] >= 1
+    assert live["counts"]["performance_events"] == 0
+
+    state.record_performance_event(
+        creator_id,
+        orders=2,
+        revenue_usd=400,
+        spend_usd=100,
+        coupon=decision["coupon"],
+    )
+    measured = state.mission_health_snapshot()
+    assert measured["band"] == "measured"
+    assert measured["score"] == 88
+    assert measured["counts"]["performance_events"] == 1
+    assert "health_score" not in session.missions[session.active_mission_id]

@@ -342,6 +342,127 @@ class ContentAsset:
     created_at: datetime = field(default_factory=_utc_now)
 
 
+# Display-only match labels. Thresholds are inclusive lower bounds.
+MATCH_TIER_THRESHOLDS: Tuple[Tuple[float, str], ...] = (
+    (80.0, "Excellent"),
+    (70.0, "Strong"),
+    (55.0, "Moderate"),
+    (0.0, "Weak"),
+)
+
+# Pipeline buckets used by Launch Mission health. Later states count as
+# earlier ones so approving a shortlist does not look like "Needs shortlist".
+HEALTH_SHORTLISTED_STATES: Tuple[str, ...] = (
+    CollaborationStatus.SHORTLISTED.value,
+    CollaborationStatus.APPROVED.value,
+    CollaborationStatus.CONTACTED.value,
+    CollaborationStatus.NEGOTIATING.value,
+    CollaborationStatus.CONTRACTED.value,
+    CollaborationStatus.CONTENT_IN_REVIEW.value,
+    CollaborationStatus.PUBLISHED.value,
+    CollaborationStatus.MEASURED.value,
+)
+HEALTH_APPROVED_STATES: Tuple[str, ...] = HEALTH_SHORTLISTED_STATES[1:]
+HEALTH_OUTREACH_STATES: Tuple[str, ...] = HEALTH_APPROVED_STATES[1:]
+
+
+def match_tier(total_score: float) -> str:
+    """Return Excellent / Strong / Moderate / Weak from a 0–100 total_score."""
+
+    score = float(total_score)
+    for threshold, label in MATCH_TIER_THRESHOLDS:
+        if score >= threshold:
+            return label
+    return "Weak"
+
+
+def match_label(total_score: float) -> str:
+    return "{} Match".format(match_tier(total_score))
+
+
+def match_fit_label(total_score: float) -> str:
+    return "{} Fit".format(match_tier(total_score))
+
+
+def pipeline_counts(summary: Mapping[str, int]) -> Dict[str, int]:
+    """Sum workflow states into shortlisted / approved / outreach / measured."""
+
+    def _sum(states: Tuple[str, ...]) -> int:
+        return sum(int(summary.get(state, 0) or 0) for state in states)
+
+    return {
+        "shortlisted": _sum(HEALTH_SHORTLISTED_STATES),
+        "approved": _sum(HEALTH_APPROVED_STATES),
+        "outreach": _sum(HEALTH_OUTREACH_STATES),
+        "measured": int(summary.get(CollaborationStatus.MEASURED.value, 0) or 0),
+    }
+
+
+def mission_health(
+    *,
+    shortlisted: int,
+    approved: int,
+    outreach: int,
+    measured: int,
+    tracking_assets: int,
+    performance_events: int,
+) -> Dict[str, Any]:
+    """Render-time health from the active creator pipeline. Not persisted.
+
+    Bands (first match wins):
+
+    ============  =====  ================================
+    Condition     Score  Label
+    0 shortlisted 28     Needs shortlist
+    shortlisted,
+    none approved 54     Matching in progress
+    approved with
+    tracking, no
+    events        72     Outreach live, no conversions yet
+    ≥1 performance
+    event         88     Measured
+    ============  =====  ================================
+    """
+
+    counts = {
+        "shortlisted": int(shortlisted),
+        "approved": int(approved),
+        "outreach": int(outreach),
+        "measured": int(measured),
+        "tracking_assets": int(tracking_assets),
+        "performance_events": int(performance_events),
+    }
+    if counts["performance_events"] >= 1:
+        band = {
+            "score": 88,
+            "band": "measured",
+            "label": "Measured",
+            "note": "Sourced performance events",
+        }
+    elif counts["approved"] >= 1 and counts["tracking_assets"] >= 1:
+        band = {
+            "score": 72,
+            "band": "outreach_live",
+            "label": "Outreach live",
+            "note": "No conversions yet",
+        }
+    elif counts["shortlisted"] >= 1:
+        band = {
+            "score": 54,
+            "band": "matching",
+            "label": "Matching in progress",
+            "note": "Shortlisted, none approved",
+        }
+    else:
+        band = {
+            "score": 28,
+            "band": "needs_shortlist",
+            "label": "Needs shortlist",
+            "note": "No creators shortlisted",
+        }
+    return {**band, "counts": counts}
+
+
 @dataclass
 class PerformanceEvent:
     performance_event_id: str
@@ -363,6 +484,10 @@ __all__ = [
     "Creator",
     "Decision",
     "EntryType",
+    "HEALTH_APPROVED_STATES",
+    "HEALTH_OUTREACH_STATES",
+    "HEALTH_SHORTLISTED_STATES",
+    "MATCH_TIER_THRESHOLDS",
     "Match",
     "Mission",
     "Opportunity",
@@ -371,5 +496,10 @@ __all__ = [
     "TransitionEvent",
     "WORKFLOW_STATES",
     "can_transition",
+    "match_fit_label",
+    "match_label",
+    "match_tier",
+    "mission_health",
+    "pipeline_counts",
     "transition_event",
 ]

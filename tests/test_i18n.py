@@ -16,6 +16,9 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Record performance event (demo)", language="zh") == "录入效果事件（演示）"
     assert translate("Mission fit", language="zh") == "任务匹配"
     assert translate("Live evidence: {n} attached", language="zh", n=2) == "实时证据：2 条已挂接"
+    assert translate("Needs shortlist", language="zh") == "需要入围名单"
+    assert translate("Demo catalog", language="zh") == "演示目录"
+    assert translate("Not assessed in this demo", language="zh") == "本演示未评估"
 
 
 def test_longest_first_localization_preserves_compound_terms():

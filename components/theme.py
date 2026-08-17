@@ -756,6 +756,10 @@ def inject_theme() -> None:
           border-color:#C9D3D8;
           box-shadow:0 6px 16px rgba(15,30,40,.08);
         }}
+        .is-kanban-card-selected {{
+          border-color:var(--blue);
+          box-shadow:0 0 0 1px var(--blue), 0 6px 16px rgba(15,30,40,.08);
+        }}
         .is-kanban-next {{
           color:var(--blue); cursor:pointer;
         }}
@@ -879,6 +883,10 @@ def inject_theme() -> None:
         .is-kanban-head {{ display:flex; justify-content:space-between; align-items:center; font-size:8.5px; font-weight:850; padding:2px 2px 7px; }}
         .is-kanban-card {{ background:white; border:1px solid #E2E7E9; border-radius:7px; padding:8px; margin-bottom:7px; box-shadow:0 4px 12px rgba(15,30,40,.035); }}
         .is-kanban-card:last-child {{ margin-bottom:0; }}
+        .is-kanban-card-selected {{
+          border-color:var(--blue);
+          box-shadow:0 0 0 1px var(--blue), 0 6px 16px rgba(15,30,40,.08);
+        }}
         .is-kanban-person {{ display:flex; gap:7px; align-items:center; margin-bottom:6px; }}
         .is-kanban-person b {{ font-size:8.2px; display:block; }}
         .is-kanban-person small {{ font-size:6.8px; color:#89939A; display:block; }}

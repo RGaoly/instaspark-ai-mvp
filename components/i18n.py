@@ -1443,6 +1443,10 @@ ZH: dict[str, str] = {
     "Audit Log": "审计日志",
     "Stage Metrics": "阶段指标",
     "Complete": "已完成",
+    "Select this creator": "选择该创作者",
+    "Selected creator": "已选择该创作者",
+    "Stay on Outreach. Contact pack, Advance, and next actions apply to this creator.": "留在外联页。联络包、推进和下一步行动都会作用到该创作者。",
+    "Collaboration state": "协作状态",
 }
 
 

@@ -60,6 +60,9 @@ def test_core_navigation_has_chinese_labels():
         translate("Performance event recorded. Creator moved to Measured.", language="zh")
         == "效果事件已录入。创作者已进入已衡量。"
     )
+    assert translate("Select this creator", language="zh") == "选择该创作者"
+    assert translate("Selected creator", language="zh") == "已选择该创作者"
+    assert translate("Collaboration state", language="zh") == "协作状态"
 
 
 def test_longest_first_localization_preserves_compound_terms():

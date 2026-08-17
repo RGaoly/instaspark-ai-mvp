@@ -52,16 +52,29 @@ def _join(values: Any, fallback: str = "") -> str:
     return text or fallback
 
 
+DEFAULT_OUTREACH_TONE = "Professional"
+
+
 def _grounding_facts(
     mission: dict[str, Any],
     creator: dict[str, Any],
     *,
     tone: str | None = None,
     checklist: list[str] | tuple[str, ...] | None = None,
+    coupon: str | None = None,
+    deeplink: str | None = None,
+    brief_excerpt: str | None = None,
 ) -> str:
     """Facts the model (or template) must stay inside — no invented specs."""
     selected_tone = (tone or mission.get("brand_tone") or "").strip() or "not specified"
     selected_checklist = checklist if checklist is not None else mission.get("quality_checklist")
+    extras = ""
+    if coupon or deeplink or brief_excerpt:
+        extras = (
+            f"Coupon: {(coupon or '').strip() or 'not issued'}\n"
+            f"UTM deeplink: {(deeplink or '').strip() or 'not issued'}\n"
+            f"Brief excerpt: {(brief_excerpt or '').strip() or 'none'}\n"
+        )
     return (
         f"Product: {mission.get('product', 'the product')}\n"
         f"Mission title: {mission.get('title') or mission.get('name') or 'Active launch'}\n"
@@ -82,6 +95,7 @@ def _grounding_facts(
         f"Creator styles: {_join(creator.get('styles'), 'not specified')}\n"
         f"Followers: {int(creator.get('followers') or 0):,}\n"
         f"Engagement rate: {creator.get('engagement_rate', 'n/a')}\n"
+        f"{extras}"
         "Constraint: do not invent product specifications, prices, or unverified claims."
     )
 
@@ -410,3 +424,103 @@ def generate_script(
         f"35-48s: Reframing reveal — showing the unique angle ({checklist_note})\n"
         f"48-60s: Creator verdict and CTA for {product}"
     )
+
+
+# ─── Outreach message ──────────────────────────────────────────
+
+
+def generate_outreach_message(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    coupon: str | None = None,
+    deeplink: str | None = None,
+    brief_excerpt: str | None = None,
+    tone: str | None = None,
+) -> str:
+    """Generate a copyable first-touch outreach note.
+
+    Uses the LLM when a key is configured; otherwise a deterministic template.
+    Stays inside supplied mission, creator, coupon, UTM and brief facts.
+    """
+    selected_tone = (tone or mission.get("brand_tone") or "").strip() or DEFAULT_OUTREACH_TONE
+    coupon_text = (coupon or "").strip()
+    deeplink_text = (deeplink or "").strip()
+    excerpt_text = (brief_excerpt or "").strip()
+
+    if is_llm_available():
+        system_prompt = (
+            "You are a brand partnership manager writing a first outreach message "
+            "that an operator will copy-paste. Stay inside the supplied facts. "
+            "Include the coupon code and UTM store link exactly as given when present. "
+            "Honor the selected brand tone. Do not invent product specs, prices, "
+            "or unverified claims. Plain text only, under 180 words, no markdown headings."
+        )
+        result = _call_llm(
+            system_prompt,
+            _grounding_facts(
+                mission,
+                creator,
+                tone=selected_tone,
+                coupon=coupon_text,
+                deeplink=deeplink_text,
+                brief_excerpt=excerpt_text,
+            ),
+        )
+        if result:
+            return result.strip()
+
+    return _mock_outreach_message(
+        mission,
+        creator,
+        coupon=coupon_text,
+        deeplink=deeplink_text,
+        brief_excerpt=excerpt_text,
+        tone=selected_tone,
+    )
+
+
+def _mock_outreach_message(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    coupon: str,
+    deeplink: str,
+    brief_excerpt: str,
+    tone: str,
+) -> str:
+    """Deterministic outreach note for development and demo mode."""
+    product = mission.get("product", "the product")
+    market = creator.get("primary_market") or mission.get("market", "the target market")
+    creator_name = creator.get("creator_name", "the creator")
+    owner = mission.get("owner", "Mission owner")
+    objective = str(
+        mission.get("objective", "Validate product-market fit with creator-led content.")
+    ).strip().rstrip(".")
+    topics = _join(creator.get("topics"), _join(mission.get("target_topics"), "the launch story"))
+    lines = [
+        f"Hi {creator_name},",
+        "",
+        (
+            f"I'm {owner}, writing about a {product} collaboration in {market}. "
+            f"The mission is to {objective}. Tone for this note: {tone}."
+        ),
+        "",
+        f"Your work around {topics} is why we shortlisted you — we stay inside documented product facts.",
+    ]
+    if coupon:
+        lines.append(f"Creator coupon: {coupon}")
+    if deeplink:
+        lines.append(f"Tracked store link: {deeplink}")
+    if brief_excerpt:
+        lines.extend(["", f"Latest brief excerpt: {brief_excerpt}"])
+    lines.extend(
+        [
+            "",
+            "If this is a fit, reply with dates and the channel you prefer to use.",
+            "",
+            "Thank you,",
+            owner,
+        ]
+    )
+    return "\n".join(lines)

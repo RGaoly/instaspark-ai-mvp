@@ -79,6 +79,7 @@ Default login: `admin` / `admin123`. A read-only viewer is available as `demo` /
 2. Ranking is rule-based (mission fit, topic overlap, momentum, commercial fit, brand safety) — not an LLM and not embeddings.
 3. Type a name or topic in NL search. That is a **lexical filter + small boost**, not semantic search.
 4. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
+5. Approve a creator on Compare. Open **Outreach Operations**, expand **Contact pack**, and copy the message + coupon + UTM. **Send to Creator** stays disabled.
 
 运行测试：
 

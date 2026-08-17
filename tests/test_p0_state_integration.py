@@ -771,3 +771,77 @@ def test_switching_to_opportunity_replaces_then_restores_mission_shortlist(sessi
     assert session.compare_ids == ["C003"]
     state.set_active_context("mission", "launch_x5_us_001")
     assert session.shortlist_ids == original
+
+
+def test_contact_pack_includes_coupon_and_utm_for_approved_creator(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so the contact pack exists")
+    pack = state.contact_pack_for(creator_id)
+    blob = state.format_contact_pack(pack)
+
+    assert pack["coupon"].startswith(f"X5-{creator_id}-")
+    assert "utm_source=instaspark" in pack["deeplink"]
+    assert "utm_medium=creator" in pack["deeplink"]
+    assert pack["coupon"] in blob
+    assert pack["deeplink"] in blob
+    assert "Coupon:" in blob
+    assert "UTM:" in blob
+    assert pack["outreach_message"]
+    assert pack["coupon"] in pack["outreach_message"]
+    assert pack["deeplink"] in pack["outreach_message"]
+    assert session.outreach_cases[0]["outreach_message"] == pack["outreach_message"]
+    assert session.outreach_cases[0]["outreach_tone"] == "Professional"
+
+    from views import outreach_operations
+
+    html = outreach_operations._kanban(state.workflow_board())
+    assert "Contact pack" in html
+
+
+def test_contact_pack_includes_brief_excerpt_and_live_evidence(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve before attaching evidence")
+    state.save_content_asset(
+        creator_id,
+        "X5 brief · Adventurous",
+        "Show the product in a real use case. Keep the verdict native.",
+    )
+    state.attach_live_evidence(
+        creator_id,
+        {
+            "channel_id": "UC-demo-pack",
+            "title": "Demo channel",
+            "url": "https://www.youtube.com/channel/UC-demo-pack",
+            "source": "youtube_data_api",
+        },
+    )
+    pack = state.contact_pack_for(creator_id)
+    blob = state.format_contact_pack(pack)
+    assert "Show the product in a real use case." in pack["brief_excerpt"]
+    assert pack["brief_excerpt"] in blob
+    assert pack["live_evidence_urls"] == ["https://www.youtube.com/channel/UC-demo-pack"]
+    assert "https://www.youtube.com/channel/UC-demo-pack" in blob
+
+    refreshed = state.refresh_outreach_message(creator_id, tone="Adventurous")
+    assert "Adventurous" in refreshed["outreach_message"]
+    assert refreshed["brief_excerpt"] in refreshed["outreach_message"]
+    assert session.outreach_cases[0]["outreach_message"] == refreshed["outreach_message"]
+    assert session.outreach_cases[0]["outreach_tone"] == "Adventurous"
+
+
+def test_viewer_cannot_regenerate_outreach_message(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve before viewer tries to regenerate")
+    original = session.outreach_cases[0]["outreach_message"]
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+
+    pack = state.contact_pack_for(creator_id)
+    assert pack["coupon"].startswith(f"X5-{creator_id}-")
+    assert original in state.format_contact_pack(pack)
+
+    with pytest.raises(PermissionError, match="read-only"):
+        state.refresh_outreach_message(creator_id, tone="Authentic")
+    assert session.outreach_cases[0]["outreach_message"] == original

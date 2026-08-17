@@ -6,11 +6,15 @@ from components.html import avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
+    CONTACT_PACK_STATES,
     active_context,
     active_context_label,
     allowed_next_creator_states,
+    contact_pack_for,
     content_assets_in_review_count,
+    format_contact_pack,
     live_evidence_for,
+    refresh_outreach_message,
     transition_creator_state,
     workflow_board,
     workflow_events,
@@ -53,6 +57,14 @@ def _kanban(board: dict[str, list[dict]]) -> str:
                 if live_n
                 else ""
             )
+            pack_line = ""
+            if person.get("state") in CONTACT_PACK_STATES and person.get("coupon"):
+                preview = (person.get("outreach_message") or "").splitlines()
+                preview_text = next((line for line in preview if line.strip()), t("Copy below"))
+                pack_line = (
+                    f'<div class="is-kanban-next">{esc(t("Contact pack"))}: '
+                    f'{esc(preview_text[:72])}</div>'
+                )
             cards.append(
                 '<div class="is-kanban-card">'
                 f'<div class="is-kanban-person">{avatar(name, color_idx)}'
@@ -63,7 +75,7 @@ def _kanban(board: dict[str, list[dict]]) -> str:
                 f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
                 f'<span>Coupon</span><strong>{esc(person.get("coupon") or "Issued on approve")}</strong>'
                 f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
-                f'{live_line}'
+                f'{live_line}{pack_line}'
                 f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
             )
             color_idx += 1
@@ -120,6 +132,59 @@ def _event_log(events: list[dict]) -> str:
     return '<div class="is-grid-3">' + "".join(cards) + "</div>"
 
 
+def _pack_people(board: dict[str, list[dict]]) -> list[dict]:
+    people = []
+    for stage, items in board.items():
+        if stage in CONTACT_PACK_STATES:
+            people.extend(items)
+    return people
+
+
+def _render_contact_pack(person: dict, *, key_prefix: str) -> None:
+    creator_id = person["creator_id"]
+    try:
+        pack = contact_pack_for(creator_id)
+    except ValueError:
+        st.caption(t("No outreach contact pack until a creator is approved."))
+        return
+    source = pack.get("source") or ""
+    tone = pack.get("tone") or ""
+    caption = t("Copy pack")
+    if source or tone:
+        caption = f"{caption} · {source} · {tone}".strip(" ·")
+    st.caption(caption)
+    st.code(format_contact_pack(pack))
+    if pack.get("brief_excerpt"):
+        st.caption(f'{t("Brief excerpt")}: {pack["brief_excerpt"][:120]}')
+    else:
+        st.caption(t("No brief saved yet"))
+    if writes_locked():
+        render_write_guard()
+    actions = st.columns(2)
+    with actions[0]:
+        if st.button(
+            t("Refresh outreach message"),
+            use_container_width=True,
+            disabled=writes_locked(),
+            key=f"{key_prefix}_refresh_{creator_id}",
+        ):
+            try:
+                refresh_outreach_message(creator_id)
+            except (ValueError, PermissionError) as exc:
+                st.error(str(exc))
+            else:
+                st.success(t("Outreach message refreshed. Nothing was sent externally."))
+                st.rerun()
+    with actions[1]:
+        st.button(
+            t("Send to Creator"),
+            use_container_width=True,
+            disabled=True,
+            help=t("External send is not wired in this demo"),
+            key=f"{key_prefix}_send_{creator_id}",
+        )
+
+
 def render() -> None:
     render_topbar()
     context = active_context()
@@ -173,13 +238,26 @@ def render() -> None:
                     else:
                         st.success(f'Advanced to {_stage_label(target)} with an audit event.')
                         st.rerun()
-            if selected.get("coupon"):
+            if selected.get("state") in CONTACT_PACK_STATES:
+                st.caption(t("Generate a copyable outreach pack. Nothing is sent externally."))
+                _render_contact_pack(selected, key_prefix="selected")
+            elif selected.get("coupon"):
                 st.caption(f'{t("Coupon")}: {selected["coupon"]}')
                 st.caption(selected.get("deeplink", ""))
 
     tabs = st.tabs(labels(["Workflow Board", "List", "Audit Log", "Stage Metrics"]))
     with tabs[0]:
         md(_kanban(board), unsafe_allow_html=True)
+        pack_people = _pack_people(board)
+        if pack_people:
+            st.subheader(t("Contact packs"))
+            st.caption(t("Use the copy control on the pack. External send stays disabled."))
+            for person in pack_people:
+                title = f'{person["creator_name"]} · {t("Contact pack")}'
+                with st.expander(title, expanded=False):
+                    _render_contact_pack(person, key_prefix="board")
+        else:
+            st.caption(t("No outreach contact pack until a creator is approved."))
     with tabs[1]:
         md(_list_view(board), unsafe_allow_html=True)
     with tabs[2]:

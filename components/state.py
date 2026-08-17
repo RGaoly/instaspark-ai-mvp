@@ -932,6 +932,65 @@ def live_evidence_for(creator_id: str) -> list[dict[str, Any]]:
     )
 
 
+_OUTREACH_BRIEF_STATES = frozenset(
+    {
+        "approved",
+        "contacted",
+        "negotiating",
+        "contracted",
+    }
+)
+_PAST_CONTENT_REVIEW = frozenset(
+    {
+        "content_in_review",
+        "published",
+        "measured",
+    }
+)
+_BRIEF_STUDIO_REASON = "Brief generated in Content Studio"
+
+
+def _advance_toward_content_in_review(creator_id: str) -> None:
+    """Walk legal linear hops to content_in_review. No-op if not eligible.
+
+    There is no ``in_outreach`` state. Outreach-eligible names are
+    ``approved`` / ``contacted`` / ``negotiating`` / ``contracted``.
+    Shortlisted, closed_lost, and states already at or past content
+    review are left unchanged. Illegal jumps are never requested.
+    """
+
+    current = creator_state(creator_id)
+    if current in _PAST_CONTENT_REVIEW or current not in _OUTREACH_BRIEF_STATES:
+        return
+    context = active_context()
+    user = st.session_state.get("auth_user") or {}
+    actor = str(user.get("display_name") or context.get("owner") or "Operator")
+    evidence = [f"content-studio://brief/{creator_id}"]
+    hops = 0
+    while creator_state(creator_id) != "content_in_review":
+        current = creator_state(creator_id)
+        nxt = next(
+            (
+                state
+                for state in WORKFLOW_STATES
+                if can_transition(current, state) and state != "closed_lost"
+            ),
+            None,
+        )
+        if nxt is None or nxt in {"published", "measured"}:
+            return
+        transition_creator_state(
+            creator_id,
+            nxt,
+            actor=actor,
+            reason=_BRIEF_STUDIO_REASON,
+            evidence=evidence,
+        )
+        hops += 1
+        if hops > 8:
+            return
+
+
 def save_content_asset(
     creator_id: str,
     title: str,
@@ -964,6 +1023,7 @@ def save_content_asset(
         "opportunity_id": context.get("opportunity_id"),
     }
     st.session_state.content_assets.append(record)
+    _advance_toward_content_in_review(creator_id)
     persist_state()
     return deepcopy(record)
 

@@ -528,6 +528,7 @@ def test_save_content_asset_appends_in_review_for_active_creator(session):
     assert first["excerpt"]
     assert first["created_at"]
     assert first["entry_id"] == session.active_mission_id
+    assert state.creator_state(creator_id) == "shortlisted"
     assert state.content_assets_in_review_count() == 2
 
     from views import launch_mission, outreach_operations
@@ -549,6 +550,125 @@ def test_viewer_cannot_save_content_asset(session):
         state.save_content_asset(creator_id, "Viewer brief", "Should not persist")
     assert state.content_assets() == []
     assert state.content_assets_in_review_count() == 0
+    assert state.creator_state(creator_id) == "shortlisted"
+
+
+def test_saving_brief_advances_approved_creator_to_content_in_review(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    assert state.creator_state(creator_id) == "approved"
+
+    asset = state.save_content_asset(
+        creator_id,
+        "X5 brief · Adventurous",
+        "Show the product in a real use case.",
+    )
+    assert asset["status"] == "in_review"
+    assert state.creator_state(creator_id) == "content_in_review"
+
+    hops = [
+        (event["from_state"], event["to_state"])
+        for event in state.workflow_events()
+        if event["reason"] == "Brief generated in Content Studio"
+    ]
+    assert hops == [
+        ("approved", "contacted"),
+        ("contacted", "negotiating"),
+        ("negotiating", "contracted"),
+        ("contracted", "content_in_review"),
+    ]
+    board = state.workflow_board()
+    assert any(item["creator_id"] == creator_id for item in board.get("content_in_review", []))
+    assert not any(item["creator_id"] == creator_id for item in board.get("approved", []))
+
+    from views import outreach_operations
+
+    html = outreach_operations._kanban(board)
+    name = ranked.iloc[0]["creator_name"]
+    assert "Content In Review" in html
+    review_col = html.split("Content In Review", 1)[1]
+    if "Published" in review_col:
+        review_col = review_col.split("Published", 1)[0]
+    assert name in review_col
+
+
+def test_saving_brief_is_noop_when_not_in_outreach_or_already_past_review(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    assert state.creator_state(creator_id) == "shortlisted"
+
+    state.save_content_asset(creator_id, "Shortlist brief", "Must not skip to content review.")
+    assert state.creator_state(creator_id) == "shortlisted"
+    assert state.workflow_events() == []
+
+    state.save_decision(second_id, "Approved", "Approve second creator")
+    state.transition_creator_state(
+        second_id,
+        "contacted",
+        actor="Olivia Chen",
+        reason="Operator moved outreach",
+        evidence=["outreach://manual"],
+    )
+    state.transition_creator_state(
+        second_id,
+        "negotiating",
+        actor="Olivia Chen",
+        reason="Operator moved outreach",
+        evidence=["outreach://manual"],
+    )
+    state.transition_creator_state(
+        second_id,
+        "contracted",
+        actor="Olivia Chen",
+        reason="Operator moved outreach",
+        evidence=["outreach://manual"],
+    )
+    state.transition_creator_state(
+        second_id,
+        "content_in_review",
+        actor="Olivia Chen",
+        reason="Operator moved outreach",
+        evidence=["outreach://manual"],
+    )
+    state.transition_creator_state(
+        second_id,
+        "published",
+        actor="Olivia Chen",
+        reason="Operator published",
+        evidence=["outreach://manual"],
+    )
+    before = len(state.workflow_events())
+    state.save_content_asset(second_id, "Published brief", "Already past content review.")
+    assert state.creator_state(second_id) == "published"
+    assert len(state.workflow_events()) == before
+
+    state.set_active_context("opportunity", "OPP-003")
+    lost_id = "C009"
+    state.save_decision(
+        lost_id,
+        "Rejected",
+        "Evidence did not pass qualification",
+        reason_code="opportunity_rejected",
+    )
+    assert state.creator_state(lost_id) == "closed_lost"
+    lost_events = len(state.workflow_events())
+    state.save_content_asset(lost_id, "Lost brief", "Closed lost must not reopen.")
+    assert state.creator_state(lost_id) == "closed_lost"
+    assert len(state.workflow_events()) == lost_events
+
+
+def test_viewer_cannot_advance_outreach_by_saving_a_brief(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve before viewer tries to write")
+    assert state.creator_state(creator_id) == "approved"
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        state.save_content_asset(creator_id, "Viewer brief", "Should not persist")
+    assert state.creator_state(creator_id) == "approved"
+    assert state.content_assets() == []
 
 
 def test_save_linked_opportunity_activates_ranking_and_origin_shortlist(session):

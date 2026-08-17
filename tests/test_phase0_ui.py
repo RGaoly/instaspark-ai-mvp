@@ -116,6 +116,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
     assert "studio_brand_tone" in studio
+    assert "generate_localized_content(grounded, creator, tone=tone, checklist=checklist)" in studio
     assert "save_content_asset" in studio
     assert "content_assets_in_review_count" in launch
     assert "launch_progress" in launch

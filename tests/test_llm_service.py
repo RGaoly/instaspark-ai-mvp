@@ -150,6 +150,36 @@ def test_generate_script_contains_timestamps():
     assert "s:" in script or "second" in script.lower()
 
 
+def test_generate_localized_includes_selected_tone_and_checklist():
+    mission = {"product": "Insta360 X5", "markets": ["United States", "Mexico"]}
+    creator = {"creator_name": "Test Creator", "creator_id": "C017"}
+    facts = _grounding_facts(
+        mission,
+        creator,
+        tone="Adventurous",
+        checklist=["Paid partnership disclosure"],
+    )
+    assert "Brand tone: Adventurous" in facts
+    assert "Paid partnership disclosure" in facts
+
+    result = generate_localized_content(
+        mission,
+        creator,
+        tone="Adventurous",
+        checklist=["Paid partnership disclosure"],
+    )
+    blob = " ".join(
+        f"{item.get('hook', '')} {item.get('caption', '')}" for item in result
+    )
+    assert "Adventurous" in blob
+    assert "Paid partnership disclosure" in blob
+
+    authentic = generate_localized_content(mission, creator, tone="Authentic")
+    authentic_blob = " ".join(item.get("hook", "") for item in authentic)
+    assert "Authentic" in authentic_blob
+    assert authentic_blob != " ".join(item.get("hook", "") for item in result)
+
+
 def test_generate_brief_grounding_includes_selected_tone_and_checklist():
     mission = {"product": "Insta360 X5", "market": "United States", "target_topics": ["adventure"]}
     creator = {"creator_name": "Test Creator", "creator_id": "C017"}

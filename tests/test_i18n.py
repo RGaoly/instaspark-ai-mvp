@@ -15,6 +15,16 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Growth Review", language="en") == "Growth Review"
     assert translate("Record performance event (demo)", language="zh") == "录入效果事件（演示）"
     assert translate("Mission fit", language="zh") == "任务匹配"
+    assert translate("Topic overlap", language="zh") == "主题重合"
+    assert translate("Query boost", language="zh") == "查询加权"
+    assert translate("Live YouTube evidence attached", language="zh") == "已挂接 YouTube 实时证据"
+    assert (
+        translate(
+            "NL query is a lexical filter + small boost, not semantic search.",
+            language="zh",
+        )
+        == "自然语言查询是词面筛选加小幅加权，不是语义搜索。"
+    )
     assert translate("Live evidence: {n} attached", language="zh", n=2) == "实时证据：2 条已挂接"
     assert translate("Needs shortlist", language="zh") == "需要入围名单"
     assert translate("Demo catalog", language="zh") == "演示目录"

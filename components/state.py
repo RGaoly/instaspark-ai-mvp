@@ -12,6 +12,7 @@ import streamlit as st
 
 from infra import repository
 from infra.auth import require_write
+from infra.config import SCORE_WEIGHTS
 from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
 from src.domain import (
@@ -415,11 +416,28 @@ def active_mission() -> dict[str, Any]:
     }
 
 
+def _live_evidence_creator_ids() -> set[str]:
+    entry_type, entry_id = _current_root()
+    return {
+        str(item.get("creator_id"))
+        for item in st.session_state.get("live_evidence", [])
+        if item.get("creator_id")
+        and item.get("entry_type") == entry_type
+        and item.get("entry_id") == entry_id
+    }
+
+
 def ranking():
     context = active_context()
     if context["entry_type"] == EntryType.OPPORTUNITY.value and not context.get("mission_id"):
         return rank_creators(creators(), active_mission()).iloc[0:0]
-    ranked = rank_creators(creators(), active_mission())
+    ranked = rank_creators(
+        creators(),
+        active_mission(),
+        SCORE_WEIGHTS,
+        query=str(st.session_state.get("creator_nl_query") or ""),
+        live_evidence_ids=_live_evidence_creator_ids(),
+    )
     for _, row in ranked.iterrows():
         creator_id = row["creator_id"]
         key = _scope_key(context["entry_type"], context["entry_id"], creator_id)

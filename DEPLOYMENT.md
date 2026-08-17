@@ -134,11 +134,13 @@ LLM_MODEL=moonshot-v1-8k
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `SCORE_WEIGHT_CONTENT_FIT` | `0.30` | Content fit weight (must sum to 1.0). |
-| `SCORE_WEIGHT_AUDIENCE_FIT` | `0.20` | Audience fit weight. |
+| `SCORE_WEIGHT_MISSION_FIT` | `0.20` | Mission fit (market + language). Mix weights must sum to 1.0. |
+| `SCORE_WEIGHT_TOPIC_OVERLAP` | `0.30` | Jaccard of mission topics vs creator topics/styles. |
 | `SCORE_WEIGHT_MOMENTUM` | `0.15` | Momentum weight. |
 | `SCORE_WEIGHT_COMMERCIAL_FIT` | `0.15` | Commercial fit weight. |
 | `SCORE_WEIGHT_BRAND_SAFETY` | `0.20` | Brand safety weight. |
+| `SCORE_WEIGHT_CONTENT_FIT` | `0.30` | Legacy alias for topic overlap. |
+| `SCORE_WEIGHT_AUDIENCE_FIT` | `0.20` | Legacy alias for mission fit. |
 | `OPPORTUNITY_HUMAN_REVIEW_THRESHOLD` | `70` | Score below this triggers human review. |
 | `OPPORTUNITY_QUALIFIED_THRESHOLD` | `75` | Score at or above qualifies for missions. |
 | `OPPORTUNITY_LOW_CONFIDENCE_THRESHOLD` | `60` | Score below this is low confidence. |

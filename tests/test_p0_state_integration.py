@@ -308,6 +308,35 @@ def test_live_youtube_evidence_attaches_once_and_blocks_viewer(session):
         )
 
 
+def test_attaching_live_evidence_increases_ranking_score(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[-1]["creator_id"]
+    before = float(ranked.loc[ranked["creator_id"] == creator_id, "total_score"].iloc[0])
+    state.attach_live_evidence(
+        creator_id,
+        {
+            "channel_id": "UC-SCORE",
+            "title": "Proof Channel",
+            "url": "https://www.youtube.com/channel/UC-SCORE",
+            "source": "youtube_data_api",
+        },
+    )
+    after_ranked = state.ranking()
+    after = float(after_ranked.loc[after_ranked["creator_id"] == creator_id, "total_score"].iloc[0])
+    bonus = float(after_ranked.loc[after_ranked["creator_id"] == creator_id, "live_proof_bonus"].iloc[0])
+    assert bonus > 0
+    assert after > before
+
+
+def test_empty_nl_query_does_not_change_state_ranking_order(session):
+    baseline = state.ranking()
+    session.creator_nl_query = ""
+    empty = state.ranking()
+    session.creator_nl_query = "   "
+    whitespace = state.ranking()
+    assert list(baseline["creator_id"]) == list(empty["creator_id"]) == list(whitespace["creator_id"])
+
+
 def test_live_evidence_is_visible_on_compare_and_outreach(session):
     from views import creator_compare, outreach_operations
 

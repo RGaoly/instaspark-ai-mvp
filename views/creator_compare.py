@@ -18,6 +18,7 @@ from components.state import (
 from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
 from src.domain import match_fit_label, match_tier
+from src.scoring import additive_driver_display, mix_driver_display
 
 
 def _geo_split(row) -> str:
@@ -136,23 +137,26 @@ def _evidence_panel(creator, context: dict) -> str:
 
 
 def _drivers_panel(creator) -> str:
-    drivers = [
-        ("Mission fit", creator["audience_fit"], "28%"),
-        ("Engagement quality", creator["momentum"], "18%"),
-        ("Content relevance", creator["content_fit"], "24%"),
-        ("Commercial fit", creator["commercial_fit"], "18%"),
-        ("Brand safety", creator["brand_safety"], "12%"),
-    ]
-    rows = "".join(
+    mix_rows = "".join(
         f'<div class="is-driver-row">{scorebar(label, score)}'
-        f'<span class="is-weight-tag">w {weight}</span></div>'
-        for label, score, weight in drivers
+        f'<span class="is-weight-tag">{esc(weight)}</span></div>'
+        for label, score, weight in mix_driver_display(creator)
+    )
+    additive_rows = "".join(
+        f'<div class="is-driver-row"><label>{esc(label)}</label>'
+        f'<span>+{value:.1f}</span><span class="is-weight-tag">{esc(note)}</span></div>'
+        for label, value, note in additive_driver_display(creator)
+    )
+    live_chip = (
+        badge("Live YouTube evidence attached", "green")
+        if float(creator.get("live_proof_bonus") or 0) > 0
+        else ""
     )
     return (
         '<div class="is-card"><div class="is-panel-head">'
         '<span class="is-panel-title">Score drivers</span>'
-        f'<span class="is-panel-link">{creator["total_score"]:.0f}/100</span></div>'
-        f'<div class="is-panel-body">{rows}'
+        f'<span class="is-panel-link">{creator["total_score"]:.0f}/100 · rule-based, not LLM</span></div>'
+        f'<div class="is-panel-body">{live_chip}{mix_rows}{additive_rows}'
         f'<div style="display:flex;justify-content:flex-end;align-items:baseline;gap:4px;'
         f'margin-top:8px;font-size:22px;font-weight:900;color:#16A36A">{creator["total_score"]:.0f}'
         f'<small style="font-size:9px;color:#879198;font-weight:650">weighted total</small></div>'
@@ -261,7 +265,9 @@ def render() -> None:
     overlap_report = shortlist_overlap_report(compare_rows)
     overlap_report["_rows"] = compare_rows
     md(_overlap_panel(overlap_report, focus.to_dict()), unsafe_allow_html=True)
-    st.caption(t("Mission fit is market + language. Overlap ≠ mission fit."))
+    st.caption(
+        t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
+    )
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:

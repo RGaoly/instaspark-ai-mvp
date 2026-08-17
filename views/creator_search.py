@@ -31,6 +31,7 @@ from components.ui import md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.domain import match_label, match_tier
+from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
 
 
@@ -88,7 +89,7 @@ def _creator_table(ranked) -> str:
         "Modeled est. views",
         "Eng. rate",
         "Mission fit",
-        "Content fit",
+        "Topic overlap",
         "Commercial",
         "Match score",
     ]
@@ -99,6 +100,13 @@ def _creator_table(ranked) -> str:
         name = row["creator_name"]
         topics = " · ".join(row["topics"][:2])
         tier = match_tier(row["total_score"])
+        mission_fit = float(row.get("mission_fit", row.get("audience_fit", 0)))
+        topic_overlap = float(row.get("topic_overlap", row.get("content_fit", 0)))
+        live_chip = (
+            f'<div style="margin-top:2px">{badge("Live YouTube evidence attached", "green")}</div>'
+            if float(row.get("live_proof_bonus") or 0) > 0
+            else ""
+        )
         rows.append(
             f'<tr class="{"is-selected" if selected else ""}">'
             f'<td>{"●" if selected else "○"}</td>'
@@ -109,12 +117,12 @@ def _creator_table(ranked) -> str:
             f'<td>{int(row["followers"]) / 1000:.0f}K</td>'
             f'<td>{int(row["followers"] * row["engagement_rate"] / 100 * 4) / 1000:.0f}K</td>'
             f'<td>{row["engagement_rate"]:.1f}%</td>'
-            f'<td><b>{row["audience_fit"]:.1f}</b>{dots(row["audience_fit"])}</td>'
-            f'<td><b>{row["content_fit"]:.1f}</b>{dots(row["content_fit"])}</td>'
+            f'<td><b>{mission_fit:.1f}</b>{dots(mission_fit)}</td>'
+            f'<td><b>{topic_overlap:.1f}</b>{dots(topic_overlap)}</td>'
             f'<td><b>{row["commercial_fit"]:.1f}</b>{dots(row["commercial_fit"])}</td>'
             f'<td><div style="display:flex;align-items:center;gap:5px">'
             f'{score_ring(row["total_score"])}'
-            f'<small style="color:#16825D;font-weight:850">{tier}</small></div></td>'
+            f'<small style="color:#16825D;font-weight:850">{tier}</small></div>{live_chip}</td>'
             "</tr>"
         )
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
@@ -131,9 +139,9 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
     while len(reasons) < 4:
         reasons.append(defaults[len(reasons)])
     reason_labels = [
-        "Audience–mission fit",
-        "Content evidence",
-        "Commercial readiness",
+        "Mission fit",
+        "Topic overlap",
+        "Commercial fit",
         "Operator caveat",
     ]
     reason_html = "".join(
@@ -145,6 +153,11 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
     overlap_pct = round(overlap["mean_jaccard"] * 100)
     score = float(creator["total_score"])
     live_rows = live_evidence_for(creator["creator_id"])
+    live_chip = (
+        badge("Live YouTube evidence attached", "green")
+        if live_rows or float(creator.get("live_proof_bonus") or 0) > 0
+        else ""
+    )
     live_html = (
         "".join(
             f'<div class="is-reason"><span class="is-reason-icon">▶</span>'
@@ -155,13 +168,24 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
         if live_rows
         else '<small style="color:#879198">No live YouTube evidence attached. Lookup is optional and labeled.</small>'
     )
+    mix_html = "".join(
+        f'<div class="is-driver-row">{scorebar(label, value)}'
+        f'<span class="is-weight-tag">{esc(weight)}</span></div>'
+        for label, value, weight in mix_driver_display(creator)
+    )
+    additive_html = "".join(
+        f'<div class="is-driver-row"><label>{esc(label)}</label>'
+        f'<span>+{value:.1f}</span><span class="is-weight-tag">{esc(note)}</span></div>'
+        for label, value, note in additive_driver_display(creator)
+    )
+    mission_fit = float(creator.get("mission_fit") or creator.get("audience_fit") or 0)
     return f"""
     <div class="is-card">
       <div class="is-panel-body">
         <div class="is-profile-head">
           {avatar(creator['creator_name'], 2, 'profile')}
           <div>
-            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')}</div>
+            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')} {live_chip}</div>
             <div class="is-socials">Instagram · TikTok · YouTube · {esc(creator.get('primary_market',''))}</div>
           </div>
           <div class="is-detail-score">
@@ -183,13 +207,12 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
             <div class="is-donut" style="--pct:{overlap_pct};width:52px;height:52px"><span>{overlap_pct}%</span></div>
             <small style="font-size:7px;color:#879198;display:block;margin-top:6px">
             Mean Jaccard vs {overlap['peers']} shortlist peers · synthetic cohorts, not platform unique reach.
-            Audience–mission fit (score driver) is {creator['audience_fit']:.0f}.</small>
+            Mission fit (score driver) is {mission_fit:.0f}.</small>
           </div>
           <div class="is-lift-panel">
-            <h4>Observed-input score components</h4>
-            {scorebar('Content fit', creator['content_fit'], '#2577F1')}
-            {scorebar('Momentum', creator['momentum'])}
-            {scorebar('Commercial fit', creator['commercial_fit'], '#F5A623')}
+            <h4>Score drivers</h4>
+            {mix_html}
+            {additive_html}
           </div>
         </div>
         <div class="is-card-title" style="margin:10px 0 6px">Live platform evidence</div>
@@ -247,10 +270,10 @@ def render() -> None:
         render_demo_notice()
         return
 
-    md(
-        nl_search_shell("Describe the creator profile you need — ranked against the active entry"),
-        unsafe_allow_html=True,
-    )
+        md(
+            nl_search_shell("Lexical filter + small boost against the demo catalog — not semantic search"),
+            unsafe_allow_html=True,
+        )
     query = st.text_input(
         t("Search creators"),
         value="",
@@ -258,7 +281,7 @@ def render() -> None:
         label_visibility="collapsed",
         key="creator_nl_query",
     )
-    st.caption(t("Filters the demo catalog; ranking stays mission-aware rules."))
+    st.caption(t("NL query is a lexical filter + small boost, not semantic search."))
     markets, languages, topics = _render_catalog_filters(ranked)
     visible = filter_ranked_creators(
         ranked,
@@ -277,7 +300,7 @@ def render() -> None:
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{len(visible)} creators found · rule-based ranking · demo catalog · {ai_badge("Not an LLM ranker")}'
+            f'{len(visible)} creators found · rule-based ranking · not LLM / embeddings · demo catalog · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -306,7 +329,9 @@ def render() -> None:
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
         md(_creator_table(visible), unsafe_allow_html=True)
-        st.caption(t("Mission fit is market + language. Overlap ≠ mission fit."))
+        st.caption(
+            t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
+        )
     with aside:
         creator = selected_creator()
         shortlist_ids = list(st.session_state.get("shortlist_ids") or [])

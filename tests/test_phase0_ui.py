@@ -105,7 +105,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "is-video" not in search
     assert "match_label" in search
     assert "Modeled est. views" in search
-    assert "Filters the demo catalog; ranking stays mission-aware rules." in search
+    assert "NL query is a lexical filter + small boost, not semantic search." in search
+    assert "Topic overlap" in search
     assert "search_filter_markets" in search
     assert "filter_ranked_creators" in search
     assert "42 + idx * 18" not in compare

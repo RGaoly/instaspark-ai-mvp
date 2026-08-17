@@ -7,17 +7,19 @@ from components.i18n import t
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     CONTACT_PACK_STATES,
+    MEASURED_REQUIRES_EVENTS,
     active_context,
     active_context_label,
-    allowed_next_creator_states,
     contact_pack_for,
     content_assets_in_review_count,
     format_contact_pack,
     live_evidence_for,
+    next_linear_creator_state,
     refresh_outreach_message,
     transition_creator_state,
     workflow_board,
     workflow_events,
+    workflow_events_for,
 )
 from components.ui import labels, md
 
@@ -39,6 +41,20 @@ def _stage_label(stage: str) -> str:
     return stage.replace("_", " ").title()
 
 
+def _next_action_label(person: dict) -> str:
+    if person.get("state") == "published":
+        return t("Record a conversion on Growth Review")
+    target = person.get("next_state")
+    if not target:
+        target = next(
+            (state for state in person.get("next_states", []) if state != "closed_lost"),
+            None,
+        )
+    if not target:
+        return t("Complete")
+    return _stage_label(target)
+
+
 def _kanban(board: dict[str, list[dict]]) -> str:
     columns = []
     color_idx = 0
@@ -49,8 +65,7 @@ def _kanban(board: dict[str, list[dict]]) -> str:
             topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
             market = person.get("primary_market", "—")
             followers = f'{int(person.get("followers", 0)) / 1000:.0f}K'
-            next_states = person.get("next_states", [])
-            next_action = _stage_label(next_states[0]) if next_states else "Complete"
+            next_action = _next_action_label(person)
             live_n = len(live_evidence_for(person["creator_id"]))
             live_line = (
                 f'<div class="is-kanban-next">{esc(t("Live evidence: {n} attached", n=live_n))}</div>'
@@ -98,8 +113,7 @@ def _list_view(board: dict[str, list[dict]]) -> str:
         for person in people:
             name = person["creator_name"]
             topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
-            next_states = person.get("next_states", [])
-            next_action = _stage_label(next_states[0]) if next_states else "Complete"
+            next_action = _next_action_label(person)
             rows.append(
                 "<tr>"
                 f'<td><div class="is-creator-cell">{avatar(name, len(rows))}'
@@ -130,6 +144,22 @@ def _event_log(events: list[dict]) -> str:
             f'{esc(event["occurred_at"])}</div></div>'
         )
     return '<div class="is-grid-3">' + "".join(cards) + "</div>"
+
+
+def _audit_timeline(events: list[dict]) -> str:
+    if not events:
+        return '<div class="is-card is-card-pad">No workflow events recorded for this creator.</div>'
+    cards = []
+    for event in reversed(events):
+        stamp = event.get("occurred_at") or event.get("timestamp") or ""
+        cards.append(
+            '<div class="is-card is-card-pad">'
+            f'<div class="is-card-title">{esc(_stage_label(event["from_state"]))} → '
+            f'{esc(_stage_label(event["to_state"]))}</div>'
+            f'<div class="is-card-caption">{esc(stamp)} · {esc(event["reason"])} · '
+            f'{esc(event["actor"])}</div></div>'
+        )
+    return "".join(cards)
 
 
 def _pack_people(board: dict[str, list[dict]]) -> list[dict]:
@@ -203,8 +233,8 @@ def render() -> None:
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
         in_review_n = content_assets_in_review_count()
         st.caption(t("Content assets in review: {n}", n=in_review_n))
-        if board.get("measured"):
-            st.caption(t("Record the conversion on Growth Review"))
+        if board.get("published"):
+            st.caption(t("Record a conversion on Growth Review"))
     with head_r:
         people = [person for stage in board.values() for person in stage]
         if people:
@@ -214,30 +244,44 @@ def render() -> None:
             }
             selected_label = st.selectbox(t("Creator workflow"), list(creator_by_label))
             selected = creator_by_label[selected_label]
-            next_states = allowed_next_creator_states(selected["creator_id"])
-            if next_states:
-                target = st.selectbox(t("Next state"), next_states, format_func=_stage_label)
-                reason = st.text_input(t("Transition reason"), "Operator completed the required review")
-                render_write_guard()
-                if st.button(
-                    t("Advance workflow"),
-                    type="primary",
-                    use_container_width=True,
-                    disabled=writes_locked(),
-                ):
-                    try:
-                        transition_creator_state(
-                            selected["creator_id"],
-                            target,
-                            actor=context.get("owner", "Operator"),
-                            reason=reason,
-                            evidence=[f'outreach://{selected.get("outreach_case_id", "workflow-review")}'],
-                        )
-                    except (ValueError, PermissionError) as exc:
-                        st.error(str(exc))
+            target = next_linear_creator_state(selected["creator_id"])
+            if selected.get("state") == "published":
+                st.info(t("Record a conversion on Growth Review"))
+                st.caption(t("Mark measured only after recording events"))
+            reason = st.text_input(t("Transition reason"), "Operator completed the required review")
+            render_write_guard()
+            advance_label = (
+                t("Advance to {state}", state=_stage_label(target))
+                if target
+                else t("No next legal hop")
+            )
+            if st.button(
+                advance_label,
+                type="primary",
+                use_container_width=True,
+                disabled=writes_locked() or not target,
+                key="advance_selected_creator",
+            ):
+                try:
+                    transition_creator_state(
+                        selected["creator_id"],
+                        target,
+                        actor=context.get("owner", "Operator"),
+                        reason=reason,
+                        evidence=[f'outreach://{selected.get("outreach_case_id", "workflow-review")}'],
+                    )
+                except PermissionError as exc:
+                    st.error(str(exc))
+                except ValueError as exc:
+                    if MEASURED_REQUIRES_EVENTS in str(exc):
+                        st.info(str(exc))
                     else:
-                        st.success(f'Advanced to {_stage_label(target)} with an audit event.')
-                        st.rerun()
+                        st.error(str(exc))
+                else:
+                    st.success(t("Advanced to {state} with an audit event.", state=_stage_label(target)))
+                    st.rerun()
+            st.caption(t("Audit timeline"))
+            md(_audit_timeline(workflow_events_for(selected["creator_id"])), unsafe_allow_html=True)
             if selected.get("state") in CONTACT_PACK_STATES:
                 st.caption(t("Generate a copyable outreach pack. Nothing is sent externally."))
                 _render_contact_pack(selected, key_prefix="selected")

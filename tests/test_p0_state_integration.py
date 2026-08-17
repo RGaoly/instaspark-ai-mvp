@@ -172,10 +172,16 @@ def test_switching_roots_isolates_creator_workflow_state(session):
 
 
 def test_workflow_board_is_derived_from_current_context(session):
+    from src.domain import WORKFLOW_STATES
+
     board = state.workflow_board()
-    assert sum(len(records) for records in board.values()) == 3
-    assert set(board) == {"shortlisted"}
+    assert list(board) == list(WORKFLOW_STATES[2:])
     assert {record["creator_id"] for record in board["shortlisted"]} == set(session.shortlist_ids)
+    assert sum(len(records) for records in board.values()) == 3
+    assert board["approved"] == []
+    assert board["contacted"] == []
+    assert board["measured"] == []
+    assert board["closed_lost"] == []
 
 
 def test_human_decision_is_written_to_sqlite(session):
@@ -845,3 +851,143 @@ def test_viewer_cannot_regenerate_outreach_message(session):
     with pytest.raises(PermissionError, match="read-only"):
         state.refresh_outreach_message(creator_id, tone="Authentic")
     assert session.outreach_cases[0]["outreach_message"] == original
+
+
+def _advance_linear(creator_id: str, to_state: str, *, reason: str) -> None:
+    hops = 0
+    while state.creator_state(creator_id) != to_state:
+        nxt = state.next_linear_creator_state(creator_id)
+        assert nxt is not None, state.creator_state(creator_id)
+        state.transition_creator_state(
+            creator_id,
+            nxt,
+            actor="Operator",
+            reason=reason,
+            evidence=["test://linear-advance"],
+        )
+        hops += 1
+        assert hops < 12
+
+
+def test_advance_approved_to_contacted_records_reason_on_timeline(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    assert state.creator_state(creator_id) == "approved"
+    assert state.next_linear_creator_state(creator_id) == "contacted"
+
+    record = state.transition_creator_state(
+        creator_id,
+        "contacted",
+        actor="Olivia Chen",
+        reason="Operator sent the contact pack",
+        evidence=["outreach://contact-pack"],
+    )
+    assert record["state"] == "contacted"
+    events = state.workflow_events_for(creator_id)
+    assert any(
+        event["from_state"] == "approved"
+        and event["to_state"] == "contacted"
+        and event["reason"] == "Operator sent the contact pack"
+        and event["actor"] == "Olivia Chen"
+        for event in events
+    )
+
+
+def test_illegal_skip_from_approved_raises_and_does_not_mutate(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    before = list(state.workflow_events_for(creator_id))
+
+    with pytest.raises(ValueError, match="illegal collaboration transition"):
+        state.transition_creator_state(
+            creator_id,
+            "published",
+            actor="Operator",
+            reason="Skip ahead",
+            evidence=["outreach://illegal-skip"],
+        )
+    assert state.creator_state(creator_id) == "approved"
+    assert state.workflow_events_for(creator_id) == before
+
+
+def test_viewer_cannot_advance_creator_state(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve before viewer tries to advance")
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+
+    with pytest.raises(PermissionError, match="read-only"):
+        state.transition_creator_state(
+            creator_id,
+            "contacted",
+            actor="Demo Viewer",
+            reason="Viewer should not advance",
+            evidence=["outreach://viewer"],
+        )
+    assert state.creator_state(creator_id) == "approved"
+
+
+def test_published_does_not_create_performance_events_and_measured_needs_one(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+
+    assert state.creator_state(creator_id) == "published"
+    assert state.performance_events() == []
+    assert state.performance_events_for(creator_id) == []
+    assert state.next_linear_creator_state(creator_id) == "measured"
+
+    with pytest.raises(ValueError, match="Mark measured only after recording events"):
+        state.transition_creator_state(
+            creator_id,
+            "measured",
+            actor="Operator",
+            reason="Mark measured without evidence",
+            evidence=["outreach://measured-too-soon"],
+        )
+    assert state.creator_state(creator_id) == "published"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    state.transition_creator_state(
+        creator_id,
+        "measured",
+        actor="Operator",
+        reason="Conversion recorded on Growth Review",
+        evidence=["growth://performance-event"],
+    )
+    assert state.creator_state(creator_id) == "measured"
+    assert len(state.performance_events_for(creator_id)) == 1
+    assert any(
+        event["to_state"] == "measured"
+        and event["reason"] == "Conversion recorded on Growth Review"
+        for event in state.workflow_events_for(creator_id)
+    )
+
+
+def test_kanban_keeps_empty_domain_columns_and_shows_growth_next_after_published(session):
+    from views import outreach_operations
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    board = state.workflow_board()
+    html = outreach_operations._kanban(board)
+    assert "Shortlisted" in html
+    assert "Approved" in html
+    assert "Contacted" in html
+    assert "Negotiating" in html
+    assert "Contracted" in html
+    assert "Content In Review" in html
+    assert "Published" in html
+    assert "Measured" in html
+    assert "in_outreach" not in html
+
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    published_board = state.workflow_board()
+    assert published_board["published"]
+    assert published_board["measured"] == []
+    html = outreach_operations._kanban(published_board)
+    assert "Record a conversion on Growth Review" in html

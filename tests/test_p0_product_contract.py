@@ -81,6 +81,8 @@ def test_state_exposes_active_context_and_transition_boundaries():
         "ensure_outreach_case",
         "contact_pack_for",
         "refresh_outreach_message",
+        "next_linear_creator_state",
+        "workflow_events_for",
         "opportunities_for_mission",
     }
 

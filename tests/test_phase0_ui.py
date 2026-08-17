@@ -97,6 +97,12 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "Refresh outreach message" in outreach
     assert "st.code" in outreach
     assert "disabled=writes_locked()" in outreach
+    assert "Advance to {state}" in outreach
+    assert "next_linear_creator_state" in outreach
+    assert "workflow_events_for" in outreach
+    assert "Audit timeline" in outreach
+    assert 't("Next state")' not in outreach
+    assert "in_outreach" not in outreach
 
 
 def test_honesty_chrome_is_not_hardcoded_pretty():

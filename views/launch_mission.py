@@ -10,6 +10,7 @@ from components.positioning import why_not_ttcm_html
 from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
+    content_assets_in_review_count,
     mission_health_snapshot,
     missions,
     ranking,
@@ -95,12 +96,13 @@ def _workflow_card(progress: dict) -> str:
     )
 
 
-def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_n: int) -> str:
+def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_n: int, in_review_n: int) -> str:
     actions = [
         (f'Review {summary.get("shortlisted", 0)} currently shortlisted creators', f"Evidence review for {market}"),
         (f'Contact {summary.get("approved", 0)} currently approved creators', "Advance audited outreach cases"),
         (f'{tracking_n} tracking assets issued', "Coupons and UTM links, not conversions"),
         (f'{events_n} performance events recorded', "Sourced conversions only"),
+        (f'{in_review_n} content assets in review', "Saved briefs from Content Studio"),
     ]
     rows = []
     for idx, (title, note) in enumerate(actions, 1):
@@ -166,6 +168,7 @@ def render() -> None:
     health = mission_health_snapshot()
     tracking_n = len(tracking_assets())
     events_n = len(performance_events())
+    in_review_n = content_assets_in_review_count()
     progress = _progress()
 
     left, right = st.columns([1, 0.26], vertical_alignment="top")
@@ -230,6 +233,7 @@ def render() -> None:
         ("Contacted", str(summary.get("contacted", 0)), "Audited outreach", ""),
         ("Published", str(summary.get("published", 0)), "Linked workflow", ""),
         ("Measured", str(summary.get("measured", 0)), "Sourced events only", ""),
+        ("Content in review", str(in_review_n), "Saved Content Studio briefs", ""),
     ]
     md(metric_cards(metrics), unsafe_allow_html=True)
 
@@ -239,7 +243,7 @@ def render() -> None:
         with c1:
             md(_workflow_card(progress), unsafe_allow_html=True)
         with c2:
-            md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n), unsafe_allow_html=True)
+            md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n, in_review_n), unsafe_allow_html=True)
     with side:
         md(_tasks_notifications(mission, progress), unsafe_allow_html=True)
 

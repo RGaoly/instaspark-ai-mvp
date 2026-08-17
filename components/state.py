@@ -881,3 +881,59 @@ def live_evidence_for(creator_id: str) -> list[dict[str, Any]]:
             and item.get("entry_id") == entry_id
         ]
     )
+
+
+def save_content_asset(
+    creator_id: str,
+    title: str,
+    body: str,
+    *,
+    status: str = "in_review",
+) -> dict[str, Any]:
+    """Append a Content Studio brief for the active creator + root context."""
+
+    require_write()
+    if creator_id not in set(creators()["creator_id"]):
+        raise ValueError(f"Unknown creator: {creator_id}")
+    title_text = str(title or "").strip()
+    body_text = str(body or "").strip()
+    if not title_text or not body_text:
+        raise ValueError("content asset title and body are required")
+    context = active_context()
+    excerpt = " ".join(body_text.split())[:280]
+    record = {
+        "asset_id": f"asset_{len(st.session_state.content_assets) + 1:04d}",
+        "creator_id": creator_id,
+        "title": title_text,
+        "body": body_text,
+        "excerpt": excerpt,
+        "status": str(status or "in_review").strip() or "in_review",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "entry_type": context["entry_type"],
+        "entry_id": context["entry_id"],
+        "mission_id": context.get("mission_id"),
+        "opportunity_id": context.get("opportunity_id"),
+    }
+    st.session_state.content_assets.append(record)
+    persist_state()
+    return deepcopy(record)
+
+
+def content_assets(*, status: str | None = None) -> list[dict[str, Any]]:
+    """Saved content assets for the active root. Empty is honest."""
+
+    context = active_context()
+    wanted = str(status).strip() if status else None
+    return deepcopy(
+        [
+            item
+            for item in st.session_state.get("content_assets", [])
+            if item.get("entry_type") == context["entry_type"]
+            and item.get("entry_id") == context["entry_id"]
+            and (wanted is None or item.get("status") == wanted)
+        ]
+    )
+
+
+def content_assets_in_review_count() -> int:
+    return len(content_assets(status="in_review"))

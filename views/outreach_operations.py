@@ -9,6 +9,7 @@ from components.state import (
     active_context,
     active_context_label,
     allowed_next_creator_states,
+    content_assets_in_review_count,
     live_evidence_for,
     transition_creator_state,
     workflow_board,
@@ -135,6 +136,8 @@ def render() -> None:
             unsafe_allow_html=True,
         )
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
+        in_review_n = content_assets_in_review_count()
+        st.caption(t("Content assets in review: {n}", n=in_review_n))
         if board.get("measured"):
             st.caption(t("Record the conversion on Growth Review"))
     with head_r:
@@ -183,8 +186,9 @@ def render() -> None:
         md(_event_log(workflow_events()), unsafe_allow_html=True)
     with tabs[3]:
         metrics = [(_stage_label(stage), str(len(people)), "Current entry") for stage, people in board.items()]
-        if not metrics:
-            metrics = [("Workflow records", "0", "Start by shortlisting a creator")]
+        metrics.insert(0, ("Content assets in review", str(content_assets_in_review_count()), "Saved briefs · 0 is honest"))
+        if len(metrics) == 1:
+            metrics.append(("Workflow records", "0", "Start by shortlisting a creator"))
         md(
             '<div class="is-grid-4">'
             + "".join(

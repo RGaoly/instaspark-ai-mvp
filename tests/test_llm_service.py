@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from services.llm_service import (
     _call_llm,
+    _grounding_facts,
     _mock_brief,
     _mock_localized_content,
     generate_brief,
@@ -147,3 +148,27 @@ def test_generate_script_contains_timestamps():
     script = generate_script(mission, creator)
     # Mock script should have timestamp-like patterns
     assert "s:" in script or "second" in script.lower()
+
+
+def test_generate_brief_grounding_includes_selected_tone_and_checklist():
+    mission = {"product": "Insta360 X5", "market": "United States", "target_topics": ["adventure"]}
+    creator = {"creator_name": "Test Creator", "creator_id": "C017"}
+    facts = _grounding_facts(
+        mission,
+        creator,
+        tone="Adventurous",
+        checklist=["Paid partnership disclosure"],
+    )
+    assert "Brand tone: Adventurous" in facts
+    assert "Paid partnership disclosure" in facts
+
+    brief = generate_brief(mission, creator, tone="Adventurous", checklist=["Paid partnership disclosure"])
+    assert "Adventurous" in brief
+    assert "Paid partnership disclosure" in brief
+
+    hooks = generate_hooks(mission, creator, tone="Adventurous")
+    assert any("Adventurous" in hook for hook in hooks)
+
+    script = generate_script(mission, creator, tone="Adventurous", checklist=["Native hook in first 2s"])
+    assert "Adventurous" in script
+    assert "Native hook in first 2s" in script

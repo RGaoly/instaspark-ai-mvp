@@ -99,10 +99,15 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "disabled=writes_locked()" in outreach
     assert "Advance to {state}" in outreach
     assert "next_linear_creator_state" in outreach
+    assert "next_outreach_action_page" in outreach
     assert "workflow_events_for" in outreach
     assert "Audit timeline" in outreach
     assert 't("Next state")' not in outreach
     assert "in_outreach" not in outreach
+    assert 'open_workspace_page("growth-review")' in outreach
+    assert 'open_workspace_page("content-studio")' in outreach
+    assert "Create a brief in Content Studio" in outreach
+    assert "growth_record_event_open" in growth
 
 
 def test_honesty_chrome_is_not_hardcoded_pretty():

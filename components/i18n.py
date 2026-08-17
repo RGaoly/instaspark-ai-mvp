@@ -1431,6 +1431,8 @@ ZH: dict[str, str] = {
     "Advanced to {state} with an audit event.": "已推进到 {state}，并写入审计事件。",
     "No next legal hop": "没有下一步合法状态",
     "Record a conversion on Growth Review": "请到增长复盘页录入转化",
+    "Create a brief in Content Studio": "请到内容工作室创建简报",
+    "Save a brief before advancing to published": "请先保存简报，再推进到已发布",
     "Mark measured only after recording events": "仅在录入效果事件后标记为已衡量",
     "Audit timeline": "审计时间线",
     "No workflow events recorded for this creator.": "该创作者尚无工作流事件。",

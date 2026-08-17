@@ -155,14 +155,34 @@ def _next_actions(context: dict, summary: dict[str, int], events: list[dict], as
     ) + "</div>"
 
 
+def _perf_event_label(creator_id: str, name: str) -> str:
+    return f"{name} · {creator_id}"
+
+
+def _prefill_record_form(recordable: list[tuple[str, str, dict]], *, force: bool) -> None:
+    labels = [_perf_event_label(creator_id, name) for creator_id, name, _ in recordable]
+    selected_id = st.session_state.get("selected_creator_id")
+    current = st.session_state.get("perf_event_creator")
+    if not force and current in labels:
+        return
+    if not selected_id:
+        return
+    for creator_id, name, _ in recordable:
+        if creator_id == selected_id:
+            st.session_state["perf_event_creator"] = _perf_event_label(creator_id, name)
+            return
+
+
 def _render_record_form() -> None:
-    with st.expander(t("Record performance event (demo)"), expanded=False):
+    expand = bool(st.session_state.pop("growth_record_event_open", False))
+    with st.expander(t("Record performance event (demo)"), expanded=expand):
         render_write_guard()
         recordable = _recordable_creators()
         if not recordable:
             st.caption(t("Approve a creator first to mint a coupon, then record the conversion here."))
             return
-        labels = [f"{name} · {creator_id}" for creator_id, name, _ in recordable]
+        _prefill_record_form(recordable, force=expand)
+        labels = [_perf_event_label(creator_id, name) for creator_id, name, _ in recordable]
         choice = st.selectbox(t("Creator"), labels, key="perf_event_creator")
         selected = recordable[labels.index(choice)]
         creator_id, _name, asset = selected

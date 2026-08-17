@@ -4,7 +4,7 @@ import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     CONTACT_PACK_STATES,
     MEASURED_REQUIRES_EVENTS,
@@ -15,7 +15,10 @@ from components.state import (
     format_contact_pack,
     live_evidence_for,
     next_linear_creator_state,
+    next_outreach_action_page,
+    prepare_growth_review_record,
     refresh_outreach_message,
+    select_creator,
     transition_creator_state,
     workflow_board,
     workflow_events,
@@ -42,8 +45,11 @@ def _stage_label(stage: str) -> str:
 
 
 def _next_action_label(person: dict) -> str:
-    if person.get("state") == "published":
+    page = next_outreach_action_page(person["creator_id"])
+    if page == "growth-review":
         return t("Record a conversion on Growth Review")
+    if page == "content-studio":
+        return t("Create a brief in Content Studio")
     target = person.get("next_state")
     if not target:
         target = next(
@@ -53,6 +59,18 @@ def _next_action_label(person: dict) -> str:
     if not target:
         return t("Complete")
     return _stage_label(target)
+
+
+def _open_next_action_page(person: dict, page: str) -> None:
+    if page == "growth-review":
+        prepare_growth_review_record(
+            person["creator_id"],
+            choice_label=f'{person["creator_name"]} · {person["creator_id"]}',
+        )
+        open_workspace_page("growth-review")
+        return
+    select_creator(person["creator_id"])
+    open_workspace_page("content-studio")
 
 
 def _kanban(board: dict[str, list[dict]]) -> str:
@@ -233,7 +251,11 @@ def render() -> None:
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
         in_review_n = content_assets_in_review_count()
         st.caption(t("Content assets in review: {n}", n=in_review_n))
-        if board.get("published"):
+        if any(
+            next_outreach_action_page(person["creator_id"]) == "growth-review"
+            for people in board.values()
+            for person in people
+        ):
             st.caption(t("Record a conversion on Growth Review"))
     with head_r:
         people = [person for stage in board.values() for person in stage]
@@ -245,11 +267,28 @@ def render() -> None:
             selected_label = st.selectbox(t("Creator workflow"), list(creator_by_label))
             selected = creator_by_label[selected_label]
             target = next_linear_creator_state(selected["creator_id"])
-            if selected.get("state") == "published":
+            jump_page = next_outreach_action_page(selected["creator_id"])
+            if jump_page == "growth-review":
                 st.info(t("Record a conversion on Growth Review"))
                 st.caption(t("Mark measured only after recording events"))
+            elif jump_page == "content-studio":
+                st.info(t("Create a brief in Content Studio"))
+                st.caption(t("Save a brief before advancing to published"))
             reason = st.text_input(t("Transition reason"), "Operator completed the required review")
             render_write_guard()
+            if jump_page:
+                jump_label = (
+                    t("Record a conversion on Growth Review")
+                    if jump_page == "growth-review"
+                    else t("Create a brief in Content Studio")
+                )
+                if st.button(
+                    jump_label,
+                    type="primary",
+                    use_container_width=True,
+                    key="jump_selected_creator",
+                ):
+                    _open_next_action_page(selected, jump_page)
             advance_label = (
                 t("Advance to {state}", state=_stage_label(target))
                 if target
@@ -257,7 +296,7 @@ def render() -> None:
             )
             if st.button(
                 advance_label,
-                type="primary",
+                type="primary" if not jump_page else "secondary",
                 use_container_width=True,
                 disabled=writes_locked() or not target,
                 key="advance_selected_creator",

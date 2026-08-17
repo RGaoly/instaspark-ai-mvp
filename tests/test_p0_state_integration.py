@@ -991,3 +991,40 @@ def test_kanban_keeps_empty_domain_columns_and_shows_growth_next_after_published
     assert published_board["measured"] == []
     html = outreach_operations._kanban(published_board)
     assert "Record a conversion on Growth Review" in html
+
+
+def test_published_with_zero_events_next_action_page_is_growth_review(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    name = ranked.iloc[0]["creator_name"]
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+
+    assert state.performance_events_for(creator_id) == []
+    assert state.next_outreach_action_page(creator_id) == "growth-review"
+
+    state.prepare_growth_review_record(creator_id, choice_label=f"{name} · {creator_id}")
+    assert session.selected_creator_id == creator_id
+    assert session.growth_record_event_open is True
+    assert session.perf_event_creator == f"{name} · {creator_id}"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert state.next_outreach_action_page(creator_id) is None
+
+
+def test_content_in_review_without_asset_next_action_page_is_content_studio(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
+
+    from views import outreach_operations
+
+    assert state.content_assets_for(creator_id) == []
+    assert state.next_outreach_action_page(creator_id) == "content-studio"
+    html = outreach_operations._kanban(state.workflow_board())
+    assert "Create a brief in Content Studio" in html
+
+    state.save_content_asset(creator_id, "Review brief", "Body of the brief for this mission.")
+    assert state.content_assets_for(creator_id)
+    assert state.next_outreach_action_page(creator_id) is None

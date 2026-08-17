@@ -52,6 +52,8 @@ def test_core_navigation_has_chinese_labels():
     )
     assert translate("Advance to {state}", language="zh", state="Contacted") == "推进到 Contacted"
     assert translate("Mark measured only after recording events", language="zh") == "仅在录入效果事件后标记为已衡量"
+    assert translate("Record a conversion on Growth Review", language="zh") == "请到增长复盘页录入转化"
+    assert translate("Create a brief in Content Studio", language="zh") == "请到内容工作室创建简报"
     assert translate("Audit timeline", language="zh") == "审计时间线"
 
 

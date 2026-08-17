@@ -1305,6 +1305,7 @@ ZH: dict[str, str] = {
     "Spend USD": "花费（美元）",
     "Record event": "录入事件",
     "Performance event recorded. ROI uses this event, not a forecast.": "效果事件已录入。ROI 只统计该事件，不是预测。",
+    "Performance event recorded. Creator moved to Measured.": "效果事件已录入。创作者已进入已衡量。",
     "Record the conversion on Growth Review": "请到增长复盘页录入转化",
     "Coupons are tracking assets, not conversions. ROI stays 0x until an operator records an event.": "优惠码是追踪资产，不是转化。在运营录入效果事件之前，ROI 一直是 0x。",
     "Use the expander below": "请使用下方折叠面板",

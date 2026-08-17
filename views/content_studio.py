@@ -4,8 +4,14 @@ import streamlit as st
 
 from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard
-from components.state import active_context_label, active_mission, ranking, select_creator
+from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.state import (
+    active_context_label,
+    active_mission,
+    ranking,
+    save_content_asset,
+    select_creator,
+)
 from components.ui import labels, md
 from src.domain import match_tier
 from services.llm_service import (
@@ -16,6 +22,14 @@ from services.llm_service import (
     generation_mode_label,
     is_llm_available,
 )
+
+BRAND_TONES = ["Adventurous", "Authentic", "Inspiring", "Innovative"]
+QUALITY_CHECKLIST = [
+    "Native hook in first 2s",
+    "Product in a real use case",
+    "Paid partnership disclosure",
+    "No invented product specs",
+]
 
 
 def _mission_creator_cards(mission, creator) -> str:
@@ -137,13 +151,8 @@ def _brief_content(mission: dict, creator: dict) -> str:
     """
 
 
-def _right_controls(mission: dict) -> str:
-    tones = ["Adventurous", "Authentic", "Inspiring", "Innovative"]
+def _right_static(mission: dict) -> str:
     return f"""
-    <div class="is-studio-card">
-      <h4>Brand tone</h4>
-      <div class="is-tone-row">{''.join(badge(t, 'gray') for t in tones)}</div>
-    </div>
     <div class="is-studio-card">
       <h4>Market & language</h4>
       <p><b>Primary</b><br/>{esc(mission.get('market', 'Target market'))} · {esc(mission.get('language', 'Local language'))}</p>
@@ -153,26 +162,22 @@ def _right_controls(mission: dict) -> str:
       <h4>Safety & compliance {badge('Not assessed in this demo','gray')}</h4>
       <p>This demo does not run a compliance checker on generated copy.</p>
     </div>
-    <div class="is-studio-card">
-      <div class="is-quality-head">
-        <h4 style="margin:0">Quality checklist</h4>
-        <span class="is-quality-score">Not assessed</span>
-      </div>
-      <p>Checklist items are a writing prompt, not an automated pass.</p>
-    </div>
     """
 
 
-def _studio_pack(mission: dict, creator: dict) -> dict:
-    cache_key = f"{creator['creator_id']}:{st.session_state.get('brief_version', 1)}"
+def _studio_pack(mission: dict, creator: dict, *, tone: str, checklist: list[str]) -> dict:
+    cache_key = f"{creator['creator_id']}:{st.session_state.get('brief_version', 1)}:{tone}:{','.join(checklist)}"
     store = st.session_state.setdefault("_content_studio_cache", {})
     if cache_key not in store:
+        grounded = {**mission, "brand_tone": tone, "quality_checklist": checklist}
         store[cache_key] = {
-            "brief": generate_brief(mission, creator),
-            "script": generate_script(mission, creator),
-            "hooks": generate_hooks(mission, creator),
-            "localized": generate_localized_content(mission, creator),
+            "brief": generate_brief(grounded, creator, tone=tone, checklist=checklist),
+            "script": generate_script(grounded, creator, tone=tone, checklist=checklist),
+            "hooks": generate_hooks(grounded, creator, tone=tone, checklist=checklist),
+            "localized": generate_localized_content(grounded, creator),
             "llm": is_llm_available(),
+            "tone": tone,
+            "checklist": list(checklist),
         }
     return store[cache_key]
 
@@ -215,7 +220,6 @@ def render() -> None:
     )
     creator = ranked[ranked["creator_name"] == selected_name].iloc[0].to_dict()
     select_creator(creator["creator_id"])
-    pack = _studio_pack(mission, creator)
     mode = generation_mode_label()
 
     head_l, head_r = st.columns([1, 0.55], vertical_alignment="top")
@@ -244,15 +248,16 @@ def render() -> None:
                 disabled=True,
                 help=t("Not wired in this demo"),
             )
-        with e2:
-            if st.button(t("Regenerate"), use_container_width=True):
-                st.session_state.brief_version += 1
-                st.toast(t("New brief version generated"))
-                st.rerun()
+        generate_clicked = e2.button(
+            t("Generate Brief"),
+            type="primary",
+            use_container_width=True,
+            disabled=writes_locked(),
+            key="studio_generate_brief",
+        )
         with e3:
             st.button(
                 t("Send to Creator"),
-                type="primary",
                 use_container_width=True,
                 disabled=True,
                 help=t("External send is not wired in this demo"),
@@ -262,11 +267,42 @@ def render() -> None:
     left, center, right = st.columns([0.18, 0.58, 0.24], gap="small", vertical_alignment="top")
     with left:
         md(_mission_creator_cards(mission, creator), unsafe_allow_html=True)
+    with right:
+        tone = st.segmented_control(
+            t("Brand tone"),
+            options=BRAND_TONES,
+            default=BRAND_TONES[0],
+            key="studio_brand_tone",
+        ) or BRAND_TONES[0]
+        checklist = st.multiselect(
+            t("Quality checklist"),
+            QUALITY_CHECKLIST,
+            default=QUALITY_CHECKLIST,
+            key="studio_quality_checklist",
+        )
+        st.caption(t("Checklist items are a writing prompt, not an automated pass."))
+        md(_right_static(mission), unsafe_allow_html=True)
+    tone = st.session_state.get("studio_brand_tone") or BRAND_TONES[0]
+    checklist = list(st.session_state.get("studio_quality_checklist") or QUALITY_CHECKLIST)
+    pack = _studio_pack(mission, creator, tone=tone, checklist=checklist)
+    if generate_clicked:
+        try:
+            save_content_asset(
+                creator["creator_id"],
+                f"{mission.get('product', 'Product')} brief · {creator['creator_name']} · {tone}",
+                pack["brief"],
+                status="in_review",
+            )
+            st.session_state.brief_version += 1
+            st.toast(t("Brief saved as a content asset in review"))
+            st.rerun()
+        except (ValueError, PermissionError) as exc:
+            st.error(str(exc))
     with center:
         md(
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
             f'<span style="font-size:11px;color:#69757E;font-weight:650">'
-            f'{esc(mode)} collaboration brief · Version {st.session_state.brief_version}</span>'
+            f'{esc(mode)} collaboration brief · {esc(tone)} · Version {st.session_state.brief_version}</span>'
             f'{ai_badge(mode)}</div>',
             unsafe_allow_html=True,
         )
@@ -302,7 +338,5 @@ def render() -> None:
             )
         with tabs[4]:
             md(_localized_html(pack["localized"], mission), unsafe_allow_html=True)
-    with right:
-        md(_right_controls(mission), unsafe_allow_html=True)
 
     render_demo_notice()

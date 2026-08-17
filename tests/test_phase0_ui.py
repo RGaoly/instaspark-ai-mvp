@@ -105,7 +105,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "is-video" not in search
     assert "match_label" in search
     assert "Modeled est. views" in search
-    assert "Ranking uses mission-aware rules, not this query." in search
+    assert "Filters the demo catalog; ranking stays mission-aware rules." in search
+    assert "search_filter_markets" in search
+    assert "filter_ranked_creators" in search
     assert "42 + idx * 18" not in compare
     assert "View more content →" not in compare
     assert "2 Medium · 1 High" not in compare
@@ -113,6 +115,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "badge('Passed'" not in studio
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
+    assert "studio_brand_tone" in studio
+    assert "save_content_asset" in studio
+    assert "content_assets_in_review_count" in launch
     assert "launch_progress" in launch
     assert "Approve creator shortlist" not in launch
     assert "Checklist for this demo" not in launch

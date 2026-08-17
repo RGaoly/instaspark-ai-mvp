@@ -506,3 +506,46 @@ def test_growth_filters_exclude_other_market_and_old_window(session):
     )
     assert {item["creator_id"] for item in us_assets + mx_assets} == {first_id, second_id}
     assert other == []
+
+
+def test_save_content_asset_appends_in_review_for_active_creator(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    assert state.content_assets_in_review_count() == 0
+    first = state.save_content_asset(
+        creator_id,
+        "X5 brief · Adventurous",
+        "Show the product in a real use case. Adventurous tone.",
+    )
+    second = state.save_content_asset(
+        creator_id,
+        "X5 brief · Authentic",
+        "Keep the verdict native. Authentic tone.",
+    )
+    assert first["asset_id"] != second["asset_id"]
+    assert first["status"] == "in_review"
+    assert first["creator_id"] == creator_id
+    assert first["excerpt"]
+    assert first["created_at"]
+    assert first["entry_id"] == session.active_mission_id
+    assert state.content_assets_in_review_count() == 2
+
+    from views import launch_mission, outreach_operations
+
+    actions = launch_mission._actions_card(state.workflow_summary(), "United States", 0, 0, state.content_assets_in_review_count())
+    assert "2 content assets in review" in actions
+    assert "Saved briefs from Content Studio" in actions
+    caption_n = state.content_assets_in_review_count()
+    html = outreach_operations._kanban(state.workflow_board())
+    assert html
+    assert caption_n == 2
+
+
+def test_viewer_cannot_save_content_asset(session):
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        state.save_content_asset(creator_id, "Viewer brief", "Should not persist")
+    assert state.content_assets() == []
+    assert state.content_assets_in_review_count() == 0

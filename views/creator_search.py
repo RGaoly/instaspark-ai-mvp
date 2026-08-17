@@ -29,38 +29,20 @@ from components.state import (
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort
+from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.domain import match_label, match_tier
 from services.youtube_service import search_channels, youtube_status_label
 
 
-def _filters(context: dict) -> str:
-    market = context.get("market", "Any market")
-    language = context.get("language", "Any language")
-    topics = " · ".join(context.get("target_topics", [])[:2]) or "Any topic"
-    styles = " · ".join(context.get("target_styles", [])[:2]) or "Any style"
-    filters = [
-        ("Market", market, True),
-        ("Platform", "YouTube · IG · TikTok", True),
-        ("Followers", "100K – 1M", False),
-        ("Avg views", "50K – 500K", False),
-        ("Engagement", "≥ 2.5%", True),
-        ("Language", language, True),
-        ("Commercial", "Open to collab", False),
-        ("Risk level", "Low – Medium", False),
-        ("Topics", topics, True),
-        ("Content style", styles, True),
-    ]
-    chips = [
-        f'<div class="is-filter-chip{" active" if active else ""}">{esc(label)}'
-        f'<span class="is-chip-caret">⌄</span><b>{esc(value)}</b></div>'
-        for label, value, active in filters
-    ]
-    chips.append('<div class="is-filter-chip" style="min-width:74px">More filters<b>＋</b></div>')
-    return (
-        '<div class="is-filter-row">' + "".join(chips) + "</div>"
-        '<small style="color:#879198;display:block;margin:4px 0 8px">'
-        "Filter chips are illustrative (demo) and do not change ranking.</small>"
-    )
+def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
+    market_options = unique_catalog_values(ranked, "primary_market") or unique_catalog_values(ranked, "markets")
+    language_options = unique_catalog_values(ranked, "languages")
+    topic_options = unique_catalog_values(ranked, "topics")
+    f1, f2, f3 = st.columns(3)
+    markets = f1.multiselect(t("Market"), market_options, key="search_filter_markets")
+    languages = f2.multiselect(t("Language"), language_options, key="search_filter_languages")
+    topics = f3.multiselect(t("Topics"), topic_options, key="search_filter_topics")
+    return markets, languages, topics
 
 
 def _render_live_lookup(context: dict) -> None:
@@ -112,7 +94,7 @@ def _creator_table(ranked) -> str:
     ]
     head = "".join(f"<th>{h}</th>" for h in headers)
     rows = []
-    for idx, row in ranked.head(8).iterrows():
+    for idx, row in ranked.iterrows():
         selected = row["creator_id"] == st.session_state.selected_creator_id
         name = row["creator_name"]
         topics = " · ".join(row["topics"][:2])
@@ -271,23 +253,31 @@ def render() -> None:
     )
     query = st.text_input(
         t("Search creators"),
-        value=(
-            f"Find creators in {context.get('market', 'the target market')} for "
-            f"{', '.join(context.get('target_topics', [])) or 'the active opportunity'}"
-        ),
+        value="",
+        placeholder=t("Name, topic, style, or country"),
         label_visibility="collapsed",
         key="creator_nl_query",
     )
-    _ = query  # keep widget wired for demo interaction; ranking stays mission-aware
-    st.caption(t("Ranking uses mission-aware rules, not this query."))
-    md(_filters(context), unsafe_allow_html=True)
+    st.caption(t("Filters the demo catalog; ranking stays mission-aware rules."))
+    markets, languages, topics = _render_catalog_filters(ranked)
+    visible = filter_ranked_creators(
+        ranked,
+        query=query,
+        markets=markets,
+        languages=languages,
+        topics=topics,
+    )
+    if visible.empty:
+        st.info(t("No creators in the demo catalog match these filters."))
+        render_demo_notice()
+        return
 
-    options = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
+    options = {row["creator_name"]: row["creator_id"] for _, row in visible.iterrows()}
     toolbar_left, toolbar_mid, toolbar_right = st.columns([0.65, 0.2, 0.15], vertical_alignment="center")
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{min(8, len(ranked))} creators found · rule-based ranking · demo catalog · {ai_badge("Not an LLM ranker")}'
+            f'{len(visible)} creators found · rule-based ranking · demo catalog · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -315,14 +305,16 @@ def render() -> None:
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
-        md(_creator_table(ranked), unsafe_allow_html=True)
+        md(_creator_table(visible), unsafe_allow_html=True)
         st.caption(t("Mission fit is market + language. Overlap ≠ mission fit."))
     with aside:
         creator = selected_creator()
         shortlist_ids = list(st.session_state.get("shortlist_ids") or [])
         if len(shortlist_ids) < 2:
-            shortlist_ids = ranked.head(3)["creator_id"].tolist()
-        cohort = ranked[ranked["creator_id"].isin(shortlist_ids)].to_dict("records")
+            shortlist_ids = visible.head(3)["creator_id"].tolist()
+        cohort = visible[visible["creator_id"].isin(shortlist_ids)].to_dict("records")
+        if not cohort:
+            cohort = visible.head(3).to_dict("records")
         md(_detail_panel(creator, context, cohort), unsafe_allow_html=True)
         a, b, c = st.columns(3)
         locked = writes_locked()

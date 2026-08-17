@@ -52,8 +52,16 @@ def _join(values: Any, fallback: str = "") -> str:
     return text or fallback
 
 
-def _grounding_facts(mission: dict[str, Any], creator: dict[str, Any]) -> str:
+def _grounding_facts(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
+) -> str:
     """Facts the model (or template) must stay inside — no invented specs."""
+    selected_tone = (tone or mission.get("brand_tone") or "").strip() or "not specified"
+    selected_checklist = checklist if checklist is not None else mission.get("quality_checklist")
     return (
         f"Product: {mission.get('product', 'the product')}\n"
         f"Mission title: {mission.get('title') or mission.get('name') or 'Active launch'}\n"
@@ -63,6 +71,8 @@ def _grounding_facts(mission: dict[str, Any], creator: dict[str, Any]) -> str:
         f"Markets: {_join(mission.get('markets'), mission.get('market', 'global'))}\n"
         f"Target topics: {_join(mission.get('target_topics'), 'creator-relevant use cases')}\n"
         f"Target styles: {_join(mission.get('target_styles'), 'the creator native style')}\n"
+        f"Brand tone: {selected_tone}\n"
+        f"Quality checklist: {_join(selected_checklist, 'none selected')}\n"
         f"Budget USD: {mission.get('budget_usd', 0)}\n"
         f"Owner: {mission.get('owner', 'Mission owner')}\n"
         f"Creator: {creator.get('creator_name', 'the creator')}\n"
@@ -106,7 +116,13 @@ def _call_llm(system_prompt: str, user_prompt: str) -> str | None:
 # ─── Brief Generation ──────────────────────────────────────────
 
 
-def generate_brief(mission: dict[str, Any], creator: dict[str, Any]) -> str:
+def generate_brief(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
+) -> str:
     """Generate a collaboration brief as Markdown.
 
     Uses OpenAI if available, otherwise returns a deterministic mock brief.
@@ -115,6 +131,8 @@ def generate_brief(mission: dict[str, Any], creator: dict[str, Any]) -> str:
     market = mission.get("market", "global")
     scenario = _join(mission.get("target_topics"), "storytelling")
     creator_name = creator.get("creator_name", "the creator")
+    selected_tone = (tone or mission.get("brand_tone") or "").strip()
+    selected_checklist = list(checklist if checklist is not None else mission.get("quality_checklist") or [])
 
     if is_llm_available():
         system_prompt = (
@@ -122,31 +140,59 @@ def generate_brief(mission: dict[str, Any], creator: dict[str, Any]) -> str:
             "actionable creator collaboration brief in Markdown format. "
             "Include sections: Objective, Audience, Core Message, Must-Show, "
             "Shot List, Do/Don't. Stay inside the supplied facts. "
+            "Honor the selected brand tone and quality checklist. "
             "Do not invent product specs. Keep it under 400 words."
         )
-        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
+        result = _call_llm(
+            system_prompt,
+            _grounding_facts(mission, creator, tone=selected_tone, checklist=selected_checklist),
+        )
         if result:
             return result
 
     # Fallback: deterministic mock brief
-    return _mock_brief(product, market, scenario, creator_name)
+    return _mock_brief(
+        product,
+        market,
+        scenario,
+        creator_name,
+        tone=selected_tone,
+        checklist=selected_checklist,
+    )
 
 
-def _mock_brief(product: str, market: str, scenario: str, creator_name: str) -> str:
+def _mock_brief(
+    product: str,
+    market: str,
+    scenario: str,
+    creator_name: str,
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
+) -> str:
     """Return a deterministic mock brief for development/demo mode."""
+    tone_line = (tone or "").strip() or "not specified"
+    checklist_items = [item for item in (checklist or []) if str(item).strip()]
+    checklist_md = (
+        "\n".join(f"- {item}" for item in checklist_items) if checklist_items else "- none selected"
+    )
     return f"""# Collaboration Brief — {product}
 
 **Creator:** {creator_name}
 **Market:** {market}
+**Brand tone:** {tone_line}
 
 ## Objective
-Show how {product} supports real-world {scenario} storytelling in the creator's native style.
+Show how {product} supports real-world {scenario} storytelling in a {tone_line} voice.
 
 ## Audience
 Action-camera users, outdoor creators and travel storytellers across {market}.
 
 ## Core Message
 Capture every angle without missing the moment — {product} keeps the story open.
+
+## Quality checklist
+{checklist_md}
 
 ## Must-Show
 - Product demonstrated in a real use case
@@ -196,7 +242,7 @@ def generate_localized_content(
             "market, language, flag, hook, caption, cta, disclosure. "
             "Keep hooks under 15 words, captions under 40 words."
         )
-        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
+        result = _call_llm(system_prompt, _grounding_facts(mission, creator, tone=mission.get("brand_tone"), checklist=mission.get("quality_checklist")))
         if result:
             try:
                 parsed = json.loads(result)
@@ -245,22 +291,34 @@ def _mock_localized_content(
 # ─── Hook Generation ───────────────────────────────────────────
 
 
-def generate_hooks(mission: dict[str, Any], creator: dict[str, Any]) -> list[str]:
+def generate_hooks(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
+) -> list[str]:
     """Generate 3 hook variants for social media content.
 
     Falls back to mock hooks when LLM is unavailable.
     """
     product = mission.get("product", "the product")
     scenario = _join(mission.get("target_topics"), "storytelling")
+    selected_tone = (tone or mission.get("brand_tone") or "").strip() or "on-brand"
+    selected_checklist = list(checklist if checklist is not None else mission.get("quality_checklist") or [])
 
     if is_llm_available():
         system_prompt = (
             "You are a social media copywriter. Generate exactly 3 short, "
             "punchy hooks for a creator collaboration video. "
             "Stay inside the supplied product, market and creator facts. "
+            "Honor the selected brand tone. "
             "Return one hook per line, no numbering or bullets."
         )
-        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
+        result = _call_llm(
+            system_prompt,
+            _grounding_facts(mission, creator, tone=selected_tone, checklist=selected_checklist),
+        )
         if result:
             hooks = [line.strip() for line in result.strip().split("\n") if line.strip()]
             if hooks:
@@ -268,16 +326,22 @@ def generate_hooks(mission: dict[str, Any], creator: dict[str, Any]) -> list[str
 
     # Fallback: mock hooks grounded in mission facts
     return [
-        f"One camera. Every angle. This is the {product}.",
+        f"{selected_tone} opener: one camera. Every angle. This is the {product}.",
         f"What if you never missed the {scenario} shot?",
-        f"I stopped choosing the frame. {product} kept the story open.",
+        f"I stopped choosing the frame. {product} kept the {selected_tone.lower()} story open.",
     ]
 
 
 # ─── Script Generation ─────────────────────────────────────────
 
 
-def generate_script(mission: dict[str, Any], creator: dict[str, Any]) -> str:
+def generate_script(
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
+) -> str:
     """Generate a 30-60 second video script outline.
 
     Falls back to mock script when LLM is unavailable.
@@ -285,23 +349,29 @@ def generate_script(mission: dict[str, Any], creator: dict[str, Any]) -> str:
     product = mission.get("product", "the product")
     scenario = _join(mission.get("target_topics"), "storytelling")
     market = mission.get("market", "the target market")
+    selected_tone = (tone or mission.get("brand_tone") or "").strip() or "on-brand"
+    selected_checklist = list(checklist if checklist is not None else mission.get("quality_checklist") or [])
 
     if is_llm_available():
         system_prompt = (
             "You are a video script writer. Generate a concise 30-60 second "
             "script outline for a creator collaboration video. Include timestamps "
             "and scene descriptions. Stay inside the supplied facts. "
+            "Honor the selected brand tone and quality checklist. "
             "Do not invent product specs. Keep it under 200 words."
         )
-        result = _call_llm(system_prompt, _grounding_facts(mission, creator))
+        result = _call_llm(
+            system_prompt,
+            _grounding_facts(mission, creator, tone=selected_tone, checklist=selected_checklist),
+        )
         if result:
             return result
 
-    # Fallback: mock script
+    checklist_note = _join(selected_checklist, "none selected")
     return (
-        f"0-3s: Immersive hook — {creator.get('creator_name', 'the creator')} in {market} with {product}\n"
+        f"0-3s: Immersive {selected_tone} hook — {creator.get('creator_name', 'the creator')} in {market} with {product}\n"
         f"3-15s: Creator challenge — setting up a real {scenario} shot\n"
         f"15-35s: Product proof — {product} demonstrated in a live use case\n"
-        "35-48s: Reframing reveal — showing the unique angle\n"
+        f"35-48s: Reframing reveal — showing the unique angle ({checklist_note})\n"
         f"48-60s: Creator verdict and CTA for {product}"
     )

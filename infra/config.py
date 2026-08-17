@@ -106,15 +106,19 @@ OPPORTUNITIES_DATA_PATH: Path = _PROJECT_ROOT / _get_str(
 )
 
 # ─── Scoring Weights ───────────────────────────────────────────
+# Mix drivers must sum to 1.0. Source of truth: src/scoring.py DEFAULT_WEIGHTS.
+# Legacy CONTENT_FIT / AUDIENCE_FIT env names still map onto topic_overlap / mission_fit.
 SCORE_WEIGHT_CONTENT_FIT: float = _get_float("SCORE_WEIGHT_CONTENT_FIT", 0.30)
 SCORE_WEIGHT_AUDIENCE_FIT: float = _get_float("SCORE_WEIGHT_AUDIENCE_FIT", 0.20)
+SCORE_WEIGHT_TOPIC_OVERLAP: float = _get_float("SCORE_WEIGHT_TOPIC_OVERLAP", SCORE_WEIGHT_CONTENT_FIT)
+SCORE_WEIGHT_MISSION_FIT: float = _get_float("SCORE_WEIGHT_MISSION_FIT", SCORE_WEIGHT_AUDIENCE_FIT)
 SCORE_WEIGHT_MOMENTUM: float = _get_float("SCORE_WEIGHT_MOMENTUM", 0.15)
 SCORE_WEIGHT_COMMERCIAL_FIT: float = _get_float("SCORE_WEIGHT_COMMERCIAL_FIT", 0.15)
 SCORE_WEIGHT_BRAND_SAFETY: float = _get_float("SCORE_WEIGHT_BRAND_SAFETY", 0.20)
 
 SCORE_WEIGHTS: dict[str, float] = {
-    "content_fit": SCORE_WEIGHT_CONTENT_FIT,
-    "audience_fit": SCORE_WEIGHT_AUDIENCE_FIT,
+    "mission_fit": SCORE_WEIGHT_MISSION_FIT,
+    "topic_overlap": SCORE_WEIGHT_TOPIC_OVERLAP,
     "momentum": SCORE_WEIGHT_MOMENTUM,
     "commercial_fit": SCORE_WEIGHT_COMMERCIAL_FIT,
     "brand_safety": SCORE_WEIGHT_BRAND_SAFETY,

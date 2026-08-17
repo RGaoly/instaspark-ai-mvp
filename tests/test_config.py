@@ -73,9 +73,11 @@ def test_data_paths_are_path_objects():
 
 def test_score_weights_sum_to_one():
     from infra.config import SCORE_WEIGHTS
+    from src.scoring import DEFAULT_WEIGHTS
 
     total = sum(SCORE_WEIGHTS.values())
     assert abs(total - 1.0) < 1e-9
+    assert set(SCORE_WEIGHTS) == set(DEFAULT_WEIGHTS)
 
 
 def test_score_weights_are_floats():

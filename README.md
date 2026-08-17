@@ -51,7 +51,8 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 示例 SKU：Insta360 X5
 - 两个目标市场：United States / Mexico
 - 30 位合成达人
-- 5 个可解释评分维度
+- 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
+- 查询词面加权与挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
 - Top 10 推荐
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成
@@ -71,6 +72,13 @@ streamlit run app.py
 ```
 
 Default login: `admin` / `admin123`. A read-only viewer is available as `demo` / `demo123`.
+
+## 5-minute demo
+
+1. Log in as `admin` / `admin123`. Open **Creator Search & Match**.
+2. Ranking is rule-based (mission fit, topic overlap, momentum, commercial fit, brand safety) — not an LLM and not embeddings.
+3. Type a name or topic in NL search. That is a **lexical filter + small boost**, not semantic search.
+4. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
 
 运行测试：
 

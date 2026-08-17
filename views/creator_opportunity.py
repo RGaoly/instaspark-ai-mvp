@@ -73,11 +73,88 @@ def _is_opportunity_context() -> bool:
 
 def _context_caption(opportunity: dict | None) -> str:
     if not _is_opportunity_context() or not opportunity:
-        return "Mission context is active. Select an opportunity below when you want to work from the creator-first entry."
+        return t("Mission context is active. Select an opportunity below when you want to work from the creator-first entry.")
     return (
-        f"Active opportunity: {opportunity['title']} · "
+        f"{t('Active opportunity')}: {opportunity['title']} · "
         f"{opportunity['market']} · {opportunity['language']}"
     )
+
+
+def _linked_mission_label(opportunity: dict) -> str:
+    linked_id = opportunity.get("linked_mission_id")
+    if not linked_id:
+        return t("Not linked")
+    mission = next(
+        (item for item in state_store.missions() if item.get("mission_id") == linked_id),
+        None,
+    )
+    if not mission:
+        return str(linked_id)
+    return str(mission.get("name") or linked_id)
+
+
+def _render_mission_link(opportunity: dict, creator: dict) -> None:
+    mission_records = state_store.missions()
+    if not mission_records:
+        st.caption(t("No launch missions are available to link."))
+        return
+    mission_by_label = {
+        mission.get("name", mission["mission_id"]): mission["mission_id"]
+        for mission in mission_records
+    }
+    current_mission_id = opportunity.get("linked_mission_id")
+    mission_labels = list(mission_by_label)
+    default_label = next(
+        (label for label, mission_id in mission_by_label.items() if mission_id == current_mission_id),
+        mission_labels[0],
+    )
+    selected_mission = st.selectbox(
+        t("Linked launch mission"),
+        mission_labels,
+        index=mission_labels.index(default_label),
+        key=f"opportunity_mission_{opportunity['opportunity_id']}",
+    )
+    if st.button(
+        t("Link mission and preserve opportunity evidence"),
+        use_container_width=True,
+        disabled=writes_locked(),
+    ):
+        state_store.link_opportunity_to_mission(
+            opportunity["opportunity_id"], mission_by_label[selected_mission]
+        )
+        state_store.set_active_context("opportunity", opportunity["opportunity_id"])
+        st.success(t("Mission linked; the Creator Opportunity remains the active root context."))
+        st.rerun()
+
+    if not current_mission_id and st.button(
+        t("Create a launch mission from this opportunity"),
+        use_container_width=True,
+        disabled=writes_locked(),
+    ):
+        mission_id = f'mission_{opportunity["opportunity_id"].lower().replace("-", "_")}'
+        generated_mission = {
+            "mission_id": mission_id,
+            "name": f'{opportunity["title"]} · Launch Mission',
+            "product": opportunity["title"],
+            "market": opportunity["market"],
+            "markets": [opportunity["market"]],
+            "language": opportunity["language"],
+            "languages": [opportunity["language"]],
+            "max_cost_usd": max(int(creator.get("estimated_cost_usd", 10000) * 1.2), 10000),
+            "min_brand_safety": 60,
+            "target_topics": list(creator.get("topics", [])),
+            "target_styles": list(creator.get("styles", [])),
+            "objective": opportunity["hypothesis"],
+            "budget_usd": 100_000,
+            "campaign_dates": "Not scheduled",
+            "owner": opportunity["owner"],
+            "status": "Draft",
+        }
+        state_store.save_mission(generated_mission)
+        state_store.link_opportunity_to_mission(opportunity["opportunity_id"], mission_id)
+        state_store.set_active_context("opportunity", opportunity["opportunity_id"])
+        st.success(t("Draft mission created and linked without changing the Opportunity root."))
+        st.rerun()
 
 
 def _render_list(opportunities: list[dict], creators_by_id: dict[str, dict]) -> None:
@@ -158,13 +235,13 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                 == opportunity["opportunity_id"]
             )
             if st.button(
-                "Active opportunity" if is_active else "Activate opportunity",
+                t("Active opportunity") if is_active else t("Activate opportunity"),
                 type="primary",
                 disabled=is_active,
                 use_container_width=True,
             ):
                 _activate_opportunity(opportunity["opportunity_id"])
-                st.success("Creator Opportunity is now the active workspace context.")
+                st.success(t("Creator Opportunity is now the active workspace context."))
                 st.rerun()
 
         facts = st.columns(5)
@@ -172,8 +249,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
         facts[1].metric(t("Status"), _status_label(opportunity["status"]))
         facts[2].metric(t("Source"), opportunity["source"])
         facts[3].metric(t("Owner"), opportunity["owner"])
-        linked = opportunity.get("linked_mission_id") or "Not linked"
-        facts[4].metric(t("Linked mission"), linked)
+        facts[4].metric(t("Linked mission"), _linked_mission_label(opportunity))
 
         md("**Opportunity hypothesis**")
         st.write(opportunity["hypothesis"])
@@ -256,61 +332,8 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
                         st.success(f"Moved to {_status_label(target_state)} with an audit event.")
                         st.rerun()
 
-            mission_records = state_store.missions()
-            if mission_records:
-                mission_by_label = {
-                    mission.get("name", mission["mission_id"]): mission["mission_id"]
-                    for mission in mission_records
-                }
-                current_mission_id = opportunity.get("linked_mission_id")
-                mission_labels = list(mission_by_label)
-                default_label = next(
-                    (label for label, mission_id in mission_by_label.items() if mission_id == current_mission_id),
-                    mission_labels[0],
-                )
-                selected_mission = st.selectbox(
-                    t("Linked launch mission"),
-                    mission_labels,
-                    index=mission_labels.index(default_label),
-                    key=f"opportunity_mission_{opportunity['opportunity_id']}",
-                )
-                if st.button(t("Link mission and preserve opportunity evidence"), use_container_width=True, disabled=writes_locked()):
-                    state_store.link_opportunity_to_mission(
-                        opportunity["opportunity_id"], mission_by_label[selected_mission]
-                    )
-                    st.success("Mission linked; the Creator Opportunity remains the active root context.")
-                    st.rerun()
-
-                if not current_mission_id and st.button(
-                    t("Create a launch mission from this opportunity"),
-                    use_container_width=True,
-                    disabled=writes_locked(),
-                ):
-                    mission_id = f'mission_{opportunity["opportunity_id"].lower().replace("-", "_")}'
-                    generated_mission = {
-                        "mission_id": mission_id,
-                        "name": f'{opportunity["title"]} · Launch Mission',
-                        "product": opportunity["title"],
-                        "market": opportunity["market"],
-                        "markets": [opportunity["market"]],
-                        "language": opportunity["language"],
-                        "languages": [opportunity["language"]],
-                        "max_cost_usd": max(int(creator.get("estimated_cost_usd", 10000) * 1.2), 10000),
-                        "min_brand_safety": 60,
-                        "target_topics": list(creator.get("topics", [])),
-                        "target_styles": list(creator.get("styles", [])),
-                        "objective": opportunity["hypothesis"],
-                        "budget_usd": 100_000,
-                        "campaign_dates": "Not scheduled",
-                        "owner": opportunity["owner"],
-                        "status": "Draft",
-                        "health_score": 0,
-                    }
-                    state_store.save_mission(generated_mission)
-                    state_store.link_opportunity_to_mission(opportunity["opportunity_id"], mission_id)
-                    state_store.set_active_context("opportunity", opportunity["opportunity_id"])
-                    st.success("Draft mission created and linked without changing the Opportunity root.")
-                    st.rerun()
+        st.divider()
+        _render_mission_link(opportunity, creator)
 
 
 def _render_create_form(creators: list[dict]) -> None:
@@ -377,7 +400,12 @@ def _render_create_form(creators: list[dict]) -> None:
             else:
                 state_store.save_opportunity(opportunity)
                 st.session_state.opportunity_detail_id = opportunity["opportunity_id"]
-                st.success(f"Created {opportunity['opportunity_id']} and opened its detail.")
+                st.success(
+                    t(
+                        "Created {opportunity_id} and set it as the active workspace context.",
+                        opportunity_id=opportunity["opportunity_id"],
+                    )
+                )
                 st.rerun()
 
 

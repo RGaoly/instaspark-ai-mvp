@@ -7,12 +7,13 @@ import streamlit as st
 from components.html import badge, metric_cards, page_header
 from components.i18n import t
 from components.positioning import why_not_ttcm_html
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
     content_assets_in_review_count,
     mission_health_snapshot,
     missions,
+    opportunities_for_mission,
     ranking,
     save_mission,
     set_active_context,
@@ -236,6 +237,28 @@ def render() -> None:
         ("Content in review", str(in_review_n), "Saved Content Studio briefs", ""),
     ]
     md(metric_cards(metrics), unsafe_allow_html=True)
+
+    linked_opps = opportunities_for_mission(mission.get("mission_id"))
+    with st.container(border=True):
+        st.markdown(f"**{t('Linked creator opportunities')}** · {len(linked_opps)}")
+        if not linked_opps:
+            st.caption(t("No creator opportunities are linked to this mission."))
+        else:
+            for opportunity in linked_opps:
+                row, action = st.columns([0.78, 0.22], vertical_alignment="center")
+                status = str(opportunity.get("status") or "discovered").replace("_", " ").title()
+                row.markdown(
+                    f"**{opportunity.get('title', opportunity['opportunity_id'])}**  \n"
+                    f"{opportunity['opportunity_id']} · {opportunity.get('creator_id', '—')} · {status}"
+                )
+                if action.button(
+                    t("Open opportunity"),
+                    key=f"open_linked_opp_{opportunity['opportunity_id']}",
+                    use_container_width=True,
+                ):
+                    set_active_context("opportunity", opportunity["opportunity_id"])
+                    st.session_state.opportunity_detail_id = opportunity["opportunity_id"]
+                    open_workspace_page("creator-opportunity")
 
     main, side = st.columns([1, 0.34], gap="small", vertical_alignment="top")
     with main:

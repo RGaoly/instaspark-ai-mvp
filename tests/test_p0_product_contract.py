@@ -79,6 +79,7 @@ def test_state_exposes_active_context_and_transition_boundaries():
         "set_active_context",
         "transition_creator_state",
         "ensure_outreach_case",
+        "opportunities_for_mission",
     }
 
     assert required <= functions, f"Missing public P0 state APIs: {sorted(required - functions)}"

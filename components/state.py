@@ -1236,5 +1236,34 @@ def content_assets(*, status: str | None = None) -> list[dict[str, Any]]:
     )
 
 
+def content_assets_for(creator_id: str, *, status: str | None = None) -> list[dict[str, Any]]:
+    return [item for item in content_assets(status=status) if item.get("creator_id") == creator_id]
+
+
 def content_assets_in_review_count() -> int:
     return len(content_assets(status="in_review"))
+
+
+def next_outreach_action_page(creator_id: str) -> str | None:
+    """Workspace page for the operator's next click from Outreach, if not Advance.
+
+    ``published`` with no recorded events jumps to Growth Review.
+    ``content_in_review`` with no saved brief for this creator + active root
+    jumps to Content Studio. Other states stay on Outreach and use Advance.
+    """
+
+    current = creator_state(creator_id)
+    if current == "published" and not _creator_has_performance_event(creator_id):
+        return "growth-review"
+    if current == "content_in_review" and not content_assets_for(creator_id):
+        return "content-studio"
+    return None
+
+
+def prepare_growth_review_record(creator_id: str, *, choice_label: str | None = None) -> None:
+    """Select this creator and expand Growth Review's record form on the next visit."""
+
+    select_creator(creator_id)
+    st.session_state["growth_record_event_open"] = True
+    if choice_label:
+        st.session_state["perf_event_creator"] = choice_label

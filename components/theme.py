@@ -437,6 +437,10 @@ def inject_theme() -> None:
           gap:7px;
           margin:8px 0 13px;
         }}
+        .is-process.is-process-live {{
+          min-width:0;
+          grid-template-columns:repeat(3,minmax(0,1fr));
+        }}
         .is-process-step {{
           background:white;
           border:1px solid var(--line);
@@ -451,11 +455,16 @@ def inject_theme() -> None:
         .is-process-step:not(:last-child):after {{
           content:""; position:absolute; right:-8px; width:8px; height:1px; background:#AEB8BE; z-index:2;
         }}
+        .is-process-step.done:not(:last-child):after {{ background:#121518; }}
+        .is-process-step.current {{ border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,214,0,.18); }}
+        .is-process-step.pending {{ opacity:.55; }}
         .is-process-num {{
           flex:0 0 25px; width:25px; height:25px; border-radius:50%;
           display:grid; place-items:center; background:var(--yellow); color:#15191C;
           font-size:9px; font-weight:950;
         }}
+        .is-process-step.done .is-process-num {{ background:#121518; color:white; }}
+        .is-process-step.pending .is-process-num {{ background:#F0F3F4; color:#6B757C; }}
         .is-process-step b {{ font-size:9.5px; line-height:1.25; }}
         .is-process-step small {{ display:block; font-size:7.5px; color:#89939A; margin-top:2px; }}
 
@@ -508,9 +517,11 @@ def inject_theme() -> None:
         .is-health small {{ font-size:11px; color:#8B949A; }}
 
         .is-workflow {{ display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:10px; }}
+        .is-workflow.is-workflow-live {{ grid-template-columns:repeat(3,1fr); }}
         .is-workflow-item {{ text-align:center; position:relative; padding:0 4px; }}
         .is-workflow-item:not(:last-child):after {{ content:""; height:2px; background:#E1E6E8; position:absolute; top:17px; left:58%; right:-42%; }}
         .is-workflow-item.done:not(:last-child):after {{ background:var(--yellow); }}
+        .is-workflow-item.pending {{ opacity:.55; }}
         .is-workflow-icon {{
           width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:#F0F3F4;
           display:grid; place-items:center; margin:0 auto 8px; font-size:11px; font-weight:850; position:relative; z-index:1;

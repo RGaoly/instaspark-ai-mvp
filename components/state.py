@@ -19,6 +19,7 @@ from src.domain import (
     EntryType,
     can_transition,
     mission_health,
+    parse_iso_datetime,
     pipeline_counts,
     transition_event,
 )
@@ -122,6 +123,24 @@ def _seed_workflows() -> dict[str, dict[str, Any]]:
             "events": [],
         }
     return records
+
+
+def _creator_market(creator_id: str) -> str | None:
+    matches = creators()[creators()["creator_id"] == creator_id]
+    if matches.empty:
+        return None
+    market = matches.iloc[0].get("primary_market")
+    text = str(market).strip() if market is not None else ""
+    return text or None
+
+
+def _as_recorded_at(value: datetime | str | None) -> str:
+    if value is None:
+        return datetime.now(timezone.utc).isoformat()
+    parsed = parse_iso_datetime(value)
+    if parsed is None:
+        raise ValueError("recorded_at must be a timezone-aware ISO timestamp")
+    return parsed.isoformat()
 
 
 def persist_state() -> None:
@@ -449,8 +468,12 @@ def _tracking_assets(creator_id: str, entry_id: str) -> dict[str, str]:
 
 def _attach_tracking(case: dict[str, Any], creator_id: str, entry_id: str) -> dict[str, Any]:
     if case.get("coupon") and case.get("deeplink"):
+        if not case.get("market"):
+            case["market"] = _creator_market(creator_id)
         return case
     case.update(_tracking_assets(creator_id, entry_id))
+    if not case.get("market"):
+        case["market"] = _creator_market(creator_id)
     return case
 
 
@@ -498,6 +521,7 @@ def ensure_outreach_case(creator_id: str, owner: str | None = None) -> dict[str,
         "channel": "Not selected",
         "next_action": "Prepare personalized outreach",
         "status": current_state,
+        "market": _creator_market(creator_id) or context.get("market"),
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -755,6 +779,8 @@ def record_performance_event(
     utm: str | None = None,
     content_asset_id: str | None = None,
     note: str | None = None,
+    market: str | None = None,
+    recorded_at: datetime | str | None = None,
 ) -> dict[str, Any]:
     """Append one operator-recorded conversion for the active root. Never inferred."""
 
@@ -767,6 +793,7 @@ def record_performance_event(
     if orders_n < 0 or revenue_n < 0 or spend_n < 0:
         raise ValueError("orders, revenue_usd and spend_usd must be non-negative")
     context = active_context()
+    stamped_market = (str(market).strip() if market else "") or _creator_market(creator_id) or context.get("market")
     record = {
         "event_id": f"perf_{len(st.session_state.performance_events) + 1:04d}",
         "creator_id": creator_id,
@@ -777,12 +804,12 @@ def record_performance_event(
         "utm": utm or None,
         "content_asset_id": content_asset_id or None,
         "note": note or None,
-        "market": context.get("market"),
+        "market": stamped_market,
         "entry_type": context["entry_type"],
         "entry_id": context["entry_id"],
         "mission_id": context.get("mission_id"),
         "opportunity_id": context.get("opportunity_id"),
-        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "recorded_at": _as_recorded_at(recorded_at),
     }
     st.session_state.performance_events.append(record)
     persist_state()

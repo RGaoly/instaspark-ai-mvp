@@ -73,56 +73,127 @@ def _open_next_action_page(person: dict, page: str) -> None:
     open_workspace_page("content-studio")
 
 
-def _kanban(board: dict[str, list[dict]]) -> str:
+def select_kanban_creator(creator_id: str) -> str:
+    """Select a board card without leaving Outreach Operations."""
+
+    select_creator(creator_id)
+    st.session_state["outreach_focus_creator_id"] = creator_id
+    return creator_id
+
+
+def _kanban_card_html(person: dict, color_idx: int, *, selected: bool = False) -> str:
+    name = person["creator_name"]
+    topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
+    market = person.get("primary_market", "—")
+    followers = f'{int(person.get("followers", 0)) / 1000:.0f}K'
+    next_action = _next_action_label(person)
+    live_n = len(live_evidence_for(person["creator_id"]))
+    live_line = (
+        f'<div class="is-kanban-next">{esc(t("Live evidence: {n} attached", n=live_n))}</div>'
+        if live_n
+        else ""
+    )
+    pack_line = ""
+    if person.get("state") in CONTACT_PACK_STATES and person.get("coupon"):
+        preview = (person.get("outreach_message") or "").splitlines()
+        preview_text = next((line for line in preview if line.strip()), t("Copy below"))
+        pack_line = (
+            f'<div class="is-kanban-next">{esc(t("Contact pack"))}: '
+            f'{esc(preview_text[:72])}</div>'
+        )
+    selected_cls = " is-kanban-card-selected" if selected else ""
+    return (
+        f'<div class="is-kanban-card{selected_cls}">'
+        f'<div class="is-kanban-person">{avatar(name, color_idx)}'
+        f'<span><b>{esc(name)}</b><small>{esc(person["creator_id"])}</small></span></div>'
+        f'<div class="is-kanban-tags">{badge(topics, "gray")} {badge(market, "blue")}</div>'
+        f'<div class="is-kanban-meta"><span>Market</span><strong>{esc(market)}</strong>'
+        f'<span>Audience</span><strong>{esc(followers)}</strong>'
+        f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
+        f'<span>Coupon</span><strong>{esc(person.get("coupon") or "Issued on approve")}</strong>'
+        f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
+        f'{live_line}{pack_line}'
+        f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
+    )
+
+
+def _kanban_column_head(stage: str, count: int) -> str:
+    tone = STAGE_TONES.get(stage, "gray")
+    label = _stage_label(stage)
+    return (
+        '<div class="is-kanban-head"><span style="display:flex;align-items:center;gap:6px">'
+        f'{esc(label)} {badge(label.split()[0], tone)}</span>'
+        f'<span class="is-kanban-count">{count}</span></div>'
+    )
+
+
+def _kanban(board: dict[str, list[dict]], selected_id: str | None = None) -> str:
     columns = []
     color_idx = 0
     for stage, people in board.items():
         cards = []
         for person in people:
-            name = person["creator_name"]
-            topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
-            market = person.get("primary_market", "—")
-            followers = f'{int(person.get("followers", 0)) / 1000:.0f}K'
-            next_action = _next_action_label(person)
-            live_n = len(live_evidence_for(person["creator_id"]))
-            live_line = (
-                f'<div class="is-kanban-next">{esc(t("Live evidence: {n} attached", n=live_n))}</div>'
-                if live_n
-                else ""
-            )
-            pack_line = ""
-            if person.get("state") in CONTACT_PACK_STATES and person.get("coupon"):
-                preview = (person.get("outreach_message") or "").splitlines()
-                preview_text = next((line for line in preview if line.strip()), t("Copy below"))
-                pack_line = (
-                    f'<div class="is-kanban-next">{esc(t("Contact pack"))}: '
-                    f'{esc(preview_text[:72])}</div>'
-                )
             cards.append(
-                '<div class="is-kanban-card">'
-                f'<div class="is-kanban-person">{avatar(name, color_idx)}'
-                f'<span><b>{esc(name)}</b><small>{esc(person["creator_id"])}</small></span></div>'
-                f'<div class="is-kanban-tags">{badge(topics, "gray")} {badge(market, "blue")}</div>'
-                f'<div class="is-kanban-meta"><span>Market</span><strong>{esc(market)}</strong>'
-                f'<span>Audience</span><strong>{esc(followers)}</strong>'
-                f'<span>Case</span><strong>{esc(person.get("outreach_case_id", "Pending approval"))}</strong>'
-                f'<span>Coupon</span><strong>{esc(person.get("coupon") or "Issued on approve")}</strong>'
-                f'<span>Owner</span><strong>{esc(person.get("owner", "Not assigned"))}</strong></div>'
-                f'{live_line}{pack_line}'
-                f'<div class="is-kanban-next">Next: {esc(next_action)} →</div></div>'
+                _kanban_card_html(
+                    person,
+                    color_idx,
+                    selected=person["creator_id"] == selected_id,
+                )
             )
             color_idx += 1
-        tone = STAGE_TONES.get(stage, "gray")
-        label = _stage_label(stage)
         columns.append(
             '<div class="is-kanban-col">'
-            f'<div class="is-kanban-head"><span style="display:flex;align-items:center;gap:6px">'
-            f'{esc(label)} {badge(label.split()[0], tone)}</span>'
-            f'<span class="is-kanban-count">{len(people)}</span></div>{"".join(cards)}</div>'
+            f'{_kanban_column_head(stage, len(people))}{"".join(cards)}</div>'
         )
     if not columns:
         return '<div class="is-card is-card-pad">No creators have entered this workflow yet.</div>'
     return '<div style="overflow-x:auto"><div class="is-kanban">' + "".join(columns) + "</div></div>"
+
+
+def _render_kanban(board: dict[str, list[dict]]) -> None:
+    """Clickable board: each card selects the creator and stays on Outreach."""
+
+    if not board:
+        md(
+            '<div class="is-card is-card-pad">No creators have entered this workflow yet.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+    selected_id = st.session_state.get("selected_creator_id")
+    stages = list(board.items())
+    color_idx = 0
+    row_size = 5
+    for row_start in range(0, len(stages), row_size):
+        chunk = stages[row_start : row_start + row_size]
+        cols = st.columns(row_size, gap="small")
+        for index in range(row_size):
+            with cols[index]:
+                if index >= len(chunk):
+                    continue
+                stage, people = chunk[index]
+                md(
+                    f'<div class="is-kanban-col">{_kanban_column_head(stage, len(people))}</div>',
+                    unsafe_allow_html=True,
+                )
+                for person in people:
+                    selected = person["creator_id"] == selected_id
+                    md(
+                        _kanban_card_html(person, color_idx, selected=selected),
+                        unsafe_allow_html=True,
+                    )
+                    label = t("Selected creator") if selected else t("Select this creator")
+                    if st.button(
+                        label,
+                        key=f"kanban_select_{person['creator_id']}",
+                        use_container_width=True,
+                        type="primary" if selected else "secondary",
+                        help=t(
+                            "Stay on Outreach. Contact pack, Advance, and next actions apply to this creator."
+                        ),
+                    ):
+                        select_kanban_creator(person["creator_id"])
+                        st.rerun()
+                    color_idx += 1
 
 
 def _list_view(board: dict[str, list[dict]]) -> str:
@@ -341,7 +412,7 @@ def render() -> None:
 
     tabs = st.tabs(labels(["Workflow Board", "List", "Audit Log", "Stage Metrics"]))
     with tabs[0]:
-        md(_kanban(board), unsafe_allow_html=True)
+        _render_kanban(board)
         pack_people = _pack_people(board)
         if pack_people:
             st.subheader(t("Contact packs"))

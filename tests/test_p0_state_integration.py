@@ -1060,3 +1060,101 @@ def test_content_in_review_without_asset_next_action_page_is_content_studio(sess
     state.save_content_asset(creator_id, "Review brief", "Body of the brief for this mission.")
     assert state.content_assets_for(creator_id)
     assert state.next_outreach_action_page(creator_id) is None
+
+
+def test_selecting_via_kanban_updates_selected_creator_id(session):
+    from views import outreach_operations
+
+    ranked = state.ranking()
+    first_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    state.select_creator(first_id)
+    assert session.selected_creator_id == first_id
+
+    result = outreach_operations.select_kanban_creator(second_id)
+    assert result == second_id
+    assert session.selected_creator_id == second_id
+    assert session.outreach_focus_creator_id == second_id
+
+    html = outreach_operations._kanban(state.workflow_board(), selected_id=second_id)
+    assert "is-kanban-card-selected" in html
+    assert second_id in html
+    assert "Measured" in html
+    measured_col = html.split("Measured", 1)[1]
+    assert "is-kanban-card" not in measured_col.split("Closed Lost", 1)[0]
+
+
+def test_opportunity_cannot_skip_approved_to_published(session):
+    from views import creator_opportunity
+
+    state.set_active_context("opportunity", "OPP-002")
+    state.transition_creator_state(
+        "C003",
+        "approved",
+        actor="Global Creator Team",
+        reason="Evidence and commercial fit approved",
+        evidence=["opportunity://OPP-002"],
+    )
+    assert state.creator_state("C003") == "approved"
+    assert state.next_linear_creator_state("C003") == "contacted"
+
+    record = creator_opportunity.advance_opportunity_creator(
+        "C003",
+        actor="Global Creator Team",
+        reason="Legal hop only",
+        evidence=["opportunity://OPP-002"],
+    )
+    assert record["state"] == "contacted"
+    assert state.creator_state("C003") == "contacted"
+
+    with pytest.raises(ValueError, match="illegal collaboration transition"):
+        state.transition_creator_state(
+            "C003",
+            "published",
+            actor="Global Creator Team",
+            reason="Skip ahead",
+            evidence=["opportunity://OPP-002"],
+        )
+    assert state.creator_state("C003") == "contacted"
+
+
+def test_opportunity_measured_with_zero_events_refused(session):
+    from views import creator_opportunity
+
+    state.set_active_context("opportunity", "OPP-002")
+    state.transition_creator_state(
+        "C003",
+        "approved",
+        actor="Global Creator Team",
+        reason="Evidence and commercial fit approved",
+        evidence=["opportunity://OPP-002"],
+    )
+    _advance_linear("C003", "published", reason="Walk legal hops to published")
+    assert state.creator_state("C003") == "published"
+    assert state.performance_events_for("C003") == []
+    assert state.next_linear_creator_state("C003") == "measured"
+
+    with pytest.raises(ValueError, match="Mark measured only after recording events"):
+        creator_opportunity.advance_opportunity_creator(
+            "C003",
+            actor="Global Creator Team",
+            reason="Mark measured without evidence",
+            evidence=["opportunity://OPP-002"],
+        )
+    assert state.creator_state("C003") == "published"
+    assert not any(event["to_state"] == "measured" for event in state.workflow_events_for("C003"))
+
+
+def test_opportunity_viewer_cannot_advance(session):
+    from views import creator_opportunity
+
+    state.set_active_context("opportunity", "OPP-002")
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        creator_opportunity.advance_opportunity_creator(
+            "C003",
+            actor="Demo Viewer",
+            reason="Viewer should not advance",
+            evidence=["opportunity://OPP-002"],
+        )
+    assert state.creator_state("C003") == "shortlisted"

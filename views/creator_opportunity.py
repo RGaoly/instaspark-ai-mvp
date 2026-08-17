@@ -54,6 +54,43 @@ def _status_label(status: str) -> str:
     return status.replace("_", " ").title()
 
 
+def advance_opportunity_creator(
+    creator_id: str,
+    *,
+    actor: str,
+    reason: str,
+    evidence: list[str] | tuple[str, ...] | str,
+) -> dict:
+    """Advance one legal hop. Never skips; measured still requires recorded events."""
+
+    target = state_store.next_linear_creator_state(creator_id)
+    if not target:
+        raise ValueError("No next legal hop")
+    return state_store.transition_creator_state(
+        creator_id,
+        target,
+        actor=actor,
+        reason=reason,
+        evidence=evidence,
+    )
+
+
+def _audit_timeline(events: list[dict]) -> str:
+    if not events:
+        return '<div class="is-card is-card-pad">No workflow events recorded for this creator.</div>'
+    cards = []
+    for event in reversed(events):
+        stamp = event.get("occurred_at") or event.get("timestamp") or ""
+        cards.append(
+            '<div class="is-card is-card-pad">'
+            f'<div class="is-card-title">{esc(_status_label(event["from_state"]))} → '
+            f'{esc(_status_label(event["to_state"]))}</div>'
+            f'<div class="is-card-caption">{esc(stamp)} · {esc(event["reason"])} · '
+            f'{esc(event["actor"])}</div></div>'
+        )
+    return "".join(cards)
+
+
 def _status_tone(status: str) -> str:
     if status in {"qualified", "shortlisted", "approved", "contracted", "published", "measured"}:
         return "green"
@@ -283,54 +320,75 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
             st.divider()
             creator_id = opportunity["creator_id"]
             current_state = state_store.creator_state(creator_id)
-            md(f"**Collaboration state:** `{_status_label(current_state)}`")
-            next_states = state_store.allowed_next_creator_states(creator_id)
-            if next_states:
-                transition_col, reason_col = st.columns([0.35, 0.65])
-                target_state = transition_col.selectbox(
-                    t("Next state"),
-                    next_states,
-                    format_func=_status_label,
-                    key=f"opportunity_next_{opportunity['opportunity_id']}",
-                )
-                reason = reason_col.text_input(
-                    t("Decision reason"),
-                    "Opportunity evidence reviewed by the owner",
-                    key=f"opportunity_reason_{opportunity['opportunity_id']}",
-                )
-                if st.button(t("Apply governed transition"), use_container_width=True, disabled=writes_locked()):
+            md(f"**{t('Collaboration state')}:** `{_status_label(current_state)}`")
+            target = state_store.next_linear_creator_state(creator_id)
+            reason = st.text_input(
+                t("Transition reason"),
+                "Opportunity evidence reviewed by the owner",
+                key=f"opportunity_reason_{opportunity['opportunity_id']}",
+            )
+            if target == "measured":
+                st.caption(t("Mark measured only after recording events"))
+            advance_label = (
+                t("Advance to {state}", state=_status_label(target))
+                if target
+                else t("No next legal hop")
+            )
+            if st.button(
+                advance_label,
+                type="primary",
+                use_container_width=True,
+                disabled=writes_locked() or not target,
+                key=f"opportunity_advance_{opportunity['opportunity_id']}",
+            ):
+                try:
+                    record = advance_opportunity_creator(
+                        creator_id,
+                        actor=opportunity["owner"],
+                        reason=reason,
+                        evidence=opportunity["evidence"] or ["opportunity://manual-review"],
+                    )
+                except PermissionError as exc:
+                    st.error(str(exc))
+                except ValueError as exc:
+                    if state_store.MEASURED_REQUIRES_EVENTS in str(exc):
+                        st.info(str(exc))
+                    else:
+                        st.error(str(exc))
+                else:
+                    st.success(
+                        t(
+                            "Advanced to {state} with an audit event.",
+                            state=_status_label(record["state"]),
+                        )
+                    )
+                    st.rerun()
+            if "closed_lost" in state_store.allowed_next_creator_states(creator_id):
+                if st.button(
+                    t("Reject"),
+                    use_container_width=True,
+                    disabled=writes_locked(),
+                    key=f"opportunity_reject_{opportunity['opportunity_id']}",
+                ):
                     try:
-                        if target_state == "approved":
-                            state_store.save_decision(
-                                creator_id,
-                                "Approved",
-                                reason,
-                                reason_code="opportunity_approved",
-                                note=opportunity["suggested_action"],
-                                evidence=opportunity["evidence"],
-                            )
-                        elif target_state == "closed_lost":
-                            state_store.save_decision(
-                                creator_id,
-                                "Rejected",
-                                reason,
-                                reason_code="opportunity_rejected",
-                                note=opportunity["suggested_action"],
-                                evidence=opportunity["evidence"],
-                            )
-                        else:
-                            state_store.transition_creator_state(
-                                creator_id,
-                                target_state,
-                                actor=opportunity["owner"],
-                                reason=reason,
-                                evidence=opportunity["evidence"] or ["opportunity://manual-review"],
-                            )
+                        state_store.save_decision(
+                            creator_id,
+                            "Rejected",
+                            reason,
+                            reason_code="opportunity_rejected",
+                            note=opportunity["suggested_action"],
+                            evidence=opportunity["evidence"],
+                        )
                     except (ValueError, PermissionError) as exc:
                         st.error(str(exc))
                     else:
-                        st.success(f"Moved to {_status_label(target_state)} with an audit event.")
+                        st.success(t("Rejection recorded with a reason code."))
                         st.rerun()
+            st.caption(t("Audit timeline"))
+            md(
+                _audit_timeline(state_store.workflow_events_for(creator_id)),
+                unsafe_allow_html=True,
+            )
 
         st.divider()
         _render_mission_link(opportunity, creator)

@@ -112,6 +112,10 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "growth_open_outreach" in growth
     assert "Create a brief in Content Studio" in outreach
     assert "growth_record_event_open" in growth
+    assert "select_kanban_creator" in outreach
+    assert "kanban_select_" in outreach
+    assert "_render_kanban" in outreach
+    assert 'open_workspace_page' not in outreach.split("def _render_kanban")[1].split("def ")[0]
 
 
 def test_honesty_chrome_is_not_hardcoded_pretty():
@@ -154,6 +158,15 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "save_opportunity" in opportunity
     assert "_render_mission_link" in opportunity
     assert "health_score" not in opportunity
+    assert "next_linear_creator_state" in opportunity
+    assert "advance_opportunity_creator" in opportunity
+    assert "Advance to {state}" in opportunity
+    assert "Audit timeline" in opportunity
+    assert "workflow_events_for" in opportunity
+    assert "MEASURED_REQUIRES_EVENTS" in opportunity
+    assert 't("Next state")' not in opportunity
+    assert "Apply governed transition" not in opportunity
+    assert "skip to published" not in opportunity.lower()
     growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
     assert "filter_performance_events" in growth
     assert 'key="growth_period"' in growth

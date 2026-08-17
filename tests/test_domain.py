@@ -70,6 +70,8 @@ def test_precontract_states_can_close_lost(from_state):
     ("from_state", "to_state"),
     [
         ("discovered", "approved"),
+        ("shortlisted", "content_in_review"),
+        ("approved", "content_in_review"),
         ("approved", "qualified"),
         ("contracted", "closed_lost"),
         ("content_in_review", "closed_lost"),

@@ -174,7 +174,7 @@ def _studio_pack(mission: dict, creator: dict, *, tone: str, checklist: list[str
             "brief": generate_brief(grounded, creator, tone=tone, checklist=checklist),
             "script": generate_script(grounded, creator, tone=tone, checklist=checklist),
             "hooks": generate_hooks(grounded, creator, tone=tone, checklist=checklist),
-            "localized": generate_localized_content(grounded, creator),
+            "localized": generate_localized_content(grounded, creator, tone=tone, checklist=checklist),
             "llm": is_llm_available(),
             "tone": tone,
             "checklist": list(checklist),

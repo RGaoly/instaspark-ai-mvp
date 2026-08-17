@@ -218,7 +218,11 @@ Capture every angle without missing the moment — {product} keeps the story ope
 
 
 def generate_localized_content(
-    mission: dict[str, Any], creator: dict[str, Any]
+    mission: dict[str, Any],
+    creator: dict[str, Any],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
 ) -> list[dict[str, str]]:
     """Generate localized hooks, captions and CTAs for each target market.
 
@@ -226,8 +230,11 @@ def generate_localized_content(
     Falls back to mock content when LLM is unavailable.
     """
     product = mission.get("product", "the product")
-    creator_name = creator.get("creator_name", "the creator")
     markets = mission.get("markets", ["United States", "Mexico"])
+    selected_tone = (tone or mission.get("brand_tone") or "").strip() or "on-brand"
+    selected_checklist = list(
+        checklist if checklist is not None else mission.get("quality_checklist") or []
+    )
 
     market_configs = {
         "United States": {"language": "English", "flag": "US"},
@@ -238,11 +245,20 @@ def generate_localized_content(
         system_prompt = (
             "You are a localization expert for social media content. "
             "Generate platform-native hooks, captions and CTAs for each market. "
+            "Honor the selected brand tone and quality checklist. "
             "Return valid JSON array with objects containing: "
             "market, language, flag, hook, caption, cta, disclosure. "
             "Keep hooks under 15 words, captions under 40 words."
         )
-        result = _call_llm(system_prompt, _grounding_facts(mission, creator, tone=mission.get("brand_tone"), checklist=mission.get("quality_checklist")))
+        result = _call_llm(
+            system_prompt,
+            _grounding_facts(
+                mission,
+                creator,
+                tone=selected_tone,
+                checklist=selected_checklist,
+            ),
+        )
         if result:
             try:
                 parsed = json.loads(result)
@@ -252,23 +268,42 @@ def generate_localized_content(
                 logger.warning("Failed to parse LLM localized content JSON, using mock")
 
     # Fallback: mock localized content
-    return _mock_localized_content(product, markets, market_configs)
+    return _mock_localized_content(
+        product,
+        markets,
+        market_configs,
+        tone=selected_tone,
+        checklist=selected_checklist,
+    )
 
 
 def _mock_localized_content(
-    product: str, markets: list[str], market_configs: dict[str, dict[str, str]]
+    product: str,
+    markets: list[str],
+    market_configs: dict[str, dict[str, str]],
+    *,
+    tone: str | None = None,
+    checklist: list[str] | tuple[str, ...] | None = None,
 ) -> list[dict[str, str]]:
     """Return deterministic mock localized content."""
+    tone_line = (tone or "").strip() or "on-brand"
+    checklist_note = _join(checklist, "none selected")
     templates = {
         "English": {
-            "hook": f"One camera. Every angle. Every moment. This is the {product}.",
-            "caption": f"From sunrise trails to city nights — the {product} captures it all in stunning 8K 360. No more choosing the frame. Just hit record.",
+            "hook": f"{tone_line} hook: One camera. Every angle. Every moment. This is the {product}.",
+            "caption": (
+                f"From sunrise trails to city nights — the {product} captures it all. "
+                f"Voice: {tone_line}. Checklist: {checklist_note}."
+            ),
             "cta": f"Tap the link to explore the {product} and start capturing every angle.",
             "disclosure": "#ad - Paid partnership",
         },
         "Espanol": {
-            "hook": f"Una camara. Todos los angulos. Cada momento. Esta es la {product}.",
-            "caption": f"Desde rutas al amanecer hasta noches en la ciudad — la {product} captura todo en impresionante 8K 360. Deja de elegir el encuadre. Solo presiona grabar.",
+            "hook": f"{tone_line}: Una camara. Todos los angulos. Cada momento. Esta es la {product}.",
+            "caption": (
+                f"Desde rutas al amanecer hasta noches en la ciudad — la {product} captura todo. "
+                f"Tono: {tone_line}. Checklist: {checklist_note}."
+            ),
             "cta": f"Toca el enlace para conocer la {product} y captura cada angulo.",
             "disclosure": "#ad - Colaboracion pagada",
         },

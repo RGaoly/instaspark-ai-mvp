@@ -1427,6 +1427,19 @@ ZH: dict[str, str] = {
     "Brief excerpt": "简报摘录",
     "No brief saved yet": "尚未保存简报",
     "UTM link": "UTM 链接",
+    "Advance to {state}": "推进到 {state}",
+    "Advanced to {state} with an audit event.": "已推进到 {state}，并写入审计事件。",
+    "No next legal hop": "没有下一步合法状态",
+    "Record a conversion on Growth Review": "请到增长复盘页录入转化",
+    "Mark measured only after recording events": "仅在录入效果事件后标记为已衡量",
+    "Audit timeline": "审计时间线",
+    "No workflow events recorded for this creator.": "该创作者尚无工作流事件。",
+    "Creator workflow": "创作者工作流",
+    "Transition reason": "流转原因",
+    "Workflow Board": "工作流看板",
+    "Audit Log": "审计日志",
+    "Stage Metrics": "阶段指标",
+    "Complete": "已完成",
 }
 
 

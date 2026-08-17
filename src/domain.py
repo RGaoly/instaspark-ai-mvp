@@ -132,6 +132,33 @@ def can_transition(from_state: StatusLike, to_state: StatusLike) -> bool:
     return target in _ALLOWED_TRANSITIONS[source]
 
 
+def next_linear_state(from_state: StatusLike) -> Optional[str]:
+    """Return the next linear hop. ``closed_lost`` is never the primary advance.
+
+    Unknown or terminal states return ``None`` instead of inventing a label
+    such as ``in_outreach``.
+    """
+
+    try:
+        source = _status(from_state)
+    except (TypeError, ValueError):
+        return None
+    for candidate in _LINEAR_WORKFLOW:
+        if can_transition(source, candidate):
+            return candidate.value
+    return None
+
+
+def allowed_next_states(from_state: StatusLike) -> Tuple[str, ...]:
+    """Legal hops from ``from_state`` in canonical ``WORKFLOW_STATES`` order."""
+
+    try:
+        source = _status(from_state)
+    except (TypeError, ValueError):
+        return ()
+    return tuple(state for state in WORKFLOW_STATES if can_transition(source, state))
+
+
 @dataclass(frozen=True)
 class TransitionEvent:
     """Immutable audit record emitted for every accepted state change."""
@@ -681,6 +708,7 @@ __all__ = [
     "PerformanceEvent",
     "TransitionEvent",
     "WORKFLOW_STATES",
+    "allowed_next_states",
     "attributed_roi",
     "can_transition",
     "filter_dated_records",
@@ -690,6 +718,7 @@ __all__ = [
     "match_label",
     "match_tier",
     "mission_health",
+    "next_linear_state",
     "parse_iso_datetime",
     "pipeline_counts",
     "transition_event",

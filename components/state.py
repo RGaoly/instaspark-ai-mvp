@@ -21,6 +21,7 @@ from src.domain import (
     EntryType,
     can_transition,
     mission_health,
+    next_linear_state,
     parse_iso_datetime,
     pipeline_counts,
     transition_event,
@@ -511,6 +512,12 @@ def allowed_next_creator_states(creator_id: str) -> list[str]:
     return [state for state in WORKFLOW_STATES if can_transition(current, state)]
 
 
+def next_linear_creator_state(creator_id: str) -> str | None:
+    """Primary advance target. Never ``closed_lost`` and never a skipped hop."""
+
+    return next_linear_state(creator_state(creator_id))
+
+
 def _tracking_assets(creator_id: str, entry_id: str) -> dict[str, str]:
     """Stable unique coupon + UTM deeplink for one creator in one root context."""
 
@@ -553,6 +560,10 @@ CONTACT_PACK_STATES = frozenset(
         "content_in_review",
     }
 )
+# Outreach kanban uses real collaboration states from shortlist onward.
+# discovered / qualified stay on Search and Opportunity; there is no in_outreach.
+OUTREACH_BOARD_STATES: tuple[str, ...] = WORKFLOW_STATES[2:]
+MEASURED_REQUIRES_EVENTS = "Mark measured only after recording events"
 DEFAULT_OUTREACH_TONE = "Professional"
 
 
@@ -679,6 +690,8 @@ def transition_creator_state(
 ) -> dict[str, Any]:
     require_write()
     record = _ensure_workflow_record(creator_id)
+    if str(to_state) == "measured" and not _creator_has_performance_event(creator_id):
+        raise ValueError(MEASURED_REQUIRES_EVENTS)
     entry_type, entry_id = _current_root()
     context = active_context()
     audit_evidence = evidence or ["operator://manual-review"]
@@ -834,8 +847,7 @@ def save_decision(
 def workflow_board() -> dict[str, list[dict[str, Any]]]:
     entry_type, entry_id = _current_root()
     creator_rows = {row["creator_id"]: row.to_dict() for _, row in creators().iterrows()}
-    visible_states = WORKFLOW_STATES[2:]
-    board: dict[str, list[dict[str, Any]]] = {state: [] for state in visible_states}
+    board: dict[str, list[dict[str, Any]]] = {state: [] for state in OUTREACH_BOARD_STATES}
     for record in st.session_state.creator_workflows.values():
         if record["entry_type"] != entry_type or record["entry_id"] != entry_id:
             continue
@@ -858,9 +870,10 @@ def workflow_board() -> dict[str, list[dict[str, Any]]]:
                 **deepcopy(record),
                 **deepcopy(outreach_case),
                 "next_states": allowed_next_creator_states(record["creator_id"]),
+                "next_state": next_linear_creator_state(record["creator_id"]),
             }
         )
-    return {stage: people for stage, people in board.items() if people}
+    return board
 
 
 def workflow_events() -> list[dict[str, Any]]:
@@ -870,6 +883,12 @@ def workflow_events() -> list[dict[str, Any]]:
         if record["entry_type"] == entry_type and record["entry_id"] == entry_id:
             events.extend(deepcopy(record.get("events", [])))
     return sorted(events, key=lambda event: event["occurred_at"])
+
+
+def workflow_events_for(creator_id: str) -> list[dict[str, Any]]:
+    """Persisted transition events for one creator in the active root. Empty is honest."""
+
+    return [event for event in workflow_events() if event.get("creator_id") == creator_id]
 
 
 def workflow_summary() -> dict[str, int]:
@@ -905,6 +924,14 @@ def performance_events() -> list[dict[str, Any]]:
             and event.get("entry_id") == context["entry_id"]
         ]
     )
+
+
+def performance_events_for(creator_id: str) -> list[dict[str, Any]]:
+    return [event for event in performance_events() if event.get("creator_id") == creator_id]
+
+
+def _creator_has_performance_event(creator_id: str) -> bool:
+    return any(event.get("creator_id") == creator_id for event in performance_events())
 
 
 def record_performance_event(
@@ -1141,15 +1168,7 @@ def _advance_toward_content_in_review(creator_id: str) -> None:
     evidence = [f"content-studio://brief/{creator_id}"]
     hops = 0
     while creator_state(creator_id) != "content_in_review":
-        current = creator_state(creator_id)
-        nxt = next(
-            (
-                state
-                for state in WORKFLOW_STATES
-                if can_transition(current, state) and state != "closed_lost"
-            ),
-            None,
-        )
+        nxt = next_linear_creator_state(creator_id)
         if nxt is None or nxt in {"published", "measured"}:
             return
         transition_creator_state(

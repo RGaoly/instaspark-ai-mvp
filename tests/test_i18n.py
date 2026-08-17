@@ -50,6 +50,9 @@ def test_core_navigation_has_chinese_labels():
         translate("External send is not wired in this demo", language="zh")
         == "本演示不发送到站外"
     )
+    assert translate("Advance to {state}", language="zh", state="Contacted") == "推进到 Contacted"
+    assert translate("Mark measured only after recording events", language="zh") == "仅在录入效果事件后标记为已衡量"
+    assert translate("Audit timeline", language="zh") == "审计时间线"
 
 
 def test_longest_first_localization_preserves_compound_terms():

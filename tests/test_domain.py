@@ -85,6 +85,20 @@ def test_invalid_or_terminal_transitions_are_rejected(from_state, to_state):
     assert not can_transition(from_state, to_state)
 
 
+def test_next_linear_state_follows_legal_hops_without_skipping():
+    from src.domain import allowed_next_states, next_linear_state
+
+    assert next_linear_state("approved") == "contacted"
+    assert next_linear_state("published") == "measured"
+    assert next_linear_state("measured") is None
+    assert next_linear_state("closed_lost") is None
+    assert next_linear_state("not_a_state") is None
+    assert "closed_lost" not in {next_linear_state(state) for state in WORKFLOW_STATES}
+    assert allowed_next_states("approved") == ("contacted", "closed_lost")
+    assert allowed_next_states("published") == ("measured",)
+    assert allowed_next_states("contracted") == ("content_in_review",)
+
+
 def test_transition_event_contains_complete_audit_context():
     occurred_at = datetime(2026, 8, 6, 9, 30, tzinfo=timezone.utc)
 

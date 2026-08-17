@@ -20,26 +20,33 @@ from components.state import (
     performance_events,
 )
 from components.ui import md
+from src.domain import launch_progress, pipeline_counts
 
 
-def _process_strip() -> str:
-    steps = [
-        ("01", "Launch Mission", "Mission setup"),
-        ("02", "Creator Search", "Recall & match"),
-        ("03", "Creator Compare", "Evidence review"),
-        ("04", "Content Studio", "Local variants"),
-        ("05", "Outreach Ops", "Execution"),
-        ("06", "Growth Review", "Outcome learning"),
-    ]
+def _progress() -> dict:
+    counts = pipeline_counts(workflow_summary())
+    return launch_progress(
+        shortlisted=counts["shortlisted"],
+        approved=counts["approved"],
+        tracking_assets=len(tracking_assets()),
+        performance_events=len(performance_events()),
+    )
+
+
+def _process_strip(progress: dict) -> str:
     html = []
-    for num, title, note in steps:
+    for index, step in enumerate(progress["steps"], 1):
         html.append(
-            '<div class="is-process-step">'
-            f'<span class="is-process-num">{num}</span>'
-            f'<span><b>{title}</b><small>{note}</small></span>'
-            '</div>'
+            f'<div class="is-process-step {step["status"]}">'
+            f'<span class="is-process-num">{index:02d}</span>'
+            f'<span><b>{step["title"]}</b><small>{step["note"]}</small></span>'
+            "</div>"
         )
-    return '<div class="is-process-scroll"><div class="is-process">' + "".join(html) + '</div></div>'
+    return (
+        '<div class="is-process-scroll"><div class="is-process is-process-live">'
+        + "".join(html)
+        + "</div></div>"
+    )
 
 
 def _product_card(mission: dict, health: dict) -> str:
@@ -71,30 +78,20 @@ def _product_card(mission: dict, health: dict) -> str:
     """
 
 
-def _workflow_card(summary: dict[str, int]) -> str:
-    matched = summary.get("qualified", 0) + summary.get("shortlisted", 0)
-    approved = summary.get("approved", 0)
-    contacted = summary.get("contacted", 0)
-    published = summary.get("published", 0)
-    measured = summary.get("measured", 0)
-    steps = [
-        ("01", "Mission setup", "Completed", "done"),
-        ("02", "Creator match", f"{matched} evaluated", "done" if matched else "active"),
-        ("03", "Approval", f"{approved} approved", "done" if approved else "active"),
-        ("04", "Outreach", f"{contacted} contacted", "done" if contacted else ""),
-        ("05", "Publish", f"{published} published", "done" if published else ""),
-        ("06", "Measurement", f"{measured} measured", "done" if measured else ""),
-    ]
+def _workflow_card(progress: dict) -> str:
     items = []
-    for num, title, state, cls in steps:
+    for index, step in enumerate(progress["steps"], 1):
+        cls = {"done": "done", "current": "active", "pending": "pending"}.get(step["status"], "")
         items.append(
-            f'<div class="is-workflow-item {cls}"><div class="is-workflow-icon">{num}</div>'
-            f'<b>{title}</b><small>{state}</small></div>'
+            f'<div class="is-workflow-item {cls}"><div class="is-workflow-icon">{index:02d}</div>'
+            f'<b>{step["title"]}</b><small>{step["note"]}</small></div>'
         )
     return (
         '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Mission workflow</span>'
-        '<span class="is-panel-link">View workflow details →</span></div>'
-        '<div class="is-panel-body"><div class="is-workflow">' + "".join(items) + '</div></div></div>'
+        '<span class="is-panel-link">From the active workflow</span></div>'
+        '<div class="is-panel-body"><div class="is-workflow is-workflow-live">'
+        + "".join(items)
+        + "</div></div></div>"
     )
 
 
@@ -112,25 +109,19 @@ def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_
         )
     return (
         '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Recommended next actions</span>'
-        '<span class="is-panel-link">View all →</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(rows) + '</ul></div></div>'
+        '<span class="is-panel-link">Live counts</span></div><div class="is-panel-body"><ul class="is-list">'
+        + "".join(rows)
+        + "</ul></div></div>"
     )
 
 
-def _tasks_notifications(mission: dict) -> str:
-    market = mission.get("market", "Target market")
+def _tasks_notifications(mission: dict, progress: dict) -> str:
     owner = mission.get("owner", "Mission owner")
-    upcoming_tasks = [
-        ("NEXT", "01", f"Approve creator shortlist ({market})", owner),
-        ("NEXT", "02", "Content brief evidence review", owner),
-        ("NEXT", "03", f"{market} outreach plan", owner),
-        ("NEXT", "04", "Budget and measurement review", owner),
-    ]
     tasks = []
-    for month, day, title, note in upcoming_tasks:
+    for index, task in enumerate(progress["upcoming"], 1):
         tasks.append(
             '<li><span class="is-list-num" style="border-radius:6px;background:#F1F4F5;color:#4A565E">'
-            f'{day}</span><span><b>{title}</b><small>{month} · {note}</small></span></li>'
+            f'{index:02d}</span><span><b>{task["title"]}</b><small>NEXT · {owner} · {task["note"]}</small></span></li>'
         )
     notifications = [
         ("Context synchronized", f'All pages now use {mission.get("name", mission.get("product", "this mission"))}.', "now"),
@@ -145,11 +136,13 @@ def _tasks_notifications(mission: dict) -> str:
         )
     return (
         '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Upcoming tasks</span>'
-        '<span class="is-panel-link">Checklist for this demo</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(tasks) + '</ul></div></div>'
+        '<span class="is-panel-link">From the active workflow</span></div><div class="is-panel-body"><ul class="is-list">'
+        + "".join(tasks)
+        + "</ul></div></div>"
         '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Team notifications</span>'
-        '<span class="is-panel-link">View all</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(notes) + '</ul></div></div>'
+        '</div><div class="is-panel-body"><ul class="is-list">'
+        + "".join(notes)
+        + "</ul></div></div>"
     )
 
 
@@ -173,6 +166,7 @@ def render() -> None:
     health = mission_health_snapshot()
     tracking_n = len(tracking_assets())
     events_n = len(performance_events())
+    progress = _progress()
 
     left, right = st.columns([1, 0.26], vertical_alignment="top")
     with left:
@@ -227,6 +221,7 @@ def render() -> None:
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
+    md(_process_strip(progress), unsafe_allow_html=True)
     md(_product_card(mission, health), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
@@ -242,10 +237,10 @@ def render() -> None:
     with main:
         c1, c2 = st.columns([1.25, 0.85], gap="small")
         with c1:
-            md(_workflow_card(summary), unsafe_allow_html=True)
+            md(_workflow_card(progress), unsafe_allow_html=True)
         with c2:
             md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n), unsafe_allow_html=True)
     with side:
-        md(_tasks_notifications(mission), unsafe_allow_html=True)
+        md(_tasks_notifications(mission, progress), unsafe_allow_html=True)
 
     render_demo_notice()

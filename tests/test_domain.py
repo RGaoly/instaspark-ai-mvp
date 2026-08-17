@@ -252,3 +252,73 @@ def test_pipeline_counts_treat_later_states_as_shortlisted():
     assert counts["approved"] == 2
     assert counts["outreach"] == 1
     assert counts["measured"] == 0
+
+
+def test_launch_progress_marks_one_current_step_from_counts():
+    from src.domain import launch_progress
+
+    empty = launch_progress(shortlisted=0, approved=0, tracking_assets=0, performance_events=0)
+    assert [step["status"] for step in empty["steps"]] == ["current", "pending", "pending"]
+    assert empty["upcoming"][0]["title"] == "Shortlist creators"
+    assert len(empty["upcoming"]) == 1
+
+    matching = launch_progress(shortlisted=3, approved=0, tracking_assets=0, performance_events=0)
+    assert [step["status"] for step in matching["steps"]] == ["done", "current", "pending"]
+    assert matching["upcoming"][0]["title"] == "Approve one creator"
+
+    live = launch_progress(shortlisted=3, approved=1, tracking_assets=1, performance_events=0)
+    assert [step["status"] for step in live["steps"]] == ["done", "done", "current"]
+    assert live["upcoming"][0]["title"] == "Record a conversion on Growth Review"
+
+    measured = launch_progress(shortlisted=3, approved=1, tracking_assets=1, performance_events=2)
+    assert [step["status"] for step in measured["steps"]] == ["done", "done", "done"]
+    assert measured["upcoming"][0]["title"] == "Review recorded outcomes"
+
+
+def test_filter_performance_events_by_market_and_period():
+    from datetime import timedelta
+
+    from src.domain import attributed_roi, filter_performance_events
+
+    now = datetime(2026, 8, 17, 12, 0, tzinfo=timezone.utc)
+    us_today = {
+        "creator_id": "C-US",
+        "market": "United States",
+        "recorded_at": now.isoformat(),
+        "orders": 2,
+        "revenue_usd": 200,
+        "spend_usd": 100,
+    }
+    mx_old = {
+        "creator_id": "C-MX",
+        "market": "Mexico",
+        "recorded_at": (now - timedelta(days=40)).isoformat(),
+        "orders": 9,
+        "revenue_usd": 900,
+        "spend_usd": 100,
+    }
+    events = [us_today, mx_old]
+
+    us_week = filter_performance_events(events, period_days=7, market="United States", now=now)
+    assert us_week == [us_today]
+    assert attributed_roi(us_week) == pytest.approx(2.0)
+
+    mx_week = filter_performance_events(events, period_days=7, market="Mexico", now=now)
+    assert mx_week == []
+    assert attributed_roi(mx_week) == 0
+
+    mx_all = filter_performance_events(events, period_days=None, market="Mexico", now=now)
+    assert mx_all == [mx_old]
+    assert attributed_roi(mx_all) == pytest.approx(9.0)
+
+    japan = filter_performance_events(events, period_days=None, market="Japan", now=now)
+    assert japan == []
+    assert attributed_roi(japan) == 0
+
+    last_90 = filter_performance_events(events, period_days=90, market=None, now=now)
+    assert last_90 == events
+
+    unstamped = {"creator_id": "C-OLD", "market": "United States", "revenue_usd": 50, "spend_usd": 25}
+    assert filter_performance_events([unstamped], period_days=7, market="United States", now=now) == []
+    assert filter_performance_events([unstamped], period_days=None, market="United States", now=now) == [unstamped]
+

@@ -113,3 +113,13 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "badge('Passed'" not in studio
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
+    assert "launch_progress" in launch
+    assert "Approve creator shortlist" not in launch
+    assert "Checklist for this demo" not in launch
+    assert "View all (8)" not in launch
+    assert "Content brief evidence review" not in launch
+    growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
+    assert "filter_performance_events" in growth
+    assert 'key="growth_period"' in growth
+    assert 'key="growth_market"' in growth
+    assert "campaign_dates" not in growth

@@ -8,7 +8,7 @@ a creator opportunity.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple, Union
 
@@ -463,6 +463,190 @@ def mission_health(
     return {**band, "counts": counts}
 
 
+# Launch Mission process strip. Later pipeline states count as earlier ones,
+# matching pipeline_counts / mission_health, so an approval is not "Needs shortlist".
+LAUNCH_PROGRESS_STEPS: Tuple[str, ...] = ("shortlist", "approve", "measure")
+
+PERIOD_WINDOW_DAYS: Dict[str, Optional[int]] = {
+    "Last 7 days": 7,
+    "Last 30 days": 30,
+    "Last 90 days": 90,
+    "All recorded events": None,
+}
+
+
+def launch_progress(
+    *,
+    shortlisted: int,
+    approved: int,
+    tracking_assets: int,
+    performance_events: int,
+) -> Dict[str, Any]:
+    """Map live pipeline counts to process steps and the next real task.
+
+    Status is ``done`` / ``current`` / ``pending``. Exactly one step is
+    ``current`` until every step is ``done``.
+    """
+
+    shortlisted_n = int(shortlisted)
+    approved_n = int(approved)
+    tracking_n = int(tracking_assets)
+    events_n = int(performance_events)
+    shortlist_done = shortlisted_n >= 1
+    approve_done = approved_n >= 1 and tracking_n >= 1
+    measure_done = events_n >= 1
+
+    if not shortlist_done:
+        statuses = ("current", "pending", "pending")
+    elif not approve_done:
+        statuses = ("done", "current", "pending")
+    elif not measure_done:
+        statuses = ("done", "done", "current")
+    else:
+        statuses = ("done", "done", "done")
+
+    steps = [
+        {
+            "id": "shortlist",
+            "title": "Shortlist",
+            "note": "{} shortlisted+".format(shortlisted_n),
+            "status": statuses[0],
+            "count": shortlisted_n,
+        },
+        {
+            "id": "approve",
+            "title": "Approve / outreach",
+            "note": "{} approved · {} tracking assets".format(approved_n, tracking_n),
+            "status": statuses[1],
+            "count": approved_n,
+        },
+        {
+            "id": "measure",
+            "title": "Measure",
+            "note": "{} performance events".format(events_n),
+            "status": statuses[2],
+            "count": events_n,
+        },
+    ]
+    next_task = {
+        "shortlist": {
+            "id": "shortlist",
+            "title": "Shortlist creators",
+            "note": "Add at least one creator to the shortlist.",
+        },
+        "approve": {
+            "id": "approve",
+            "title": "Approve one creator",
+            "note": "Approval mints a coupon and UTM tracking asset.",
+        },
+        "measure": {
+            "id": "measure",
+            "title": "Record a conversion on Growth Review",
+            "note": "ROI stays 0x until an operator records an event.",
+        },
+    }
+    current = next((step for step in steps if step["status"] == "current"), None)
+    if current is None:
+        upcoming = [
+            {
+                "id": "complete",
+                "title": "Review recorded outcomes",
+                "note": "Sourced events are on Growth Review.",
+            }
+        ]
+    else:
+        upcoming = [next_task[current["id"]]]
+    return {"steps": steps, "upcoming": upcoming, "current_id": None if current is None else current["id"]}
+
+
+def parse_iso_datetime(value: Any) -> Optional[datetime]:
+    """Parse a timezone-aware ISO timestamp. Naive values are treated as UTC."""
+
+    if value is None:
+        return None
+    if isinstance(value, datetime):
+        dt = value
+    else:
+        text = str(value).strip()
+        if not text:
+            return None
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        try:
+            dt = datetime.fromisoformat(text)
+        except ValueError:
+            return None
+    if dt.tzinfo is None or dt.utcoffset() is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+def filter_dated_records(
+    records: Iterable[Mapping[str, Any]],
+    *,
+    period_days: Optional[int] = None,
+    market: Optional[str] = None,
+    now: Optional[datetime] = None,
+    timestamp_field: str = "recorded_at",
+    market_field: str = "market",
+) -> List[Dict[str, Any]]:
+    """Filter events or tracking rows by a real time window and market.
+
+    Missing timestamps are excluded from a bounded period (they cannot prove
+    they fall inside the window) and included when the period is all records.
+    Missing markets are excluded from a specific-market filter.
+    ``market`` values ``All``, ``All markets``, empty, or ``None`` disable
+    the market predicate.
+    """
+
+    clock = now or _utc_now()
+    if clock.tzinfo is None or clock.utcoffset() is None:
+        clock = clock.replace(tzinfo=timezone.utc)
+    clock = clock.astimezone(timezone.utc)
+    market_key = str(market).strip() if market is not None else ""
+    apply_market = bool(market_key) and market_key not in {"All", "All markets"}
+    cutoff = None if period_days is None else clock - timedelta(days=int(period_days))
+
+    matched: List[Dict[str, Any]] = []
+    for record in records:
+        row = dict(record)
+        if apply_market and str(row.get(market_field) or "").strip() != market_key:
+            continue
+        if cutoff is not None:
+            stamp = parse_iso_datetime(row.get(timestamp_field))
+            if stamp is None or stamp < cutoff:
+                continue
+        matched.append(row)
+    return matched
+
+
+def filter_performance_events(
+    events: Iterable[Mapping[str, Any]],
+    *,
+    period_days: Optional[int] = None,
+    market: Optional[str] = None,
+    now: Optional[datetime] = None,
+) -> List[Dict[str, Any]]:
+    """Keep performance events inside the selected period and market."""
+
+    return filter_dated_records(
+        events,
+        period_days=period_days,
+        market=market,
+        now=now,
+        timestamp_field="recorded_at",
+        market_field="market",
+    )
+
+
+def attributed_roi(events: Iterable[Mapping[str, Any]]) -> float:
+    """Revenue / spend from recorded events. Empty or zero spend is 0x."""
+
+    revenue = sum(float(event.get("revenue_usd", 0) or 0) for event in events)
+    spend = sum(float(event.get("spend_usd", 0) or 0) for event in events)
+    return revenue / spend if spend else 0.0
+
+
 @dataclass
 class PerformanceEvent:
     performance_event_id: str
@@ -487,7 +671,9 @@ __all__ = [
     "HEALTH_APPROVED_STATES",
     "HEALTH_OUTREACH_STATES",
     "HEALTH_SHORTLISTED_STATES",
+    "LAUNCH_PROGRESS_STEPS",
     "MATCH_TIER_THRESHOLDS",
+    "PERIOD_WINDOW_DAYS",
     "Match",
     "Mission",
     "Opportunity",
@@ -495,11 +681,16 @@ __all__ = [
     "PerformanceEvent",
     "TransitionEvent",
     "WORKFLOW_STATES",
+    "attributed_roi",
     "can_transition",
+    "filter_dated_records",
+    "filter_performance_events",
+    "launch_progress",
     "match_fit_label",
     "match_label",
     "match_tier",
     "mission_health",
+    "parse_iso_datetime",
     "pipeline_counts",
     "transition_event",
 ]

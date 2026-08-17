@@ -19,6 +19,12 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Needs shortlist", language="zh") == "需要入围名单"
     assert translate("Demo catalog", language="zh") == "演示目录"
     assert translate("Not assessed in this demo", language="zh") == "本演示未评估"
+    assert translate("Shortlist creators", language="zh") == "将创作者加入入围名单"
+    assert translate("Last 7 days", language="zh") == "最近 7 天"
+    assert translate(
+        "ROI uses recorded performance events in the selected period and market. Empty set equals 0x.",
+        language="zh",
+    ) == "ROI 只统计所选周期和市场内已录入的效果事件。筛空则为 0x。"
 
 
 def test_longest_first_localization_preserves_compound_terms():

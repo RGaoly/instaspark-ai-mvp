@@ -17,6 +17,7 @@ from components.state import (
     workflow_summary,
 )
 from components.ui import md
+from src.domain import PERIOD_WINDOW_DAYS, attributed_roi, filter_dated_records, filter_performance_events
 
 _OUTREACH_STATES = {
     "approved",
@@ -33,7 +34,7 @@ def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> st
     orders = sum(int(event.get("orders", 0)) for event in events)
     revenue = sum(float(event.get("revenue_usd", 0)) for event in events)
     spend = sum(float(event.get("spend_usd", 0)) for event in events)
-    roi = revenue / spend if spend else 0
+    roi = attributed_roi(events)
     adoption_base = max(sum(summary.values()) - summary.get("closed_lost", 0), 1)
     adopted = sum(summary.get(state, 0) for state in ["approved", "contacted", "negotiating", "contracted", "content_in_review", "published", "measured"])
     metrics = [
@@ -41,9 +42,9 @@ def _kpi_strip(summary: dict[str, int], events: list[dict], budget: float) -> st
         ("Contacted", str(summary.get("contacted", 0)), "Audited workflow"),
         ("Published", str(summary.get("published", 0)), "Audited workflow"),
         ("Measured", str(summary.get("measured", 0)), "Performance linked"),
-        ("Attributed orders", f"{orders:,}", "Recorded events"),
-        ("Revenue", f"${revenue:,.0f}", "Recorded events"),
-        ("ROI", f"{roi:.2f}x", "Recorded events only · 0x if empty"),
+        ("Attributed orders", f"{orders:,}", "Filtered recorded events"),
+        ("Revenue", f"${revenue:,.0f}", "Filtered recorded events"),
+        ("ROI", f"{roi:.2f}x", "Filtered events only · 0x if empty"),
         ("Budget utilization", f"{spend / budget:.0%}" if budget else "—", f"${spend:,.0f} / ${budget:,.0f}"),
     ]
     return '<div class="is-kpi-strip">' + "".join(
@@ -68,16 +69,22 @@ def _funnel(pool: int, summary: dict[str, int], events: list[dict]) -> str:
     ) + "</div>"
 
 
+def _event_recorded_label(event: dict) -> str:
+    stamp = str(event.get("recorded_at") or "").strip()
+    return stamp[:10] if stamp else "—"
+
+
 def _performance_table(events: list[dict]) -> str:
-    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Content", "Market", "Orders", "Revenue", "Spend"])
+    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Content", "Market", "Recorded", "Orders", "Revenue", "Spend"])
     if not events:
-        body = '<tr><td colspan="6">No performance events recorded for this entry.</td></tr>'
+        body = '<tr><td colspan="7">No performance events in this period and market.</td></tr>'
     else:
         body = "".join(
             "<tr>"
             f'<td>{esc(event.get("creator_id", "—"))}</td>'
             f'<td>{esc(event.get("content_asset_id", "—"))}</td>'
             f'<td>{esc(event.get("market", "—"))}</td>'
+            f'<td>{esc(_event_recorded_label(event))}</td>'
             f'<td>{int(event.get("orders", 0)):,}</td>'
             f'<td>${float(event.get("revenue_usd", 0)):,.0f}</td>'
             f'<td>${float(event.get("spend_usd", 0)):,.0f}</td></tr>'
@@ -86,14 +93,18 @@ def _performance_table(events: list[dict]) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
 
 
-def _tracking_table(assets: list[dict]) -> str:
-    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Coupon", "UTM campaign", "Deeplink"])
+def _tracking_table(assets: list[dict], *, any_issued: bool = True) -> str:
+    head = "".join(f"<th>{h}</th>" for h in ["Creator", "Market", "Coupon", "UTM campaign", "Deeplink"])
     if not assets:
-        body = '<tr><td colspan="4">No tracking assets issued yet. Approve outreach to mint a coupon and UTM deeplink.</td></tr>'
+        if any_issued:
+            body = '<tr><td colspan="5">No tracking assets in this period and market.</td></tr>'
+        else:
+            body = '<tr><td colspan="5">No tracking assets issued yet. Approve outreach to mint a coupon and UTM deeplink.</td></tr>'
     else:
         body = "".join(
             "<tr>"
             f'<td>{esc(item.get("creator_id", "—"))}</td>'
+            f'<td>{esc(item.get("market", "—"))}</td>'
             f'<td>{esc(item.get("coupon", "—"))}</td>'
             f'<td>{esc(item.get("utm_campaign", "—"))}</td>'
             f'<td>{esc(item.get("deeplink", "—"))}</td></tr>'
@@ -192,6 +203,9 @@ def render() -> None:
     assets = tracking_assets()
     ranked = ranking()
     budget = float(context.get("budget_usd", 0))
+    period_keys = list(PERIOD_WINDOW_DAYS)
+    mission_markets = [item for item in (context.get("markets") or [context.get("market")]) if item]
+    market_keys = ["All markets", *mission_markets]
 
     md(
         page_header(
@@ -206,25 +220,44 @@ def render() -> None:
     controls = st.columns([0.48, 0.24, 0.18, 0.1], vertical_alignment="center")
     with controls[0]:
         md(mission_chip(active_context_label()), unsafe_allow_html=True)
-    controls[1].selectbox(
+    period_key = controls[1].selectbox(
         t("Period"),
-        [context.get("campaign_dates", "Active entry period"), "All recorded events"],
+        period_keys,
+        index=period_keys.index("All recorded events"),
+        format_func=lambda key: t(key),
+        key="growth_period",
         label_visibility="collapsed",
     )
-    markets = context.get("markets") or [context.get("market", "All markets")]
-    controls[2].selectbox(t("Market"), ["All markets", *markets], label_visibility="collapsed")
+    market_key = controls[2].selectbox(
+        t("Market"),
+        market_keys,
+        format_func=lambda key: t(key) if key == "All markets" else key,
+        key="growth_market",
+        label_visibility="collapsed",
+    )
     controls[3].button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
 
-    md(_kpi_strip(summary, events, budget), unsafe_allow_html=True)
+    period_days = PERIOD_WINDOW_DAYS[period_key]
+    market_filter = None if market_key == "All markets" else market_key
+    filtered_events = filter_performance_events(events, period_days=period_days, market=market_filter)
+    filtered_assets = filter_dated_records(
+        assets,
+        period_days=period_days,
+        market=market_filter,
+        timestamp_field="created_at",
+        market_field="market",
+    )
+
+    md(_kpi_strip(summary, filtered_events, budget), unsafe_allow_html=True)
     st.caption(
-        t("ROI uses recorded performance events only. Empty events equal 0x — this is not a modeled forecast.")
+        t("ROI uses recorded performance events in the selected period and market. Empty set equals 0x.")
     )
 
     left, right = st.columns([0.38, 0.62], gap="small")
     with left:
         md(
             '<div class="is-chart"><div class="is-chart-title">Creator funnel</div>'
-            + _funnel(len(ranked), summary, events)
+            + _funnel(len(ranked), summary, filtered_events)
             + "</div>",
             unsafe_allow_html=True,
         )
@@ -232,7 +265,7 @@ def render() -> None:
         md(
             '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Linked performance events</span>'
             '<span class="is-panel-link">No inferred attribution</span></div>'
-            f'<div class="is-panel-body">{_performance_table(events)}</div></div>',
+            f'<div class="is-panel-body">{_performance_table(filtered_events)}</div></div>',
             unsafe_allow_html=True,
         )
 
@@ -240,7 +273,7 @@ def render() -> None:
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
         '<span class="is-panel-title">Issued tracking assets</span>'
         '<span class="is-panel-link">Minted on approve · not conversions</span></div>'
-        f'<div class="is-panel-body">{_tracking_table(assets)}</div></div>',
+        f'<div class="is-panel-body">{_tracking_table(filtered_assets, any_issued=bool(assets))}</div></div>',
         unsafe_allow_html=True,
     )
 

@@ -260,6 +260,8 @@ def test_record_performance_event_drives_roi_and_survives_reload(session, monkey
     assert len(events) == 1
     assert event["entry_id"] == session.active_mission_id
     assert event["coupon"] == decision["coupon"]
+    assert event["recorded_at"]
+    assert event["market"]
     revenue = sum(float(item["revenue_usd"]) for item in events)
     spend = sum(float(item["spend_usd"]) for item in events)
     roi = revenue / spend
@@ -380,3 +382,127 @@ def test_mission_health_moves_with_shortlist_approve_and_performance_event(sessi
     assert measured["score"] == 88
     assert measured["counts"]["performance_events"] == 1
     assert "health_score" not in session.missions[session.active_mission_id]
+
+
+def _launch_progress_snapshot():
+    from src.domain import launch_progress, pipeline_counts
+
+    counts = pipeline_counts(state.workflow_summary())
+    return launch_progress(
+        shortlisted=counts["shortlisted"],
+        approved=counts["approved"],
+        tracking_assets=len(state.tracking_assets()),
+        performance_events=len(state.performance_events()),
+    )
+
+
+def test_launch_checklist_moves_after_shortlist_approve_and_event(session):
+    for record in session.creator_workflows.values():
+        record["state"] = "qualified"
+    session.shortlist_ids = []
+    empty = _launch_progress_snapshot()
+    assert empty["upcoming"][0]["title"] == "Shortlist creators"
+    assert empty["steps"][0]["status"] == "current"
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.transition_creator_state(
+        creator_id,
+        "shortlisted",
+        actor="Olivia Chen",
+        reason="Operator shortlisted from Search",
+        evidence=["search://shortlist"],
+    )
+    matching = _launch_progress_snapshot()
+    assert matching["upcoming"][0]["title"] == "Approve one creator"
+    assert matching["steps"][0]["status"] == "done"
+    assert matching["steps"][1]["status"] == "current"
+
+    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    live = _launch_progress_snapshot()
+    assert live["upcoming"][0]["title"] == "Record a conversion on Growth Review"
+    assert live["steps"][1]["status"] == "done"
+    assert live["steps"][2]["status"] == "current"
+
+    state.record_performance_event(
+        creator_id,
+        orders=2,
+        revenue_usd=400,
+        spend_usd=100,
+        coupon=decision["coupon"],
+    )
+    measured = _launch_progress_snapshot()
+    assert [step["status"] for step in measured["steps"]] == ["done", "done", "done"]
+    assert measured["upcoming"][0]["title"] == "Review recorded outcomes"
+
+
+def test_growth_filters_exclude_other_market_and_old_window(session):
+    from datetime import datetime, timedelta, timezone
+
+    from src.domain import attributed_roi, filter_dated_records, filter_performance_events
+
+    ranked = state.ranking()
+    first_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    first = state.save_decision(first_id, "Approved", "Approve US conversion path")
+    second = state.save_decision(second_id, "Approved", "Approve Mexico conversion path")
+    now = datetime(2026, 8, 17, 12, 0, tzinfo=timezone.utc)
+
+    state.record_performance_event(
+        first_id,
+        orders=2,
+        revenue_usd=200,
+        spend_usd=100,
+        coupon=first["coupon"],
+        market="United States",
+        recorded_at=now,
+    )
+    state.record_performance_event(
+        second_id,
+        orders=9,
+        revenue_usd=900,
+        spend_usd=100,
+        coupon=second["coupon"],
+        market="Mexico",
+        recorded_at=now - timedelta(days=40),
+    )
+
+    events = state.performance_events()
+    us_week = filter_performance_events(events, period_days=7, market="United States", now=now)
+    assert len(us_week) == 1
+    assert us_week[0]["market"] == "United States"
+    assert attributed_roi(us_week) == pytest.approx(2.0)
+
+    mx_week = filter_performance_events(events, period_days=7, market="Mexico", now=now)
+    assert mx_week == []
+    assert attributed_roi(mx_week) == 0
+
+    mx_all = filter_performance_events(events, period_days=None, market="Mexico", now=now)
+    assert len(mx_all) == 1
+    assert attributed_roi(mx_all) == pytest.approx(9.0)
+
+    assets = state.tracking_assets()
+    assert all(item.get("market") for item in assets)
+    us_assets = filter_dated_records(
+        assets,
+        period_days=None,
+        market="United States",
+        timestamp_field="created_at",
+        market_field="market",
+    )
+    mx_assets = filter_dated_records(
+        assets,
+        period_days=None,
+        market="Mexico",
+        timestamp_field="created_at",
+        market_field="market",
+    )
+    other = filter_dated_records(
+        assets,
+        period_days=None,
+        market="Japan",
+        timestamp_field="created_at",
+        market_field="market",
+    )
+    assert {item["creator_id"] for item in us_assets + mx_assets} == {first_id, second_id}
+    assert other == []

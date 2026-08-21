@@ -4,13 +4,14 @@ from uuid import uuid4
 
 import streamlit as st
 
-from components.html import badge, metric_cards, page_header
+from components.html import badge, esc, metric_cards, page_header
 from components.i18n import t
 from components.positioning import why_not_ttcm_html
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
     content_assets_in_review_count,
+    creators,
     mission_health_snapshot,
     missions,
     next_outreach_action_page,
@@ -21,6 +22,7 @@ from components.state import (
     set_active_context,
     tracking_assets,
     workflow_board,
+    workflow_events,
     workflow_summary,
     performance_events,
 )
@@ -184,23 +186,47 @@ def _upcoming_tasks_html(mission: dict, progress: dict, *, skip_titles: tuple[st
     )
 
 
-def _notifications_html(mission: dict) -> str:
-    notifications = [
-        ("Context synchronized", f'All pages now use {mission.get("name", mission.get("product", "this mission"))}.', "now"),
-        ("State machine active", "Every creator transition records actor, reason and evidence.", "now"),
-        ("Attribution guardrail", "Unsourced outcomes remain explicitly empty.", "now"),
-    ]
-    notes = []
-    for idx, (title, note, when) in enumerate(notifications):
-        notes.append(
-            f'<li><span class="is-list-num" style="background:{"#EAF2FF" if idx == 0 else "#E9F8F1" if idx == 1 else "#FFF4E4"};color:#34424A">•</span>'
-            f'<span><b>{title}</b><small>{note} · {when}</small></span></li>'
+def _creator_names() -> dict[str, str]:
+    return {row["creator_id"]: row["creator_name"] for _, row in creators().iterrows()}
+
+
+def _activity_rows(events: list[dict], names: dict[str, str], *, limit: int = 5) -> list[tuple[str, str]]:
+    """Newest-first audit lines for Launch. Empty list is honest."""
+
+    rows: list[tuple[str, str]] = []
+    for event in reversed(events[-limit:]):
+        creator_id = str(event.get("creator_id") or "")
+        name = str(names.get(creator_id) or creator_id)
+        title = f"{name}: {event.get('from_state')} → {event.get('to_state')}"
+        stamp = str(event.get("occurred_at") or "")[:16]
+        note = " · ".join(part for part in [str(event.get("reason") or ""), str(event.get("actor") or ""), stamp] if part)
+        rows.append((title, note))
+    return rows
+
+
+def _activity_html(events: list[dict], names: dict[str, str]) -> str:
+    rows = _activity_rows(events, names)
+    if not rows:
+        body = (
+            '<ul class="is-list"><li><span class="is-list-num" style="background:#F1F4F5;color:#4A565E">•</span>'
+            "<span><b>No workflow events for this mission yet.</b>"
+            "<small>Shortlist or approve a creator to start the audit trail.</small></span></li></ul>"
         )
+    else:
+        items = []
+        palettes = ["#EAF2FF", "#E9F8F1", "#FFF4E4"]
+        for idx, (title, note) in enumerate(rows):
+            color = palettes[idx % 3]
+            items.append(
+                f'<li><span class="is-list-num" style="background:{color};color:#34424A">•</span>'
+                f"<span><b>{esc(title)}</b><small>{esc(note)}</small></span></li>"
+            )
+        body = '<ul class="is-list">' + "".join(items) + "</ul>"
     return (
-        '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Team notifications</span>'
-        '</div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(notes)
-        + "</ul></div></div>"
+        '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Recent workflow activity</span>'
+        '<span class="is-panel-link">From the audit trail</span></div><div class="is-panel-body">'
+        + body
+        + "</div></div>"
     )
 
 
@@ -221,7 +247,7 @@ def _render_next_action_cta(mission: dict, progress: dict) -> None:
             key="launch_next_action",
         ):
             open_launch_cta(target["creator_id"], creator_name=target.get("creator_name"))
-    md(_notifications_html(mission), unsafe_allow_html=True)
+    md(_activity_html(workflow_events(), _creator_names()), unsafe_allow_html=True)
 
 
 def render() -> None:

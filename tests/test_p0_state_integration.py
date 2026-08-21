@@ -1148,6 +1148,50 @@ def test_opportunity_cta_targets_growth_and_content_studio(session):
     assert creator_opportunity.opportunity_cta_page(creator_id) is None
 
 
+def test_search_and_compare_cta_targets_match_helper(session):
+    from views import creator_compare, creator_search
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    name = str(ranked.iloc[0]["creator_name"])
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
+    assert state.content_assets_for(creator_id) == []
+
+    helper = state.next_outreach_action_page(creator_id)
+    assert helper == "content-studio"
+    assert creator_search.search_cta_page(creator_id) == helper
+    assert creator_compare.compare_cta_page(creator_id) == helper
+
+    jumped = creator_search.open_search_cta(creator_id, creator_name=name)
+    assert jumped == "content-studio"
+    assert jumped == state.next_outreach_action_page(creator_id)
+    assert session.selected_creator_id == creator_id
+
+    state.save_content_asset(creator_id, "Review brief", "Body of the brief for this search.")
+    assert creator_search.search_cta_page(creator_id) is None
+    assert creator_compare.compare_cta_page(creator_id) is None
+    assert state.next_outreach_action_page(creator_id) is None
+
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    assert state.performance_events_for(creator_id) == []
+    helper = state.next_outreach_action_page(creator_id)
+    assert helper == "growth-review"
+    assert creator_search.search_cta_page(creator_id) == helper
+    assert creator_compare.compare_cta_page(creator_id) == helper
+
+    opened = creator_compare.open_compare_cta(creator_id, creator_name=name)
+    assert opened == "growth-review"
+    assert session.selected_creator_id == creator_id
+    assert session.growth_record_event_open is True
+    assert session.perf_event_creator == f"{name} · {creator_id}"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert creator_search.search_cta_page(creator_id) is None
+    assert creator_compare.compare_cta_page(creator_id) is None
+    assert state.next_outreach_action_page(creator_id) is None
+
+
 def test_opportunity_cannot_skip_approved_to_published(session):
     from views import creator_opportunity
 

@@ -1274,10 +1274,11 @@ def content_assets_in_review_count() -> int:
 def next_outreach_action_page(creator_id: str) -> str | None:
     """Workspace page for the operator's next click, if not Advance.
 
-    Shared by Outreach and Creator Opportunity. ``published`` with no
-    recorded events jumps to Growth Review. ``content_in_review`` with no
-    saved brief for this creator + active root jumps to Content Studio.
-    Other states stay on the current page and use Advance.
+    Shared by Outreach, Creator Opportunity, Search, and Compare.
+    ``published`` with no recorded events jumps to Growth Review.
+    ``content_in_review`` with no saved brief for this creator + active
+    root jumps to Content Studio. Other states stay on the current page
+    and use Advance.
     """
 
     current = creator_state(creator_id)

@@ -16,7 +16,7 @@ from components.state import (
     live_evidence_for,
     next_linear_creator_state,
     next_outreach_action_page,
-    prepare_growth_review_record,
+    prepare_next_action_jump,
     refresh_outreach_message,
     select_creator,
     transition_creator_state,
@@ -61,24 +61,36 @@ def _next_action_label(person: dict) -> str:
     return _stage_label(target)
 
 
-def _open_next_action_page(person: dict, page: str) -> None:
+def _open_next_action_page(person: dict) -> None:
+    page = prepare_next_action_jump(
+        person["creator_id"],
+        creator_name=person.get("creator_name"),
+    )
     if page == "growth-review":
-        prepare_growth_review_record(
-            person["creator_id"],
-            choice_label=f'{person["creator_name"]} · {person["creator_id"]}',
-        )
         open_workspace_page("growth-review")
         return
-    select_creator(person["creator_id"])
-    open_workspace_page("content-studio")
+    if page == "content-studio":
+        open_workspace_page("content-studio")
+
+
+def select_outreach_creator(creator_id: str) -> str:
+    """Select a creator without leaving Outreach Operations."""
+
+    select_creator(creator_id)
+    st.session_state["outreach_focus_creator_id"] = creator_id
+    return creator_id
 
 
 def select_kanban_creator(creator_id: str) -> str:
     """Select a board card without leaving Outreach Operations."""
 
-    select_creator(creator_id)
-    st.session_state["outreach_focus_creator_id"] = creator_id
-    return creator_id
+    return select_outreach_creator(creator_id)
+
+
+def select_list_creator(creator_id: str) -> str:
+    """Select a list row without leaving Outreach Operations."""
+
+    return select_outreach_creator(creator_id)
 
 
 def _kanban_card_html(person: dict, color_idx: int, *, selected: bool = False) -> str:
@@ -196,28 +208,81 @@ def _render_kanban(board: dict[str, list[dict]]) -> None:
                     color_idx += 1
 
 
-def _list_view(board: dict[str, list[dict]]) -> str:
+def _list_row_html(person: dict, color_idx: int, *, selected: bool = False) -> str:
+    name = person["creator_name"]
+    topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
+    next_action = _next_action_label(person)
+    selected_cls = ' class="is-selected"' if selected else ""
+    return (
+        f"<tr{selected_cls}>"
+        f'<td><div class="is-creator-cell">{avatar(name, color_idx)}'
+        f'<span><b>{esc(name)}</b><small>{esc(topics)}</small></span></div></td>'
+        f'<td>{esc(_stage_label(person.get("state", "")))}</td>'
+        f'<td>{esc(person.get("primary_market", "—"))}</td>'
+        f'<td>{esc(person.get("outreach_case_id", "Pending approval"))}</td>'
+        f'<td>{esc(person.get("owner", "Not assigned"))}</td>'
+        f'<td><span class="is-panel-link">{esc(next_action)} →</span></td></tr>'
+    )
+
+
+def _list_view(board: dict[str, list[dict]], selected_id: str | None = None) -> str:
     rows = []
-    for stage, people in board.items():
+    color_idx = 0
+    for _stage, people in board.items():
         for person in people:
-            name = person["creator_name"]
-            topics = " · ".join(person.get("topics", [])[:2]) or "Creator"
-            next_action = _next_action_label(person)
             rows.append(
-                "<tr>"
-                f'<td><div class="is-creator-cell">{avatar(name, len(rows))}'
-                f'<span><b>{esc(name)}</b><small>{esc(topics)}</small></span></div></td>'
-                f'<td>{esc(_stage_label(stage))}</td>'
-                f'<td>{esc(person.get("primary_market", "—"))}</td>'
-                f'<td>{esc(person.get("outreach_case_id", "Pending approval"))}</td>'
-                f'<td>{esc(person.get("owner", "Not assigned"))}</td>'
-                f'<td><span class="is-panel-link">{esc(next_action)} →</span></td></tr>'
+                _list_row_html(
+                    person,
+                    color_idx,
+                    selected=person["creator_id"] == selected_id,
+                )
             )
+            color_idx += 1
     head = "".join(f"<th>{h}</th>" for h in ["Creator", "Stage", "Market", "OutreachCase", "Owner", "Next action"])
     return (
         f'<div class="is-card is-card-pad"><table class="is-table"><thead><tr>{head}</tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table></div>'
     )
+
+
+def _render_list(board: dict[str, list[dict]]) -> None:
+    """Clickable list: each row selects the creator and stays on Outreach."""
+
+    people = [person for stage in board.values() for person in stage]
+    if not people:
+        md(
+            '<div class="is-card is-card-pad">No creators have entered this workflow yet.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+    selected_id = st.session_state.get("selected_creator_id")
+    head = "".join(
+        f"<th>{h}</th>" for h in ["Creator", "Stage", "Market", "OutreachCase", "Owner", "Next action"]
+    )
+    md(
+        f'<div class="is-card is-card-pad"><table class="is-table"><thead><tr>{head}</tr></thead></table></div>',
+        unsafe_allow_html=True,
+    )
+    for color_idx, person in enumerate(people):
+        selected = person["creator_id"] == selected_id
+        md(
+            '<div class="is-card is-card-pad"><table class="is-table"><tbody>'
+            f"{_list_row_html(person, color_idx, selected=selected)}"
+            "</tbody></table></div>",
+            unsafe_allow_html=True,
+        )
+        label = t("Selected creator") if selected else t("Select this creator")
+        if st.button(
+            label,
+            key=f"list_select_{person['creator_id']}",
+            use_container_width=True,
+            type="primary" if selected else "secondary",
+            help=t(
+                "Stay on Outreach. Contact pack, Advance, and next actions apply to this creator."
+            ),
+        ):
+            select_list_creator(person["creator_id"])
+            st.rerun()
 
 
 def _event_log(events: list[dict]) -> str:
@@ -370,7 +435,7 @@ def render() -> None:
                     use_container_width=True,
                     key="jump_selected_creator",
                 ):
-                    _open_next_action_page(selected, jump_page)
+                    _open_next_action_page(selected)
             advance_label = (
                 t("Advance to {state}", state=_stage_label(target))
                 if target
@@ -424,7 +489,7 @@ def render() -> None:
         else:
             st.caption(t("No outreach contact pack until a creator is approved."))
     with tabs[1]:
-        md(_list_view(board), unsafe_allow_html=True)
+        _render_list(board)
     with tabs[2]:
         md(_event_log(workflow_events()), unsafe_allow_html=True)
     with tabs[3]:

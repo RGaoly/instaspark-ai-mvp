@@ -210,3 +210,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'key="growth_period"' in growth
     assert 'key="growth_market"' in growth
     assert "campaign_dates" not in growth
+    assert "_creator_label" in growth
+    assert "_render_next_action_buttons" in growth
+    assert 'key="growth_go_outreach"' in growth
+    assert 'key="growth_go_record"' in growth
+    assert 'open_workspace_page("outreach-operations")' in growth
+    assert "Go to Outreach" not in growth
+    assert "_performance_table(filtered_events, names)" in growth

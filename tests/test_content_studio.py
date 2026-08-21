@@ -37,4 +37,5 @@ def test_creator_profile_uses_catalog_styles_not_canned_tone():
     assert "travel, tech" in alex_html
     assert "Energetic, authentic, cinematic, practical." not in maya_html
     assert "Hook → story → proof → CTA" not in maya_html
+    assert "Demo format assumptions, not creator fields" in maya_html
     assert maya_html != alex_html

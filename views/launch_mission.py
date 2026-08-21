@@ -85,22 +85,6 @@ def _progress() -> dict:
     )
 
 
-def _process_strip(progress: dict) -> str:
-    html = []
-    for index, step in enumerate(progress["steps"], 1):
-        html.append(
-            f'<div class="is-process-step {step["status"]}">'
-            f'<span class="is-process-num">{index:02d}</span>'
-            f'<span><b>{step["title"]}</b><small>{step["note"]}</small></span>'
-            "</div>"
-        )
-    return (
-        '<div class="is-process-scroll"><div class="is-process is-process-live">'
-        + "".join(html)
-        + "</div></div>"
-    )
-
-
 def _product_card(mission: dict, health: dict) -> str:
     markets = " / ".join(mission.get("markets", [mission.get("market", "United States")]))
     score = int(health.get("score", 0))
@@ -147,75 +131,30 @@ def _workflow_card(progress: dict) -> str:
     )
 
 
-def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_n: int, in_review_n: int) -> str:
-    actions = [
-        (f'Review {summary.get("shortlisted", 0)} currently shortlisted creators', f"Evidence review for {market}"),
-        (f'Contact {summary.get("approved", 0)} currently approved creators', "Advance audited outreach cases"),
-        (f'{tracking_n} tracking assets issued', "Coupons and UTM links, not conversions"),
-        (f'{events_n} performance events recorded', "Sourced conversions only"),
-        (f'{in_review_n} content assets in review', "Saved briefs from Content Studio"),
-    ]
-    rows = []
-    for idx, (title, note) in enumerate(actions, 1):
-        rows.append(
-            f'<li><span class="is-list-num">{idx}</span><span><b>{title}</b><small>{note}</small></span></li>'
-        )
-    return (
-        '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Recommended next actions</span>'
-        '<span class="is-panel-link">Live counts</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(rows)
-        + "</ul></div></div>"
-    )
-
-
-def _upcoming_tasks_html(mission: dict, progress: dict, *, skip_titles: tuple[str, ...] = ()) -> str:
-    owner = mission.get("owner", "Mission owner")
-    tasks = []
-    for index, task in enumerate(progress["upcoming"], 1):
-        if task["title"] in skip_titles:
-            continue
-        tasks.append(
-            '<li><span class="is-list-num" style="border-radius:6px;background:#F1F4F5;color:#4A565E">'
-            f'{index:02d}</span><span><b>{task["title"]}</b><small>NEXT · {owner} · {task["note"]}</small></span></li>'
-        )
-    return (
-        '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Upcoming tasks</span>'
-        '<span class="is-panel-link">From the active workflow</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(tasks)
-        + "</ul></div></div>"
-    )
-
-
 def _pipeline_notes(
     *,
     shortlisted: int,
     approved: int,
     tracking_n: int,
     events_n: int,
-    next_task: dict,
 ) -> list[tuple[str, str]]:
-    """Operator notes from live pipeline counts. Not invented alerts."""
+    """Live pipeline counts. Next action is the CTA, not a duplicate list."""
 
-    title = str(next_task.get("title") or "")
-    note = str(next_task.get("note") or "")
     return [
         (f"{int(shortlisted)} currently shortlisted creators", "Unified workflow"),
         (f"{int(approved)} currently approved creators", "Human decisions"),
         (f"{int(tracking_n)} tracking assets issued", "Coupons and UTM links, not conversions"),
         (f"{int(events_n)} performance events recorded", "Sourced conversions only"),
-        (title, f"Next action · {note}" if note else "Next action"),
     ]
 
 
 def _pipeline_notes_html(progress: dict, *, tracking_n: int) -> str:
     steps = {step["id"]: step for step in progress.get("steps", [])}
-    next_task = (progress.get("upcoming") or [{}])[0]
     notes = _pipeline_notes(
         shortlisted=int(steps.get("shortlist", {}).get("count", 0)),
         approved=int(steps.get("approve", {}).get("count", 0)),
         tracking_n=tracking_n,
         events_n=int(steps.get("measure", {}).get("count", 0)),
-        next_task=next_task,
     )
     items = []
     accents = ("#EAF2FF", "#E9F8F1", "#FFF4E4", "#F1F4F5", "#EAF2FF")
@@ -276,15 +215,9 @@ def _activity_html(events: list[dict], names: dict[str, str]) -> str:
     )
 
 
-def _render_next_action_cta(mission: dict, progress: dict, *, tracking_n: int) -> None:
+def _render_next_action_cta(progress: dict, *, tracking_n: int) -> None:
     target = launch_cta_creator()
     jump_page = launch_cta_page(target["creator_id"]) if target else None
-    skip_titles: tuple[str, ...] = ()
-    if jump_page == "growth-review":
-        skip_titles = ("Record a conversion on Growth Review",)
-    elif jump_page == "content-studio":
-        skip_titles = ("Create a brief in Content Studio",)
-    md(_upcoming_tasks_html(mission, progress, skip_titles=skip_titles), unsafe_allow_html=True)
     if jump_page and target:
         if st.button(
             _next_action_label(jump_page),
@@ -316,7 +249,6 @@ def render() -> None:
     ranked = ranking()
     health = mission_health_snapshot()
     tracking_n = len(tracking_assets())
-    events_n = len(performance_events())
     in_review_n = content_assets_in_review_count()
     progress = _progress()
 
@@ -373,7 +305,6 @@ def render() -> None:
                 st.success("Mission saved for this demo session.")
                 st.rerun()
 
-    md(_process_strip(progress), unsafe_allow_html=True)
     md(_product_card(mission, health), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
@@ -410,12 +341,8 @@ def render() -> None:
 
     main, side = st.columns([1, 0.34], gap="small", vertical_alignment="top")
     with main:
-        c1, c2 = st.columns([1.25, 0.85], gap="small")
-        with c1:
-            md(_workflow_card(progress), unsafe_allow_html=True)
-        with c2:
-            md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n, in_review_n), unsafe_allow_html=True)
+        md(_workflow_card(progress), unsafe_allow_html=True)
     with side:
-        _render_next_action_cta(mission, progress, tracking_n=tracking_n)
+        _render_next_action_cta(progress, tracking_n=tracking_n)
 
     render_demo_notice()

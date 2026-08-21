@@ -74,6 +74,7 @@ def _mission_creator_cards(mission, creator) -> str:
     </div>
     <div class="is-studio-card">
       <h4>Platform requirements</h4>
+      <p><small>Demo format assumptions, not creator fields</small></p>
       <div class="is-platform-card" style="margin-bottom:7px;padding:8px">
         <h4><span class="is-platform-icon">IG</span> Instagram Reels</h4>
         <p>9:16 · 15–45s · native captions · #ad</p>

@@ -164,6 +164,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "badge('Passed'" not in studio
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
+    assert "Demo format assumptions, not creator fields" in studio
     assert "Energetic, authentic, cinematic, practical." not in studio
     assert "Hook → story → proof → CTA" not in studio
     assert "def _brief_content" not in studio
@@ -194,6 +195,14 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "_pipeline_notes" in launch
     assert "_pipeline_notes_html(progress, tracking_n=tracking_n)" in launch
     assert "Pipeline snapshot" in launch
+    assert launch.count('key="launch_next_action"') == 1
+    assert "Upcoming tasks" not in launch
+    assert "Recommended next actions" not in launch
+    assert "_upcoming_tasks_html" not in launch
+    assert "_actions_card" not in launch
+    assert "_process_strip" not in launch
+    assert "is-process-scroll" not in launch
+    assert "skip_titles" not in launch
     opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
     assert "save_opportunity" in opportunity
     assert "_render_mission_link" in opportunity

@@ -985,6 +985,7 @@ ZH: dict[str, str] = {
     "Hook → story → proof → CTA": "钩子 → 故事 → 证明 → 行动号召",
     "Not specified in the catalog": "目录中未注明",
     "Platform requirements": "平台要求",
+    "Demo format assumptions, not creator fields": "演示用的格式假设，不是创作者字段",
     "native captions": "原生字幕",
     "hook in 2s": "2 秒内抛出钩子",
     "trending audio OK": "可使用热门音频",

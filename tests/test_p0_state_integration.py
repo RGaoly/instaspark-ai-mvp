@@ -496,20 +496,22 @@ def test_launch_pipeline_notes_follow_live_counts(session):
         approved=0,
         tracking_n=0,
         events_n=0,
-        next_task={"title": "Shortlist creators", "note": "Add at least one creator to the shortlist."},
     )
-    assert empty[0] == ("0 currently shortlisted creators", "Unified workflow")
-    assert empty[1] == ("0 currently approved creators", "Human decisions")
-    assert empty[2] == ("0 tracking assets issued", "Coupons and UTM links, not conversions")
-    assert empty[3] == ("0 performance events recorded", "Sourced conversions only")
-    assert empty[4] == ("Shortlist creators", "Next action · Add at least one creator to the shortlist.")
+    assert empty == [
+        ("0 currently shortlisted creators", "Unified workflow"),
+        ("0 currently approved creators", "Human decisions"),
+        ("0 tracking assets issued", "Coupons and UTM links, not conversions"),
+        ("0 performance events recorded", "Sourced conversions only"),
+    ]
     html = _launch_pipeline_notes_html()
     assert "0 currently shortlisted creators" in html
-    assert "Shortlist creators" in html
+    assert "Shortlist creators" not in html
     assert "Live counts" in html
     assert "Team notifications" not in html
     assert "Context synchronized" not in html
     assert "State machine active" not in html
+    assert "Upcoming tasks" not in html
+    assert "Recommended next actions" not in html
 
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
@@ -523,7 +525,7 @@ def test_launch_pipeline_notes_follow_live_counts(session):
     matching = _launch_progress_snapshot()
     html = _launch_pipeline_notes_html()
     assert f'{matching["steps"][0]["count"]} currently shortlisted creators' in html
-    assert "Approve one creator" in html
+    assert "Approve one creator" not in html
 
     decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
     live = _launch_progress_snapshot()
@@ -531,7 +533,7 @@ def test_launch_pipeline_notes_follow_live_counts(session):
     assert f'{live["steps"][1]["count"]} currently approved creators' in html
     assert f"{len(state.tracking_assets())} tracking assets issued" in html
     assert "0 performance events recorded" in html
-    assert "Record a conversion on Growth Review" in html
+    assert "Record a conversion on Growth Review" not in html
 
     state.record_performance_event(
         creator_id,
@@ -542,7 +544,7 @@ def test_launch_pipeline_notes_follow_live_counts(session):
     )
     html = _launch_pipeline_notes_html()
     assert "1 performance events recorded" in html
-    assert "Review recorded outcomes" in html
+    assert "Review recorded outcomes" not in html
     assert "Attribution guardrail" not in html
 
 
@@ -641,11 +643,8 @@ def test_save_content_asset_appends_in_review_for_active_creator(session):
     assert state.creator_state(creator_id) == "shortlisted"
     assert state.content_assets_in_review_count() == 2
 
-    from views import launch_mission, outreach_operations
+    from views import outreach_operations
 
-    actions = launch_mission._actions_card(state.workflow_summary(), "United States", 0, 0, state.content_assets_in_review_count())
-    assert "2 content assets in review" in actions
-    assert "Saved briefs from Content Studio" in actions
     caption_n = state.content_assets_in_review_count()
     html = outreach_operations._kanban(state.workflow_board())
     assert html

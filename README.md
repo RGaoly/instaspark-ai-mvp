@@ -75,11 +75,15 @@ Default login: `admin` / `admin123`. A read-only viewer is available as `demo` /
 
 ## 5-minute demo
 
-1. Log in as `admin` / `admin123`. Open **Creator Search & Match**.
-2. Ranking is rule-based (mission fit, topic overlap, momentum, commercial fit, brand safety) — not an LLM and not embeddings.
-3. Type a name or topic in NL search. That is a **lexical filter + small boost**, not semantic search.
-4. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
-5. Approve a creator on Compare. Open **Outreach Operations**, expand **Contact pack**, and copy the message + coupon + UTM. **Send to Creator** stays disabled.
+Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded events only. **Send to Creator** stays disabled.
+
+1. Log in as `admin` / `admin123`. Open **Launch Mission** and expand **Why this is not TikTok Creator Marketplace**.
+2. Open **Creator Search & Match**. Filter by market / language / topics. Type a name or topic in NL search — that is a **lexical filter + small boost**, not semantic search. Ranking uses mission fit, topic overlap, momentum, commercial fit, and brand safety — not an LLM and not embeddings.
+3. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
+4. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
+5. Open **Content Studio** → **Generate Brief** and save it. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
+6. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. If the creator is in content review with no saved brief, the next-action CTA opens Content Studio.
+7. When the creator is published with 0 events, the next-action CTA (Launch, Search, Compare, Opportunity, or Outreach) opens **Growth Review**. Record a conversion; the creator advances to **Measured** automatically. ROI stays 0x until that recorded event exists.
 
 运行测试：
 

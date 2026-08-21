@@ -106,6 +106,10 @@ def test_readme_describes_dual_entry_product_and_current_tree():
 
     assert "launch mission" in readme
     assert "creator opportunity" in readme
+    assert "why this is not tiktok creator marketplace" in readme
+    assert "send to creator" in readme
+    assert "growth review" in readme
+    assert "measured" in readme
     for directory in ("components/", "services/", "views/", "tests/"):
         assert directory in readme, f"README repository tree is missing {directory}"
 

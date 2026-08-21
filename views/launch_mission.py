@@ -186,6 +186,52 @@ def _upcoming_tasks_html(mission: dict, progress: dict, *, skip_titles: tuple[st
     )
 
 
+def _pipeline_notes(
+    *,
+    shortlisted: int,
+    approved: int,
+    tracking_n: int,
+    events_n: int,
+    next_task: dict,
+) -> list[tuple[str, str]]:
+    """Operator notes from live pipeline counts. Not invented alerts."""
+
+    title = str(next_task.get("title") or "")
+    note = str(next_task.get("note") or "")
+    return [
+        (f"{int(shortlisted)} currently shortlisted creators", "Unified workflow"),
+        (f"{int(approved)} currently approved creators", "Human decisions"),
+        (f"{int(tracking_n)} tracking assets issued", "Coupons and UTM links, not conversions"),
+        (f"{int(events_n)} performance events recorded", "Sourced conversions only"),
+        (title, f"Next action · {note}" if note else "Next action"),
+    ]
+
+
+def _pipeline_notes_html(progress: dict, *, tracking_n: int) -> str:
+    steps = {step["id"]: step for step in progress.get("steps", [])}
+    next_task = (progress.get("upcoming") or [{}])[0]
+    notes = _pipeline_notes(
+        shortlisted=int(steps.get("shortlist", {}).get("count", 0)),
+        approved=int(steps.get("approve", {}).get("count", 0)),
+        tracking_n=tracking_n,
+        events_n=int(steps.get("measure", {}).get("count", 0)),
+        next_task=next_task,
+    )
+    items = []
+    accents = ("#EAF2FF", "#E9F8F1", "#FFF4E4", "#F1F4F5", "#EAF2FF")
+    for idx, (title, note) in enumerate(notes):
+        items.append(
+            f'<li><span class="is-list-num" style="background:{accents[idx % len(accents)]};color:#34424A">•</span>'
+            f'<span><b>{title}</b><small>{note}</small></span></li>'
+        )
+    return (
+        '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Pipeline snapshot</span>'
+        '<span class="is-panel-link">Live counts</span></div><div class="is-panel-body"><ul class="is-list">'
+        + "".join(items)
+        + "</ul></div></div>"
+    )
+
+
 def _creator_names() -> dict[str, str]:
     return {row["creator_id"]: row["creator_name"] for _, row in creators().iterrows()}
 
@@ -230,7 +276,7 @@ def _activity_html(events: list[dict], names: dict[str, str]) -> str:
     )
 
 
-def _render_next_action_cta(mission: dict, progress: dict) -> None:
+def _render_next_action_cta(mission: dict, progress: dict, *, tracking_n: int) -> None:
     target = launch_cta_creator()
     jump_page = launch_cta_page(target["creator_id"]) if target else None
     skip_titles: tuple[str, ...] = ()
@@ -247,6 +293,7 @@ def _render_next_action_cta(mission: dict, progress: dict) -> None:
             key="launch_next_action",
         ):
             open_launch_cta(target["creator_id"], creator_name=target.get("creator_name"))
+    md(_pipeline_notes_html(progress, tracking_n=tracking_n), unsafe_allow_html=True)
     md(_activity_html(workflow_events(), _creator_names()), unsafe_allow_html=True)
 
 
@@ -369,6 +416,6 @@ def render() -> None:
         with c2:
             md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n, in_review_n), unsafe_allow_html=True)
     with side:
-        _render_next_action_cta(mission, progress)
+        _render_next_action_cta(mission, progress, tracking_n=tracking_n)
 
     render_demo_notice()

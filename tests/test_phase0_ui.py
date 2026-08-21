@@ -183,6 +183,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'open_workspace_page("growth-review")' in launch
     assert 'open_workspace_page("content-studio")' in launch
     assert 'key="launch_next_action"' in launch
+    assert "workflow_events" in launch
+    assert "_activity_html" in launch
+    assert "Team notifications" not in launch
+    assert "State machine active" not in launch
     opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
     assert "save_opportunity" in opportunity
     assert "_render_mission_link" in opportunity

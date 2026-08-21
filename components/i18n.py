@@ -1449,6 +1449,10 @@ ZH: dict[str, str] = {
     "Collaboration state": "协作状态",
     "Use the button below": "请使用下方按钮",
     "Record conversion here": "在此录入转化",
+    "Recent workflow activity": "最近工作流动态",
+    "From the audit trail": "来自审计记录",
+    "No workflow events for this mission yet.": "本任务尚无工作流事件。",
+    "Shortlist or approve a creator to start the audit trail.": "请先加入短名单或批准创作者，审计记录才会开始。",
 }
 
 

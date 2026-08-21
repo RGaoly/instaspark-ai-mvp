@@ -4,7 +4,7 @@ import streamlit as st
 
 from components.html import ai_badge, avatar, badge, esc, mission_chip, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context_label,
     active_mission,
@@ -182,6 +182,16 @@ def _studio_pack(mission: dict, creator: dict, *, tone: str, checklist: list[str
     return store[cache_key]
 
 
+def _render_post_brief_handoff() -> None:
+    if st.session_state.pop("studio_brief_toast", False):
+        st.toast(t("Brief saved as a content asset in review"))
+    if not st.session_state.get("studio_open_outreach"):
+        return
+    if st.button(t("Open Outreach"), type="primary"):
+        st.session_state.pop("studio_open_outreach", None)
+        open_workspace_page("outreach-operations")
+
+
 def _localized_html(items: list[dict], mission: dict) -> str:
     cards = []
     for item in items:
@@ -264,6 +274,8 @@ def render() -> None:
             )
         render_write_guard()
 
+    _render_post_brief_handoff()
+
     left, center, right = st.columns([0.18, 0.58, 0.24], gap="small", vertical_alignment="top")
     with left:
         md(_mission_creator_cards(mission, creator), unsafe_allow_html=True)
@@ -294,7 +306,10 @@ def render() -> None:
                 status="in_review",
             )
             st.session_state.brief_version += 1
-            st.toast(t("Brief saved as a content asset in review"))
+            select_creator(creator["creator_id"])
+            st.session_state["studio_brief_toast"] = True
+            st.session_state["studio_open_outreach"] = True
+            st.session_state["outreach_focus_creator_id"] = creator["creator_id"]
             st.rerun()
         except (ValueError, PermissionError) as exc:
             st.error(str(exc))

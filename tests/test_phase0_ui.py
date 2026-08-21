@@ -90,6 +90,22 @@ def test_unwired_chrome_buttons_are_disabled():
 
     assert 'open_workspace_page("content-studio")' in search
     assert 'open_workspace_page("creator-compare")' in search
+    assert 'open_workspace_page("growth-review")' in search
+    assert "search_cta_page" in search
+    assert "open_search_cta" in search
+    assert "next_outreach_action_page" in search
+    assert "prepare_next_action_jump" in search
+    assert "compare_cta_page" in compare
+    assert "open_compare_cta" in compare
+    assert "next_outreach_action_page" in compare
+    assert "prepare_next_action_jump" in compare
+    assert 'open_workspace_page("growth-review")' in compare
+    assert 'open_workspace_page("content-studio")' in compare
+    assert 't("Open Outreach")' in studio
+    assert "studio_open_outreach" in studio
+    assert "studio_brief_toast" in studio
+    assert 'open_workspace_page("outreach-operations")' in studio
+    assert "st.toast" in studio
     assert 'help=t("External send is not wired in this demo")' in studio
     assert 'help=t("External send is not wired in this demo")' in outreach
     assert "contact_pack_for" in outreach

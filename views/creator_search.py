@@ -22,6 +22,8 @@ from components.state import (
     active_context_label,
     attach_live_evidence,
     live_evidence_for,
+    next_outreach_action_page,
+    prepare_next_action_jump,
     ranking,
     select_creator,
     selected_creator,
@@ -33,6 +35,23 @@ from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.domain import match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
+
+
+def search_cta_page(creator_id: str) -> str | None:
+    """Jump target for Search. Same rules as Outreach; do not fork them."""
+
+    return next_outreach_action_page(creator_id)
+
+
+def open_search_cta(creator_id: str, *, creator_name: str | None = None) -> str | None:
+    """Prefill the creator and open Growth Review or Content Studio when that is the next action."""
+
+    page = prepare_next_action_jump(creator_id, creator_name=creator_name)
+    if page == "growth-review":
+        open_workspace_page("growth-review")
+    elif page == "content-studio":
+        open_workspace_page("content-studio")
+    return page
 
 
 def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
@@ -341,10 +360,29 @@ def render() -> None:
         if not cohort:
             cohort = visible.head(3).to_dict("records")
         md(_detail_panel(creator, context, cohort), unsafe_allow_html=True)
+        jump_page = search_cta_page(creator["creator_id"])
+        if jump_page:
+            jump_label = (
+                t("Record a conversion on Growth Review")
+                if jump_page == "growth-review"
+                else t("Create a brief in Content Studio")
+            )
+            if st.button(
+                jump_label,
+                type="primary",
+                use_container_width=True,
+                key="search_next_action",
+            ):
+                open_search_cta(creator["creator_id"], creator_name=creator.get("creator_name"))
         a, b, c = st.columns(3)
         locked = writes_locked()
         render_write_guard()
-        if a.button(t("Shortlist"), type="primary", use_container_width=True, disabled=locked):
+        if a.button(
+            t("Shortlist"),
+            type="primary" if not jump_page else "secondary",
+            use_container_width=True,
+            disabled=locked,
+        ):
             cid = creator["creator_id"]
             try:
                 transition_creator_state(

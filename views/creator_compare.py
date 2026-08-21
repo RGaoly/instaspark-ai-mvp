@@ -4,12 +4,14 @@ import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header, scorebar
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
     creator_state,
     live_evidence_for,
+    next_outreach_action_page,
+    prepare_next_action_jump,
     ranking,
     save_decision,
     select_creator,
@@ -19,6 +21,23 @@ from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
 from src.domain import match_fit_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
+
+
+def compare_cta_page(creator_id: str) -> str | None:
+    """Jump target for Compare. Same rules as Outreach; do not fork them."""
+
+    return next_outreach_action_page(creator_id)
+
+
+def open_compare_cta(creator_id: str, *, creator_name: str | None = None) -> str | None:
+    """Prefill the creator and open Growth Review or Content Studio when that is the next action."""
+
+    page = prepare_next_action_jump(creator_id, creator_name=creator_name)
+    if page == "growth-review":
+        open_workspace_page("growth-review")
+    elif page == "content-studio":
+        open_workspace_page("content-studio")
+    return page
 
 
 def _geo_split(row) -> str:
@@ -286,10 +305,30 @@ def render() -> None:
     )
     locked = writes_locked()
     render_write_guard()
-    _, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
+    jump_page = compare_cta_page(focus["creator_id"])
+    jump_col, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
+    with jump_col:
+        if jump_page:
+            jump_label = (
+                t("Record a conversion on Growth Review")
+                if jump_page == "growth-review"
+                else t("Create a brief in Content Studio")
+            )
+            if st.button(
+                jump_label,
+                type="primary",
+                use_container_width=True,
+                key="compare_next_action",
+            ):
+                open_compare_cta(focus["creator_id"], creator_name=focus.get("creator_name"))
     with a:
         if focus_state == "qualified":
-            if st.button(t("Add to Shortlist"), type="primary", use_container_width=True, disabled=locked):
+            if st.button(
+                t("Add to Shortlist"),
+                type="primary" if not jump_page else "secondary",
+                use_container_width=True,
+                disabled=locked,
+            ):
                 transition_creator_state(
                     focus["creator_id"],
                     "shortlisted",
@@ -300,7 +339,12 @@ def render() -> None:
                 st.success("Shortlisted with an audit event. Review once more to approve outreach.")
                 st.rerun()
         elif focus_state == "shortlisted":
-            if st.button(t("Approve Outreach"), type="primary", use_container_width=True, disabled=locked):
+            if st.button(
+                t("Approve Outreach"),
+                type="primary" if not jump_page else "secondary",
+                use_container_width=True,
+                disabled=locked,
+            ):
                 save_decision(
                     focus["creator_id"],
                     "Approved",

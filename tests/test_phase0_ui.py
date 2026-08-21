@@ -175,6 +175,14 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Content brief evidence review" not in launch
     assert "opportunities_for_mission" in launch
     assert "Linked creator opportunities" in launch
+    assert "launch_cta_page" in launch
+    assert "open_launch_cta" in launch
+    assert "launch_cta_creator" in launch
+    assert "next_outreach_action_page" in launch
+    assert "prepare_next_action_jump" in launch
+    assert 'open_workspace_page("growth-review")' in launch
+    assert 'open_workspace_page("content-studio")' in launch
+    assert 'key="launch_next_action"' in launch
     opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
     assert "save_opportunity" in opportunity
     assert "_render_mission_link" in opportunity

@@ -13,16 +13,64 @@ from components.state import (
     content_assets_in_review_count,
     mission_health_snapshot,
     missions,
+    next_outreach_action_page,
     opportunities_for_mission,
+    prepare_next_action_jump,
     ranking,
     save_mission,
     set_active_context,
     tracking_assets,
+    workflow_board,
     workflow_summary,
     performance_events,
 )
 from components.ui import md
 from src.domain import launch_progress, pipeline_counts
+
+
+def launch_cta_page(creator_id: str) -> str | None:
+    """Jump target for Launch Mission. Same rules as Outreach; do not fork them."""
+
+    return next_outreach_action_page(creator_id)
+
+
+def open_launch_cta(creator_id: str, *, creator_name: str | None = None) -> str | None:
+    """Prefill the creator and open Growth Review or Content Studio when that is the next action."""
+
+    page = prepare_next_action_jump(creator_id, creator_name=creator_name)
+    if page == "growth-review":
+        open_workspace_page("growth-review")
+    elif page == "content-studio":
+        open_workspace_page("content-studio")
+    return page
+
+
+def launch_cta_creator() -> dict | None:
+    """Selected creator if they have a jump, else the first workflow creator who does."""
+
+    selected_id = st.session_state.get("selected_creator_id")
+    if selected_id and launch_cta_page(selected_id):
+        ranked = ranking()
+        if not ranked.empty:
+            matches = ranked[ranked["creator_id"] == selected_id]
+            if not matches.empty:
+                return matches.iloc[0].to_dict()
+        for people in workflow_board().values():
+            for person in people:
+                if person["creator_id"] == selected_id:
+                    return person
+        return {"creator_id": selected_id, "creator_name": selected_id}
+    for people in workflow_board().values():
+        for person in people:
+            if launch_cta_page(person["creator_id"]):
+                return person
+    return None
+
+
+def _next_action_label(page: str) -> str:
+    if page == "growth-review":
+        return t("Record a conversion on Growth Review")
+    return t("Create a brief in Content Studio")
 
 
 def _progress() -> dict:
@@ -118,14 +166,25 @@ def _actions_card(summary: dict[str, int], market: str, tracking_n: int, events_
     )
 
 
-def _tasks_notifications(mission: dict, progress: dict) -> str:
+def _upcoming_tasks_html(mission: dict, progress: dict, *, skip_titles: tuple[str, ...] = ()) -> str:
     owner = mission.get("owner", "Mission owner")
     tasks = []
     for index, task in enumerate(progress["upcoming"], 1):
+        if task["title"] in skip_titles:
+            continue
         tasks.append(
             '<li><span class="is-list-num" style="border-radius:6px;background:#F1F4F5;color:#4A565E">'
             f'{index:02d}</span><span><b>{task["title"]}</b><small>NEXT · {owner} · {task["note"]}</small></span></li>'
         )
+    return (
+        '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Upcoming tasks</span>'
+        '<span class="is-panel-link">From the active workflow</span></div><div class="is-panel-body"><ul class="is-list">'
+        + "".join(tasks)
+        + "</ul></div></div>"
+    )
+
+
+def _notifications_html(mission: dict) -> str:
     notifications = [
         ("Context synchronized", f'All pages now use {mission.get("name", mission.get("product", "this mission"))}.', "now"),
         ("State machine active", "Every creator transition records actor, reason and evidence.", "now"),
@@ -138,15 +197,31 @@ def _tasks_notifications(mission: dict, progress: dict) -> str:
             f'<span><b>{title}</b><small>{note} · {when}</small></span></li>'
         )
     return (
-        '<div class="is-card" style="margin-bottom:10px"><div class="is-panel-head"><span class="is-panel-title">Upcoming tasks</span>'
-        '<span class="is-panel-link">From the active workflow</span></div><div class="is-panel-body"><ul class="is-list">'
-        + "".join(tasks)
-        + "</ul></div></div>"
         '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Team notifications</span>'
         '</div><div class="is-panel-body"><ul class="is-list">'
         + "".join(notes)
         + "</ul></div></div>"
     )
+
+
+def _render_next_action_cta(mission: dict, progress: dict) -> None:
+    target = launch_cta_creator()
+    jump_page = launch_cta_page(target["creator_id"]) if target else None
+    skip_titles: tuple[str, ...] = ()
+    if jump_page == "growth-review":
+        skip_titles = ("Record a conversion on Growth Review",)
+    elif jump_page == "content-studio":
+        skip_titles = ("Create a brief in Content Studio",)
+    md(_upcoming_tasks_html(mission, progress, skip_titles=skip_titles), unsafe_allow_html=True)
+    if jump_page and target:
+        if st.button(
+            _next_action_label(jump_page),
+            type="primary",
+            use_container_width=True,
+            key="launch_next_action",
+        ):
+            open_launch_cta(target["creator_id"], creator_name=target.get("creator_name"))
+    md(_notifications_html(mission), unsafe_allow_html=True)
 
 
 def render() -> None:
@@ -268,6 +343,6 @@ def render() -> None:
         with c2:
             md(_actions_card(summary, mission.get("market", "Target market"), tracking_n, events_n, in_review_n), unsafe_allow_html=True)
     with side:
-        md(_tasks_notifications(mission, progress), unsafe_allow_html=True)
+        _render_next_action_cta(mission, progress)
 
     render_demo_notice()

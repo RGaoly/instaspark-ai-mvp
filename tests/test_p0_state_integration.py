@@ -1192,6 +1192,74 @@ def test_search_and_compare_cta_targets_match_helper(session):
     assert state.next_outreach_action_page(creator_id) is None
 
 
+def test_launch_cta_targets_match_helper(session):
+    from views import launch_mission
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    name = str(ranked.iloc[0]["creator_name"])
+    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
+    assert state.content_assets_for(creator_id) == []
+
+    helper = state.next_outreach_action_page(creator_id)
+    assert helper == "content-studio"
+    assert launch_mission.launch_cta_page(creator_id) == helper
+
+    jumped = launch_mission.open_launch_cta(creator_id, creator_name=name)
+    assert jumped == "content-studio"
+    assert jumped == state.next_outreach_action_page(creator_id)
+    assert session.selected_creator_id == creator_id
+
+    state.save_content_asset(creator_id, "Review brief", "Body of the brief for this launch.")
+    assert launch_mission.launch_cta_page(creator_id) is None
+    assert state.next_outreach_action_page(creator_id) is None
+
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    assert state.performance_events_for(creator_id) == []
+    helper = state.next_outreach_action_page(creator_id)
+    assert helper == "growth-review"
+    assert launch_mission.launch_cta_page(creator_id) == helper
+
+    opened = launch_mission.open_launch_cta(creator_id, creator_name=name)
+    assert opened == "growth-review"
+    assert session.selected_creator_id == creator_id
+    assert session.growth_record_event_open is True
+    assert session.perf_event_creator == f"{name} · {creator_id}"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert launch_mission.launch_cta_page(creator_id) is None
+    assert state.next_outreach_action_page(creator_id) is None
+
+
+def test_launch_cta_prefers_selected_then_workflow_creator(session):
+    from views import launch_mission
+
+    ranked = state.ranking()
+    selected_id = ranked.iloc[0]["creator_id"]
+    workflow_id = ranked.iloc[1]["creator_id"]
+    workflow_name = str(ranked.iloc[1]["creator_name"])
+    state.select_creator(selected_id)
+    assert launch_mission.launch_cta_page(selected_id) is None
+    assert launch_mission.launch_cta_creator() is None
+
+    state.save_decision(workflow_id, "Approved", "Approve so the case exists")
+    _advance_linear(workflow_id, "content_in_review", reason="Walk legal hops to review")
+    assert state.content_assets_for(workflow_id) == []
+    state.select_creator(selected_id)
+
+    fallback = launch_mission.launch_cta_creator()
+    assert fallback is not None
+    assert fallback["creator_id"] == workflow_id
+    assert launch_mission.launch_cta_page(fallback["creator_id"]) == "content-studio"
+
+    state.select_creator(workflow_id)
+    preferred = launch_mission.launch_cta_creator()
+    assert preferred is not None
+    assert preferred["creator_id"] == workflow_id
+    assert preferred.get("creator_name") == workflow_name
+
+
 def test_opportunity_cannot_skip_approved_to_published(session):
     from views import creator_opportunity
 

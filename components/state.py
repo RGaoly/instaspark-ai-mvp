@@ -1272,11 +1272,12 @@ def content_assets_in_review_count() -> int:
 
 
 def next_outreach_action_page(creator_id: str) -> str | None:
-    """Workspace page for the operator's next click from Outreach, if not Advance.
+    """Workspace page for the operator's next click, if not Advance.
 
-    ``published`` with no recorded events jumps to Growth Review.
-    ``content_in_review`` with no saved brief for this creator + active root
-    jumps to Content Studio. Other states stay on Outreach and use Advance.
+    Shared by Outreach and Creator Opportunity. ``published`` with no
+    recorded events jumps to Growth Review. ``content_in_review`` with no
+    saved brief for this creator + active root jumps to Content Studio.
+    Other states stay on the current page and use Advance.
     """
 
     current = creator_state(creator_id)
@@ -1294,3 +1295,20 @@ def prepare_growth_review_record(creator_id: str, *, choice_label: str | None = 
     st.session_state["growth_record_event_open"] = True
     if choice_label:
         st.session_state["perf_event_creator"] = choice_label
+
+
+def prepare_next_action_jump(creator_id: str, *, creator_name: str | None = None) -> str | None:
+    """Prefill the creator and return the jump page from ``next_outreach_action_page``.
+
+    Does not navigate. Callers pass the return value to ``open_workspace_page``.
+    """
+
+    page = next_outreach_action_page(creator_id)
+    if page == "growth-review":
+        name = creator_name or str(_creator_record(creator_id).get("creator_name") or creator_id)
+        prepare_growth_review_record(creator_id, choice_label=f"{name} · {creator_id}")
+        return page
+    if page == "content-studio":
+        select_creator(creator_id)
+        return page
+    return None

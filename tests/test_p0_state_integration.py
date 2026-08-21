@@ -1084,6 +1084,70 @@ def test_selecting_via_kanban_updates_selected_creator_id(session):
     assert "is-kanban-card" not in measured_col.split("Closed Lost", 1)[0]
 
 
+def test_selecting_via_list_updates_selected_creator_id(session):
+    from views import outreach_operations
+
+    ranked = state.ranking()
+    first_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    second_name = ranked.iloc[1]["creator_name"]
+    state.select_creator(first_id)
+    assert session.selected_creator_id == first_id
+
+    result = outreach_operations.select_list_creator(second_id)
+    assert result == second_id
+    assert session.selected_creator_id == second_id
+    assert session.outreach_focus_creator_id == second_id
+
+    html = outreach_operations._list_view(state.workflow_board(), selected_id=second_id)
+    assert "is-selected" in html
+    assert second_name in html
+    assert 'open_workspace_page' not in outreach_operations._render_list.__code__.co_names
+
+
+def test_opportunity_cta_targets_growth_and_content_studio(session):
+    from views import creator_opportunity
+
+    state.set_active_context("opportunity", "OPP-002")
+    creator_id = "C003"
+    name = str(state.creators().set_index("creator_id").loc[creator_id]["creator_name"])
+
+    state.transition_creator_state(
+        creator_id,
+        "approved",
+        actor="Global Creator Team",
+        reason="Evidence and commercial fit approved",
+        evidence=["opportunity://OPP-002"],
+    )
+    _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
+    assert state.content_assets_for(creator_id) == []
+    assert creator_opportunity.opportunity_cta_page(creator_id) == "content-studio"
+    assert creator_opportunity.opportunity_cta_page(creator_id) == state.next_outreach_action_page(
+        creator_id
+    )
+
+    jumped = state.prepare_next_action_jump(creator_id, creator_name=name)
+    assert jumped == "content-studio"
+    assert session.selected_creator_id == creator_id
+
+    state.save_content_asset(creator_id, "Review brief", "Body of the brief for this opportunity.")
+    assert creator_opportunity.opportunity_cta_page(creator_id) is None
+
+    _advance_linear(creator_id, "published", reason="Walk legal hops to published")
+    assert state.performance_events_for(creator_id) == []
+    assert creator_opportunity.opportunity_cta_page(creator_id) == "growth-review"
+
+    opened = creator_opportunity.open_opportunity_cta(creator_id, creator_name=name)
+    assert opened == "growth-review"
+    assert session.selected_creator_id == creator_id
+    assert session.growth_record_event_open is True
+    assert session.perf_event_creator == f"{name} · {creator_id}"
+
+    state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
+    assert state.creator_state(creator_id) == "measured"
+    assert creator_opportunity.opportunity_cta_page(creator_id) is None
+
+
 def test_opportunity_cannot_skip_approved_to_published(session):
     from views import creator_opportunity
 

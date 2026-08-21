@@ -7,7 +7,7 @@ import streamlit as st
 from components import state as state_store
 from components.html import badge, esc, page_header
 from components.i18n import t
-from components.shell import render_demo_notice, render_topbar, render_write_guard, writes_locked
+from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.ui import md
 from services.opportunity_service import (
     OPPORTUNITY_STATUSES,
@@ -52,6 +52,23 @@ def _creator_records() -> tuple[list[dict], dict[str, dict]]:
 
 def _status_label(status: str) -> str:
     return status.replace("_", " ").title()
+
+
+def opportunity_cta_page(creator_id: str) -> str | None:
+    """Jump target for Opportunity. Same rules as Outreach; do not fork them."""
+
+    return state_store.next_outreach_action_page(creator_id)
+
+
+def open_opportunity_cta(creator_id: str, *, creator_name: str | None = None) -> str | None:
+    """Prefill the creator and open Growth Review or Content Studio when that is the next action."""
+
+    page = state_store.prepare_next_action_jump(creator_id, creator_name=creator_name)
+    if page == "growth-review":
+        open_workspace_page("growth-review")
+    elif page == "content-studio":
+        open_workspace_page("content-studio")
+    return page
 
 
 def advance_opportunity_creator(
@@ -322,13 +339,33 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
             current_state = state_store.creator_state(creator_id)
             md(f"**{t('Collaboration state')}:** `{_status_label(current_state)}`")
             target = state_store.next_linear_creator_state(creator_id)
+            jump_page = opportunity_cta_page(creator_id)
             reason = st.text_input(
                 t("Transition reason"),
                 "Opportunity evidence reviewed by the owner",
                 key=f"opportunity_reason_{opportunity['opportunity_id']}",
             )
-            if target == "measured":
+            if jump_page == "growth-review":
+                st.info(t("Record a conversion on Growth Review"))
                 st.caption(t("Mark measured only after recording events"))
+            elif jump_page == "content-studio":
+                st.info(t("Create a brief in Content Studio"))
+                st.caption(t("Save a brief before advancing to published"))
+            elif target == "measured":
+                st.caption(t("Mark measured only after recording events"))
+            if jump_page:
+                jump_label = (
+                    t("Record a conversion on Growth Review")
+                    if jump_page == "growth-review"
+                    else t("Create a brief in Content Studio")
+                )
+                if st.button(
+                    jump_label,
+                    type="primary",
+                    use_container_width=True,
+                    key=f"opportunity_jump_{opportunity['opportunity_id']}",
+                ):
+                    open_opportunity_cta(creator_id, creator_name=creator_name)
             advance_label = (
                 t("Advance to {state}", state=_status_label(target))
                 if target
@@ -336,7 +373,7 @@ def _render_detail(opportunity: dict, creator: dict | None) -> None:
             )
             if st.button(
                 advance_label,
-                type="primary",
+                type="primary" if not jump_page else "secondary",
                 use_container_width=True,
                 disabled=writes_locked() or not target,
                 key=f"opportunity_advance_{opportunity['opportunity_id']}",

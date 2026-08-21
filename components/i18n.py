@@ -983,6 +983,7 @@ ZH: dict[str, str] = {
     "Energetic, authentic, cinematic, practical.": "有活力、真实、电影感、实用。",
     "Common structure": "常用结构",
     "Hook → story → proof → CTA": "钩子 → 故事 → 证明 → 行动号召",
+    "Not specified in the catalog": "目录中未注明",
     "Platform requirements": "平台要求",
     "native captions": "原生字幕",
     "hook in 2s": "2 秒内抛出钩子",

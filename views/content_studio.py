@@ -30,10 +30,29 @@ QUALITY_CHECKLIST = [
     "Paid partnership disclosure",
     "No invented product specs",
 ]
+NOT_IN_CATALOG = "Not specified in the catalog"
+
+
+def _catalog_join(value: object, empty: str = NOT_IN_CATALOG) -> str:
+    """Join catalog list fields. Empty is honest, not a canned personality."""
+
+    if value is None:
+        parts: list[str] = []
+    elif isinstance(value, str):
+        parts = [item.strip() for item in value.replace("|", ",").split(",") if item.strip()]
+    else:
+        try:
+            parts = [str(item).strip() for item in list(value) if str(item).strip()]
+        except TypeError:
+            text = str(value).strip()
+            parts = [text] if text else []
+    return ", ".join(parts) if parts else empty
 
 
 def _mission_creator_cards(mission, creator) -> str:
     markets = " · ".join(mission.get("markets", ["United States", "Mexico"]))
+    styles = esc(_catalog_join(creator.get("styles")))
+    topics = esc(_catalog_join(creator.get("topics")))
     return f"""
     <div class="is-studio-card">
       <h4>Active entry context</h4>
@@ -49,8 +68,8 @@ def _mission_creator_cards(mission, creator) -> str:
       <h4>Creator profile</h4>
       <div class="is-creator-cell" style="margin-bottom:8px">{avatar(creator['creator_name'],3)}
         <span><b>{esc(creator['creator_name'])}</b><small>{esc(creator['primary_market'])}</small></span></div>
-      <p><b>Creator tone</b><br/>Energetic, authentic, cinematic, practical.</p>
-      <p><b>Common structure</b><br/>Hook → story → proof → CTA</p>
+      <p><b>Content style</b><br/>{styles}</p>
+      <p><b>Topics</b><br/>{topics}</p>
       <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · {match_tier(creator.get('total_score', 0))}</p>
     </div>
     <div class="is-studio-card">
@@ -66,86 +85,6 @@ def _mission_creator_cards(mission, creator) -> str:
       <div class="is-platform-card" style="padding:8px">
         <h4><span class="is-platform-icon">YT</span> YouTube Shorts</h4>
         <p>9:16 · 30–60s · end-screen CTA</p>
-      </div>
-    </div>
-    """
-
-
-def _brief_content(mission: dict, creator: dict) -> str:
-    product = esc(mission.get("product", "Product"))
-    objective = esc(mission.get("objective", "Validate product-market fit with creator-led content."))
-    market = esc(mission.get("market", "Target market"))
-    language = esc(mission.get("language", "Local language"))
-    topics = esc(", ".join(mission.get("target_topics", [])) or "creator-relevant use cases")
-    styles = esc(", ".join(mission.get("target_styles", [])) or "the creator's native style")
-    return f"""
-    <div class="is-brief-grid">
-      <div class="is-brief-block">
-        <h4>Objective</h4>
-        <p>{objective}</p>
-        <h4 style="margin-top:10px">Audience</h4>
-        <p>{market} audiences interested in {topics}.</p>
-      </div>
-      <div class="is-brief-block">
-        <h4>Core Message</h4>
-        <p>Show how {product} supports a credible {styles} story in the creator's own voice.</p>
-        <h4 style="margin-top:10px">Must-Show</h4>
-        <ul>
-          <li>Product in a real use case</li>
-          <li>One approved value proposition</li>
-          <li>Evidence for every product claim</li>
-          <li>Natural creator verdict</li>
-        </ul>
-      </div>
-      <div class="is-brief-block">
-        <h4>Shot List</h4>
-        <ul>
-          <li>Wide establishing shot</li>
-          <li>Immersive POV ride / surf</li>
-          <li>Subject + environment</li>
-          <li>Close-up of key feature</li>
-          <li>Reframe reveal example</li>
-          <li>CTA end card</li>
-        </ul>
-      </div>
-      <div class="is-brief-block">
-        <h4>Do / Don't</h4>
-        <p style="color:#16825D">✓ Use natural light<br/>✓ Keep edits cinematic<br/>✓ Show real movement<br/>✓ Disclose paid partnership</p>
-        <p style="color:#C83B3B;margin-top:8px">× Do not invent specs<br/>× Avoid competitor claims<br/>× No unsafe stunts</p>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px">
-      <div class="is-platform-card">
-        <h4><span class="is-platform-icon">IG</span> Instagram</h4>
-        <ul><li>Primary cut 30s</li><li>Carousel stills optional</li><li>Story stickers for CTA</li></ul>
-      </div>
-      <div class="is-platform-card">
-        <h4><span class="is-platform-icon">TT</span> TikTok</h4>
-        <ul><li>Hook in first 2s</li><li>On-screen text EN/ES</li><li>Spark Ads ready</li></ul>
-      </div>
-      <div class="is-platform-card">
-        <h4><span class="is-platform-icon">YT</span> YouTube</h4>
-        <ul><li>Shorts + optional mid-roll</li><li>Pinned comment CTA</li><li>Affiliate link in desc</li></ul>
-      </div>
-    </div>
-    <div class="is-localized">
-      <div class="is-locale-card">
-        <div class="is-locale-head">
-          <h4>{market} · {language}</h4>
-          {ai_badge("AI Generated")}
-        </div>
-        <p><b>Hook</b><br/>A creator-native opening built around {topics}.</p>
-        <p><b>Caption</b><br/>See how {product} fits a real {market} use case.</p>
-        <p><b>CTA</b><br/>Use the approved campaign link to explore {product}.</p>
-      </div>
-      <div class="is-locale-card">
-        <div class="is-locale-head">
-          <h4>Localization guardrail</h4>
-          {ai_badge("AI Generated")}
-        </div>
-        <p><b>Requirement</b><br/>Adapt meaning and cultural references for {market}; do not translate claims that have not been verified.</p>
-        <p><b>Evidence</b><br/>Attach the approved product source before external review.</p>
-        <p><b>Owner</b><br/>{esc(mission.get('owner', 'Mission owner'))}</p>
       </div>
     </div>
     """

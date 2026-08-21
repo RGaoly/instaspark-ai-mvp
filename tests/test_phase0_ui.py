@@ -164,6 +164,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "badge('Passed'" not in studio
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
+    assert "Energetic, authentic, cinematic, practical." not in studio
+    assert "Hook → story → proof → CTA" not in studio
+    assert "def _brief_content" not in studio
+    assert "_catalog_join" in studio
     assert "studio_brand_tone" in studio
     assert "generate_localized_content(grounded, creator, tone=tone, checklist=checklist)" in studio
     assert "save_content_asset" in studio

@@ -29,6 +29,7 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Needs shortlist", language="zh") == "需要入围名单"
     assert translate("Demo catalog", language="zh") == "演示目录"
     assert translate("Not assessed in this demo", language="zh") == "本演示未评估"
+    assert translate("Not specified in the catalog", language="zh") == "目录中未注明"
     assert translate("Shortlist creators", language="zh") == "将创作者加入入围名单"
     assert translate("Pipeline snapshot", language="zh") == "管线快照"
     assert translate("Unified workflow", language="zh") == "统一工作流"

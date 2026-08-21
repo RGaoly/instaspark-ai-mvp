@@ -187,6 +187,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "_activity_html" in launch
     assert "Team notifications" not in launch
     assert "State machine active" not in launch
+    assert "_pipeline_notes" in launch
+    assert "_pipeline_notes_html(progress, tracking_n=tracking_n)" in launch
+    assert "Pipeline snapshot" in launch
     opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
     assert "save_opportunity" in opportunity
     assert "_render_mission_link" in opportunity

@@ -478,6 +478,74 @@ def test_launch_checklist_moves_after_shortlist_approve_and_event(session):
     assert measured["upcoming"][0]["title"] == "Review recorded outcomes"
 
 
+def _launch_pipeline_notes_html():
+    from views import launch_mission
+
+    progress = _launch_progress_snapshot()
+    return launch_mission._pipeline_notes_html(progress, tracking_n=len(state.tracking_assets()))
+
+
+def test_launch_pipeline_notes_follow_live_counts(session):
+    from views import launch_mission
+
+    for record in session.creator_workflows.values():
+        record["state"] = "qualified"
+    session.shortlist_ids = []
+    empty = launch_mission._pipeline_notes(
+        shortlisted=0,
+        approved=0,
+        tracking_n=0,
+        events_n=0,
+        next_task={"title": "Shortlist creators", "note": "Add at least one creator to the shortlist."},
+    )
+    assert empty[0] == ("0 currently shortlisted creators", "Unified workflow")
+    assert empty[1] == ("0 currently approved creators", "Human decisions")
+    assert empty[2] == ("0 tracking assets issued", "Coupons and UTM links, not conversions")
+    assert empty[3] == ("0 performance events recorded", "Sourced conversions only")
+    assert empty[4] == ("Shortlist creators", "Next action · Add at least one creator to the shortlist.")
+    html = _launch_pipeline_notes_html()
+    assert "0 currently shortlisted creators" in html
+    assert "Shortlist creators" in html
+    assert "Live counts" in html
+    assert "Team notifications" not in html
+    assert "Context synchronized" not in html
+    assert "State machine active" not in html
+
+    ranked = state.ranking()
+    creator_id = ranked.iloc[0]["creator_id"]
+    state.transition_creator_state(
+        creator_id,
+        "shortlisted",
+        actor="Olivia Chen",
+        reason="Operator shortlisted from Search",
+        evidence=["search://shortlist"],
+    )
+    matching = _launch_progress_snapshot()
+    html = _launch_pipeline_notes_html()
+    assert f'{matching["steps"][0]["count"]} currently shortlisted creators' in html
+    assert "Approve one creator" in html
+
+    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    live = _launch_progress_snapshot()
+    html = _launch_pipeline_notes_html()
+    assert f'{live["steps"][1]["count"]} currently approved creators' in html
+    assert f"{len(state.tracking_assets())} tracking assets issued" in html
+    assert "0 performance events recorded" in html
+    assert "Record a conversion on Growth Review" in html
+
+    state.record_performance_event(
+        creator_id,
+        orders=2,
+        revenue_usd=400,
+        spend_usd=100,
+        coupon=decision["coupon"],
+    )
+    html = _launch_pipeline_notes_html()
+    assert "1 performance events recorded" in html
+    assert "Review recorded outcomes" in html
+    assert "Attribution guardrail" not in html
+
+
 def test_growth_filters_exclude_other_market_and_old_window(session):
     from datetime import datetime, timedelta, timezone
 

@@ -71,19 +71,31 @@ def _funnel(pool: int, summary: dict[str, int], events: list[dict]) -> str:
     ) + "</div>"
 
 
+def _creator_names() -> dict[str, str]:
+    return {row["creator_id"]: row["creator_name"] for _, row in creators().iterrows()}
+
+
+def _creator_label(creator_id: str, names: dict[str, str] | None = None) -> str:
+    mapping = names if names is not None else _creator_names()
+    name = str(mapping.get(creator_id, "") or "").strip()
+    if not name or name == creator_id:
+        return creator_id
+    return f"{name} · {creator_id}"
+
+
 def _event_recorded_label(event: dict) -> str:
     stamp = str(event.get("recorded_at") or "").strip()
     return stamp[:10] if stamp else "—"
 
 
-def _performance_table(events: list[dict]) -> str:
+def _performance_table(events: list[dict], names: dict[str, str] | None = None) -> str:
     head = "".join(f"<th>{h}</th>" for h in ["Creator", "Content", "Market", "Recorded", "Orders", "Revenue", "Spend"])
     if not events:
         body = '<tr><td colspan="7">No performance events in this period and market.</td></tr>'
     else:
         body = "".join(
             "<tr>"
-            f'<td>{esc(event.get("creator_id", "—"))}</td>'
+            f'<td>{esc(_creator_label(str(event.get("creator_id", "—")), names))}</td>'
             f'<td>{esc(event.get("content_asset_id", "—"))}</td>'
             f'<td>{esc(event.get("market", "—"))}</td>'
             f'<td>{esc(_event_recorded_label(event))}</td>'
@@ -95,7 +107,7 @@ def _performance_table(events: list[dict]) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'
 
 
-def _tracking_table(assets: list[dict], *, any_issued: bool = True) -> str:
+def _tracking_table(assets: list[dict], *, any_issued: bool = True, names: dict[str, str] | None = None) -> str:
     head = "".join(f"<th>{h}</th>" for h in ["Creator", "Market", "Coupon", "UTM campaign", "Deeplink"])
     if not assets:
         if any_issued:
@@ -105,7 +117,7 @@ def _tracking_table(assets: list[dict], *, any_issued: bool = True) -> str:
     else:
         body = "".join(
             "<tr>"
-            f'<td>{esc(item.get("creator_id", "—"))}</td>'
+            f'<td>{esc(_creator_label(str(item.get("creator_id", "—")), names))}</td>'
             f'<td>{esc(item.get("market", "—"))}</td>'
             f'<td>{esc(item.get("coupon", "—"))}</td>'
             f'<td>{esc(item.get("utm_campaign", "—"))}</td>'
@@ -136,16 +148,16 @@ def _recordable_creators() -> list[tuple[str, str, dict]]:
 
 def _next_actions(context: dict, summary: dict[str, int], events: list[dict], assets: list[dict]) -> str:
     actions = []
-    if summary.get("approved", 0):
-        actions.append(("blue", "Execute", "Contact approved creators", "Approved creators are waiting for outreach.", "Go to Outreach"))
-    if not events and (assets or summary.get("published", 0)):
+    if _needs_outreach(summary):
+        actions.append(("blue", "Execute", "Contact approved creators", "Approved creators are waiting for outreach.", "Use the button below"))
+    if _needs_conversion(summary, events, assets):
         actions.append(
             (
                 "orange",
                 "Measure",
                 "Record the conversion on Growth Review",
                 "Coupons are tracking assets, not conversions. ROI stays 0x until an operator records an event.",
-                "Use the expander below",
+                "Use the button below",
             )
         )
     if not actions:
@@ -155,6 +167,31 @@ def _next_actions(context: dict, summary: dict[str, int], events: list[dict], as
         f'<h4>{esc(title)}</h4><p>{esc(body)}</p><div class="is-action-impact">{esc(impact)}</div></div>'
         for tone, tag, title, body, impact in actions
     ) + "</div>"
+
+
+def _needs_outreach(summary: dict[str, int]) -> bool:
+    return any(summary.get(state, 0) for state in _OUTREACH_STATES - {"measured"})
+
+
+def _needs_conversion(summary: dict[str, int], events: list[dict], assets: list[dict]) -> bool:
+    return not events and bool(assets or summary.get("published", 0))
+
+
+def _render_next_action_buttons(summary: dict[str, int], events: list[dict], assets: list[dict]) -> None:
+    outreach = _needs_outreach(summary)
+    convert = _needs_conversion(summary, events, assets)
+    if not outreach and not convert:
+        return
+    cols = st.columns(2 if outreach and convert else 1)
+    index = 0
+    if outreach:
+        if cols[index].button(t("Open Outreach"), type="primary", key="growth_go_outreach"):
+            open_workspace_page("outreach-operations")
+        index += 1
+    if convert:
+        if cols[index].button(t("Record conversion here"), key="growth_go_record"):
+            st.session_state["growth_record_event_open"] = True
+            st.rerun()
 
 
 def _perf_event_label(creator_id: str, name: str) -> str:
@@ -289,6 +326,7 @@ def render() -> None:
         market_field="market",
     )
 
+    names = _creator_names()
     md(_kpi_strip(summary, filtered_events, budget), unsafe_allow_html=True)
     st.caption(
         t("ROI uses recorded performance events in the selected period and market. Empty set equals 0x.")
@@ -306,7 +344,7 @@ def render() -> None:
         md(
             '<div class="is-card"><div class="is-panel-head"><span class="is-panel-title">Linked performance events</span>'
             '<span class="is-panel-link">No inferred attribution</span></div>'
-            f'<div class="is-panel-body">{_performance_table(filtered_events)}</div></div>',
+            f'<div class="is-panel-body">{_performance_table(filtered_events, names)}</div></div>',
             unsafe_allow_html=True,
         )
 
@@ -314,7 +352,7 @@ def render() -> None:
         '<div class="is-card" style="margin-top:10px"><div class="is-panel-head">'
         '<span class="is-panel-title">Issued tracking assets</span>'
         '<span class="is-panel-link">Minted on approve · not conversions</span></div>'
-        f'<div class="is-panel-body">{_tracking_table(filtered_assets, any_issued=bool(assets))}</div></div>',
+        f'<div class="is-panel-body">{_tracking_table(filtered_assets, any_issued=bool(assets), names=names)}</div></div>',
         unsafe_allow_html=True,
     )
 
@@ -324,6 +362,7 @@ def render() -> None:
         f'<div class="is-panel-body">{_next_actions(context, summary, events, assets)}</div></div>',
         unsafe_allow_html=True,
     )
+    _render_next_action_buttons(summary, events, assets)
 
     _render_post_record_handoff()
     _render_record_form()

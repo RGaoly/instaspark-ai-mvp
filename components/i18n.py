@@ -1447,6 +1447,8 @@ ZH: dict[str, str] = {
     "Selected creator": "已选择该创作者",
     "Stay on Outreach. Contact pack, Advance, and next actions apply to this creator.": "留在外联页。联络包、推进和下一步行动都会作用到该创作者。",
     "Collaboration state": "协作状态",
+    "Use the button below": "请使用下方按钮",
+    "Record conversion here": "在此录入转化",
 }
 
 

@@ -1,4 +1,4 @@
-from views.creator_compare import _compare_grid, resolve_compare_focus
+from views.creator_compare import _compare_grid, open_search_youtube_lookup, resolve_compare_focus
 import pandas as pd
 
 
@@ -45,3 +45,17 @@ def test_compare_grid_marks_focused_column_not_first():
     assert "2 creators selected" in html
     assert html.count("is-compare-head selected") == 1
     assert html.index("Alex") < html.index("is-compare-head selected")
+
+
+def test_open_search_youtube_lookup_opens_search_expander(monkeypatch):
+    from views import creator_compare
+
+    fake = {}
+    opened = []
+    monkeypatch.setattr(creator_compare.st, "session_state", fake)
+    monkeypatch.setattr(creator_compare, "open_workspace_page", lambda page: opened.append(page))
+
+    open_search_youtube_lookup()
+
+    assert fake["search_youtube_open"] is True
+    assert opened == ["creator-search"]

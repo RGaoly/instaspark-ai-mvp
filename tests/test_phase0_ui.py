@@ -101,6 +101,10 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "prepare_next_action_jump" in compare
     assert 'open_workspace_page("growth-review")' in compare
     assert 'open_workspace_page("content-studio")' in compare
+    assert 'open_workspace_page("creator-search")' in compare
+    assert "open_search_youtube_lookup" in compare
+    assert "Look up YouTube on Search" in compare
+    assert "search_youtube_open" in search
     assert 't("Open Outreach")' in studio
     assert "studio_open_outreach" in studio
     assert "studio_brief_toast" in studio
@@ -159,6 +163,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "filter_ranked_creators" in search
     assert "42 + idx * 18" not in compare
     assert "View more content →" not in compare
+    assert "View more content (not wired)" not in compare
     assert "2 Medium · 1 High" not in compare
     assert "match_fit_label" in compare
     assert "badge('Passed'" not in studio

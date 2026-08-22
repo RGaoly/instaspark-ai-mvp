@@ -164,7 +164,11 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "badge('Passed'" not in studio
     assert "8/8" not in studio
     assert "Not assessed in this demo" in studio
-    assert "Demo format assumptions, not creator fields" in studio
+    assert "No platform fields in the demo catalog" in studio
+    assert "Instagram Reels" not in studio
+    assert "Instagram · TikTok · YouTube" not in search
+    assert "declared_platforms" in search
+    assert "_platform_line" in search
     assert "Energetic, authentic, cinematic, practical." not in studio
     assert "Hook → story → proof → CTA" not in studio
     assert "def _brief_content" not in studio

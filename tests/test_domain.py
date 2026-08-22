@@ -8,6 +8,7 @@ from src.domain import (
     OutreachCase,
     WORKFLOW_STATES,
     can_transition,
+    declared_platforms,
     match_fit_label,
     match_label,
     match_tier,
@@ -337,4 +338,14 @@ def test_filter_performance_events_by_market_and_period():
     unstamped = {"creator_id": "C-OLD", "market": "United States", "revenue_usd": 50, "spend_usd": 25}
     assert filter_performance_events([unstamped], period_days=7, market="United States", now=now) == []
     assert filter_performance_events([unstamped], period_days=None, market="United States", now=now) == [unstamped]
+
+
+def test_declared_platforms_do_not_invent_instagram_or_tiktok():
+    assert declared_platforms({}) == ()
+    assert declared_platforms({"platforms": "YouTube|Instagram"}) == ("YouTube", "Instagram")
+    assert declared_platforms(
+        {},
+        [{"source": "youtube_data_api", "url": "https://www.youtube.com/channel/UC1"}],
+    ) == ("YouTube",)
+    assert "TikTok" not in declared_platforms({"primary_market": "United States"})
 

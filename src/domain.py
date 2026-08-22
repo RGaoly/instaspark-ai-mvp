@@ -411,6 +411,41 @@ def match_fit_label(total_score: float) -> str:
     return "{} Fit".format(match_tier(total_score))
 
 
+def _split_catalog_tokens(value: Any) -> Tuple[str, ...]:
+    if value is None:
+        return ()
+    if isinstance(value, str):
+        parts = [item.strip() for item in value.replace("|", ",").split(",") if item.strip()]
+        return tuple(parts)
+    try:
+        return tuple(str(item).strip() for item in list(value) if str(item).strip())
+    except TypeError:
+        text = str(value).strip()
+        return (text,) if text else ()
+
+
+def declared_platforms(
+    creator: Mapping[str, Any],
+    live_evidence: Iterable[Mapping[str, Any]] | None = None,
+) -> Tuple[str, ...]:
+    """Platforms we can actually name: catalog field, then attached live evidence.
+
+    The demo CSV has no platforms column. Do not invent Instagram or TikTok.
+    """
+
+    seen: list[str] = []
+    for item in _split_catalog_tokens(creator.get("platforms")):
+        if item not in seen:
+            seen.append(item)
+    for row in live_evidence or ():
+        blob = " ".join(
+            str(row.get(key) or "") for key in ("source", "url", "title")
+        ).lower()
+        if "youtube" in blob and "YouTube" not in seen:
+            seen.append("YouTube")
+    return tuple(seen)
+
+
 def pipeline_counts(summary: Mapping[str, int]) -> Dict[str, int]:
     """Sum workflow states into shortlisted / approved / outreach / measured."""
 
@@ -711,6 +746,7 @@ __all__ = [
     "allowed_next_states",
     "attributed_roi",
     "can_transition",
+    "declared_platforms",
     "filter_dated_records",
     "filter_performance_events",
     "launch_progress",

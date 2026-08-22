@@ -32,7 +32,7 @@ from components.state import (
 from components.ui import md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
-from src.domain import match_label, match_tier
+from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
 
@@ -41,6 +41,15 @@ def search_cta_page(creator_id: str) -> str | None:
     """Jump target for Search. Same rules as Outreach; do not fork them."""
 
     return next_outreach_action_page(creator_id)
+
+
+def _platform_line(creator: dict, live_rows: list) -> str:
+    platforms = declared_platforms(creator, live_rows)
+    market = str(creator.get("primary_market") or "").strip()
+    bits = list(platforms) if platforms else [t("No platform fields in the demo catalog")]
+    if market:
+        bits.append(market)
+    return " · ".join(bits)
 
 
 def open_search_cta(creator_id: str, *, creator_name: str | None = None) -> str | None:
@@ -205,7 +214,7 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
           {avatar(creator['creator_name'], 2, 'profile')}
           <div>
             <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')} {live_chip}</div>
-            <div class="is-socials">Instagram · TikTok · YouTube · {esc(creator.get('primary_market',''))}</div>
+            <div class="is-socials">{esc(_platform_line(creator, live_rows))}</div>
           </div>
           <div class="is-detail-score">
             {score_ring(score)}

@@ -71,6 +71,7 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Shortlist overlap", language="zh") == "入围名单重合度"
     assert translate("No scored reasons for this creator.", language="zh") == "该创作者没有已评分的推荐理由。"
     assert translate("Same catalog fields as Content Studio.", language="zh") == "与内容工作室使用同一目录字段。"
+    assert translate("Focus creator", language="zh") == "聚焦创作者"
     assert (
         translate("No live YouTube evidence attached. Lookup is optional and labeled.", language="zh")
         == "尚未挂接 YouTube 实时证据。查询可选且会标明来源。"

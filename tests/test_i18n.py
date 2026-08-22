@@ -67,6 +67,14 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Select this creator", language="zh") == "选择该创作者"
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert translate("Collaboration state", language="zh") == "协作状态"
+    assert translate("Why recommended", language="zh") == "推荐原因"
+    assert translate("Shortlist overlap", language="zh") == "入围名单重合度"
+    assert translate("No scored reasons for this creator.", language="zh") == "该创作者没有已评分的推荐理由。"
+    assert translate("Same catalog fields as Content Studio.", language="zh") == "与内容工作室使用同一目录字段。"
+    assert (
+        translate("No live YouTube evidence attached. Lookup is optional and labeled.", language="zh")
+        == "尚未挂接 YouTube 实时证据。查询可选且会标明来源。"
+    )
 
 
 def test_longest_first_localization_preserves_compound_terms():

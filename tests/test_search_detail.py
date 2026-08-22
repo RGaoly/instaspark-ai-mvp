@@ -30,10 +30,16 @@ def test_style_and_risk_tabs_use_catalog():
     style = _content_style_html({"styles": ["POV", "vlog"], "topics": ["outdoor"]})
     assert "POV, vlog" in style
     assert "outdoor" in style
+    assert "Same catalog fields as Content Studio." in style
+    assert "Instagram" not in style
+    assert "TikTok" not in style
+    empty_style = _content_style_html({"styles": [], "topics": None})
+    assert "Not specified in the catalog" in empty_style
     empty_risk = _risk_html({})
     assert "No catalog warnings for this creator" in empty_risk
     risk = _risk_html({"warnings": ["需确认竞品合作排他"]})
     assert "需确认竞品合作排他" in risk
+    assert "Verified" not in risk
 
 
 def test_audience_tab_shows_overlap_not_unique_reach():

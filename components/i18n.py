@@ -1461,6 +1461,14 @@ ZH: dict[str, str] = {
     "No platform fields in the demo catalog": "演示目录没有平台字段",
     "Attached as live evidence": "已挂为实时证据",
     "From catalog": "来自目录",
+    "Shortlist overlap": "入围名单重合度",
+    "Live platform evidence": "实时平台证据",
+    "No live YouTube evidence attached. Lookup is optional and labeled.": "尚未挂接 YouTube 实时证据。查询可选且会标明来源。",
+    "No scored reasons for this creator.": "该创作者没有已评分的推荐理由。",
+    "Score drivers below still come from the rule-based mix.": "下方分数驱动项仍来自规则加权。",
+    "shortlist peers · synthetic cohorts, not platform unique reach.": "名入围同伴 · 合成人群，不是平台独立触达。",
+    "Market + language mix driver already used in ranking.": "市场 + 语言混合驱动项，已用于排序。",
+    "Same catalog fields as Content Studio.": "与内容工作室使用同一目录字段。",
 }
 
 

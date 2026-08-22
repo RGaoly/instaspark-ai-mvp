@@ -29,12 +29,13 @@ from components.state import (
     selected_creator,
     transition_creator_state,
 )
-from components.ui import md
+from components.ui import labels, md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
+from views.content_studio import _catalog_join
 
 
 def search_cta_page(creator_id: str) -> str | None:
@@ -156,57 +157,39 @@ def _creator_table(ranked) -> str:
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
 
 
-def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
-    reasons = list(creator.get("positives", [])[:4])
-    defaults = [
-        "Eligible under the active entry's hard gates",
-        "Evidence requires operator verification before outreach",
-        "Commercial terms require direct confirmation",
-        "No outcome prediction is treated as observed performance",
-    ]
-    while len(reasons) < 4:
-        reasons.append(defaults[len(reasons)])
-    reason_labels = [
-        "Mission fit",
-        "Topic overlap",
-        "Commercial fit",
-        "Operator caveat",
-    ]
-    reason_html = "".join(
-        '<div class="is-reason"><span class="is-reason-icon">✓</span>'
-        f'<span><b>{esc(reason_labels[i])}</b><small>{esc(reason)}</small></span></div>'
-        for i, reason in enumerate(reasons)
-    )
-    overlap = overlap_vs_cohort(creator, cohort)
-    overlap_pct = round(overlap["mean_jaccard"] * 100)
-    score = float(creator["total_score"])
-    live_rows = live_evidence_for(creator["creator_id"])
-    live_chip = (
-        badge("Live YouTube evidence attached", "green")
-        if live_rows or float(creator.get("live_proof_bonus") or 0) > 0
-        else ""
-    )
-    live_html = (
-        "".join(
+def _scored_reasons(creator: dict) -> list[str]:
+    return [str(item).strip() for item in list(creator.get("positives") or []) if str(item).strip()]
+
+
+def _catalog_risks(creator: dict) -> list[str]:
+    raw = creator.get("warnings")
+    if raw is None:
+        raw = creator.get("risks")
+    return [str(item).strip() for item in list(raw or []) if str(item).strip()]
+
+
+def _live_evidence_html(live_rows: list) -> str:
+    if live_rows:
+        return "".join(
             f'<div class="is-reason"><span class="is-reason-icon">▶</span>'
             f'<span><b>{esc(item.get("title", "YouTube"))}</b>'
             f'<small>{esc(item.get("source", "youtube_data_api"))} · {esc(item.get("url", ""))}</small></span></div>'
             for item in live_rows[:3]
         )
-        if live_rows
-        else '<small style="color:#879198">No live YouTube evidence attached. Lookup is optional and labeled.</small>'
+    return (
+        '<small style="color:#879198">'
+        "No live YouTube evidence attached. Lookup is optional and labeled."
+        "</small>"
     )
-    mix_html = "".join(
-        f'<div class="is-driver-row">{scorebar(label, value)}'
-        f'<span class="is-weight-tag">{esc(weight)}</span></div>'
-        for label, value, weight in mix_driver_display(creator)
+
+
+def _detail_header_html(creator: dict, live_rows: list) -> str:
+    score = float(creator["total_score"])
+    live_chip = (
+        badge("Live YouTube evidence attached", "green")
+        if live_rows or float(creator.get("live_proof_bonus") or 0) > 0
+        else ""
     )
-    additive_html = "".join(
-        f'<div class="is-driver-row"><label>{esc(label)}</label>'
-        f'<span>+{value:.1f}</span><span class="is-weight-tag">{esc(note)}</span></div>'
-        for label, value, note in additive_driver_display(creator)
-    )
-    mission_fit = float(creator.get("mission_fit") or creator.get("audience_fit") or 0)
     return f"""
     <div class="is-card">
       <div class="is-panel-body">
@@ -221,33 +204,127 @@ def _detail_panel(creator: dict, context: dict, cohort: list[dict]) -> str:
             <span class="is-match-label">{esc(match_label(score))}</span>
           </div>
         </div>
-        <div class="is-tabs">
-          <span class="is-tab active">Why recommended</span>
-          <span class="is-tab">Audience</span>
-          <span class="is-tab">Content style</span>
-          <span class="is-tab">Risk</span>
-        </div>
-        <div class="is-card-title" style="margin-bottom:6px">Top reasons</div>
-        {reason_html}
-        <div class="is-grid-2" style="margin-top:10px">
-          <div class="is-lift-panel">
-            <h4>Shortlist overlap</h4>
-            <div class="is-donut" style="--pct:{overlap_pct};width:52px;height:52px"><span>{overlap_pct}%</span></div>
-            <small style="font-size:7px;color:#879198;display:block;margin-top:6px">
-            Mean Jaccard vs {overlap['peers']} shortlist peers · synthetic cohorts, not platform unique reach.
-            Mission fit (score driver) is {mission_fit:.0f}.</small>
-          </div>
-          <div class="is-lift-panel">
-            <h4>Score drivers</h4>
-            {mix_html}
-            {additive_html}
-          </div>
-        </div>
-        <div class="is-card-title" style="margin:10px 0 6px">Live platform evidence</div>
-        {live_html}
       </div>
     </div>
     """
+
+
+def _why_recommended_html(creator: dict, live_rows: list) -> str:
+    reasons = _scored_reasons(creator)
+    if reasons:
+        reason_html = "".join(
+            '<div class="is-reason"><span class="is-reason-icon">✓</span>'
+            f"<span><b>{esc(reason)}</b></span></div>"
+            for reason in reasons[:6]
+        )
+    else:
+        reason_html = (
+            '<div class="is-reason"><span class="is-reason-icon">·</span>'
+            "<span><b>No scored reasons for this creator.</b>"
+            "<small>Score drivers below still come from the rule-based mix.</small></span></div>"
+        )
+    mix_html = "".join(
+        f'<div class="is-driver-row">{scorebar(label, value)}'
+        f'<span class="is-weight-tag">{esc(weight)}</span></div>'
+        for label, value, weight in mix_driver_display(creator)
+    )
+    additive_html = "".join(
+        f'<div class="is-driver-row"><label>{esc(label)}</label>'
+        f'<span>+{value:.1f}</span><span class="is-weight-tag">{esc(note)}</span></div>'
+        for label, value, note in additive_driver_display(creator)
+    )
+    return f"""
+    <div class="is-card">
+      <div class="is-panel-body">
+        <div class="is-card-title" style="margin-bottom:6px">Top reasons</div>
+        {reason_html}
+        <div class="is-card-title" style="margin:10px 0 6px">Score drivers</div>
+        {mix_html}
+        {additive_html}
+        <div class="is-card-title" style="margin:10px 0 6px">Live platform evidence</div>
+        {_live_evidence_html(live_rows)}
+      </div>
+    </div>
+    """
+
+
+def _audience_html(creator: dict, cohort: list[dict]) -> str:
+    overlap = overlap_vs_cohort(creator, cohort)
+    overlap_pct = round(overlap["mean_jaccard"] * 100)
+    mission_fit = float(creator.get("mission_fit") or creator.get("audience_fit") or 0)
+    return f"""
+    <div class="is-card">
+      <div class="is-panel-body">
+        <div class="is-lift-panel">
+          <h4>Shortlist overlap</h4>
+          <div class="is-donut" style="--pct:{overlap_pct};width:52px;height:52px"><span>{overlap_pct}%</span></div>
+          <small style="font-size:7px;color:#879198;display:block;margin-top:6px">
+          {overlap['peers']} shortlist peers · synthetic cohorts, not platform unique reach.</small>
+        </div>
+        <div class="is-lift-panel" style="margin-top:10px">
+          <h4>Mission fit</h4>
+          <div class="is-donut" style="--pct:{mission_fit:.0f};width:52px;height:52px"><span>{mission_fit:.0f}</span></div>
+          <small style="font-size:7px;color:#879198;display:block;margin-top:6px">
+          Market + language mix driver already used in ranking.</small>
+        </div>
+      </div>
+    </div>
+    """
+
+
+def _content_style_html(creator: dict) -> str:
+    styles = esc(_catalog_join(creator.get("styles")))
+    topics = esc(_catalog_join(creator.get("topics")))
+    return f"""
+    <div class="is-card">
+      <div class="is-panel-body">
+        <div class="is-card-title" style="margin-bottom:6px">Content style</div>
+        <p>{styles}</p>
+        <div class="is-card-title" style="margin:10px 0 6px">Topics</div>
+        <p>{topics}</p>
+        <small style="color:#879198">Same catalog fields as Content Studio.</small>
+      </div>
+    </div>
+    """
+
+
+def _risk_html(creator: dict) -> str:
+    risks = _catalog_risks(creator)
+    if not risks:
+        body = (
+            '<div class="is-risk"><span><b>No catalog warnings for this creator.</b>'
+            "<small>Operator review is still required before outreach.</small></span></div>"
+        )
+    else:
+        body = "".join(
+            '<div class="is-risk"><span class="is-risk-icon">!</span>'
+            f"<span><b>{esc(risk)}</b></span></div>"
+            for risk in risks
+        )
+    return f"""
+    <div class="is-card">
+      <div class="is-panel-body">
+        <div class="is-card-title" style="margin-bottom:6px">Potential risks</div>
+        {body}
+      </div>
+    </div>
+    """
+
+
+def _render_detail_aside(creator: dict, cohort: list[dict]) -> None:
+    live_rows = live_evidence_for(creator["creator_id"])
+    md(_detail_header_html(creator, live_rows), unsafe_allow_html=True)
+    why_tab, audience_tab, style_tab, risk_tab = st.tabs(
+        labels(["Why recommended", "Audience", "Content style", "Risk"])
+    )
+    with why_tab:
+        md(_why_recommended_html(creator, live_rows), unsafe_allow_html=True)
+    with audience_tab:
+        md(_audience_html(creator, cohort), unsafe_allow_html=True)
+    with style_tab:
+        md(_content_style_html(creator), unsafe_allow_html=True)
+    with risk_tab:
+        md(_risk_html(creator), unsafe_allow_html=True)
 
 
 def render() -> None:
@@ -368,7 +445,7 @@ def render() -> None:
         cohort = visible[visible["creator_id"].isin(shortlist_ids)].to_dict("records")
         if not cohort:
             cohort = visible.head(3).to_dict("records")
-        md(_detail_panel(creator, context, cohort), unsafe_allow_html=True)
+        _render_detail_aside(creator, cohort)
         jump_page = search_cta_page(creator["creator_id"])
         if jump_page:
             jump_label = (

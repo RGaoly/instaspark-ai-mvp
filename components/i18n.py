@@ -1452,6 +1452,8 @@ ZH: dict[str, str] = {
     "Select this creator": "选择该创作者",
     "Selected creator": "已选择该创作者",
     "Stay on Outreach. Contact pack, Advance, and next actions apply to this creator.": "留在外联页。联络包、推进和下一步行动都会作用到该创作者。",
+    "Stay on Search. Detail, Shortlist, Compare, and Brief apply to this creator.": "留在搜索页。详情、短名单、对比和简报都针对该创作者。",
+    "Click a row to inspect that creator.": "点击一行即可查看该创作者。",
     "Collaboration state": "协作状态",
     "Use the button below": "请使用下方按钮",
     "Record conversion here": "在此录入转化",

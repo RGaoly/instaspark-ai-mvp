@@ -64,6 +64,13 @@ def open_search_cta(creator_id: str, *, creator_name: str | None = None) -> str 
     return page
 
 
+def select_search_creator(creator_id: str) -> str:
+    """Select a ranked row without leaving Search."""
+
+    select_creator(creator_id)
+    return creator_id
+
+
 def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
     market_options = unique_catalog_values(ranked, "primary_market") or unique_catalog_values(ranked, "markets")
     language_options = unique_catalog_values(ranked, "languages")
@@ -110,52 +117,91 @@ def _render_live_lookup(context: dict) -> None:
                     st.error(str(exc))
 
 
+_TABLE_HEADERS = [
+    "",
+    "Creator",
+    "Niche & market",
+    "Followers",
+    "Modeled est. views",
+    "Eng. rate",
+    "Mission fit",
+    "Topic overlap",
+    "Commercial",
+    "Match score",
+]
+
+
+def _creator_row_html(row, idx: int, *, selected: bool = False) -> str:
+    name = row["creator_name"]
+    topics = " · ".join(row["topics"][:2])
+    tier = match_tier(row["total_score"])
+    mission_fit = float(row.get("mission_fit", row.get("audience_fit", 0)))
+    topic_overlap = float(row.get("topic_overlap", row.get("content_fit", 0)))
+    live_chip = (
+        f'<div style="margin-top:2px">{badge("Live YouTube evidence attached", "green")}</div>'
+        if float(row.get("live_proof_bonus") or 0) > 0
+        else ""
+    )
+    selected_cls = ' class="is-selected"' if selected else ""
+    return (
+        f"<tr{selected_cls}>"
+        f'<td>{"●" if selected else "○"}</td>'
+        f'<td><div class="is-creator-cell">{avatar(name, idx)}'
+        f'<span><b>{esc(name)}</b><small>@{esc(name.lower().replace(" ", ""))}</small></span></div></td>'
+        f'<td><b>{esc(topics or "Outdoor")}</b><br/>'
+        f'<small style="color:#879198">{esc(row["primary_market"])}</small></td>'
+        f'<td>{int(row["followers"]) / 1000:.0f}K</td>'
+        f'<td>{int(row["followers"] * row["engagement_rate"] / 100 * 4) / 1000:.0f}K</td>'
+        f'<td>{row["engagement_rate"]:.1f}%</td>'
+        f'<td><b>{mission_fit:.1f}</b>{dots(mission_fit)}</td>'
+        f'<td><b>{topic_overlap:.1f}</b>{dots(topic_overlap)}</td>'
+        f'<td><b>{row["commercial_fit"]:.1f}</b>{dots(row["commercial_fit"])}</td>'
+        f'<td><div style="display:flex;align-items:center;gap:5px">'
+        f'{score_ring(row["total_score"])}'
+        f'<small style="color:#16825D;font-weight:850">{tier}</small></div>{live_chip}</td>'
+        "</tr>"
+    )
+
+
 def _creator_table(ranked) -> str:
-    headers = [
-        "",
-        "Creator",
-        "Niche & market",
-        "Followers",
-        "Modeled est. views",
-        "Eng. rate",
-        "Mission fit",
-        "Topic overlap",
-        "Commercial",
-        "Match score",
+    head = "".join(f"<th>{h}</th>" for h in _TABLE_HEADERS)
+    selected_id = st.session_state.get("selected_creator_id")
+    rows = [
+        _creator_row_html(row, idx, selected=row["creator_id"] == selected_id)
+        for idx, row in ranked.iterrows()
     ]
-    head = "".join(f"<th>{h}</th>" for h in headers)
-    rows = []
-    for idx, row in ranked.iterrows():
-        selected = row["creator_id"] == st.session_state.selected_creator_id
-        name = row["creator_name"]
-        topics = " · ".join(row["topics"][:2])
-        tier = match_tier(row["total_score"])
-        mission_fit = float(row.get("mission_fit", row.get("audience_fit", 0)))
-        topic_overlap = float(row.get("topic_overlap", row.get("content_fit", 0)))
-        live_chip = (
-            f'<div style="margin-top:2px">{badge("Live YouTube evidence attached", "green")}</div>'
-            if float(row.get("live_proof_bonus") or 0) > 0
-            else ""
-        )
-        rows.append(
-            f'<tr class="{"is-selected" if selected else ""}">'
-            f'<td>{"●" if selected else "○"}</td>'
-            f'<td><div class="is-creator-cell">{avatar(name, idx)}'
-            f'<span><b>{esc(name)}</b><small>@{esc(name.lower().replace(" ", ""))}</small></span></div></td>'
-            f'<td><b>{esc(topics or "Outdoor")}</b><br/>'
-            f'<small style="color:#879198">{esc(row["primary_market"])}</small></td>'
-            f'<td>{int(row["followers"]) / 1000:.0f}K</td>'
-            f'<td>{int(row["followers"] * row["engagement_rate"] / 100 * 4) / 1000:.0f}K</td>'
-            f'<td>{row["engagement_rate"]:.1f}%</td>'
-            f'<td><b>{mission_fit:.1f}</b>{dots(mission_fit)}</td>'
-            f'<td><b>{topic_overlap:.1f}</b>{dots(topic_overlap)}</td>'
-            f'<td><b>{row["commercial_fit"]:.1f}</b>{dots(row["commercial_fit"])}</td>'
-            f'<td><div style="display:flex;align-items:center;gap:5px">'
-            f'{score_ring(row["total_score"])}'
-            f'<small style="color:#16825D;font-weight:850">{tier}</small></div>{live_chip}</td>'
-            "</tr>"
-        )
     return f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
+
+
+def _render_creator_table(ranked) -> None:
+    """Clickable ranking: each row selects the creator and stays on Search."""
+
+    selected_id = st.session_state.get("selected_creator_id")
+    head = "".join(f"<th>{h}</th>" for h in _TABLE_HEADERS)
+    md(
+        f'<table class="is-table"><thead><tr>{head}</tr></thead></table>',
+        unsafe_allow_html=True,
+    )
+    for idx, row in ranked.iterrows():
+        selected = row["creator_id"] == selected_id
+        md(
+            f'<table class="is-table"><tbody>'
+            f"{_creator_row_html(row, idx, selected=selected)}"
+            "</tbody></table>",
+            unsafe_allow_html=True,
+        )
+        label = t("Selected creator") if selected else t("Select this creator")
+        if st.button(
+            label,
+            key=f"search_select_{row['creator_id']}",
+            use_container_width=True,
+            type="primary" if selected else "secondary",
+            help=t(
+                "Stay on Search. Detail, Shortlist, Compare, and Brief apply to this creator."
+            ),
+        ):
+            select_search_creator(row["creator_id"])
+            st.rerun()
 
 
 def _scored_reasons(creator: dict) -> list[str]:
@@ -401,8 +447,11 @@ def render() -> None:
         render_demo_notice()
         return
 
-    options = {row["creator_name"]: row["creator_id"] for _, row in visible.iterrows()}
-    toolbar_left, toolbar_mid, toolbar_right = st.columns([0.65, 0.2, 0.15], vertical_alignment="center")
+    visible_ids = visible["creator_id"].tolist()
+    selected_id = st.session_state.get("selected_creator_id")
+    if selected_id not in visible_ids:
+        select_creator(visible_ids[0])
+    toolbar_left, toolbar_right = st.columns([0.85, 0.15], vertical_alignment="center")
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
@@ -410,20 +459,6 @@ def render() -> None:
             f'</div>',
             unsafe_allow_html=True,
         )
-    with toolbar_mid:
-        option_names = list(options)
-        selected_id = st.session_state.get("selected_creator_id")
-        preferred_name = next(
-            (name for name, creator_id in options.items() if creator_id == selected_id),
-            option_names[0],
-        )
-        selected_name = st.selectbox(
-            t("Inspect creator"),
-            option_names,
-            index=option_names.index(preferred_name),
-            label_visibility="collapsed",
-        )
-        select_creator(options[selected_name])
     with toolbar_right:
         st.button(
             t("Sort: Match score"),
@@ -434,9 +469,11 @@ def render() -> None:
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     with main:
-        md(_creator_table(visible), unsafe_allow_html=True)
+        _render_creator_table(visible)
         st.caption(
-            t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
+            t("Click a row to inspect that creator.")
+            + " "
+            + t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
         )
     with aside:
         creator = selected_creator()

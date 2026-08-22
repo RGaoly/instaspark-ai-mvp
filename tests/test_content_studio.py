@@ -1,4 +1,9 @@
-from views.content_studio import NOT_IN_CATALOG, _catalog_join, _mission_creator_cards
+from views.content_studio import (
+    NOT_IN_CATALOG,
+    _catalog_join,
+    _mission_creator_cards,
+    _platform_requirements_html,
+)
 
 
 def test_catalog_join_lists_and_empty():
@@ -37,5 +42,22 @@ def test_creator_profile_uses_catalog_styles_not_canned_tone():
     assert "travel, tech" in alex_html
     assert "Energetic, authentic, cinematic, practical." not in maya_html
     assert "Hook → story → proof → CTA" not in maya_html
-    assert "Demo format assumptions, not creator fields" in maya_html
+    assert "No platform fields in the demo catalog" in maya_html
+    assert "Instagram Reels" not in maya_html
+    assert "TikTok" not in maya_html
     assert maya_html != alex_html
+
+
+def test_platform_requirements_use_catalog_and_live_evidence():
+    empty = _platform_requirements_html({"creator_name": "Maya"}, [])
+    assert "No platform fields in the demo catalog" in empty
+    assert "Instagram Reels" not in empty
+    catalog = _platform_requirements_html({"platforms": ["YouTube"]}, [])
+    assert "YouTube" in catalog
+    assert "From catalog" in catalog
+    live = _platform_requirements_html(
+        {},
+        [{"source": "youtube_data_api", "url": "https://www.youtube.com/channel/UC1", "title": "Maya"}],
+    )
+    assert "YouTube" in live
+    assert "Attached as live evidence" in live

@@ -8,12 +8,13 @@ from components.shell import open_workspace_page, render_demo_notice, render_top
 from components.state import (
     active_context_label,
     active_mission,
+    live_evidence_for,
     ranking,
     save_content_asset,
     select_creator,
 )
 from components.ui import labels, md
-from src.domain import match_tier
+from src.domain import declared_platforms, match_tier
 from services.llm_service import (
     generate_brief,
     generate_hooks,
@@ -49,7 +50,33 @@ def _catalog_join(value: object, empty: str = NOT_IN_CATALOG) -> str:
     return ", ".join(parts) if parts else empty
 
 
-def _mission_creator_cards(mission, creator) -> str:
+def _platform_requirements_html(creator, live_evidence=None) -> str:
+    evidence = list(live_evidence or [])
+    platforms = declared_platforms(creator, evidence)
+    catalog = set(declared_platforms(creator, None))
+    if not platforms:
+        return """
+    <div class="is-studio-card">
+      <h4>Platform requirements</h4>
+      <p><small>No platform fields in the demo catalog</small></p>
+    </div>
+    """
+    cards = []
+    for name in platforms:
+        note = "Attached as live evidence" if name not in catalog else "From catalog"
+        cards.append(
+            '<div class="is-platform-card" style="margin-bottom:7px;padding:8px">'
+            f"<h4>{esc(name)}</h4><p>{esc(note)}</p></div>"
+        )
+    return f"""
+    <div class="is-studio-card">
+      <h4>Platform requirements</h4>
+      {''.join(cards)}
+    </div>
+    """
+
+
+def _mission_creator_cards(mission, creator, live_evidence=None) -> str:
     markets = " · ".join(mission.get("markets", ["United States", "Mexico"]))
     styles = esc(_catalog_join(creator.get("styles")))
     topics = esc(_catalog_join(creator.get("topics")))
@@ -72,22 +99,7 @@ def _mission_creator_cards(mission, creator) -> str:
       <p><b>Topics</b><br/>{topics}</p>
       <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · {match_tier(creator.get('total_score', 0))}</p>
     </div>
-    <div class="is-studio-card">
-      <h4>Platform requirements</h4>
-      <p><small>Demo format assumptions, not creator fields</small></p>
-      <div class="is-platform-card" style="margin-bottom:7px;padding:8px">
-        <h4><span class="is-platform-icon">IG</span> Instagram Reels</h4>
-        <p>9:16 · 15–45s · native captions · #ad</p>
-      </div>
-      <div class="is-platform-card" style="margin-bottom:7px;padding:8px">
-        <h4><span class="is-platform-icon">TT</span> TikTok</h4>
-        <p>9:16 · hook in 2s · trending audio OK</p>
-      </div>
-      <div class="is-platform-card" style="padding:8px">
-        <h4><span class="is-platform-icon">YT</span> YouTube Shorts</h4>
-        <p>9:16 · 30–60s · end-screen CTA</p>
-      </div>
-    </div>
+    {_platform_requirements_html(creator, live_evidence)}
     """
 
 
@@ -218,7 +230,14 @@ def render() -> None:
 
     left, center, right = st.columns([0.18, 0.58, 0.24], gap="small", vertical_alignment="top")
     with left:
-        md(_mission_creator_cards(mission, creator), unsafe_allow_html=True)
+        md(
+            _mission_creator_cards(
+                mission,
+                creator,
+                live_evidence_for(creator.get("creator_id", "")),
+            ),
+            unsafe_allow_html=True,
+        )
     with right:
         tone = st.segmented_control(
             t("Brand tone"),

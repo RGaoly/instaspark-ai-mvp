@@ -1458,6 +1458,9 @@ ZH: dict[str, str] = {
     "From the audit trail": "来自审计记录",
     "No workflow events for this mission yet.": "本任务尚无工作流事件。",
     "Shortlist or approve a creator to start the audit trail.": "请先加入短名单或批准创作者，审计记录才会开始。",
+    "No platform fields in the demo catalog": "演示目录没有平台字段",
+    "Attached as live evidence": "已挂为实时证据",
+    "From catalog": "来自目录",
 }
 
 

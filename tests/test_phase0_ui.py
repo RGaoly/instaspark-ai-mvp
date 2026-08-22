@@ -93,6 +93,10 @@ def test_unwired_chrome_buttons_are_disabled():
     assert 'open_workspace_page("growth-review")' in search
     assert "search_cta_page" in search
     assert "open_search_cta" in search
+    assert "select_search_creator" in search
+    assert "search_select_" in search
+    assert "_render_creator_table" in search
+    assert 'open_workspace_page' not in search.split("def _render_creator_table")[1].split("def ")[0]
     assert "next_outreach_action_page" in search
     assert "prepare_next_action_jump" in search
     assert "compare_cta_page" in compare

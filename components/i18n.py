@@ -1469,6 +1469,7 @@ ZH: dict[str, str] = {
     "shortlist peers · synthetic cohorts, not platform unique reach.": "名入围同伴 · 合成人群，不是平台独立触达。",
     "Market + language mix driver already used in ranking.": "市场 + 语言混合驱动项，已用于排序。",
     "Same catalog fields as Content Studio.": "与内容工作室使用同一目录字段。",
+    "Focus creator": "聚焦创作者",
 }
 
 

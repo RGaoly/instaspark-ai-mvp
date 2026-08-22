@@ -85,7 +85,18 @@ def _overlap_panel(report: dict, focus: dict) -> str:
     )
 
 
-def _compare_grid(rows) -> str:
+def resolve_compare_focus(compare_ids: list[str], selected_id: str | None) -> str | None:
+    """Keep focus on a compared creator; fall back to the first column."""
+
+    ids = [str(item) for item in compare_ids if str(item).strip()]
+    if not ids:
+        return None
+    if selected_id and str(selected_id) in ids:
+        return str(selected_id)
+    return ids[0]
+
+
+def _compare_grid(rows, focus_id: str | None = None) -> str:
     creators = [row for _, row in rows.iterrows()]
     labels = [
         ("Audience geography", lambda r: _geo_split(r)),
@@ -99,17 +110,18 @@ def _compare_grid(rows) -> str:
         ("Recommended market", lambda r: r["primary_market"]),
     ]
     cells = [
-        '<div class="is-compare-label is-compare-head">'
-        '<b>3 creators selected</b><br/><small>Select up to 3 to compare</small></div>'
+        f'<div class="is-compare-label is-compare-head">'
+        f'<b>{len(creators)} creators selected</b><br/><small>Select up to 3 to compare</small></div>'
     ]
-    for idx, r in enumerate(creators):
+    for avatar_idx, r in enumerate(creators):
         score = float(r["total_score"])
         fit = match_fit_label(score)
         tier = match_tier(score)
         tone = {"Excellent": "blue", "Strong": "green", "Moderate": "gray", "Weak": "orange"}.get(tier, "gray")
+        focused = bool(focus_id) and str(r["creator_id"]) == str(focus_id)
         cells.append(
-            f'<div class="is-compare-head {"selected" if idx == 0 else ""}">'
-            f'<div class="is-creator-cell">{avatar(r["creator_name"], idx)}'
+            f'<div class="is-compare-head {"selected" if focused else ""}">'
+            f'<div class="is-creator-cell">{avatar(r["creator_name"], avatar_idx)}'
             f'<span><b>{esc(r["creator_name"])}</b>'
             f'<div class="is-fit-row">{badge(fit, tone)}</div></span></div>'
             f'<div style="font-size:20px;font-weight:900;margin-top:8px;'
@@ -276,9 +288,20 @@ def render() -> None:
     if compare.empty:
         compare = ranked.head(3)
 
-    md(_compare_grid(compare), unsafe_allow_html=True)
-    focus = compare.iloc[0]
+    compare_ids = [str(item) for item in compare["creator_id"].tolist()]
+    focus_id = resolve_compare_focus(compare_ids, st.session_state.get("selected_creator_id"))
+    focus_names = [str(row["creator_name"]) for _, row in compare.iterrows()]
+    focus_index = compare_ids.index(focus_id) if focus_id in compare_ids else 0
+    chosen_name = st.radio(
+        t("Focus creator"),
+        focus_names,
+        index=focus_index,
+        horizontal=True,
+        key="compare_focus_name",
+    )
+    focus = compare[compare["creator_name"] == chosen_name].iloc[0]
     select_creator(focus["creator_id"])
+    md(_compare_grid(compare, focus["creator_id"]), unsafe_allow_html=True)
     focus_state = creator_state(focus["creator_id"])
     compare_rows = compare.to_dict("records")
     overlap_report = shortlist_overlap_report(compare_rows)

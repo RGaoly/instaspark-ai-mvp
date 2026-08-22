@@ -254,3 +254,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'open_workspace_page("outreach-operations")' in growth
     assert "Go to Outreach" not in growth
     assert "_performance_table(filtered_events, names)" in growth
+    compare_src = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
+    assert "resolve_compare_focus" in compare_src
+    assert 'key="compare_focus_name"' in compare_src
+    assert "_compare_grid(compare, focus" in compare_src

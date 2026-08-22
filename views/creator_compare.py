@@ -161,10 +161,16 @@ def _evidence_panel(creator, context: dict) -> str:
         )
     return (
         '<div class="is-card"><div class="is-panel-head">'
-        '<span class="is-panel-title">Evidence explorer</span>'
-        '<span class="is-panel-link">View more content (not wired)</span></div>'
+        '<span class="is-panel-title">Evidence explorer</span></div>'
         f'<div class="is-panel-body">{"".join(items)}</div></div>'
     )
+
+
+def open_search_youtube_lookup() -> None:
+    """Keep the focused creator and open Search with the live YouTube expander."""
+
+    st.session_state["search_youtube_open"] = True
+    open_workspace_page("creator-search")
 
 
 def _drivers_panel(creator) -> str:
@@ -314,6 +320,8 @@ def render() -> None:
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
         md(_evidence_panel(focus, context), unsafe_allow_html=True)
+        if st.button(t("Look up YouTube on Search"), use_container_width=True, key="compare_youtube_lookup"):
+            open_search_youtube_lookup()
     with c2:
         md(_drivers_panel(focus), unsafe_allow_html=True)
     with c3:

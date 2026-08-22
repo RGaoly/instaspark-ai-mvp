@@ -80,7 +80,8 @@ def _render_live_lookup(context: dict) -> None:
         " ".join(context.get("target_topics") or [])
         or str(context.get("product") or "action camera")
     )
-    with st.expander(f"{t('Live YouTube lookup')} · {t(youtube_status_label())}", expanded=False):
+    open_lookup = bool(st.session_state.pop("search_youtube_open", False))
+    with st.expander(f"{t('Live YouTube lookup')} · {t(youtube_status_label())}", expanded=open_lookup):
         md(why_not_ttcm_html(compact=True), unsafe_allow_html=True)
         st.caption(live_lookup_caption())
         query = st.text_input(t("YouTube query"), value=default_query, key="youtube_lookup_query")

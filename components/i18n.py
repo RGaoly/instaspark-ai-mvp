@@ -1294,6 +1294,7 @@ ZH: dict[str, str] = {
     "Live YouTube lookup": "YouTube 实时查询",
     "YouTube query": "YouTube 查询词",
     "Search YouTube": "搜索 YouTube",
+    "Look up YouTube on Search": "到搜索页查询 YouTube",
     "Attach as evidence": "挂为证据",
     "YouTube channel attached as evidence": "已将 YouTube 频道挂为证据",
     "Live YouTube Data API results. Attach a channel as evidence; it does not enter the ranked catalog.": "YouTube Data API 实时结果。可挂为证据，不会进入排序目录。",

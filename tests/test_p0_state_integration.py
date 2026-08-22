@@ -372,7 +372,7 @@ def test_live_evidence_is_visible_on_compare_and_outreach(session):
     assert "42s" not in panel
     assert "60s" not in panel
     assert "78s" not in panel
-    assert "View more content (not wired)" in panel
+    assert "View more content (not wired)" not in panel
 
     state.save_decision(creator_id, "Approved", "Need the creator on the outreach board")
     html = outreach_operations._kanban(state.workflow_board())

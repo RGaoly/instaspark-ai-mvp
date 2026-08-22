@@ -169,6 +169,19 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Instagram · TikTok · YouTube" not in search
     assert "declared_platforms" in search
     assert "_platform_line" in search
+    assert "_render_detail_aside" in search
+    assert "st.tabs" in search
+    assert 'is-tab active' not in search
+    assert "while len(reasons) < 4" not in search
+    assert "is-tabs" not in search
+    assert 'st.tabs(' in search
+    assert 'labels(["Why recommended", "Audience", "Content style", "Risk"])' in search
+    assert "_why_recommended_html" in search
+    assert "_audience_html" in search
+    assert "_content_style_html" in search
+    assert "_risk_html" in search
+    assert "_catalog_join" in search
+    assert "Eligible under the active entry's hard gates" not in search
     assert "Energetic, authentic, cinematic, practical." not in studio
     assert "Hook → story → proof → CTA" not in studio
     assert "def _brief_content" not in studio

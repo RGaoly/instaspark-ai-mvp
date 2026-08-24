@@ -23,6 +23,7 @@ from components.ui import md
 from src.domain import PERIOD_WINDOW_DAYS, attributed_roi, filter_dated_records, filter_performance_events
 from src.content_evidence import load_creator_content
 from src.evaluation import acceptance_matrix
+from src.budget import propose_budget_decision
 
 _OUTREACH_STATES = {
     "approved",
@@ -276,6 +277,21 @@ def _render_record_form() -> None:
                 st.rerun()
 
 
+def _budget_html(decision: dict) -> str:
+    expected = decision.get("expected_value_usd")
+    expected_label = "—" if expected is None else f"${float(expected):,.0f} recorded revenue"
+    return (
+        '<div class="is-card"><div class="is-panel-body">'
+        f'<p><b>Action</b><br/>{esc(str(decision.get("action", "observe")))}</p>'
+        f'<p><b>Cost</b><br/>${float(decision.get("cost_usd") or 0):,.0f} recorded spend</p>'
+        f'<p><b>Expected value</b><br/>{esc(expected_label)} · {esc(str(decision.get("expected_value_status", "not_collected")))}</p>'
+        f'<p><b>Uncertainty</b><br/>{esc(str(decision.get("uncertainty", "unmeasured")))}</p>'
+        f'<p><b>Approver</b><br/>{esc(str(decision.get("approver", "")))} · human approval required</p>'
+        f'<small>{esc(str(decision.get("note", "")))} Model {esc(str(decision.get("model_version", "")))}. Not a viral forecast.</small>'
+        "</div></div>"
+    )
+
+
 def _acceptance_html(rows: list[dict]) -> str:
     cells = []
     for row in rows:
@@ -390,6 +406,15 @@ def render() -> None:
 
     _render_post_record_handoff()
     _render_record_form()
+
+    with st.expander(t("Budget decision"), expanded=False):
+        st.caption(t("From recorded performance events only. Empty events keep ROI at 0x. Not a modeled forecast."))
+        decision = propose_budget_decision(
+            filtered_events,
+            sku=str(active_mission().get("product") or ""),
+            budget_usd=budget,
+        )
+        md(_budget_html(decision), unsafe_allow_html=True)
 
     with st.expander(t("Pilot acceptance matrix"), expanded=False):
         st.caption(

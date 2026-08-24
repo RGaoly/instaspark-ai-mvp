@@ -1351,6 +1351,8 @@ ZH: dict[str, str] = {
     "Saved scout card as {opportunity_id}.": "已将侦察卡片存为 {opportunity_id}。",
     "Pilot acceptance matrix": "试点验收矩阵",
     "Pytest-backed gates from the current catalog, ranking and events. Not operator interviews.": "由当前目录、排序和效果事件计算的 pytest 门槛。不是运营访谈。",
+    "Budget decision": "预算决策",
+    "From recorded performance events only. Empty events keep ROI at 0x. Not a modeled forecast.": "只根据已录入的效果事件。没有事件则 ROI 为 0x。不是模型预测。",
     "Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.": "任务匹配看市场与语言。主题重合是 Jaccard。排序是规则打分，不是大模型。",
     "Lexical filter + small boost against the demo catalog — not semantic search": "对演示目录做词面筛选和小幅加权 — 不是语义搜索",
     "rule-based, not LLM": "规则打分，非大模型",

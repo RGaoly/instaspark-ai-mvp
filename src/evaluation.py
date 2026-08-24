@@ -11,6 +11,7 @@ from typing import Any, Iterable, Mapping, Sequence
 import pandas as pd
 
 from src.content_evidence import clips_for
+from src.creator_genome import genome_for, genomes_by_id
 from src.scoring import passes_hard_gates
 
 
@@ -69,6 +70,36 @@ def evidence_coverage(
     }
 
 
+def genome_coverage(
+    ranked: pd.DataFrame,
+    *,
+    n: int = 10,
+) -> dict[str, Any]:
+    top = _top_n(ranked, n)
+    missing: list[str] = []
+    pack = genomes_by_id()
+    for _, row in top.iterrows():
+        creator_id = str(row.get("creator_id") or "")
+        genome = pack.get(creator_id) or genome_for(creator_id)
+        if (
+            not genome
+            or not genome.get("clip_ids")
+            or genome.get("asr_status") != "not_collected"
+            or genome.get("comment_status") != "not_collected"
+            or genome.get("keyframe_status") != "not_collected"
+        ):
+            missing.append(creator_id)
+    total = len(top)
+    covered = total - len(missing)
+    return {
+        "total": total,
+        "covered": covered,
+        "missing": missing,
+        "rate": 1.0 if total == 0 else covered / total,
+        "pack_size": len(pack),
+    }
+
+
 def ranking_stability(ranked: pd.DataFrame) -> tuple[str, ...]:
     return tuple(str(item) for item in _top_n(ranked)["creator_id"].tolist()) if ranked is not None and not ranked.empty else ()
 
@@ -109,6 +140,7 @@ def acceptance_matrix(
     stability = ranking_stability(ranked)
     attribution = attribution_completeness(events, sku=str(mission.get("product") or ""))
     video_n = len(list(posts or []))
+    genomes = genome_coverage(ranked, n=10)
     return [
         {
             "id": "hard_gates",
@@ -165,5 +197,13 @@ def acceptance_matrix(
             "value": video_n,
             "passed": video_n >= 180,
             "detail": "Synthetic catalog URLs. Not live ingest, not ASR, not comment mining.",
+        },
+        {
+            "id": "creator_genome",
+            "dimension": "Creator Genome coverage",
+            "target": "Top 10 have versioned genomes, clip ids, ASR/comments/keyframes marked not_collected",
+            "value": genomes["pack_size"],
+            "passed": genomes["rate"] >= 1.0 and genomes["total"] >= 1 and genomes["pack_size"] >= 60,
+            "detail": f"{genomes['covered']}/{genomes['total']} Top 10 covered · pack {genomes['pack_size']}. Missing: {', '.join(genomes['missing']) or 'none'}.",
         },
     ]

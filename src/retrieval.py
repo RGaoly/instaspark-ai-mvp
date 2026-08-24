@@ -89,13 +89,18 @@ def tfidf_boosts(
     *,
     dna_text: str = "",
     query: str = "",
+    genome_texts: Mapping[str, str] | None = None,
     cap: float = TFIDF_BOOST_CAP,
 ) -> dict[str, float]:
     """Return 0–cap additive boosts keyed by creator_id. Empty catalog is {}."""
 
     if catalog is None or catalog.empty:
         return {}
-    docs = [tokenize(catalog_document(row)) for _, row in catalog.iterrows()]
+    extra = genome_texts or {}
+    docs = [
+        tokenize(catalog_document(row) + " " + extra.get(str(row.get("creator_id")), ""))
+        for _, row in catalog.iterrows()
+    ]
     query_tokens = tokenize(query_document(mission, dna_text=dna_text, query=query))
     if not query_tokens:
         return {str(row.get("creator_id")): 0.0 for _, row in catalog.iterrows()}

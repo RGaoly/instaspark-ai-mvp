@@ -53,6 +53,7 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 60 位合成达人（召回池）；硬门槛后排序；Top 10 为工作切片
 - 180 条合成目录视频（每人 3 条），带标注时间戳，映射到 Product DNA claim；**不是 ASR / OCR / 评论挖掘**
 - 版本化 Product DNA 对象（卖点、场景、画面证据、护栏）
+- 版本化 Creator Genome 包（60 人；7/30/90 代理；clip 索引；ASR/评论/关键帧/年龄/成交标记为 not_collected）
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
 - 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
 - Top 10 推荐；Top 20 精读看标注时间戳
@@ -113,6 +114,7 @@ pytest -q
 ├── data/
 │   ├── creators.csv
 │   ├── creator_content.json       # 180 authored clips + timestamps
+│   ├── creator_genome.json        # versionable Creator Genome pack
 │   ├── creator_opportunities.json
 │   ├── inbound_messages.json
 │   ├── launch_mission.json
@@ -138,7 +140,9 @@ pytest -q
 ├── src/
 │   ├── audience.py                # synthetic shortlist Jaccard
 │   ├── brief.py
+│   ├── budget.py                  # BudgetDecision from recorded events only
 │   ├── content_evidence.py        # authored clip timestamps, not ASR
+│   ├── creator_genome.py
 │   ├── data_loader.py
 │   ├── domain.py                  # 核心对象与统一状态机
 │   ├── evaluation.py              # pytest acceptance matrix

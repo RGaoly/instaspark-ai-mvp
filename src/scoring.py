@@ -10,7 +10,7 @@ bonuses, then clamped to 0–100:
     brand_safety     * 0.20   catalog safety score
     + query_boost             0–4 when an NL query token hits name/topics/styles/country
     + live_proof_bonus        +3 only after an operator attaches live YouTube evidence
-    + tfidf_boost             0–3 sparse TF-IDF cosine vs mission + Product DNA (+ query)
+    + tfidf_boost             0–3 sparse TF-IDF cosine vs mission + Product DNA + Creator Genome (+ query)
 
 Query boost is a lexical filter+boost, not semantic search. TF-IDF cosine is a
 real sparse-vector pass, not a neural embedding and not an LLM ranker. Live
@@ -25,6 +25,8 @@ from typing import Any, Iterable, Mapping
 import pandas as pd
 
 from src.retrieval import TFIDF_BOOST_CAP, tfidf_boosts
+
+RANKING_MODEL_VERSION = "rule_mix_tfidf_v1"
 
 # Mix weights must sum to 1.0. Additive bonuses are documented separately.
 DEFAULT_WEIGHTS = {
@@ -146,6 +148,15 @@ def _default_dna_text() -> str:
         return ""
 
 
+def _genome_texts() -> dict[str, str]:
+    try:
+        from src.creator_genome import genome_document, genomes_by_id
+
+        return {creator_id: genome_document(item) for creator_id, item in genomes_by_id().items()}
+    except (OSError, ValueError):
+        return {}
+
+
 def passes_hard_gates(row: pd.Series, mission: dict) -> tuple[bool, list[str]]:
     reasons = []
     if mission["market"] not in row["markets"]:
@@ -248,6 +259,8 @@ def score_creator(
         "query_boost": round(query_boost, 1),
         "live_proof_bonus": round(live_proof_bonus, 1),
         "tfidf_boost": round(tfidf_boost, 3),
+        "ranking_model_version": RANKING_MODEL_VERSION,
+        "match_confidence": "deterministic_rule",
         "total_score": round(total, 1),
         "positives": positives or ["具备基础匹配条件，需进一步人工核验"],
         "warnings": warnings,
@@ -265,7 +278,19 @@ def rank_creators(
 ) -> pd.DataFrame:
     live_ids = {str(item) for item in (live_evidence_ids or []) if str(item).strip()}
     dna = _default_dna_text() if dna_text is None else dna_text
-    boosts = tfidf_boosts(df, mission, dna_text=dna, query=query) if df is not None and not df.empty else {}
+    genome_texts = _genome_texts()
+    boosts = (
+        tfidf_boosts(df, mission, dna_text=dna, query=query, genome_texts=genome_texts)
+        if df is not None and not df.empty
+        else {}
+    )
+    genomes: dict[str, Any] = {}
+    try:
+        from src.creator_genome import genomes_by_id
+
+        genomes = genomes_by_id()
+    except (OSError, ValueError):
+        genomes = {}
     records = []
     for _, row in df.iterrows():
         passed, gate_reasons = passes_hard_gates(row, mission)
@@ -279,7 +304,16 @@ def rank_creators(
                 has_live_evidence=creator_id in live_ids,
                 tfidf_boost=boosts.get(creator_id, 0.0),
             )
-            records.append({**row.to_dict(), **scored, "gate_reasons": gate_reasons})
+            genome = genomes.get(creator_id) or {}
+            records.append(
+                {
+                    **row.to_dict(),
+                    **scored,
+                    "gate_reasons": gate_reasons,
+                    "genome_id": genome.get("genome_id"),
+                    "genome_version": genome.get("version"),
+                }
+            )
     if not records:
         return pd.DataFrame()
     result = pd.DataFrame(records)

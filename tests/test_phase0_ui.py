@@ -218,6 +218,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "load_product_dna" in launch
     assert "_dna_card" in launch
     assert "Versionable SKU object" in launch
+    assert "genome_panel_html" in search
+    assert "genome_panel_html" in compare
+    assert "genome_panel_html" in studio
     assert "launch_cta_creator" in launch
     assert "next_outreach_action_page" in launch
     assert "prepare_next_action_jump" in launch
@@ -286,6 +289,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "acceptance_matrix" in growth
     assert "Pilot acceptance matrix" in growth
     assert "Not operator interviews" in growth
+    assert "propose_budget_decision" in growth
+    assert "Budget decision" in growth
+    assert "Not a modeled forecast" in growth
     assert "Command Center" not in (ROOT / "app.py").read_text(encoding="utf-8")
     assert "Knowledge Hub" not in (ROOT / "app.py").read_text(encoding="utf-8")
     assert (ROOT / "app.py").read_text(encoding="utf-8").count("st.Page(") == 7

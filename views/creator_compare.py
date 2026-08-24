@@ -19,6 +19,7 @@ from components.state import (
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
+from src.creator_genome import genome_panel_html
 from src.domain import match_fit_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 
@@ -320,6 +321,7 @@ def render() -> None:
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
         md(_evidence_panel(focus, context), unsafe_allow_html=True)
+        md(genome_panel_html(str(focus["creator_id"])), unsafe_allow_html=True)
         if st.button(t("Look up YouTube on Search"), use_container_width=True, key="compare_youtube_lookup"):
             open_search_youtube_lookup()
     with c2:

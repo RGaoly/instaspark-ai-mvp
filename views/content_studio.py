@@ -15,6 +15,7 @@ from components.state import (
 )
 from components.ui import labels, md
 from src.domain import declared_platforms, match_tier
+from src.creator_genome import genome_panel_html
 from src.product_dna import load_product_dna
 from services.llm_service import (
     generate_brief,
@@ -102,6 +103,7 @@ def _mission_creator_cards(mission, creator, live_evidence=None) -> str:
     </div>
     {_platform_requirements_html(creator, live_evidence)}
     {_dna_shot_list_html()}
+    {genome_panel_html(str(creator.get("creator_id") or ""))}
     """
 
 

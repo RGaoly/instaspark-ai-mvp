@@ -2,6 +2,7 @@ from pathlib import Path
 
 from src.content_evidence import load_creator_content
 from src.data_loader import load_creators, load_mission
+from src.creator_genome import genome_for, load_genome_pack
 from src.product_dna import claim_ids, dna_document, load_product_dna
 from src.retrieval import TFIDF_BOOST_CAP, cosine, tfidf_boosts
 from src.scoring import passes_hard_gates, rank_creators
@@ -44,6 +45,29 @@ def test_product_dna_is_versionable_visual_object():
     assert "TikTok" not in dna_document(dna)
 
 
+def test_creator_genome_pack_is_versionable_and_honest():
+    pack = load_genome_pack()
+    assert pack["genome_pack_id"] == "genome_x5_v1"
+    assert pack["version"] == 1
+    assert len(pack["genomes"]) == 60
+    catalog_ids = set(load_creators(ROOT / "data" / "creators.csv")["creator_id"])
+    posts = {item["post_id"] for item in load_creator_content()}
+    genome_ids = {item["creator_id"] for item in pack["genomes"]}
+    assert genome_ids == catalog_ids
+    maya = genome_for("C004")
+    assert maya is not None
+    assert maya["genome_id"] == "genome_C004_v1"
+    assert maya["asr_status"] == "not_collected"
+    assert maya["comment_status"] == "not_collected"
+    assert maya["keyframe_status"] == "not_collected"
+    assert maya["commerce"]["status"] == "not_collected"
+    assert maya["audience"]["age_status"] == "not_collected"
+    assert maya["cost"]["sample_status"] == "not_collected"
+    assert set(maya["clip_ids"]) <= posts
+    assert "Instagram" not in str(maya)
+    assert "TikTok" not in str(maya)
+
+
 def test_tfidf_is_real_sparse_cosine_not_a_constant():
     catalog = load_creators(ROOT / "data" / "creators.csv")
     mission = load_mission(ROOT / "data" / "launch_mission.json")
@@ -62,6 +86,8 @@ def test_hybrid_recall_gates_then_ranks_top_ten():
     ranked = rank_creators(catalog, mission)
     assert len(catalog) == 60
     assert 10 <= len(ranked) < 60
+    assert (ranked["ranking_model_version"] == "rule_mix_tfidf_v1").all()
+    assert ranked["genome_id"].notna().all()
     for _, row in ranked.head(10).iterrows():
         passed, reasons = passes_hard_gates(row, mission)
         assert passed is True
@@ -74,7 +100,8 @@ def test_scout_cards_are_catalog_momentum_not_live_crawl():
     catalog = load_creators(ROOT / "data" / "creators.csv")
     cards = scout_cards(catalog, limit=8)
     assert len(cards) == 8
-    assert all(item["source"] == "catalog_momentum" for item in cards)
+    assert all(item["source"] == "creator_genome" for item in cards)
+    assert all(item.get("genome_id") for item in cards)
     assert all("not a live" in item["note"].lower() for item in cards)
     scores = [item["scout_score"] for item in cards]
     assert scores == sorted(scores, reverse=True)

@@ -34,6 +34,7 @@ from components.ui import labels, md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.content_evidence import clips_for
+from src.creator_genome import genome_panel_html
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
@@ -360,6 +361,7 @@ def _content_style_html(creator: dict, clips: list | None = None) -> str:
         <small style="color:#879198">Same catalog fields as Content Studio.</small>
         <div class="is-card-title" style="margin:10px 0 6px">Intensive-read clips</div>
         {_clips_html(list(clips or []))}
+        {genome_panel_html(str(creator.get("creator_id") or ""))}
       </div>
     </div>
     """

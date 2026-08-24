@@ -767,7 +767,7 @@ def _render_scout_cards(opportunities: list[dict]) -> None:
             row, action = st.columns([0.78, 0.22], vertical_alignment="center")
             row.markdown(
                 f"**{card['creator_name']}** · {card['creator_id']}  \n"
-                f"{card['market']} · scout {card['scout_score']} · "
+                f"{card['market']} · {card.get('genome_id') or 'no genome'} · scout {card['scout_score']} · "
                 f"7d {card['window_7d']} · 30d {card['window_30d']} · 90d {card['window_90d']}"
             )
             if action.button(

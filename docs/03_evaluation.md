@@ -11,7 +11,8 @@ read-only expander. It is not a live operator-interview dashboard.
 3. 解释覆盖：每名 Top 10 候选至少有一条正向证据、一条风险、五项分数和标注时间戳。
 4. 稳定性：同样输入多次运行结果一致。
 5. 召回池：合成目录 60 人；精读 Top 20 均有标注片段；目录视频 180 条。
-6. 归因：已录入效果事件保留 creator、任务/机会根和来源；空事件 ROI 仍为 0x。
+6. Creator Genome：Top 10 均有版本化基因组、clip 索引，且 ASR/评论/关键帧标记为 not_collected。
+7. 归因：已录入效果事件保留 creator、任务/机会根和来源；空事件 ROI 仍为 0x。
 
 ## 人工评测
 

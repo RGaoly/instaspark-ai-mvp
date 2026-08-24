@@ -648,7 +648,22 @@ def ranking():
             "score": float(row["total_score"]),
             "gate_passed": True,
             "rationale": list(row.get("positives", [])),
+            "warnings": list(row.get("warnings", [])),
             "evidence": list(row.get("evidence", [])),
+            "breakdown": {
+                "mission_fit": float(row.get("mission_fit") or 0),
+                "topic_overlap": float(row.get("topic_overlap") or 0),
+                "momentum": float(row.get("momentum") or 0),
+                "commercial_fit": float(row.get("commercial_fit") or 0),
+                "brand_safety": float(row.get("brand_safety") or 0),
+                "query_boost": float(row.get("query_boost") or 0),
+                "live_proof_bonus": float(row.get("live_proof_bonus") or 0),
+                "tfidf_boost": float(row.get("tfidf_boost") or 0),
+            },
+            "model_version": str(row.get("ranking_model_version") or "rule_mix_tfidf_v1"),
+            "confidence": str(row.get("match_confidence") or "deterministic_rule"),
+            "genome_id": row.get("genome_id"),
+            "genome_version": row.get("genome_version"),
         }
     return ranked
 
@@ -1424,18 +1439,35 @@ def save_content_asset(
         raise ValueError("content asset title and body are required")
     context = active_context()
     excerpt = " ".join(body_text.split())[:280]
+    asset_id = f"asset_{len(st.session_state.content_assets) + 1:04d}"
+    genome_id = None
+    try:
+        from src.creator_genome import genome_for
+
+        genome = genome_for(creator_id)
+        genome_id = genome.get("genome_id") if genome else None
+    except (OSError, ValueError):
+        genome_id = None
     record = {
-        "asset_id": f"asset_{len(st.session_state.content_assets) + 1:04d}",
+        "asset_id": asset_id,
+        "content_asset_id": asset_id,
         "creator_id": creator_id,
         "title": title_text,
         "body": body_text,
         "excerpt": excerpt,
+        "asset_type": "brief",
         "status": str(status or "in_review").strip() or "in_review",
+        "review_status": str(status or "in_review").strip() or "in_review",
+        "version": 1,
+        "locale": str(context.get("language") or context.get("market") or ""),
+        "platform": "not_declared",
+        "usage_rights_status": "not_collected",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "entry_type": context["entry_type"],
         "entry_id": context["entry_id"],
         "mission_id": context.get("mission_id"),
         "opportunity_id": context.get("opportunity_id"),
+        "genome_id": genome_id,
     }
     st.session_state.content_assets.append(record)
     _advance_toward_content_in_review(creator_id)

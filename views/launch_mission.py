@@ -28,6 +28,7 @@ from components.state import (
 )
 from components.ui import md
 from src.domain import launch_progress, pipeline_counts
+from src.product_dna import load_product_dna
 
 
 def launch_cta_page(creator_id: str) -> str | None:
@@ -109,6 +110,33 @@ def _product_card(mission: dict, health: dict) -> str:
         <div class="is-donut" style="--pct:{score}"><span>{score}</span></div>
         <b>{health.get("label", "Needs shortlist")}</b>
         <small>{health.get("note", "Computed from the active workflow")}</small>
+      </div>
+    </div>
+    """
+
+
+def _dna_card() -> str:
+    dna = load_product_dna()
+    claims = []
+    for claim in dna.get("claims") or []:
+        proof = " · ".join(str(item) for item in (claim.get("visual_proof") or []) if str(item).strip())
+        scenes = " · ".join(str(item) for item in (claim.get("scenes") or []) if str(item).strip())
+        claims.append(
+            f'<div class="is-field"><label>{esc(claim.get("claim_id", ""))}</label>'
+            f'<strong>{esc(claim.get("claim", ""))}</strong>'
+            f"<small>{esc(scenes)} · {esc(proof)}</small></div>"
+        )
+    guardrails = "; ".join(str(item) for item in (dna.get("guardrails") or []) if str(item).strip())
+    return f"""
+    <div class="is-card" style="margin-top:10px">
+      <div class="is-panel-head">
+        <span class="is-panel-title">Product DNA</span>
+        <span class="is-panel-link">{esc(dna.get("dna_id", ""))} · v{esc(str(dna.get("version", "")))}</span>
+      </div>
+      <div class="is-panel-body">
+        <p><b>{esc(dna.get("sku", ""))}</b> · {esc(dna.get("audience", ""))}</p>
+        <div class="is-product-info">{"".join(claims)}</div>
+        <small>Versionable SKU object with visual-proof claims. Not a copy of mission form fields. Not a live PIM. {esc(guardrails)}</small>
       </div>
     </div>
     """
@@ -306,6 +334,7 @@ def render() -> None:
                 st.rerun()
 
     md(_product_card(mission, health), unsafe_allow_html=True)
+    md(_dna_card(), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
         ("Shortlisted", str(summary.get("shortlisted", 0)), "Unified workflow", ""),

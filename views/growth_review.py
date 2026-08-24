@@ -8,6 +8,7 @@ from components.shell import open_workspace_page, render_demo_notice, render_top
 from components.state import (
     active_context,
     active_context_label,
+    active_mission,
     creator_state,
     creators,
     performance_events,
@@ -20,6 +21,8 @@ from components.state import (
 )
 from components.ui import md
 from src.domain import PERIOD_WINDOW_DAYS, attributed_roi, filter_dated_records, filter_performance_events
+from src.content_evidence import load_creator_content
+from src.evaluation import acceptance_matrix
 
 _OUTREACH_STATES = {
     "approved",
@@ -273,6 +276,27 @@ def _render_record_form() -> None:
                 st.rerun()
 
 
+def _acceptance_html(rows: list[dict]) -> str:
+    cells = []
+    for row in rows:
+        mark = "PASS" if row.get("passed") else "FAIL"
+        cells.append(
+            "<tr>"
+            f"<td>{esc(row.get('dimension', ''))}</td>"
+            f"<td>{esc(row.get('target', ''))}</td>"
+            f"<td>{esc(str(row.get('value', '')))}</td>"
+            f"<td>{mark}</td>"
+            f"<td><small>{esc(row.get('detail', ''))}</small></td>"
+            "</tr>"
+        )
+    return (
+        '<table class="is-table"><thead><tr>'
+        "<th>Dimension</th><th>Target</th><th>Value</th><th>Gate</th><th>Detail</th>"
+        "</tr></thead>"
+        f"<tbody>{''.join(cells)}</tbody></table>"
+    )
+
+
 def render() -> None:
     render_topbar()
     context = active_context()
@@ -366,5 +390,18 @@ def render() -> None:
 
     _render_post_record_handoff()
     _render_record_form()
+
+    with st.expander(t("Pilot acceptance matrix"), expanded=False):
+        st.caption(
+            t("Pytest-backed gates from the current catalog, ranking and events. Not operator interviews.")
+        )
+        rows = acceptance_matrix(
+            ranked=ranked,
+            mission=active_mission(),
+            catalog_size=len(creators()),
+            posts=load_creator_content(),
+            events=events,
+        )
+        md(_acceptance_html(rows), unsafe_allow_html=True)
 
     render_demo_notice()

@@ -21,6 +21,7 @@ from components.state import (
     active_context,
     active_context_label,
     attach_live_evidence,
+    creators,
     live_evidence_for,
     next_outreach_action_page,
     prepare_next_action_jump,
@@ -32,6 +33,7 @@ from components.state import (
 from components.ui import labels, md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
+from src.content_evidence import clips_for
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
@@ -319,7 +321,33 @@ def _audience_html(creator: dict, cohort: list[dict]) -> str:
     """
 
 
-def _content_style_html(creator: dict) -> str:
+def _clips_html(clips: list) -> str:
+    if not clips:
+        return (
+            '<small style="color:#879198">'
+            "No authored clips for this creator. Timestamps are catalog labels, not ASR."
+            "</small>"
+        )
+    blocks = []
+    for clip in clips[:3]:
+        stamps = "".join(
+            f'<li><b>{esc(stamp.get("t", ""))}</b> {esc(stamp.get("label", ""))}'
+            f' · {esc(stamp.get("claim_id", ""))}</li>'
+            for stamp in clip.get("timestamps") or []
+        )
+        blocks.append(
+            '<div style="margin-top:8px">'
+            f'<b>{esc(clip.get("title") or clip.get("post_id") or "Clip")}</b><br/>'
+            f'<small><a href="{esc(clip.get("url", ""))}">{esc(clip.get("url", ""))}</a>'
+            f' · {esc(clip.get("source", "synthetic_catalog"))}</small>'
+            f'<ul style="margin:4px 0 0 16px">{stamps}</ul>'
+            f'<small style="color:#879198">{esc(clip.get("note", ""))}</small>'
+            "</div>"
+        )
+    return "".join(blocks)
+
+
+def _content_style_html(creator: dict, clips: list | None = None) -> str:
     styles = esc(_catalog_join(creator.get("styles")))
     topics = esc(_catalog_join(creator.get("topics")))
     return f"""
@@ -330,6 +358,8 @@ def _content_style_html(creator: dict) -> str:
         <div class="is-card-title" style="margin:10px 0 6px">Topics</div>
         <p>{topics}</p>
         <small style="color:#879198">Same catalog fields as Content Studio.</small>
+        <div class="is-card-title" style="margin:10px 0 6px">Intensive-read clips</div>
+        {_clips_html(list(clips or []))}
       </div>
     </div>
     """
@@ -369,7 +399,7 @@ def _render_detail_aside(creator: dict, cohort: list[dict]) -> None:
     with audience_tab:
         md(_audience_html(creator, cohort), unsafe_allow_html=True)
     with style_tab:
-        md(_content_style_html(creator), unsafe_allow_html=True)
+        md(_content_style_html(creator, clips_for(creator.get("creator_id", ""))), unsafe_allow_html=True)
     with risk_tab:
         md(_risk_html(creator), unsafe_allow_html=True)
 
@@ -434,6 +464,7 @@ def render() -> None:
         key="creator_nl_query",
     )
     st.caption(t("NL query is a lexical filter + small boost, not semantic search."))
+    st.caption(t("TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA. Not a neural embedding and not an LLM ranker."))
     markets, languages, topics = _render_catalog_filters(ranked)
     visible = filter_ranked_creators(
         ranked,
@@ -451,11 +482,13 @@ def render() -> None:
     selected_id = st.session_state.get("selected_creator_id")
     if selected_id not in visible_ids:
         select_creator(visible_ids[0])
+    catalog_n = len(creators())
+    gated_n = len(ranked)
     toolbar_left, toolbar_right = st.columns([0.85, 0.15], vertical_alignment="center")
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{len(visible)} creators found · rule-based ranking · not LLM / embeddings · demo catalog · {ai_badge("Not an LLM ranker")}'
+            f'{catalog_n} recalled · {gated_n} gated · Top 10 working cut · hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · demo catalog · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -468,8 +501,24 @@ def render() -> None:
         )
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
+    working = visible.head(10)
+    rest = visible.iloc[10:]
     with main:
-        _render_creator_table(visible)
+        st.caption(t("Top 10 is the working cut. Remaining gated rows stay available below."))
+        _render_creator_table(working)
+        if not rest.empty:
+            with st.expander(t("Additional gated candidates"), expanded=False):
+                _render_creator_table(rest)
+        with st.expander(t("Top 20 intensive-read clips"), expanded=False):
+            st.caption(
+                t("Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.")
+            )
+            for _, row in visible.head(20).iterrows():
+                clips = clips_for(row["creator_id"])
+                stamp_n = sum(len(clip.get("timestamps") or []) for clip in clips)
+                st.markdown(
+                    f"**{row['creator_name']}** · {row['creator_id']} · {len(clips)} clips · {stamp_n} labeled timestamps"
+                )
         st.caption(
             t("Click a row to inspect that creator.")
             + " "

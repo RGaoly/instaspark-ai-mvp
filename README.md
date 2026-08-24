@@ -50,12 +50,16 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 
 - 示例 SKU：Insta360 X5
 - 两个目标市场：United States / Mexico
-- 30 位合成达人
+- 60 位合成达人（召回池）；硬门槛后排序；Top 10 为工作切片
+- 180 条合成目录视频（每人 3 条），带标注时间戳，映射到 Product DNA claim；**不是 ASR / OCR / 评论挖掘**
+- 版本化 Product DNA 对象（卖点、场景、画面证据、护栏）
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
-- 查询词面加权与挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
-- Top 10 推荐
+- 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
+- Top 10 推荐；Top 20 精读看标注时间戳
 - 人工采纳/驳回与 Reason Code
-- 英语/西班牙语 Brief 生成
+- 英语/西班牙语 Brief 生成；镜头清单来自 Product DNA
+- 目录动量侦察卡片（7/30/90 代理，不是实时抓取）
+- pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）
 - 3 条 Creator Opportunity 非邮件信号 + 30 封合成入站来信（英 / 西 / 德；含 KOL、MCN、Affiliate、渠道商、垃圾邮件与身份冒用）
 - Mission / Opportunity 统一活动上下文
 - 可验证的状态迁移、审计事件和幂等 OutreachCase
@@ -78,7 +82,7 @@ Default login: `admin` / `admin123`. A read-only viewer is available as `demo` /
 Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded events only. **Send to Creator** stays disabled.
 
 1. Log in as `admin` / `admin123`. Open **Launch Mission** and expand **Why this is not TikTok Creator Marketplace**.
-2. Open **Creator Search & Match**. Filter by market / language / topics. Type a name or topic in NL search — that is a **lexical filter + small boost**, not semantic search. Ranking uses mission fit, topic overlap, momentum, commercial fit, and brand safety — not an LLM and not embeddings.
+2. Open **Creator Search & Match**. Filter by market / language / topics. Type a name or topic in NL search — that is a **lexical filter + small boost**, not semantic search. Ranking uses hard gates, the five-driver mix, and a **sparse TF-IDF cosine** boost from the mission + Product DNA — not an LLM and not a neural embedding.
 3. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
 4. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
 5. Open **Content Studio** → **Generate Brief** and save it. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
@@ -108,9 +112,11 @@ pytest -q
 │   └── theme.py
 ├── data/
 │   ├── creators.csv
+│   ├── creator_content.json       # 180 authored clips + timestamps
 │   ├── creator_opportunities.json
 │   ├── inbound_messages.json
-│   └── launch_mission.json
+│   ├── launch_mission.json
+│   └── product_dna.json           # versionable SKU visual-proof object
 ├── docs/
 │   ├── 00_project_charter.md
 │   ├── 01_prd.md
@@ -132,10 +138,15 @@ pytest -q
 ├── src/
 │   ├── audience.py                # synthetic shortlist Jaccard
 │   ├── brief.py
+│   ├── content_evidence.py        # authored clip timestamps, not ASR
 │   ├── data_loader.py
 │   ├── domain.py                  # 核心对象与统一状态机
+│   ├── evaluation.py              # pytest acceptance matrix
 │   ├── inbound.py                 # 入站来信抽取、身份、评分、派单
-│   └── scoring.py
+│   ├── product_dna.py
+│   ├── retrieval.py               # sparse TF-IDF cosine, not neural embeddings
+│   ├── scoring.py
+│   └── scouting.py                # catalog momentum cards, not a live crawl
 ├── views/
 │   ├── launch_mission.py
 │   ├── creator_opportunity.py
@@ -188,15 +199,15 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md) for Docker and other hosts.
 
 ## Evaluation
 
-核心评测不以“页面数量”为目标，而以证据和可复现性为目标：
+核心评测不以“页面数量”为目标，而以证据和可复现性为目标。验收矩阵由 `tests/test_acceptance_matrix.py` 对当前目录、排序和效果事件计算，Growth Review 上有只读展开，不是装饰仪表盘：
 
-- 硬门槛违规数
-- Top 10 人工采纳率
-- 证据覆盖率
-- 推荐理由准确率
-- 排序稳定性
-- Brief 人工修改距离
-- 单次任务耗时
+- 硬门槛违规数（Top 10 = 0）
+- 证据覆盖率（Top 10 含正负证据、五维分数、标注时间戳）
+- Top 20 精读片段覆盖
+- 召回池 60、目录视频 180
+- 排序稳定性（同输入同 Top 10）
+- 归因完整性（事件保留 creator + root + source）
+- Top 10 人工采纳率、推荐理由准确率、Brief 人工修改距离、单次任务耗时仍需运营盲评，本演示不伪造访谈结果
 
 详见 [`docs/03_evaluation.md`](docs/03_evaluation.md)。
 

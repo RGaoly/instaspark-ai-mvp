@@ -45,7 +45,9 @@ def test_creator_profile_uses_catalog_styles_not_canned_tone():
     assert "No platform fields in the demo catalog" in maya_html
     assert "Instagram Reels" not in maya_html
     assert "TikTok" not in maya_html
-    assert maya_html != alex_html
+    assert "Need-show visual proof from" not in maya_html
+    assert "Product DNA shot list" in maya_html
+    assert "dna_x5_v1" in maya_html
 
 
 def test_platform_requirements_use_catalog_and_live_evidence():

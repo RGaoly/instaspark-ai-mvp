@@ -164,6 +164,11 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "match_label" in search
     assert "Modeled est. views" in search
     assert "NL query is a lexical filter + small boost, not semantic search." in search
+    assert "TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA." in search
+    assert "Top 10 working cut" in search
+    assert "Top 20 intensive-read clips" in search
+    assert "clips_for" in search
+    assert "not LLM / not neural embeddings" in search
     assert "Topic overlap" in search
     assert "search_filter_markets" in search
     assert "filter_ranked_creators" in search
@@ -210,6 +215,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Linked creator opportunities" in launch
     assert "launch_cta_page" in launch
     assert "open_launch_cta" in launch
+    assert "load_product_dna" in launch
+    assert "_dna_card" in launch
+    assert "Versionable SKU object" in launch
     assert "launch_cta_creator" in launch
     assert "next_outreach_action_page" in launch
     assert "prepare_next_action_jump" in launch
@@ -250,6 +258,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "approve_inbound_for_outreach" in opportunity
     assert "generate_inbound_reply" in opportunity
     assert "_render_inbound_list" in opportunity
+    assert "_render_scout_cards" in opportunity
+    assert "Always-on scout cards" in opportunity
+    assert "catalog_momentum" in opportunity
+    assert "Not a live crawl" in opportunity
     assert "labeled footer" in opportunity or "labeled-footer" in opportunity
     assert "not a live mailbox" in opportunity.lower()
     assert "next_outreach_action_page" in opportunity
@@ -271,6 +283,12 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'open_workspace_page("outreach-operations")' in growth
     assert "Go to Outreach" not in growth
     assert "_performance_table(filtered_events, names)" in growth
+    assert "acceptance_matrix" in growth
+    assert "Pilot acceptance matrix" in growth
+    assert "Not operator interviews" in growth
+    assert "Command Center" not in (ROOT / "app.py").read_text(encoding="utf-8")
+    assert "Knowledge Hub" not in (ROOT / "app.py").read_text(encoding="utf-8")
+    assert (ROOT / "app.py").read_text(encoding="utf-8").count("st.Page(") == 7
     compare_src = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
     assert "resolve_compare_focus" in compare_src
     assert 'key="compare_focus_name"' in compare_src

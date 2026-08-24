@@ -1,0 +1,5906 @@
+[
+  {
+    "post_id": "POST-C001-01",
+    "creator_id": "C001",
+    "url": "https://example.com/demo/c001/clip-01",
+    "title": "Alex Rides · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C001-02",
+    "creator_id": "C001",
+    "url": "https://example.com/demo/c001/clip-02",
+    "title": "Alex Rides · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C001-03",
+    "creator_id": "C001",
+    "url": "https://example.com/demo/c001/clip-03",
+    "title": "Alex Rides · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C002-01",
+    "creator_id": "C002",
+    "url": "https://example.com/demo/c002/clip-01",
+    "title": "Sofia Motion · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "motorcycle"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C002-02",
+    "creator_id": "C002",
+    "url": "https://example.com/demo/c002/clip-02",
+    "title": "Sofia Motion · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "motorcycle"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C002-03",
+    "creator_id": "C002",
+    "url": "https://example.com/demo/c002/clip-03",
+    "title": "Sofia Motion · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C003-01",
+    "creator_id": "C003",
+    "url": "https://example.com/demo/c003/clip-01",
+    "title": "Diego Trail · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "tech",
+      "surfing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C003-02",
+    "creator_id": "C003",
+    "url": "https://example.com/demo/c003/clip-02",
+    "title": "Diego Trail · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C003-03",
+    "creator_id": "C003",
+    "url": "https://example.com/demo/c003/clip-03",
+    "title": "Diego Trail · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C004-01",
+    "creator_id": "C004",
+    "url": "https://example.com/demo/c004/clip-01",
+    "title": "Maya Outdoors · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C004-02",
+    "creator_id": "C004",
+    "url": "https://example.com/demo/c004/clip-02",
+    "title": "Maya Outdoors · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C004-03",
+    "creator_id": "C004",
+    "url": "https://example.com/demo/c004/clip-03",
+    "title": "Maya Outdoors · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C005-01",
+    "creator_id": "C005",
+    "url": "https://example.com/demo/c005/clip-01",
+    "title": "Liam Frames · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C005-02",
+    "creator_id": "C005",
+    "url": "https://example.com/demo/c005/clip-02",
+    "title": "Liam Frames · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C005-03",
+    "creator_id": "C005",
+    "url": "https://example.com/demo/c005/clip-03",
+    "title": "Liam Frames · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C006-01",
+    "creator_id": "C006",
+    "url": "https://example.com/demo/c006/clip-01",
+    "title": "Yuki Journey · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech",
+      "skiing"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C006-02",
+    "creator_id": "C006",
+    "url": "https://example.com/demo/c006/clip-02",
+    "title": "Yuki Journey · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C006-03",
+    "creator_id": "C006",
+    "url": "https://example.com/demo/c006/clip-03",
+    "title": "Yuki Journey · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C007-01",
+    "creator_id": "C007",
+    "url": "https://example.com/demo/c007/clip-01",
+    "title": "Noah Tech · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C007-02",
+    "creator_id": "C007",
+    "url": "https://example.com/demo/c007/clip-02",
+    "title": "Noah Tech · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C007-03",
+    "creator_id": "C007",
+    "url": "https://example.com/demo/c007/clip-03",
+    "title": "Noah Tech · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C008-01",
+    "creator_id": "C008",
+    "url": "https://example.com/demo/c008/clip-01",
+    "title": "Camila Waves · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor",
+      "tech"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C008-02",
+    "creator_id": "C008",
+    "url": "https://example.com/demo/c008/clip-02",
+    "title": "Camila Waves · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C008-03",
+    "creator_id": "C008",
+    "url": "https://example.com/demo/c008/clip-03",
+    "title": "Camila Waves · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C009-01",
+    "creator_id": "C009",
+    "url": "https://example.com/demo/c009/clip-01",
+    "title": "Ethan Explore · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "skiing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C009-02",
+    "creator_id": "C009",
+    "url": "https://example.com/demo/c009/clip-02",
+    "title": "Ethan Explore · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C009-03",
+    "creator_id": "C009",
+    "url": "https://example.com/demo/c009/clip-03",
+    "title": "Ethan Explore · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C010-01",
+    "creator_id": "C010",
+    "url": "https://example.com/demo/c010/clip-01",
+    "title": "Isabella Road · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C010-02",
+    "creator_id": "C010",
+    "url": "https://example.com/demo/c010/clip-02",
+    "title": "Isabella Road · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "motorcycle"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C010-03",
+    "creator_id": "C010",
+    "url": "https://example.com/demo/c010/clip-03",
+    "title": "Isabella Road · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C011-01",
+    "creator_id": "C011",
+    "url": "https://example.com/demo/c011/clip-01",
+    "title": "Lucas POV · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor",
+      "skiing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C011-02",
+    "creator_id": "C011",
+    "url": "https://example.com/demo/c011/clip-02",
+    "title": "Lucas POV · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C011-03",
+    "creator_id": "C011",
+    "url": "https://example.com/demo/c011/clip-03",
+    "title": "Lucas POV · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C012-01",
+    "creator_id": "C012",
+    "url": "https://example.com/demo/c012/clip-01",
+    "title": "Emma Peaks · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "skiing",
+      "cycling"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C012-02",
+    "creator_id": "C012",
+    "url": "https://example.com/demo/c012/clip-02",
+    "title": "Emma Peaks · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C012-03",
+    "creator_id": "C012",
+    "url": "https://example.com/demo/c012/clip-03",
+    "title": "Emma Peaks · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C013-01",
+    "creator_id": "C013",
+    "url": "https://example.com/demo/c013/clip-01",
+    "title": "Mateo Wheels · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C013-02",
+    "creator_id": "C013",
+    "url": "https://example.com/demo/c013/clip-02",
+    "title": "Mateo Wheels · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C013-03",
+    "creator_id": "C013",
+    "url": "https://example.com/demo/c013/clip-03",
+    "title": "Mateo Wheels · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C014-01",
+    "creator_id": "C014",
+    "url": "https://example.com/demo/c014/clip-01",
+    "title": "Olivia Lens · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling",
+      "surfing"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C014-02",
+    "creator_id": "C014",
+    "url": "https://example.com/demo/c014/clip-02",
+    "title": "Olivia Lens · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C014-03",
+    "creator_id": "C014",
+    "url": "https://example.com/demo/c014/clip-03",
+    "title": "Olivia Lens · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C015-01",
+    "creator_id": "C015",
+    "url": "https://example.com/demo/c015/clip-01",
+    "title": "Daniel Surf · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "travel",
+      "motorcycle"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C015-02",
+    "creator_id": "C015",
+    "url": "https://example.com/demo/c015/clip-02",
+    "title": "Daniel Surf · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C015-03",
+    "creator_id": "C015",
+    "url": "https://example.com/demo/c015/clip-03",
+    "title": "Daniel Surf · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C016-01",
+    "creator_id": "C016",
+    "url": "https://example.com/demo/c016/clip-01",
+    "title": "Valeria Vlog · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C016-02",
+    "creator_id": "C016",
+    "url": "https://example.com/demo/c016/clip-02",
+    "title": "Valeria Vlog · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C016-03",
+    "creator_id": "C016",
+    "url": "https://example.com/demo/c016/clip-03",
+    "title": "Valeria Vlog · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C017-01",
+    "creator_id": "C017",
+    "url": "https://example.com/demo/c017/clip-01",
+    "title": "Ryan Gear · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C017-02",
+    "creator_id": "C017",
+    "url": "https://example.com/demo/c017/clip-02",
+    "title": "Ryan Gear · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C017-03",
+    "creator_id": "C017",
+    "url": "https://example.com/demo/c017/clip-03",
+    "title": "Ryan Gear · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C018-01",
+    "creator_id": "C018",
+    "url": "https://example.com/demo/c018/clip-01",
+    "title": "Ava Horizon · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "tech",
+      "outdoor"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C018-02",
+    "creator_id": "C018",
+    "url": "https://example.com/demo/c018/clip-02",
+    "title": "Ava Horizon · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C018-03",
+    "creator_id": "C018",
+    "url": "https://example.com/demo/c018/clip-03",
+    "title": "Ava Horizon · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C019-01",
+    "creator_id": "C019",
+    "url": "https://example.com/demo/c019/clip-01",
+    "title": "Samuel Ride · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "skiing",
+      "surfing"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C019-02",
+    "creator_id": "C019",
+    "url": "https://example.com/demo/c019/clip-02",
+    "title": "Samuel Ride · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C019-03",
+    "creator_id": "C019",
+    "url": "https://example.com/demo/c019/clip-03",
+    "title": "Samuel Ride · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C020-01",
+    "creator_id": "C020",
+    "url": "https://example.com/demo/c020/clip-01",
+    "title": "Chloe Wild · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "cycling",
+      "motorcycle"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C020-02",
+    "creator_id": "C020",
+    "url": "https://example.com/demo/c020/clip-02",
+    "title": "Chloe Wild · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C020-03",
+    "creator_id": "C020",
+    "url": "https://example.com/demo/c020/clip-03",
+    "title": "Chloe Wild · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C021-01",
+    "creator_id": "C021",
+    "url": "https://example.com/demo/c021/clip-01",
+    "title": "Leo Action · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "tech",
+      "skiing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C021-02",
+    "creator_id": "C021",
+    "url": "https://example.com/demo/c021/clip-02",
+    "title": "Leo Action · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C021-03",
+    "creator_id": "C021",
+    "url": "https://example.com/demo/c021/clip-03",
+    "title": "Leo Action · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C022-01",
+    "creator_id": "C022",
+    "url": "https://example.com/demo/c022/clip-01",
+    "title": "Mia Travel · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "surfing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C022-02",
+    "creator_id": "C022",
+    "url": "https://example.com/demo/c022/clip-02",
+    "title": "Mia Travel · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "surfing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C022-03",
+    "creator_id": "C022",
+    "url": "https://example.com/demo/c022/clip-03",
+    "title": "Mia Travel · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C023-01",
+    "creator_id": "C023",
+    "url": "https://example.com/demo/c023/clip-01",
+    "title": "Gabriel Motion · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "skiing"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C023-02",
+    "creator_id": "C023",
+    "url": "https://example.com/demo/c023/clip-02",
+    "title": "Gabriel Motion · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C023-03",
+    "creator_id": "C023",
+    "url": "https://example.com/demo/c023/clip-03",
+    "title": "Gabriel Motion · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C024-01",
+    "creator_id": "C024",
+    "url": "https://example.com/demo/c024/clip-01",
+    "title": "Zoe Alpine · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "tech",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C024-02",
+    "creator_id": "C024",
+    "url": "https://example.com/demo/c024/clip-02",
+    "title": "Zoe Alpine · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C024-03",
+    "creator_id": "C024",
+    "url": "https://example.com/demo/c024/clip-03",
+    "title": "Zoe Alpine · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C025-01",
+    "creator_id": "C025",
+    "url": "https://example.com/demo/c025/clip-01",
+    "title": "Nico Adventure · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "skiing",
+      "travel"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C025-02",
+    "creator_id": "C025",
+    "url": "https://example.com/demo/c025/clip-02",
+    "title": "Nico Adventure · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C025-03",
+    "creator_id": "C025",
+    "url": "https://example.com/demo/c025/clip-03",
+    "title": "Nico Adventure · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C026-01",
+    "creator_id": "C026",
+    "url": "https://example.com/demo/c026/clip-01",
+    "title": "Ella Review · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "cycling",
+      "skiing"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C026-02",
+    "creator_id": "C026",
+    "url": "https://example.com/demo/c026/clip-02",
+    "title": "Ella Review · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C026-03",
+    "creator_id": "C026",
+    "url": "https://example.com/demo/c026/clip-03",
+    "title": "Ella Review · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C027-01",
+    "creator_id": "C027",
+    "url": "https://example.com/demo/c027/clip-01",
+    "title": "Marco Journey · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel",
+      "motorcycle"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C027-02",
+    "creator_id": "C027",
+    "url": "https://example.com/demo/c027/clip-02",
+    "title": "Marco Journey · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C027-03",
+    "creator_id": "C027",
+    "url": "https://example.com/demo/c027/clip-03",
+    "title": "Marco Journey · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C028-01",
+    "creator_id": "C028",
+    "url": "https://example.com/demo/c028/clip-01",
+    "title": "Luna Camera · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "motorcycle",
+      "outdoor"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C028-02",
+    "creator_id": "C028",
+    "url": "https://example.com/demo/c028/clip-02",
+    "title": "Luna Camera · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "motorcycle"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C028-03",
+    "creator_id": "C028",
+    "url": "https://example.com/demo/c028/clip-03",
+    "title": "Luna Camera · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C029-01",
+    "creator_id": "C029",
+    "url": "https://example.com/demo/c029/clip-01",
+    "title": "Ben Trails · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C029-02",
+    "creator_id": "C029",
+    "url": "https://example.com/demo/c029/clip-02",
+    "title": "Ben Trails · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C029-03",
+    "creator_id": "C029",
+    "url": "https://example.com/demo/c029/clip-03",
+    "title": "Ben Trails · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C030-01",
+    "creator_id": "C030",
+    "url": "https://example.com/demo/c030/clip-01",
+    "title": "Sara Stories · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "surfing",
+      "tech"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C030-02",
+    "creator_id": "C030",
+    "url": "https://example.com/demo/c030/clip-02",
+    "title": "Sara Stories · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "surfing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C030-03",
+    "creator_id": "C030",
+    "url": "https://example.com/demo/c030/clip-03",
+    "title": "Sara Stories · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C031-01",
+    "creator_id": "C031",
+    "url": "https://example.com/demo/c031/clip-01",
+    "title": "Jordan Ridge · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C031-02",
+    "creator_id": "C031",
+    "url": "https://example.com/demo/c031/clip-02",
+    "title": "Jordan Ridge · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C031-03",
+    "creator_id": "C031",
+    "url": "https://example.com/demo/c031/clip-03",
+    "title": "Jordan Ridge · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C032-01",
+    "creator_id": "C032",
+    "url": "https://example.com/demo/c032/clip-01",
+    "title": "Harper Coast · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C032-02",
+    "creator_id": "C032",
+    "url": "https://example.com/demo/c032/clip-02",
+    "title": "Harper Coast · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C032-03",
+    "creator_id": "C032",
+    "url": "https://example.com/demo/c032/clip-03",
+    "title": "Harper Coast · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C033-01",
+    "creator_id": "C033",
+    "url": "https://example.com/demo/c033/clip-01",
+    "title": "Quinn Summit · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C033-02",
+    "creator_id": "C033",
+    "url": "https://example.com/demo/c033/clip-02",
+    "title": "Quinn Summit · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C033-03",
+    "creator_id": "C033",
+    "url": "https://example.com/demo/c033/clip-03",
+    "title": "Quinn Summit · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C034-01",
+    "creator_id": "C034",
+    "url": "https://example.com/demo/c034/clip-01",
+    "title": "Riley Canyon · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C034-02",
+    "creator_id": "C034",
+    "url": "https://example.com/demo/c034/clip-02",
+    "title": "Riley Canyon · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C034-03",
+    "creator_id": "C034",
+    "url": "https://example.com/demo/c034/clip-03",
+    "title": "Riley Canyon · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C035-01",
+    "creator_id": "C035",
+    "url": "https://example.com/demo/c035/clip-01",
+    "title": "Avery Drift · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "outdoor"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C035-02",
+    "creator_id": "C035",
+    "url": "https://example.com/demo/c035/clip-02",
+    "title": "Avery Drift · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C035-03",
+    "creator_id": "C035",
+    "url": "https://example.com/demo/c035/clip-03",
+    "title": "Avery Drift · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C036-01",
+    "creator_id": "C036",
+    "url": "https://example.com/demo/c036/clip-01",
+    "title": "Casey Bluff · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C036-02",
+    "creator_id": "C036",
+    "url": "https://example.com/demo/c036/clip-02",
+    "title": "Casey Bluff · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C036-03",
+    "creator_id": "C036",
+    "url": "https://example.com/demo/c036/clip-03",
+    "title": "Casey Bluff · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C037-01",
+    "creator_id": "C037",
+    "url": "https://example.com/demo/c037/clip-01",
+    "title": "Morgan Vale · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "cycling"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C037-02",
+    "creator_id": "C037",
+    "url": "https://example.com/demo/c037/clip-02",
+    "title": "Morgan Vale · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "cycling"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C037-03",
+    "creator_id": "C037",
+    "url": "https://example.com/demo/c037/clip-03",
+    "title": "Morgan Vale · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C038-01",
+    "creator_id": "C038",
+    "url": "https://example.com/demo/c038/clip-01",
+    "title": "Reese Harbor · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C038-02",
+    "creator_id": "C038",
+    "url": "https://example.com/demo/c038/clip-02",
+    "title": "Reese Harbor · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C038-03",
+    "creator_id": "C038",
+    "url": "https://example.com/demo/c038/clip-03",
+    "title": "Reese Harbor · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C039-01",
+    "creator_id": "C039",
+    "url": "https://example.com/demo/c039/clip-01",
+    "title": "Skyler Pond · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "outdoor"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C039-02",
+    "creator_id": "C039",
+    "url": "https://example.com/demo/c039/clip-02",
+    "title": "Skyler Pond · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C039-03",
+    "creator_id": "C039",
+    "url": "https://example.com/demo/c039/clip-03",
+    "title": "Skyler Pond · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C040-01",
+    "creator_id": "C040",
+    "url": "https://example.com/demo/c040/clip-01",
+    "title": "Hayden Brook · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C040-02",
+    "creator_id": "C040",
+    "url": "https://example.com/demo/c040/clip-02",
+    "title": "Hayden Brook · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C040-03",
+    "creator_id": "C040",
+    "url": "https://example.com/demo/c040/clip-03",
+    "title": "Hayden Brook · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C041-01",
+    "creator_id": "C041",
+    "url": "https://example.com/demo/c041/clip-01",
+    "title": "Valentina Ruta · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C041-02",
+    "creator_id": "C041",
+    "url": "https://example.com/demo/c041/clip-02",
+    "title": "Valentina Ruta · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C041-03",
+    "creator_id": "C041",
+    "url": "https://example.com/demo/c041/clip-03",
+    "title": "Valentina Ruta · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C042-01",
+    "creator_id": "C042",
+    "url": "https://example.com/demo/c042/clip-01",
+    "title": "Santiago Peak · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "skiing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C042-02",
+    "creator_id": "C042",
+    "url": "https://example.com/demo/c042/clip-02",
+    "title": "Santiago Peak · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C042-03",
+    "creator_id": "C042",
+    "url": "https://example.com/demo/c042/clip-03",
+    "title": "Santiago Peak · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C043-01",
+    "creator_id": "C043",
+    "url": "https://example.com/demo/c043/clip-01",
+    "title": "Regina Sierra · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C043-02",
+    "creator_id": "C043",
+    "url": "https://example.com/demo/c043/clip-02",
+    "title": "Regina Sierra · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C043-03",
+    "creator_id": "C043",
+    "url": "https://example.com/demo/c043/clip-03",
+    "title": "Regina Sierra · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C044-01",
+    "creator_id": "C044",
+    "url": "https://example.com/demo/c044/clip-01",
+    "title": "Pablo Costa · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "travel"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C044-02",
+    "creator_id": "C044",
+    "url": "https://example.com/demo/c044/clip-02",
+    "title": "Pablo Costa · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C044-03",
+    "creator_id": "C044",
+    "url": "https://example.com/demo/c044/clip-03",
+    "title": "Pablo Costa · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C045-01",
+    "creator_id": "C045",
+    "url": "https://example.com/demo/c045/clip-01",
+    "title": "Jimena Valle · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C045-02",
+    "creator_id": "C045",
+    "url": "https://example.com/demo/c045/clip-02",
+    "title": "Jimena Valle · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C045-03",
+    "creator_id": "C045",
+    "url": "https://example.com/demo/c045/clip-03",
+    "title": "Jimena Valle · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C046-01",
+    "creator_id": "C046",
+    "url": "https://example.com/demo/c046/clip-01",
+    "title": "Andres Nube · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C046-02",
+    "creator_id": "C046",
+    "url": "https://example.com/demo/c046/clip-02",
+    "title": "Andres Nube · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C046-03",
+    "creator_id": "C046",
+    "url": "https://example.com/demo/c046/clip-03",
+    "title": "Andres Nube · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C047-01",
+    "creator_id": "C047",
+    "url": "https://example.com/demo/c047/clip-01",
+    "title": "Fernanda Lago · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C047-02",
+    "creator_id": "C047",
+    "url": "https://example.com/demo/c047/clip-02",
+    "title": "Fernanda Lago · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "tech"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C047-03",
+    "creator_id": "C047",
+    "url": "https://example.com/demo/c047/clip-03",
+    "title": "Fernanda Lago · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C048-01",
+    "creator_id": "C048",
+    "url": "https://example.com/demo/c048/clip-01",
+    "title": "Hector Cumbre · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "outdoor"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C048-02",
+    "creator_id": "C048",
+    "url": "https://example.com/demo/c048/clip-02",
+    "title": "Hector Cumbre · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C048-03",
+    "creator_id": "C048",
+    "url": "https://example.com/demo/c048/clip-03",
+    "title": "Hector Cumbre · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C049-01",
+    "creator_id": "C049",
+    "url": "https://example.com/demo/c049/clip-01",
+    "title": "Daniela Faro · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "fashion",
+      "beauty"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C049-02",
+    "creator_id": "C049",
+    "url": "https://example.com/demo/c049/clip-02",
+    "title": "Daniela Faro · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "fashion",
+      "beauty"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C049-03",
+    "creator_id": "C049",
+    "url": "https://example.com/demo/c049/clip-03",
+    "title": "Daniela Faro · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "fashion"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C050-01",
+    "creator_id": "C050",
+    "url": "https://example.com/demo/c050/clip-01",
+    "title": "Bruno Sendero · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C050-02",
+    "creator_id": "C050",
+    "url": "https://example.com/demo/c050/clip-02",
+    "title": "Bruno Sendero · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C050-03",
+    "creator_id": "C050",
+    "url": "https://example.com/demo/c050/clip-03",
+    "title": "Bruno Sendero · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "skiing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C051-01",
+    "creator_id": "C051",
+    "url": "https://example.com/demo/c051/clip-01",
+    "title": "Catalina Mesa · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C051-02",
+    "creator_id": "C051",
+    "url": "https://example.com/demo/c051/clip-02",
+    "title": "Catalina Mesa · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C051-03",
+    "creator_id": "C051",
+    "url": "https://example.com/demo/c051/clip-03",
+    "title": "Catalina Mesa · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C052-01",
+    "creator_id": "C052",
+    "url": "https://example.com/demo/c052/clip-01",
+    "title": "Ignacio Brisa · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "wide establishing rotate"
+    ],
+    "timestamps": [
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C052-02",
+    "creator_id": "C052",
+    "url": "https://example.com/demo/c052/clip-02",
+    "title": "Ignacio Brisa · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C052-03",
+    "creator_id": "C052",
+    "url": "https://example.com/demo/c052/clip-03",
+    "title": "Ignacio Brisa · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "travel"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C053-01",
+    "creator_id": "C053",
+    "url": "https://example.com/demo/c053/clip-01",
+    "title": "Paula Mirador · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "skiing"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C053-02",
+    "creator_id": "C053",
+    "url": "https://example.com/demo/c053/clip-02",
+    "title": "Paula Mirador · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "skiing"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C053-03",
+    "creator_id": "C053",
+    "url": "https://example.com/demo/c053/clip-03",
+    "title": "Paula Mirador · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C054-01",
+    "creator_id": "C054",
+    "url": "https://example.com/demo/c054/clip-01",
+    "title": "Tomas Sendero · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "motorcycle"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C054-02",
+    "creator_id": "C054",
+    "url": "https://example.com/demo/c054/clip-02",
+    "title": "Tomas Sendero · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "motorcycle"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C054-03",
+    "creator_id": "C054",
+    "url": "https://example.com/demo/c054/clip-03",
+    "title": "Tomas Sendero · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C055-01",
+    "creator_id": "C055",
+    "url": "https://example.com/demo/c055/clip-01",
+    "title": "Nia Hollow · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel",
+      "cycling"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C055-02",
+    "creator_id": "C055",
+    "url": "https://example.com/demo/c055/clip-02",
+    "title": "Nia Hollow · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C055-03",
+    "creator_id": "C055",
+    "url": "https://example.com/demo/c055/clip-03",
+    "title": "Nia Hollow · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C056-01",
+    "creator_id": "C056",
+    "url": "https://example.com/demo/c056/clip-01",
+    "title": "Owen Kite · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "travel"
+    ],
+    "scenes": [
+      "eye-line / handlebar pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:05",
+        "label": "Wide establishing rotate",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C056-02",
+    "creator_id": "C056",
+    "url": "https://example.com/demo/c056/clip-02",
+    "title": "Owen Kite · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C056-03",
+    "creator_id": "C056",
+    "url": "https://example.com/demo/c056/clip-03",
+    "title": "Owen Kite · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "tech"
+    ],
+    "scenes": [
+      "creator-facing cut then back to pov"
+    ],
+    "timestamps": [
+      {
+        "t": "00:17",
+        "label": "Creator-facing cut then back to POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C057-01",
+    "creator_id": "C057",
+    "url": "https://example.com/demo/c057/clip-01",
+    "title": "Mila Ridgeway · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel",
+      "outdoor"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C057-02",
+    "creator_id": "C057",
+    "url": "https://example.com/demo/c057/clip-02",
+    "title": "Mila Ridgeway · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C057-03",
+    "creator_id": "C057",
+    "url": "https://example.com/demo/c057/clip-03",
+    "title": "Mila Ridgeway · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "cycling"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C058-01",
+    "creator_id": "C058",
+    "url": "https://example.com/demo/c058/clip-01",
+    "title": "Kai Stillwater · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "outdoor"
+    ],
+    "scenes": [
+      "water or dust contact"
+    ],
+    "timestamps": [
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C058-02",
+    "creator_id": "C058",
+    "url": "https://example.com/demo/c058/clip-02",
+    "title": "Kai Stillwater · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C058-03",
+    "creator_id": "C058",
+    "url": "https://example.com/demo/c058/clip-03",
+    "title": "Kai Stillwater · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "surfing"
+    ],
+    "scenes": [
+      "same take continues past the first minute"
+    ],
+    "timestamps": [
+      {
+        "t": "00:54",
+        "label": "Same take continues past the first minute",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C059-01",
+    "creator_id": "C059",
+    "url": "https://example.com/demo/c059/clip-01",
+    "title": "Yara Campo · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:41",
+        "label": "Water or dust contact",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C059-02",
+    "creator_id": "C059",
+    "url": "https://example.com/demo/c059/clip-02",
+    "title": "Yara Campo · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor",
+      "travel"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C059-03",
+    "creator_id": "C059",
+    "url": "https://example.com/demo/c059/clip-03",
+    "title": "Yara Campo · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "outdoor"
+    ],
+    "scenes": [
+      "rotate then cut to a product detail"
+    ],
+    "timestamps": [
+      {
+        "t": "01:18",
+        "label": "Rotate then cut to a product detail",
+        "claim_id": "360",
+        "mapped_claim": "360 capture"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  },
+  {
+    "post_id": "POST-C060-01",
+    "creator_id": "C060",
+    "url": "https://example.com/demo/c060/clip-01",
+    "title": "Felix North · catalog clip 01",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor",
+      "tech"
+    ],
+    "scenes": [
+      "long take still rolling"
+    ],
+    "timestamps": [
+      {
+        "t": "00:08",
+        "label": "Long take still rolling",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:22",
+        "label": "Eye-line / handlebar POV",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Authored demo timestamps. Not ASR, not comments, not a live platform view count."
+  },
+  {
+    "post_id": "POST-C060-02",
+    "creator_id": "C060",
+    "url": "https://example.com/demo/c060/clip-02",
+    "title": "Felix North · catalog clip 02",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle",
+      "outdoor"
+    ],
+    "scenes": [
+      "detail cutaway"
+    ],
+    "timestamps": [
+      {
+        "t": "00:11",
+        "label": "Product in a real use case",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      },
+      {
+        "t": "00:36",
+        "label": "Creator voiceover, no transcript stored",
+        "claim_id": "pov",
+        "mapped_claim": "immersive POV"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Second clip for Top-20 intensive read. Voiceover is not transcribed."
+  },
+  {
+    "post_id": "POST-C060-03",
+    "creator_id": "C060",
+    "url": "https://example.com/demo/c060/clip-03",
+    "title": "Felix North · catalog clip 03",
+    "source": "synthetic_catalog",
+    "keywords": [
+      "motorcycle"
+    ],
+    "scenes": [
+      "splash or grit on the housing"
+    ],
+    "timestamps": [
+      {
+        "t": "00:33",
+        "label": "Splash or grit on the housing",
+        "claim_id": "rugged",
+        "mapped_claim": "wet or dusty scene"
+      },
+      {
+        "t": "01:42",
+        "label": "End card, no view counts stored",
+        "claim_id": "all_day",
+        "mapped_claim": "all-day shooting"
+      }
+    ],
+    "asr": null,
+    "asr_status": "not_collected",
+    "comments": null,
+    "comment_status": "not_collected",
+    "note": "Third clip so the catalog holds 180 authored videos. Not live ingest."
+  }
+]

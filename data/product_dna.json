@@ -1,0 +1,48 @@
+{
+  "dna_id": "dna_x5_v1",
+  "sku": "Insta360 X5",
+  "version": 1,
+  "status": "active",
+  "source": "Synthetic GTM pack for the X5 dual-market pilot. Not a live PIM feed.",
+  "updated_at": "2026-08-01T00:00:00+00:00",
+  "audience": "Action-camera users who already shoot outdoor, cycling, travel or POV content.",
+  "claims": [
+    {
+      "claim_id": "all_day",
+      "claim": "All-day shooting in real outdoor use",
+      "scenes": ["daylight trail", "sunrise ride"],
+      "visual_proof": ["handlebar POV held through a long ride"],
+      "guardrail": "Do not invent battery minutes or amp-hour figures."
+    },
+    {
+      "claim_id": "pov",
+      "claim": "Immersive POV storytelling",
+      "scenes": ["first-person trail", "waterline"],
+      "visual_proof": ["camera at rider eye-line or handlebar"],
+      "guardrail": "Do not claim a platform-exclusive format."
+    },
+    {
+      "claim_id": "rugged",
+      "claim": "Use in wet or dusty outdoor scenes",
+      "scenes": ["splash", "dust trail"],
+      "visual_proof": ["water contact without cutting the take"],
+      "guardrail": "Do not invent an IP rating."
+    },
+    {
+      "claim_id": "360",
+      "claim": "360 capture of a real location",
+      "scenes": ["wide establishing", "group ride"],
+      "visual_proof": ["full-surround establish then cut to a detail"],
+      "guardrail": "Do not invent resolution numbers."
+    }
+  ],
+  "objections": [
+    "Creators may already shoot on a phone and need a reason to carry another camera.",
+    "Regional teams may over-promise waterproofing."
+  ],
+  "guardrails": [
+    "Do not invent product specifications.",
+    "Do not invent Instagram or TikTok inventory.",
+    "Paid partnership disclosure is required on generated briefs."
+  ]
+}

@@ -1,7 +1,8 @@
-"""Demo-row binds to real public YouTube channels.
+"""Catalog rows whose identity is a real public YouTube channel.
 
-The catalog display name stays a synthetic persona. These binds never claim
-that persona uploaded the videos. attached_channel still wins at runtime.
+For bound rows, creator_name === channel_title and youtube_channel_id is
+persisted. That is not KYC. attached_channel still wins at runtime.
+Unbound rows stay synthetic personas.
 """
 
 from __future__ import annotations
@@ -15,8 +16,8 @@ from src.youtube_clips import overlay_clip_from_upload
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_VERIFIED_CHANNELS_PATH = ROOT / "data" / "verified_public_channels.json"
-OWNERSHIP = "verified_public_channel"
-VERIFIED_ROW_LABEL = "Verified public channel bound for this demo row: {channel_title}"
+OWNERSHIP = "catalog_channel"
+VERIFIED_ROW_LABEL = "This catalog row is this public YouTube channel: {channel_title}"
 LEFTOVER_SEARCH_NOTE = "Leftover public_search_hit: topic search, not a verified channel bind."
 
 
@@ -116,7 +117,7 @@ def overlay_for_verified_bind(
     *,
     cache_by_video: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Zip demo-row posts to the bound channel's public uploads. Timedtext reused from cache."""
+    """Zip this catalog row's posts to that public channel's uploads. Timedtext reused from cache."""
 
     cache_by_video = cache_by_video or {}
     bound: dict[str, dict[str, Any]] = {}

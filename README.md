@@ -56,7 +56,7 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 版本化 Creator Genome 包（60 人；7/30/90 代理；clip 索引；ASR/评论/关键帧/年龄/成交标记为 not_collected）
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
 - 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
-- Top 10 推荐；Top 20 精读看标注时间戳。YouTube 叠加层按 ownership 标明：`verified_public_channel`（演示行绑定的真实公开频道，目录显示名不是上传者）、`channel_search_match`（目录名匹配公开频道标题）、`public_search_hit`（主题搜索）、`attached_channel`（运营当场挂接）
+- Top 10 推荐；Top 20 精读看标注时间戳。Top 20 目录行的 `creator_name` 就是公开频道标题，并带 `youtube_channel_id`；精读 ownership 为 `catalog_channel`（该行就是该频道的公开上传，不是 KYC）。其余 40 人为合成人设。`public_search_hit` / `channel_search_match` 只出现在未绑定行；`attached_channel` 仍是运营当场挂接
 - pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）；展示在 Growth Review，不是第八页
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成；镜头清单来自 Product DNA
@@ -84,7 +84,7 @@ Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded 
 
 1. Log in as `admin` / `admin123`. Open **Launch Mission**. Product DNA is on the dashboard (versioned SKU claims), not hidden. Expand **Why this is not TikTok Creator Marketplace** if needed.
 2. Open **Creator Opportunity**. The default fold is the **Inbound inbox** (30 synthetic EN/ES/DE messages: parse, score, route, mission link). Import email reloads that corpus; it is not a live mailbox. Always-on scout cards sit **below** the inbox and save as catalog-momentum opportunities.
-3. Open **Creator Search & Match**. The catalog recall is **60** creators; hard gates then rank; Top 10 is the working cut. The **Top 20 intensive-read board** is on this page (not collapsed): labeled_demo timestamps plus a YouTube overlay. Bound rows say **Verified public channel bound for this demo row**; leftover topic hits stay `public_search_hit`. The catalog display name is a demo persona, not the uploader.
+3. Open **Creator Search & Match**. The catalog recall is **60** creators; hard gates then rank; Top 10 is the working cut. The **Top 20 intensive-read board** is on this page (not collapsed). Those 20 rows **are** the public YouTube channels (name + channel id); clips are that channel's uploads (`catalog_channel`). Not KYC. The other 40 rows stay synthetic.
 4. Optional: Live YouTube lookup → **Attach as evidence**. That is `attached_channel` for intensive-read. Hits do **not** become new ranked creators.
 5. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
 6. Open **Content Studio** → **Generate Brief** and save it. Shot list comes from Product DNA. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.

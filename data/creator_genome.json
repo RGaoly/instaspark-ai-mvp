@@ -271,7 +271,7 @@
     {
       "genome_id": "genome_C004_v1",
       "creator_id": "C004",
-      "creator_name": "Maya Outdoors",
+      "creator_name": "Haze Outdoors",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -353,7 +353,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C005_v1",
@@ -981,7 +983,7 @@
     {
       "genome_id": "genome_C012_v1",
       "creator_id": "C012",
-      "creator_name": "Emma Peaks",
+      "creator_name": "Surfing With Noz",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -1065,12 +1067,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C013_v1",
       "creator_id": "C013",
-      "creator_name": "Mateo Wheels",
+      "creator_name": "Best360",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -1154,7 +1158,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C014_v1",
@@ -1244,7 +1250,7 @@
     {
       "genome_id": "genome_C015_v1",
       "creator_id": "C015",
-      "creator_name": "Daniel Surf",
+      "creator_name": "The Tech Chap",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -1329,12 +1335,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C016_v1",
       "creator_id": "C016",
-      "creator_name": "Valeria Vlog",
+      "creator_name": "Oscar Hikes",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -1421,12 +1429,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C017_v1",
       "creator_id": "C017",
-      "creator_name": "Ryan Gear",
+      "creator_name": "DC Rainmaker",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -1511,7 +1521,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC6y_DbpezOinlzHv8O092zw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C018_v1",
@@ -2666,7 +2678,7 @@
     {
       "genome_id": "genome_C031_v1",
       "creator_id": "C031",
-      "creator_name": "Jordan Ridge",
+      "creator_name": "NorCal Cycling",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -2746,12 +2758,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C032_v1",
       "creator_id": "C032",
-      "creator_name": "Harper Coast",
+      "creator_name": "Patagonia",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -2832,12 +2846,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C033_v1",
       "creator_id": "C033",
-      "creator_name": "Quinn Summit",
+      "creator_name": "Insta360 Moto",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -2918,7 +2934,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C034_v1",
@@ -3010,7 +3028,7 @@
     {
       "genome_id": "genome_C035_v1",
       "creator_id": "C035",
-      "creator_name": "Avery Drift",
+      "creator_name": "MountMedia",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -3090,12 +3108,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C036_v1",
       "creator_id": "C036",
-      "creator_name": "Casey Bluff",
+      "creator_name": "The Skiing Ram",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -3176,12 +3196,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C037_v1",
       "creator_id": "C037",
-      "creator_name": "Morgan Vale",
+      "creator_name": "Insta360 Tutorials",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -3263,12 +3285,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C038_v1",
       "creator_id": "C038",
-      "creator_name": "Reese Harbor",
+      "creator_name": "DJI",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -3349,7 +3373,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C039_v1",
@@ -3441,7 +3467,7 @@
     {
       "genome_id": "genome_C040_v1",
       "creator_id": "C040",
-      "creator_name": "Hayden Brook",
+      "creator_name": "Chaseontwowheels",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -3521,7 +3547,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C041_v1",
@@ -4382,7 +4410,7 @@
     {
       "genome_id": "genome_C051_v1",
       "creator_id": "C051",
-      "creator_name": "Catalina Mesa",
+      "creator_name": "GoPro",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -4463,12 +4491,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C052_v1",
       "creator_id": "C052",
-      "creator_name": "Ignacio Brisa",
+      "creator_name": "The North Face",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -4550,12 +4580,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C053_v1",
       "creator_id": "C053",
-      "creator_name": "Paula Mirador",
+      "creator_name": "Becca Farsace",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -4635,7 +4667,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCEbFX3P9ADiJvle5Z0Qyw2A",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C054_v1",
@@ -4724,7 +4758,7 @@
     {
       "genome_id": "genome_C055_v1",
       "creator_id": "C055",
-      "creator_name": "Nia Hollow",
+      "creator_name": "Insta360",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -4805,7 +4839,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C056_v1",
@@ -4896,7 +4932,7 @@
     {
       "genome_id": "genome_C057_v1",
       "creator_id": "C057",
-      "creator_name": "Mila Ridgeway",
+      "creator_name": "Global Mountain Bike Network",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -4979,12 +5015,14 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C058_v1",
       "creator_id": "C058",
-      "creator_name": "Kai Stillwater",
+      "creator_name": "Brandon Li",
       "version": 1,
       "updated_at": "2026-08-01T00:00:00+00:00",
       "source": "synthetic_catalog",
@@ -5063,7 +5101,9 @@
       "vector_ref": "sparse_tfidf_catalog_document",
       "asr_status": "not_collected",
       "comment_status": "not_collected",
-      "keyframe_status": "not_collected"
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
     },
     {
       "genome_id": "genome_C059_v1",

@@ -317,7 +317,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "src/evaluation.py" in growth
     assert 'st.expander(t("Pilot acceptance matrix")' not in growth
     assert "Not operator interviews" in growth
-    assert "not catalog-persona-owned" in growth
+    assert "catalog_channel" in growth
+    assert "not KYC" in growth
     assert "propose_budget_decision" in growth
     assert "Budget decision" in growth
     assert "Not a modeled forecast" in growth

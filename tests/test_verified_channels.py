@@ -7,7 +7,6 @@ from src.data_loader import load_creators, load_mission
 from src.intensive_read import intensive_read_html, intensive_read_pack
 from src.scoring import rank_creators
 from src.verified_channels import (
-    LEFTOVER_SEARCH_NOTE,
     OWNERSHIP,
     VERIFIED_ROW_LABEL,
     binds_by_creator_id,
@@ -19,29 +18,35 @@ from src.verified_channels import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_verified_bind_table_is_honest_and_stable():
+def test_verified_bind_table_is_catalog_identity_not_kyc():
     pack = load_verified_public_channels()
     assert pack.get("available")
     binds = pack["binds"]
-    assert binds
+    assert len(binds) == 20
     catalog = load_creators(ROOT / "data" / "creators.csv")
-    persona = {str(name).strip().lower() for name in catalog["creator_name"].tolist()}
+    by_id = catalog.set_index("creator_id")
     creator_ids = [item["creator_id"] for item in binds]
     channel_ids = [item["channel_id"] for item in binds]
     assert len(creator_ids) == len(set(creator_ids))
     assert len(channel_ids) == len(set(channel_ids))
     for item in binds:
-        assert item["ownership"] == OWNERSHIP
+        row = by_id.loc[item["creator_id"]]
+        assert item["ownership"] == OWNERSHIP == "catalog_channel"
         assert item["channel_id"].startswith("UC")
-        assert item["channel_title"]
-        assert "synthetic persona" in item["bind_reason"].lower() or "not the uploader" in item["bind_reason"].lower()
-        assert item["channel_title"].strip().lower() not in persona
+        assert str(row["creator_name"]) == item["channel_title"]
+        assert str(row["youtube_channel_id"]) == item["channel_id"]
+        reason = item["bind_reason"].lower()
+        assert "not kyc" in reason
+        assert "synthetic persona and is not the uploader" not in reason
         assert item["uploads"]
         assert all(str(upload.get("url") or "").startswith("https://www.youtube.com/watch") for upload in item["uploads"])
         assert all(upload.get("channel_id") == item["channel_id"] for upload in item["uploads"])
+    unbound = catalog[~catalog["creator_id"].isin(creator_ids)]
+    assert len(unbound) == 40
+    assert (unbound["youtube_channel_id"].fillna("") == "").all()
 
 
-def test_top20_intensive_board_uses_verified_bind_label():
+def test_top20_names_and_clips_are_the_catalog_channel():
     catalog = load_creators(ROOT / "data" / "creators.csv")
     mission = load_mission(ROOT / "data" / "launch_mission.json")
     posts = load_creator_content()
@@ -49,29 +54,27 @@ def test_top20_intensive_board_uses_verified_bind_label():
     binds = binds_by_creator_id()
     pack = intensive_read_pack(ranked, posts, n=20)
     html = intensive_read_html(pack)
-    bound_rows = [item for item in pack if item.get("verified_bind")]
-    assert bound_rows, "Top 20 should include at least one verified public-channel bind"
+    assert len(pack) == 20
+    assert len(binds) == 20
     for item in pack:
-        bind = binds.get(item["creator_id"])
-        if not bind:
-            owns = {str(clip.get("ownership") or "") for clip in item["clips"] if clip.get("video_id")}
-            if "public_search_hit" in owns:
-                assert LEFTOVER_SEARCH_NOTE in html
-            continue
+        bind = binds[item["creator_id"]]
+        row = catalog[catalog["creator_id"] == item["creator_id"]].iloc[0]
+        assert item["creator_name"] == bind["channel_title"] == str(row["creator_name"])
+        assert str(row["youtube_channel_id"]) == bind["channel_id"]
         assert item["verified_bind"]["channel_id"] == bind["channel_id"]
-        assert item["verified_bind"]["channel_title"] == bind["channel_title"]
         label = verified_row_label(bind)
         assert label == VERIFIED_ROW_LABEL.format(channel_title=bind["channel_title"])
         assert label in html
-        assert "Catalog name stays a demo persona" in html
+        assert "Not KYC" in html
+        assert "demo persona" not in html.lower()
         youtube_clips = [clip for clip in item["clips"] if clip.get("video_id")]
         assert youtube_clips
         assert all(clip.get("ownership") == OWNERSHIP for clip in youtube_clips)
-        assert all(clip.get("channel_id") == bind["channel_id"] for clip in youtube_clips)
-        assert all(clip.get("channel_title") == bind["channel_title"] for clip in youtube_clips)
+        assert all(clip.get("channel_id") == str(row["youtube_channel_id"]) for clip in youtube_clips)
+        assert all(clip.get("channel_title") == item["creator_name"] for clip in youtube_clips)
 
 
-def test_attached_channel_still_wins_over_verified_bind():
+def test_attached_channel_still_wins_over_catalog_channel():
     catalog = load_creators(ROOT / "data" / "creators.csv")
     mission = load_mission(ROOT / "data" / "launch_mission.json")
     posts = load_creator_content()

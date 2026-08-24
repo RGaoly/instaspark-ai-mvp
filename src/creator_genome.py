@@ -121,7 +121,8 @@ def genome_panel_html(creator_id: str, pack: Mapping[str, Any] | None = None) ->
       </div>
       <div class="is-panel-body">
         <p><b>{esc(str(genome.get("creator_name") or creator_id))}</b>
-        <small> · {esc(str(audience.get("country") or ""))} · {esc(str(audience.get("language") or ""))}</small></p>
+        <small> · {esc(str(audience.get("country") or ""))} · {esc(str(audience.get("language") or ""))}</small>
+        {f"<br/><small>Public YouTube channel {esc(str(genome.get('youtube_channel_id')))}. Not KYC.</small>" if str(genome.get("youtube_channel_id") or "").startswith("UC") else ""}</p>
         <p><b>Topics / style</b><br/>{esc(topics or "—")} · {esc(styles or "—")}</p>
         <p><b>Momentum proxies</b><br/>
         7d {esc(str(momentum.get("window_7d", "—")))}

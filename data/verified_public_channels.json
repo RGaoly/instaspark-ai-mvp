@@ -2,8 +2,8 @@
   "pack_id": "verified_public_channels_v1",
   "version": 1,
   "source": "youtube_data_api",
-  "ownership": "verified_public_channel",
-  "note": "Demo catalog rows bound to real public YouTube channels for intensive-read. Catalog display names stay synthetic personas and are not the uploaders. Uploads prefer already-cached public videos and timedtext. attached_channel still wins. Never enters ranking.",
+  "ownership": "catalog_channel",
+  "note": "Top 20 catalog rows ARE these public YouTube channels (name + channel id). creator_id stays stable. Clips are that channel's public uploads. Not KYC. Remaining catalog rows stay synthetic. attached_channel still wins. Never ranked.",
   "bound_at": "2026-08-24T04:08:42+00:00",
   "api_calls": {
     "channel_searches": 28,
@@ -14,11 +14,11 @@
   "binds": [
     {
       "creator_id": "C051",
-      "catalog_name": "Catalina Mesa",
+      "catalog_name": "GoPro",
       "channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
       "channel_title": "GoPro",
-      "bind_reason": "Public channel 'GoPro' (UCqhnX4jA0A5paNd1v-zEysw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'GoPro' (UCqhnX4jA0A5paNd1v-zEysw). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "outdoor",
         "travel",
@@ -54,15 +54,16 @@
           "channel_title": "GoPro",
           "duration": "PT15S"
         }
-      ]
+      ],
+      "former_catalog_name": "Catalina Mesa"
     },
     {
       "creator_id": "C055",
-      "catalog_name": "Nia Hollow",
+      "catalog_name": "Insta360",
       "channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
       "channel_title": "Insta360",
-      "bind_reason": "Public channel 'Insta360' (UC3qWcF49rv8VMZO7Vg6kj5w). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Insta360' (UC3qWcF49rv8VMZO7Vg6kj5w). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "tech",
         "travel",
@@ -98,15 +99,16 @@
           "channel_title": "Insta360",
           "duration": "PT9M30S"
         }
-      ]
+      ],
+      "former_catalog_name": "Nia Hollow"
     },
     {
       "creator_id": "C038",
-      "catalog_name": "Reese Harbor",
+      "catalog_name": "DJI",
       "channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
       "channel_title": "DJI",
-      "bind_reason": "Public channel 'DJI' (UCsNGtpqGsyw0U6qEG-WHadA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'DJI' (UCsNGtpqGsyw0U6qEG-WHadA). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "tech",
         "travel",
@@ -140,15 +142,16 @@
           "channel_title": "DJI",
           "duration": "PT17S"
         }
-      ]
+      ],
+      "former_catalog_name": "Reese Harbor"
     },
     {
       "creator_id": "C017",
-      "catalog_name": "Ryan Gear",
+      "catalog_name": "DC Rainmaker",
       "channel_id": "UC6y_DbpezOinlzHv8O092zw",
       "channel_title": "DC Rainmaker",
-      "bind_reason": "Public channel 'DC Rainmaker' (UC6y_DbpezOinlzHv8O092zw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'DC Rainmaker' (UC6y_DbpezOinlzHv8O092zw). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "tech",
         "cycling",
@@ -183,15 +186,16 @@
           "channel_title": "DC Rainmaker",
           "duration": "PT19M47S"
         }
-      ]
+      ],
+      "former_catalog_name": "Ryan Gear"
     },
     {
       "creator_id": "C057",
-      "catalog_name": "Mila Ridgeway",
+      "catalog_name": "Global Mountain Bike Network",
       "channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
       "channel_title": "Global Mountain Bike Network",
-      "bind_reason": "Public channel 'Global Mountain Bike Network' (UC_A--fhX5gea0i4UtpD99Gg). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Global Mountain Bike Network' (UC_A--fhX5gea0i4UtpD99Gg). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "cycling",
         "outdoor",
@@ -225,15 +229,16 @@
           "channel_title": "Global Mountain Bike Network",
           "duration": "PT1M30S"
         }
-      ]
+      ],
+      "former_catalog_name": "Mila Ridgeway"
     },
     {
       "creator_id": "C031",
-      "catalog_name": "Jordan Ridge",
+      "catalog_name": "NorCal Cycling",
       "channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
       "channel_title": "NorCal Cycling",
-      "bind_reason": "Public channel 'NorCal Cycling' (UCIfRR1N2Gm1vjj9X955iWSQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'NorCal Cycling' (UCIfRR1N2Gm1vjj9X955iWSQ). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "cycling",
         "outdoor"
@@ -266,15 +271,16 @@
           "channel_title": "NorCal Cycling",
           "duration": "PT9M48S"
         }
-      ]
+      ],
+      "former_catalog_name": "Jordan Ridge"
     },
     {
       "creator_id": "C040",
-      "catalog_name": "Hayden Brook",
+      "catalog_name": "Chaseontwowheels",
       "channel_id": "UCidMMQafCAomjuD_a3DcdHw",
       "channel_title": "Chaseontwowheels",
-      "bind_reason": "Public channel 'Chaseontwowheels' (UCidMMQafCAomjuD_a3DcdHw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Chaseontwowheels' (UCidMMQafCAomjuD_a3DcdHw). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "cycling",
         "POV"
@@ -307,15 +313,16 @@
           "channel_title": "Chaseontwowheels",
           "duration": "PT23M58S"
         }
-      ]
+      ],
+      "former_catalog_name": "Hayden Brook"
     },
     {
       "creator_id": "C032",
-      "catalog_name": "Harper Coast",
+      "catalog_name": "Patagonia",
       "channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
       "channel_title": "Patagonia",
-      "bind_reason": "Public channel 'Patagonia' (UCl3xZ-f3cQhOHvH6f-7-ssQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Patagonia' (UCl3xZ-f3cQhOHvH6f-7-ssQ). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "outdoor",
         "travel"
@@ -348,15 +355,16 @@
           "channel_title": "Patagonia",
           "duration": "PT4M15S"
         }
-      ]
+      ],
+      "former_catalog_name": "Harper Coast"
     },
     {
       "creator_id": "C052",
-      "catalog_name": "Ignacio Brisa",
+      "catalog_name": "The North Face",
       "channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
       "channel_title": "The North Face",
-      "bind_reason": "Public channel 'The North Face' (UCNfWDbERpf34FsSWIpqGD0Q). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'The North Face' (UCNfWDbERpf34FsSWIpqGD0Q). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "outdoor",
         "travel"
@@ -389,15 +397,16 @@
           "channel_title": "The North Face",
           "duration": "PT25M8S"
         }
-      ]
+      ],
+      "former_catalog_name": "Ignacio Brisa"
     },
     {
       "creator_id": "C037",
-      "catalog_name": "Morgan Vale",
+      "catalog_name": "Insta360 Tutorials",
       "channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
       "channel_title": "Insta360 Tutorials",
-      "bind_reason": "Public channel 'Insta360 Tutorials' (UCFeUhzdN15jFTuT-ZruAqVw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Insta360 Tutorials' (UCFeUhzdN15jFTuT-ZruAqVw). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [
         "tech",
         "tutorial"
@@ -430,15 +439,16 @@
           "channel_title": "Insta360 Tutorials",
           "duration": "PT8M19S"
         }
-      ]
+      ],
+      "former_catalog_name": "Morgan Vale"
     },
     {
       "creator_id": "C016",
-      "catalog_name": "Valeria Vlog",
+      "catalog_name": "Oscar Hikes",
       "channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
       "channel_title": "Oscar Hikes",
-      "bind_reason": "Public channel 'Oscar Hikes' (UCGQNEhX3SQw3jkcQoHTipvQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Oscar Hikes' (UCGQNEhX3SQw3jkcQoHTipvQ). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -468,15 +478,16 @@
           "channel_title": "Oscar Hikes",
           "duration": "PT13M20S"
         }
-      ]
+      ],
+      "former_catalog_name": "Valeria Vlog"
     },
     {
       "creator_id": "C012",
-      "catalog_name": "Emma Peaks",
+      "catalog_name": "Surfing With Noz",
       "channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
       "channel_title": "Surfing With Noz",
-      "bind_reason": "Public channel 'Surfing With Noz' (UCoicMEw3njXscfwHlaAJVcQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Surfing With Noz' (UCoicMEw3njXscfwHlaAJVcQ). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -506,15 +517,16 @@
           "channel_title": "Surfing With Noz",
           "duration": "PT8M36S"
         }
-      ]
+      ],
+      "former_catalog_name": "Emma Peaks"
     },
     {
       "creator_id": "C058",
-      "catalog_name": "Kai Stillwater",
+      "catalog_name": "Brandon Li",
       "channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
       "channel_title": "Brandon Li",
-      "bind_reason": "Public channel 'Brandon Li' (UC3stPIuUoCDHG7COfwr0tEA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Brandon Li' (UC3stPIuUoCDHG7COfwr0tEA). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -535,15 +547,16 @@
           "channel_title": "Brandon Li",
           "duration": "PT14M14S"
         }
-      ]
+      ],
+      "former_catalog_name": "Kai Stillwater"
     },
     {
       "creator_id": "C004",
-      "catalog_name": "Maya Outdoors",
+      "catalog_name": "Haze Outdoors",
       "channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
       "channel_title": "Haze Outdoors",
-      "bind_reason": "Public channel 'Haze Outdoors' (UCDzwHsfeQcQJ_0FDnLheU9w). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Haze Outdoors' (UCDzwHsfeQcQJ_0FDnLheU9w). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -564,15 +577,16 @@
           "channel_title": "Haze Outdoors",
           "duration": "PT48S"
         }
-      ]
+      ],
+      "former_catalog_name": "Maya Outdoors"
     },
     {
       "creator_id": "C035",
-      "catalog_name": "Avery Drift",
+      "catalog_name": "MountMedia",
       "channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
       "channel_title": "MountMedia",
-      "bind_reason": "Public channel 'MountMedia' (UC_Nql0AlGzl7dSAuTqBUPEA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'MountMedia' (UC_Nql0AlGzl7dSAuTqBUPEA). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -593,15 +607,16 @@
           "channel_title": "MountMedia",
           "duration": "PT35S"
         }
-      ]
+      ],
+      "former_catalog_name": "Avery Drift"
     },
     {
       "creator_id": "C015",
-      "catalog_name": "Daniel Surf",
+      "catalog_name": "The Tech Chap",
       "channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
       "channel_title": "The Tech Chap",
-      "bind_reason": "Public channel 'The Tech Chap' (UCzlXf-yUIaOpOjEjPrOO9TA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'The Tech Chap' (UCzlXf-yUIaOpOjEjPrOO9TA). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -622,15 +637,16 @@
           "channel_title": "The Tech Chap",
           "duration": "PT13M28S"
         }
-      ]
+      ],
+      "former_catalog_name": "Daniel Surf"
     },
     {
       "creator_id": "C013",
-      "catalog_name": "Mateo Wheels",
+      "catalog_name": "Best360",
       "channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
       "channel_title": "Best360",
-      "bind_reason": "Public channel 'Best360' (UCeqky0tc84Ezl0CYMW3xKkA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Best360' (UCeqky0tc84Ezl0CYMW3xKkA). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -651,15 +667,16 @@
           "channel_title": "Best360",
           "duration": "PT15S"
         }
-      ]
+      ],
+      "former_catalog_name": "Mateo Wheels"
     },
     {
       "creator_id": "C033",
-      "catalog_name": "Quinn Summit",
+      "catalog_name": "Insta360 Moto",
       "channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
       "channel_title": "Insta360 Moto",
-      "bind_reason": "Public channel 'Insta360 Moto' (UC9rhVOE9V5abTKrDGFeRZWg). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Insta360 Moto' (UC9rhVOE9V5abTKrDGFeRZWg). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -680,15 +697,16 @@
           "channel_title": "Insta360 Moto",
           "duration": "PT10S"
         }
-      ]
+      ],
+      "former_catalog_name": "Quinn Summit"
     },
     {
       "creator_id": "C036",
-      "catalog_name": "Casey Bluff",
+      "catalog_name": "The Skiing Ram",
       "channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
       "channel_title": "The Skiing Ram",
-      "bind_reason": "Public channel 'The Skiing Ram' (UCIj8c5QtM74AFS5RaESr90Q). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'The Skiing Ram' (UCIj8c5QtM74AFS5RaESr90Q). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -709,15 +727,16 @@
           "channel_title": "The Skiing Ram",
           "duration": "PT2M43S"
         }
-      ]
+      ],
+      "former_catalog_name": "Casey Bluff"
     },
     {
       "creator_id": "C053",
-      "catalog_name": "Paula Mirador",
+      "catalog_name": "Becca Farsace",
       "channel_id": "UCEbFX3P9ADiJvle5Z0Qyw2A",
       "channel_title": "Becca Farsace",
-      "bind_reason": "Public channel 'Becca Farsace' (UCEbFX3P9ADiJvle5Z0Qyw2A). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
-      "ownership": "verified_public_channel",
+      "bind_reason": "This catalog row is public YouTube channel 'Becca Farsace' (UCEbFX3P9ADiJvle5Z0Qyw2A). Intensive-read clips are that channel's public uploads. Not KYC.",
+      "ownership": "catalog_channel",
       "topics": [],
       "uploads": [
         {
@@ -729,7 +748,8 @@
           "channel_title": "Becca Farsace",
           "duration": "PT12M31S"
         }
-      ]
+      ],
+      "former_catalog_name": "Paula Mirador"
     }
   ]
 }

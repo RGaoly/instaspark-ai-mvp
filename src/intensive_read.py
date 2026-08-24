@@ -28,8 +28,8 @@ YT_LEGEND = (
     "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. "
     "youtube_public_timedtext: caption lines when YouTube exposes them. "
     "ownership attached_channel = operator-attached channel uploads; "
-    "verified_public_channel = demo row bound to a real public channel, catalog name is not the uploader; "
-    "channel_search_match = catalog name matched a public channel title; "
+    "catalog_channel = this catalog row is that public YouTube channel, not KYC; "
+    "channel_search_match = leftover name match on an unbound synthetic row; "
     "public_search_hit = topic search, not the catalog creator. "
     "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
 )
@@ -300,7 +300,7 @@ def intensive_read_html(pack: Iterable[Mapping[str, Any]]) -> str:
         if bind:
             row_note = (
                 f"<br/><small>{esc(verified_row_label(bind))}. "
-                "Catalog name stays a demo persona; this is not the uploader.</small>"
+                "Clips are this channel's public uploads. Not KYC.</small>"
             )
         elif any(str(clip.get("ownership") or "") == "public_search_hit" for clip in item.get("clips") or []):
             row_note = f"<br/><small>{esc(LEFTOVER_SEARCH_NOTE)}</small>"

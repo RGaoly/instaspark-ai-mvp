@@ -29,7 +29,7 @@ def test_empty_query_returns_no_hits():
 
 def test_search_finds_creator_by_name():
     creators, missions, opportunities = _fixtures()
-    hits = search_workspace("Ryan Gear", creators=creators, missions=missions, opportunities=opportunities)
+    hits = search_workspace("DC Rainmaker", creators=creators, missions=missions, opportunities=opportunities)
     assert any(hit["kind"] == "creator" and hit["id"] == "C017" for hit in hits)
 
 
@@ -47,7 +47,7 @@ def test_search_finds_opportunity_by_title():
 
 def test_search_requires_every_token():
     creators, missions, opportunities = _fixtures()
-    hits = search_workspace("Ryan Antarctica", creators=creators, missions=missions, opportunities=opportunities)
+    hits = search_workspace("Rainmaker Antarctica", creators=creators, missions=missions, opportunities=opportunities)
     assert hits == []
 
 

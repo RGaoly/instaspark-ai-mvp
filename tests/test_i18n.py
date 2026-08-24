@@ -20,15 +20,15 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Live YouTube evidence attached", language="zh") == "已挂接 YouTube 实时证据"
     assert translate("Product DNA", language="zh") == "产品 DNA"
     assert translate("Always-on scout cards", language="zh") == "持续侦察卡片"
-    assert "not catalog-persona-owned" in translate(
-        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay is a verified public-channel bind or leftover topic-search, not catalog-persona-owned. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
+    assert "not KYC" in translate(
+        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay: Top 20 rows are public channels (catalog_channel), not KYC. Remaining recall is synthetic. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
         language="en",
     )
     assert translate(
-        "Verified public channel bound for this demo row: {channel_title}",
+        "This catalog row is this public YouTube channel: {channel_title}",
         language="zh",
         channel_title="GoPro",
-    ) == "该演示行绑定的已核验公开频道：GoPro"
+    ) == "该目录行就是这个公开 YouTube 频道：GoPro"
     assert (
         translate(
             "NL query is a lexical filter + small boost, not semantic search.",
@@ -87,7 +87,7 @@ def test_core_navigation_has_chinese_labels():
         == "标注演示证据 — 不是语音转写，不是抓取评论。"
     )
     assert "youtube_data_api" in translate(
-        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; verified_public_channel = demo row bound to a real public channel, catalog name is not the uploader; channel_search_match = catalog name matched a public channel title; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
+        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; catalog_channel = this catalog row is that public YouTube channel, not KYC; channel_search_match = leftover name match on an unbound synthetic row; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
         language="en",
     )
     assert translate("Selected creator", language="zh") == "已选择该创作者"

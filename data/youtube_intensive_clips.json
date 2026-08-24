@@ -4,7 +4,7 @@
   "source": "youtube_data_api",
   "fetched_at": "2026-08-24T03:30:54+00:00",
   "ownership": "mixed",
-  "note": "Intensive-read YouTube overlay. verified_public_channel = demo row bound to a real public channel; catalog name is not the uploader. channel_search_match = leftover name match. public_search_hit = topic search. attached_channel is runtime operator attach. Never ranked. Not Whisper.",
+  "note": "Intensive-read YouTube overlay. catalog_channel = this catalog row is that public YouTube channel; clips are its uploads; not KYC. channel_search_match / public_search_hit only on unbound synthetic rows. attached_channel is runtime operator attach. Never ranked. Not Whisper.",
   "clip_count": 179,
   "creator_count": 60,
   "clips": [
@@ -10241,7 +10241,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -10370,7 +10370,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -27108,7 +27108,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -27465,7 +27465,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -27746,7 +27746,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -27793,7 +27793,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -27837,7 +27837,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -32640,7 +32640,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -34157,7 +34157,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -35166,7 +35166,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -36087,7 +36087,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -37400,7 +37400,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -39129,7 +39129,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -41174,7 +41174,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -43219,7 +43219,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68035,7 +68035,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68794,7 +68794,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68822,7 +68822,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68850,7 +68850,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68878,7 +68878,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68906,7 +68906,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68955,7 +68955,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -68991,7 +68991,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -71481,7 +71481,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -71546,7 +71546,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72026,7 +72026,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72058,7 +72058,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72191,7 +72191,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72296,7 +72296,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72811,7 +72811,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72839,7 +72839,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72867,7 +72867,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -72895,7 +72895,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -76627,7 +76627,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -78664,7 +78664,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -80709,7 +80709,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99623,7 +99623,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99651,7 +99651,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99679,7 +99679,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99707,7 +99707,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99735,7 +99735,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -99763,7 +99763,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -101340,7 +101340,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -102440,7 +102440,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -102925,7 +102925,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -103838,7 +103838,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -104915,7 +104915,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -104943,7 +104943,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -104971,7 +104971,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -106432,7 +106432,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -108057,7 +108057,7 @@
       "asr_status": "not_collected",
       "asr": null,
       "transcript": null,
-      "ownership": "verified_public_channel",
+      "ownership": "catalog_channel",
       "source": "youtube_data_api"
     },
     {
@@ -117387,7 +117387,7 @@
   "timedtext_not_downloaded": 49,
   "ownership_mix": {
     "public_search_hit": 126,
-    "verified_public_channel": 51,
+    "catalog_channel": 51,
     "channel_search_match": 2
   },
   "channel_match_fetched_at": "2026-08-24T03:50:46+00:00",

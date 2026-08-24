@@ -19,7 +19,7 @@ def _ranked():
 def test_keyword_filter_includes_matching_name_and_excludes_others():
     ranked = _ranked()
     assert not ranked.empty
-    included = filter_ranked_creators(ranked, query="Ryan Gear")
+    included = filter_ranked_creators(ranked, query="DC Rainmaker")
     assert list(included["creator_id"]) == ["C017"]
 
     excluded = filter_ranked_creators(ranked, query="Antarctica")
@@ -30,7 +30,11 @@ def test_keyword_filter_matches_topics_and_country():
     ranked = _ranked()
     by_topic = filter_ranked_creators(ranked, query="surfing")
     assert not by_topic.empty
-    assert by_topic["topics"].apply(lambda topics: "surfing" in [str(item).lower() for item in topics]).all()
+    assert by_topic.apply(
+        lambda row: "surfing" in [str(item).lower() for item in (row.get("topics") or [])]
+        or "surfing" in str(row.get("creator_name") or "").lower(),
+        axis=1,
+    ).all()
 
     by_country = filter_ranked_creators(ranked, query="mexico")
     if not by_country.empty:

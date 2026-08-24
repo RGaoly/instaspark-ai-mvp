@@ -53,11 +53,13 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
                     "public_search_hit",
                     "channel_search_match",
                     "attached_channel",
+                    "catalog_channel",
                     "verified_public_channel",
                 }
                 if clip.get("ownership") in {
                     "channel_search_match",
                     "attached_channel",
+                    "catalog_channel",
                     "verified_public_channel",
                 }:
                     assert clip.get("channel_id")
@@ -106,10 +108,10 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
     assert "ASR" not in YT_LEGEND
     assert "youtube_public_timedtext" in YT_LEGEND
     assert "attached_channel" in YT_LEGEND
-    assert "verified_public_channel" in YT_LEGEND
+    assert "catalog_channel" in YT_LEGEND
+    assert "not KYC" in YT_LEGEND
     assert "channel_search_match" in YT_LEGEND
     assert "public_search_hit" in YT_LEGEND
-    assert "catalog name is not the uploader" in YT_LEGEND
 
 
 def test_intensive_read_html_empty_ranking():

@@ -37,11 +37,11 @@ def test_committed_cache_covers_sixty_creators_when_present():
     assert all(item["asr_status"] == "not_collected" for item in clips)
     assert all(
         item.get("ownership")
-        in {"public_search_hit", "channel_search_match", "attached_channel", "verified_public_channel"}
+        in {"public_search_hit", "channel_search_match", "attached_channel", "catalog_channel", "verified_public_channel"}
         for item in clips
     )
     for item in clips:
-        if item.get("ownership") in {"channel_search_match", "attached_channel", "verified_public_channel"}:
+        if item.get("ownership") in {"channel_search_match", "attached_channel", "catalog_channel", "verified_public_channel"}:
             assert item.get("channel_id")
     assert all(item["caption_body_status"] in {"not_downloaded", "downloaded_public_timedtext"} for item in clips)
     downloaded = [item for item in clips if item["caption_body_status"] == "downloaded_public_timedtext"]

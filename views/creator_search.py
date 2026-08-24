@@ -268,6 +268,12 @@ def _live_evidence_html(live_rows: list) -> str:
 
 def _detail_header_html(creator: dict, live_rows: list) -> str:
     score = float(creator["total_score"])
+    channel_id = str(creator.get("youtube_channel_id") or "").strip()
+    catalog_chip = (
+        badge("Public YouTube channel", "green")
+        if channel_id.startswith("UC")
+        else badge("Demo catalog", "gray")
+    )
     live_chip = (
         badge("Live YouTube evidence attached", "green")
         if live_rows or float(creator.get("live_proof_bonus") or 0) > 0
@@ -279,7 +285,7 @@ def _detail_header_html(creator: dict, live_rows: list) -> str:
         <div class="is-profile-head">
           {avatar(creator['creator_name'], 2, 'profile')}
           <div>
-            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')} {live_chip}</div>
+            <div class="is-profile-name">{esc(creator['creator_name'])} {catalog_chip} {live_chip}</div>
             <div class="is-socials">{esc(_platform_line(creator, live_rows))}</div>
           </div>
           <div class="is-detail-score">

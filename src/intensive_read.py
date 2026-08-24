@@ -1,8 +1,7 @@
 """Top-20 intensive-read pack. YouTube public overlay + labeled-demo timestamps.
 
-Public YouTube hits never enter ranking. ASR stays not_collected. Caption
-bodies are not downloaded. DNA claim timestamps stay on the labeled-demo layer
-because the API key cannot download caption times.
+Public YouTube hits never enter ranking. Public timedtext lines are a separate
+layer from labeled_demo DNA timestamps. Bodies are never invented from demo text.
 """
 
 from __future__ import annotations
@@ -20,8 +19,8 @@ INTENSIVE_N = 20
 LEGEND = "Labeled demo evidence — not ASR, not scraped comments."
 YT_LEGEND = (
     "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. "
-    "labeled_demo: DNA claim timestamps (no true caption times). "
-    "ASR not_collected. Caption tracks listed, body not downloaded. Not ranked."
+    "youtube_public_timedtext: caption lines when YouTube exposes them. "
+    "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
 )
 
 
@@ -79,6 +78,41 @@ def intensive_read_pack(
     return rows
 
 
+def _stamp_seconds(value: str) -> int | None:
+    parts = str(value or "").strip().split(":")
+    if not parts or not all(part.isdigit() for part in parts):
+        return None
+    nums = [int(part) for part in parts]
+    if len(nums) == 2:
+        return nums[0] * 60 + nums[1]
+    if len(nums) == 3:
+        return nums[0] * 3600 + nums[1] * 60 + nums[2]
+    return None
+
+
+def nearest_timedtext_line(
+    stamp_t: str,
+    lines: Iterable[Mapping[str, Any]] | None,
+    *,
+    window_seconds: int = 20,
+) -> dict[str, str] | None:
+    target = _stamp_seconds(stamp_t)
+    rows = [dict(item) for item in lines or [] if str(item.get("t") or "").strip() and str(item.get("text") or "").strip()]
+    if target is None or not rows:
+        return None
+
+    def distance(item: Mapping[str, Any]) -> int:
+        seconds = _stamp_seconds(str(item.get("t") or ""))
+        if seconds is None:
+            return 10**9
+        return abs(seconds - target)
+
+    chosen = min(rows, key=distance)
+    if distance(chosen) > window_seconds:
+        return None
+    return {"t": str(chosen.get("t") or ""), "text": str(chosen.get("text") or "")}
+
+
 def _youtube_block_html(block: Mapping[str, Any] | None, esc) -> str:
     if not block:
         return ""
@@ -91,13 +125,28 @@ def _youtube_block_html(block: Mapping[str, Any] | None, esc) -> str:
         )
         return (
             f'<div class="is-youtube-captions"><small><b>YouTube caption tracks</b> · source: {source}. '
-            "Listed only, not downloaded, not ranked, not ASR.</small>"
+            "Listed only, not ranked.</small>"
             f"<ul style=\"margin:2px 0 0 16px\">{tracks}</ul></div>"
         )
     error = esc(str(block.get("error") or "No caption tracks listed."))
     return (
         f'<div class="is-youtube-captions"><small><b>YouTube captions</b> · source: {source}. '
         f"{error} Labeled demo layer stays below.</small></div>"
+    )
+
+
+def _clip_timedtext_html(clip: Mapping[str, Any], esc) -> str:
+    lines = [item for item in clip.get("caption_lines") or [] if item.get("t") and item.get("text")]
+    if clip.get("caption_body_status") != "downloaded_public_timedtext" or not lines:
+        return ""
+    preview = "".join(
+        f"<li><small>{esc(item.get('t'))} · {esc(item.get('text'))}</small></li>" for item in lines[:8]
+    )
+    more = f" · showing 8 of {len(lines)}" if len(lines) > 8 else f" · {len(lines)} lines"
+    return (
+        f'<div class="is-public-timedtext"><small><b>Public timedtext</b> · source: youtube_public_timedtext{more}. '
+        "Separate from labeled_demo.</small>"
+        f"<ul style=\"margin:2px 0 0 16px\">{preview}</ul></div>"
     )
 
 
@@ -115,11 +164,16 @@ def _clip_youtube_html(clip: Mapping[str, Any], esc) -> str:
         f"<li><small>{esc(text)}</small></li>" for text in clip.get("comment_snippets") or []
     ) or "<li><small>No public comment snippets returned.</small></li>"
     tracks = clip.get("caption_tracks") or []
-    track_line = (
-        f"{len(tracks)} caption track(s) listed, body not downloaded"
-        if tracks
-        else "No caption tracks listed; body not downloaded"
-    )
+    body_status = str(clip.get("caption_body_status") or "not_downloaded")
+    if body_status == "downloaded_public_timedtext" and clip.get("caption_lines"):
+        track_line = (
+            f"{len(tracks)} caption track(s) listed, public timedtext downloaded "
+            f"({len(clip.get('caption_lines') or [])} lines, source: youtube_public_timedtext)"
+        )
+    elif tracks:
+        track_line = f"{len(tracks)} caption track(s) listed, body not_downloaded"
+    else:
+        track_line = "No caption tracks listed; body not_downloaded"
     yt_themes = ", ".join(esc(theme) for theme in clip.get("youtube_comment_themes") or []) or "none"
     return (
         "<div style=\"margin:4px 0 0 8px\">"
@@ -129,6 +183,7 @@ def _clip_youtube_html(clip: Mapping[str, Any], esc) -> str:
         f"{img}"
         f"<small>Public comments (comment_source: youtube_data_api): {yt_themes}</small>"
         f"<ul style=\"margin:2px 0 0 16px\">{snippets}</ul>"
+        f"{_clip_timedtext_html(clip, esc)}"
         "</div>"
     )
 
@@ -148,12 +203,22 @@ def intensive_read_html(pack: Iterable[Mapping[str, Any]]) -> str:
         clip_blocks = []
         for clip in item.get("clips") or []:
             themes = ", ".join(esc(theme) for theme in clip.get("comment_themes") or []) or "none"
+            public_lines = list(clip.get("caption_lines") or [])
             stamps = "".join(
                 "<li>"
                 f'<b>{esc(stamp.get("t", ""))}</b> · claim {esc(stamp.get("claim_id", "") or "unmapped")}'
                 f"<br/><small>Caption ({esc(stamp.get('caption_source') or clip.get('caption_source') or 'labeled_demo')}): "
                 f"{esc(stamp.get('caption', ''))}</small>"
-                f"<br/><small>Keyframe note ({esc(clip.get('keyframe_status') or 'labeled_demo_note')}): "
+                + (
+                    (
+                        "<br/><small>Public timedtext near DNA "
+                        f"({esc(near.get('t'))}, source: youtube_public_timedtext): "
+                        f"{esc(near.get('text'))}</small>"
+                    )
+                    if (near := nearest_timedtext_line(str(stamp.get("t") or ""), public_lines))
+                    else ""
+                )
+                + f"<br/><small>Keyframe note ({esc(clip.get('keyframe_status') or 'labeled_demo_note')}): "
                 f"{esc(stamp.get('keyframe_note', ''))}</small>"
                 "</li>"
                 for stamp in clip.get("timestamps") or []

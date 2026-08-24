@@ -1,8 +1,9 @@
 from pathlib import Path
+import html as html_lib
 
 from src.content_evidence import load_creator_content
 from src.data_loader import load_creators, load_mission
-from src.intensive_read import intensive_read_html, intensive_read_pack
+from src.intensive_read import YT_LEGEND, intensive_read_html, intensive_read_pack, nearest_timedtext_line
 from src.scoring import rank_creators
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,8 +47,15 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
                 assert str(clip["url"]).startswith("https://www.youtube.com/watch")
                 assert clip.get("keyframe_source") == "youtube_thumbnail"
                 assert clip.get("comment_source") == "youtube_data_api"
-                assert clip.get("caption_body_status") == "not_downloaded"
+                assert clip.get("caption_body_status") in {"not_downloaded", "downloaded_public_timedtext"}
                 assert clip.get("youtube_source") == "youtube_data_api"
+                if clip.get("caption_body_status") == "downloaded_public_timedtext":
+                    assert clip.get("caption_body_source") == "youtube_public_timedtext"
+                    assert clip.get("caption_lines")
+                    assert html_lib.escape(clip["caption_lines"][0]["text"]) in html
+                    assert "youtube_public_timedtext" in html
+                else:
+                    assert not clip.get("caption_lines")
             assert clip["timestamps"]
             assert all(stamp["t"] and stamp["label"] for stamp in clip["timestamps"])
             assert all(stamp["claim_id"] in CLAIM_IDS for stamp in clip["timestamps"])
@@ -82,6 +90,9 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
     assert "labeled_demo" in html
     assert "asr_collected" not in html.lower()
     assert "whisper output" not in html.lower()
+    assert "Whisper" not in YT_LEGEND
+    assert "ASR" not in YT_LEGEND
+    assert "youtube_public_timedtext" in YT_LEGEND
 
 
 def test_intensive_read_html_empty_ranking():
@@ -91,3 +102,11 @@ def test_intensive_read_html_empty_ranking():
     html = intensive_read_html([])
     assert 'id="intensive-read-board"' in html
     assert "No gated creators" in html
+
+
+def test_nearest_timedtext_line_stays_within_window():
+    lines = [{"t": "00:01", "text": "Hello trail"}, {"t": "01:00", "text": "Later"}]
+    near = nearest_timedtext_line("00:08", lines, window_seconds=20)
+    assert near == {"t": "00:01", "text": "Hello trail"}
+    assert nearest_timedtext_line("03:00", lines, window_seconds=20) is None
+    assert nearest_timedtext_line("00:08", [], window_seconds=20) is None

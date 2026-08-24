@@ -2,7 +2,8 @@
 
 Cached JSON is the offline source of truth after one fetch. Missing cache
 keeps the labeled-demo catalog clips. This overlay does not claim catalog
-creators uploaded the videos.
+creators uploaded the videos. Public timedtext bodies are optional and
+never invented from labeled_demo.
 """
 
 from __future__ import annotations
@@ -15,6 +16,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_YOUTUBE_CLIPS_PATH = ROOT / "data" / "youtube_intensive_clips.json"
 ALLOWED_THUMB_HOSTS = (".ytimg.com", "i.ytimg.com", "img.youtube.com")
+ALLOWED_BODY_STATUS = frozenset({"not_downloaded", "downloaded_public_timedtext"})
+TIMEDTEXT_SOURCE = "youtube_public_timedtext"
 
 
 def _as_text(value: Any) -> str:
@@ -27,6 +30,26 @@ def _public_thumb(url: str) -> str:
     if any(host == item or host.endswith(item) for item in ALLOWED_THUMB_HOSTS):
         return text
     return ""
+
+
+def _clean_caption_lines(post_id: str, raw: Any, status: str) -> list[dict[str, str]]:
+    if status != "downloaded_public_timedtext":
+        if raw in (None, "", []):
+            return []
+        raise ValueError(f"{post_id} must not store caption_lines unless public timedtext downloaded.")
+    if not isinstance(raw, list) or not raw:
+        raise ValueError(f"{post_id} downloaded_public_timedtext requires caption_lines.")
+    lines: list[dict[str, str]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        stamp = _as_text(item.get("t"))
+        text = _as_text(item.get("text"))
+        if stamp and text:
+            lines.append({"t": stamp, "text": text[:280]})
+    if not lines:
+        raise ValueError(f"{post_id} downloaded_public_timedtext caption_lines are empty.")
+    return lines[:500]
 
 
 def load_youtube_intensive_clips(
@@ -66,8 +89,15 @@ def load_youtube_intensive_clips(
             raise ValueError(f"{post_id} must not store a downloaded transcript.")
         if str(item.get("privacy") or "public") != "public":
             raise ValueError(f"{post_id} only public videos are allowed.")
-        if str(item.get("caption_body_status") or "not_downloaded") != "not_downloaded":
-            raise ValueError(f"{post_id} caption bodies must stay not_downloaded.")
+        status = str(item.get("caption_body_status") or "not_downloaded")
+        if status not in ALLOWED_BODY_STATUS:
+            raise ValueError(f"{post_id} caption_body_status {status!r} is not allowed.")
+        body_source = _as_text(item.get("caption_body_source"))
+        if status == "downloaded_public_timedtext" and body_source != TIMEDTEXT_SOURCE:
+            raise ValueError(f"{post_id} caption_body_source must be {TIMEDTEXT_SOURCE}.")
+        if status == "not_downloaded" and body_source:
+            raise ValueError(f"{post_id} must not claim a caption body source without a download.")
+        lines = _clean_caption_lines(post_id, item.get("caption_lines"), status)
         token = str(item.get("keyframe_source") or "")
         if token != "youtube_thumbnail":
             raise ValueError(f"{post_id} keyframe_source must be youtube_thumbnail.")
@@ -84,7 +114,9 @@ def load_youtube_intensive_clips(
                 "comment_snippets": [str(s).strip()[:280] for s in (item.get("comment_snippets") or []) if str(s).strip()][:3],
                 "comment_themes": [str(s).strip() for s in (item.get("comment_themes") or []) if str(s).strip()][:3],
                 "caption_tracks": list(item.get("caption_tracks") or []),
-                "caption_body_status": "not_downloaded",
+                "caption_body_status": status,
+                "caption_body_source": body_source or None,
+                "caption_lines": lines,
                 "asr_status": "not_collected",
                 "source": "youtube_data_api",
             }
@@ -112,6 +144,14 @@ def attach_youtube_overlay(clip: Mapping[str, Any], overlay: Mapping[str, Any] |
     merged["catalog_url"] = str(clip.get("url") or "")
     if not overlay:
         return merged
+    status = str(overlay.get("caption_body_status") or "not_downloaded")
+    lines = list(overlay.get("caption_lines") or []) if status == "downloaded_public_timedtext" else []
+    if status != "downloaded_public_timedtext" or not lines:
+        status = "not_downloaded"
+        lines = []
+        body_source = None
+    else:
+        body_source = str(overlay.get("caption_body_source") or TIMEDTEXT_SOURCE)
     merged["video_id"] = overlay.get("video_id")
     merged["url"] = overlay.get("url") or merged["url"]
     merged["youtube_title"] = overlay.get("title")
@@ -121,7 +161,9 @@ def attach_youtube_overlay(clip: Mapping[str, Any], overlay: Mapping[str, Any] |
     merged["comment_snippets"] = list(overlay.get("comment_snippets") or [])
     merged["youtube_comment_themes"] = list(overlay.get("comment_themes") or [])
     merged["caption_tracks"] = list(overlay.get("caption_tracks") or [])
-    merged["caption_body_status"] = "not_downloaded"
+    merged["caption_body_status"] = status
+    merged["caption_body_source"] = body_source
+    merged["caption_lines"] = [{"t": str(item.get("t") or ""), "text": str(item.get("text") or "")} for item in lines if str(item.get("t") or "").strip() and str(item.get("text") or "").strip()]
     merged["youtube_source"] = "youtube_data_api"
     merged["ownership"] = overlay.get("ownership") or "public_search_hit"
     merged["asr_status"] = "not_collected"

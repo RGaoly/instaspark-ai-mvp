@@ -12,6 +12,7 @@ import pandas as pd
 
 from src.content_evidence import clips_for
 from src.creator_genome import genome_for, genomes_by_id
+from src.intensive_read import intensive_read_pack
 from src.scoring import passes_hard_gates
 
 
@@ -100,6 +101,33 @@ def genome_coverage(
     }
 
 
+def intensive_read_coverage(
+    ranked: pd.DataFrame,
+    posts: Iterable[Mapping[str, Any]] | None = None,
+    *,
+    n: int = 20,
+) -> dict[str, Any]:
+    pack = intensive_read_pack(ranked, posts, n=n)
+    missing: list[str] = []
+    invented_asr: list[str] = []
+    for item in pack:
+        clips = item.get("clips") or []
+        timed = any(clip.get("timestamps") for clip in clips)
+        if not clips or not timed:
+            missing.append(str(item.get("creator_id") or ""))
+        for clip in clips:
+            if clip.get("asr_status") != "not_collected" or clip.get("asr") not in (None, ""):
+                invented_asr.append(str(item.get("creator_id") or ""))
+    total = len(pack)
+    return {
+        "total": total,
+        "covered": total - len(missing),
+        "missing": missing,
+        "invented_asr": invented_asr,
+        "rate": 1.0 if total == 0 else (total - len(missing)) / total,
+    }
+
+
 def ranking_stability(ranked: pd.DataFrame) -> tuple[str, ...]:
     return tuple(str(item) for item in _top_n(ranked)["creator_id"].tolist()) if ranked is not None and not ranked.empty else ()
 
@@ -136,7 +164,7 @@ def acceptance_matrix(
 ) -> list[dict[str, Any]]:
     gates = hard_gate_violations(ranked, mission)
     coverage = evidence_coverage(ranked, posts, n=10)
-    intensive = evidence_coverage(ranked, posts, n=20)
+    intensive = intensive_read_coverage(ranked, posts, n=20)
     stability = ranking_stability(ranked)
     attribution = attribution_completeness(events, sku=str(mission.get("product") or ""))
     video_n = len(list(posts or []))
@@ -187,8 +215,14 @@ def acceptance_matrix(
             "dimension": "Top 20 intensive-read clips",
             "target": "Every Top 20 row has labeled timestamps (not ASR)",
             "value": intensive["covered"],
-            "passed": intensive["rate"] >= 1.0 and intensive["total"] >= 1,
-            "detail": f"{intensive['covered']}/{intensive['total']} have authored clip timestamps. Missing: {', '.join(intensive['missing']) or 'none'}.",
+            "passed": intensive["rate"] >= 1.0
+            and intensive["total"] >= 1
+            and not intensive.get("invented_asr"),
+            "detail": (
+                f"{intensive['covered']}/{intensive['total']} have authored clip timestamps. "
+                f"Missing: {', '.join(intensive['missing']) or 'none'}. "
+                "ASR/comments/keyframes remain not_collected."
+            ),
         },
         {
             "id": "catalog_videos",

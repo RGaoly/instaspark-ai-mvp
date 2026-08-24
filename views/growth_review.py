@@ -416,17 +416,25 @@ def render() -> None:
         )
         md(_budget_html(decision), unsafe_allow_html=True)
 
-    with st.expander(t("Pilot acceptance matrix"), expanded=False):
-        st.caption(
-            t("Pytest-backed gates from the current catalog, ranking and events. Not operator interviews.")
-        )
-        rows = acceptance_matrix(
-            ranked=ranked,
-            mission=active_mission(),
-            catalog_size=len(creators()),
-            posts=load_creator_content(),
-            events=events,
-        )
-        md(_acceptance_html(rows), unsafe_allow_html=True)
+    rows = acceptance_matrix(
+        ranked=ranked,
+        mission=active_mission(),
+        catalog_size=len(creators()),
+        posts=load_creator_content(),
+        events=events,
+    )
+    st.caption(
+        t("Pytest-backed gates from the current catalog, ranking and events. Not operator interviews.")
+    )
+    md(
+        '<div class="is-card" id="pilot-acceptance-matrix" style="margin-top:10px">'
+        '<div class="is-panel-head"><span class="is-panel-title">Pilot acceptance matrix</span>'
+        '<span class="is-panel-link">Same rows as src/evaluation.py</span></div>'
+        '<div class="is-panel-body">'
+        "<small>Hard gates, evidence, stability, attribution, recall 60, intensive-read 20, "
+        "catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.</small>"
+        f"{_acceptance_html(rows)}</div></div>",
+        unsafe_allow_html=True,
+    )
 
     render_demo_notice()

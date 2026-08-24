@@ -1344,6 +1344,7 @@ ZH: dict[str, str] = {
     "Additional gated candidates": "其余过门槛候选人",
     "Top 20 intensive-read clips": "Top 20 精读片段",
     "Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.": "时间戳是按产品 DNA 卖点标注的演示标记。不是语音转写，不是评论挖掘，也不是平台分析。",
+    "Inspect {creator_id}": "精读 {creator_id}",
     "Always-on scout cards": "持续侦察卡片",
     "Catalog momentum proxies (7d ≈ inverted decline, 30d ≈ engagement, 90d ≈ consistency). Not a live crawl.": "目录动量代理（7 日≈下滑取反，30 日≈互动，90 日≈稳定）。不是实时抓取。",
     "No additional scout cards in this catalog.": "当前目录没有更多侦察卡片。",

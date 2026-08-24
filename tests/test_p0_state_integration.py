@@ -1481,3 +1481,35 @@ def test_viewer_cannot_import_or_approve_inbound(session):
             reason="Viewer should not approve inbound",
         )
 
+
+def test_save_scout_card_creates_signal_opportunity_from_genome_windows(session):
+    from src.scouting import scout_cards
+
+    cards = scout_cards(state.creators(), limit=1)
+    assert cards
+    card = cards[0]
+    assert card.get("genome_id")
+    before = {item["opportunity_id"] for item in session.opportunities}
+    saved = state.save_scout_card(card)
+    assert saved["opportunity_id"] not in before
+    assert saved["source"] == "catalog_momentum"
+    assert saved["opportunity_type"] == "creator_signal"
+    assert saved["creator_id"] == card["creator_id"]
+    assert "not a live crawl" in saved["hypothesis"].lower()
+    assert any(str(item).startswith("window_7d=") for item in saved["evidence"])
+    assert any(str(item).startswith("window_30d=") for item in saved["evidence"])
+    assert any(str(item).startswith("window_90d=") for item in saved["evidence"])
+    assert session.active_opportunity_id == saved["opportunity_id"]
+    assert saved["opportunity_id"] in {item["opportunity_id"] for item in session.opportunities}
+
+
+def test_viewer_cannot_save_scout_card(session):
+    from src.scouting import scout_cards
+
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    cards = scout_cards(state.creators(), limit=1)
+    count = len(session.opportunities)
+    with pytest.raises(PermissionError, match="read-only"):
+        state.save_scout_card(cards[0])
+    assert len(session.opportunities) == count
+

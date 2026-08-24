@@ -33,7 +33,7 @@ def test_shared_ui_files_exist():
 
 
 def test_python_sources_compile(tmp_path):
-    for path in [ROOT / "app.py", *ROOT.glob("components/*.py"), *ROOT.glob("views/*.py")]:
+    for path in [ROOT / "app.py", *ROOT.glob("components/*.py"), *ROOT.glob("views/*.py"), *ROOT.glob("src/*.py")]:
         py_compile.compile(str(path), cfile=str(tmp_path / f"{path.stem}.pyc"), doraise=True)
 
 
@@ -166,7 +166,15 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "NL query is a lexical filter + small boost, not semantic search." in search
     assert "TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA." in search
     assert "Top 10 working cut" in search
-    assert "Top 20 intensive-read clips" in search
+    assert "intensive_read_html" in search
+    assert "intensive_read_pack" in search
+    assert 'st.expander(t("Top 20 intensive-read clips")' not in search
+    assert "intensive_inspect_" in search
+    intensive = (ROOT / "src/intensive_read.py").read_text(encoding="utf-8")
+    assert "Top 20 intensive-read clips" in intensive
+    assert 'id="intensive-read-board"' in intensive
+    assert "asr_status" in intensive
+    assert "This is not multimodal ASR" in intensive
     assert "clips_for" in search
     assert "not LLM / not neural embeddings" in search
     assert "Topic overlap" in search
@@ -263,6 +271,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "_render_inbound_list" in opportunity
     assert "_render_scout_cards" in opportunity
     assert "Always-on scout cards" in opportunity
+    assert "save_scout_card" in opportunity
+    assert 'id="always-on-scout"' in opportunity
+    assert 'st.expander(t("Always-on scout cards")' not in opportunity
     assert "catalog_momentum" in opportunity
     assert "Not a live crawl" in opportunity
     assert "labeled footer" in opportunity or "labeled-footer" in opportunity
@@ -288,6 +299,9 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "_performance_table(filtered_events, names)" in growth
     assert "acceptance_matrix" in growth
     assert "Pilot acceptance matrix" in growth
+    assert 'id="pilot-acceptance-matrix"' in growth
+    assert "src/evaluation.py" in growth
+    assert 'st.expander(t("Pilot acceptance matrix")' not in growth
     assert "Not operator interviews" in growth
     assert "propose_budget_decision" in growth
     assert "Budget decision" in growth

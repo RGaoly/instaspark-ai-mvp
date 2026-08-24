@@ -35,6 +35,7 @@ from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.content_evidence import clips_for
 from src.creator_genome import genome_panel_html
+from src.intensive_read import intensive_read_html, intensive_read_pack
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import search_channels, youtube_status_label
@@ -511,16 +512,23 @@ def render() -> None:
         if not rest.empty:
             with st.expander(t("Additional gated candidates"), expanded=False):
                 _render_creator_table(rest)
-        with st.expander(t("Top 20 intensive-read clips"), expanded=False):
-            st.caption(
-                t("Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.")
-            )
-            for _, row in visible.head(20).iterrows():
-                clips = clips_for(row["creator_id"])
-                stamp_n = sum(len(clip.get("timestamps") or []) for clip in clips)
-                st.markdown(
-                    f"**{row['creator_name']}** · {row['creator_id']} · {len(clips)} clips · {stamp_n} labeled timestamps"
-                )
+        pack = intensive_read_pack(visible, n=20)
+        st.caption(
+            t("Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.")
+        )
+        md(intensive_read_html(pack), unsafe_allow_html=True)
+        if pack:
+            inspect_cols = st.columns(5)
+            for index, item in enumerate(pack):
+                creator_id = str(item.get("creator_id") or "")
+                with inspect_cols[index % 5]:
+                    if st.button(
+                        t("Inspect {creator_id}", creator_id=creator_id),
+                        key=f"intensive_inspect_{creator_id}",
+                        use_container_width=True,
+                    ):
+                        select_creator(creator_id)
+                        st.rerun()
         st.caption(
             t("Click a row to inspect that creator.")
             + " "

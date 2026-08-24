@@ -756,7 +756,16 @@ def _render_create_form(creators: list[dict]) -> None:
 def _render_scout_cards(opportunities: list[dict]) -> None:
     exclude = {str(item.get("creator_id") or "") for item in opportunities if item.get("creator_id")}
     cards = scout_cards(state_store.creators(), exclude_ids=exclude)
-    with st.expander(t("Always-on scout cards"), expanded=False):
+    with st.container(border=True):
+        md(
+            '<div class="is-card" id="always-on-scout">'
+            '<div class="is-panel-head"><span class="is-panel-title">Always-on scout cards</span>'
+            '<span class="is-panel-link">Genome 7/30/90 · not a crawler</span></div>'
+            '<div class="is-panel-body">'
+            "<small>Source catalog_momentum. Catalog momentum proxies from Creator Genome windows. Not a live daily crawl.</small>"
+            "</div></div>",
+            unsafe_allow_html=True,
+        )
         st.caption(
             t("Catalog momentum proxies (7d ≈ inverted decline, 30d ≈ engagement, 90d ≈ consistency). Not a live crawl.")
         )
@@ -777,20 +786,7 @@ def _render_scout_cards(opportunities: list[dict]) -> None:
                 use_container_width=True,
             ):
                 try:
-                    opportunity = create_opportunity(
-                        st.session_state.opportunities,
-                        creator_id=card["creator_id"],
-                        title=f"Scout: {card['creator_name']}",
-                        source="catalog_momentum",
-                        market=card["market"] or "United States",
-                        language=card.get("language") or "English",
-                        hypothesis="Catalog momentum proxy rose on 7/30/90 windows. Not a live crawl.",
-                        evidence=[card["note"], f"scout_score={card['scout_score']}"],
-                        owner="Scout desk",
-                        opportunity_type="creator_signal",
-                        suggested_action="Qualify this scout card against the active launch mission.",
-                    )
-                    state_store.save_opportunity(opportunity)
+                    opportunity = state_store.save_scout_card(card)
                     st.session_state.opportunity_detail_id = opportunity["opportunity_id"]
                     st.success(t("Saved scout card as {opportunity_id}.", opportunity_id=opportunity["opportunity_id"]))
                     st.rerun()

@@ -442,6 +442,39 @@ def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
     return deepcopy(opportunity)
 
 
+def save_scout_card(card: dict[str, Any]) -> dict[str, Any]:
+    """Persist a Genome 7/30/90 scout card as a signal opportunity. Not a live crawl."""
+
+    require_write()
+    from services.opportunity_service import create_opportunity
+
+    creator_id = str(card.get("creator_id") or "").strip()
+    if not creator_id:
+        raise ValueError("creator_id is required")
+    name = str(card.get("creator_name") or creator_id)
+    opportunity = create_opportunity(
+        st.session_state.opportunities,
+        creator_id=creator_id,
+        title=f"Scout: {name}",
+        source="catalog_momentum",
+        market=str(card.get("market") or "United States"),
+        language=str(card.get("language") or "English"),
+        hypothesis="Catalog momentum proxy rose on 7/30/90 windows. Not a live crawl.",
+        evidence=[
+            str(card.get("note") or "Catalog proxies, not a live 7/30/90 crawl."),
+            f"scout_score={card.get('scout_score')}",
+            f"window_7d={card.get('window_7d')}",
+            f"window_30d={card.get('window_30d')}",
+            f"window_90d={card.get('window_90d')}",
+            f"genome_id={card.get('genome_id') or 'none'}",
+        ],
+        owner="Scout desk",
+        opportunity_type="creator_signal",
+        suggested_action="Qualify this scout card against the active launch mission.",
+    )
+    return save_opportunity(opportunity)
+
+
 def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[str, Any]:
     require_write()
     if mission_id not in st.session_state.missions:

@@ -70,6 +70,7 @@ def test_core_navigation_has_chinese_labels():
         == "留在搜索页。详情、短名单、对比和简报都针对该创作者。"
     )
     assert translate("Click a row to inspect that creator.", language="zh") == "点击一行即可查看该创作者。"
+    assert translate("Inspect {creator_id}", language="zh", creator_id="C051") == "精读 C051"
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert (
         translate(

@@ -30,7 +30,8 @@ def test_acceptance_matrix_passes_on_demo_catalog():
     assert rows["recall"]["passed"] is True
     assert rows["recall"]["value"] == 60
     assert rows["intensive_read"]["passed"] is True
-    assert rows["intensive_read"]["value"] >= 10
+    assert rows["intensive_read"]["value"] == 20
+    assert "not_collected" in rows["intensive_read"]["detail"]
     assert rows["catalog_videos"]["passed"] is True
     assert rows["catalog_videos"]["value"] == 180
     assert rows["creator_genome"]["passed"] is True

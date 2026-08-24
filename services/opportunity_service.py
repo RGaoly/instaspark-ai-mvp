@@ -83,6 +83,9 @@ def normalize_opportunity(value: Mapping[str, Any]) -> dict[str, Any]:
         if opportunity.get("linked_mission_id")
         else None
     )
+    for key, extra in value.items():
+        if key not in opportunity:
+            opportunity[key] = extra
     return opportunity
 
 

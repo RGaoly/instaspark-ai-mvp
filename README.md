@@ -56,7 +56,7 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - Top 10 推荐
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成
-- 3 条 Creator Opportunity 合成样例
+- 3 条 Creator Opportunity 非邮件信号 + 30 封合成入站来信（英 / 西 / 德；含 KOL、MCN、Affiliate、渠道商、垃圾邮件与身份冒用）
 - Mission / Opportunity 统一活动上下文
 - 可验证的状态迁移、审计事件和幂等 OutreachCase
 
@@ -109,6 +109,7 @@ pytest -q
 ├── data/
 │   ├── creators.csv
 │   ├── creator_opportunities.json
+│   ├── inbound_messages.json
 │   └── launch_mission.json
 ├── docs/
 │   ├── 00_project_charter.md
@@ -133,6 +134,7 @@ pytest -q
 │   ├── brief.py
 │   ├── data_loader.py
 │   ├── domain.py                  # 核心对象与统一状态机
+│   ├── inbound.py                 # 入站来信抽取、身份、评分、派单
 │   └── scoring.py
 ├── views/
 │   ├── launch_mission.py

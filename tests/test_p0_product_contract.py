@@ -84,6 +84,10 @@ def test_state_exposes_active_context_and_transition_boundaries():
         "next_linear_creator_state",
         "workflow_events_for",
         "opportunities_for_mission",
+        "import_inbound_corpus",
+        "assign_inbound_owner",
+        "generate_inbound_reply",
+        "approve_inbound_for_outreach",
     }
 
     assert required <= functions, f"Missing public P0 state APIs: {sorted(required - functions)}"

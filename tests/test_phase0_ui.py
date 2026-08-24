@@ -80,6 +80,8 @@ def test_unwired_chrome_buttons_are_disabled():
     _assert_label_disabled(studio, "Send to Creator")
     outreach = (ROOT / "views/outreach_operations.py").read_text(encoding="utf-8")
     _assert_label_disabled(outreach, "Send to Creator")
+    opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
+    _assert_label_disabled(opportunity, "Send to Creator")
     _assert_label_disabled(launch, "Export")
     _assert_label_disabled(compare, "Export")
     _assert_label_disabled(growth, "Export")
@@ -244,6 +246,12 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "skip to published" not in opportunity.lower()
     assert "opportunity_cta_page" in opportunity
     assert "open_opportunity_cta" in opportunity
+    assert "import_inbound_corpus" in opportunity
+    assert "approve_inbound_for_outreach" in opportunity
+    assert "generate_inbound_reply" in opportunity
+    assert "_render_inbound_list" in opportunity
+    assert "labeled footer" in opportunity or "labeled-footer" in opportunity
+    assert "not a live mailbox" in opportunity.lower()
     assert "next_outreach_action_page" in opportunity
     assert "prepare_next_action_jump" in opportunity
     assert "growth-review" in opportunity

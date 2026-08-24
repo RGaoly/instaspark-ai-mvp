@@ -71,6 +71,14 @@ def test_core_navigation_has_chinese_labels():
     )
     assert translate("Click a row to inspect that creator.", language="zh") == "点击一行即可查看该创作者。"
     assert translate("Selected creator", language="zh") == "已选择该创作者"
+    assert (
+        translate(
+            "Synthetic 30-message corpus (EN / ES / DE). Not a live mailbox. Extraction is a labeled footer. Translation is pre-authored. Send stays disabled.",
+            language="zh",
+        )
+        == "30 封合成来信语料（英 / 西 / 德）。不是真实邮箱。字段抽取读的是邮件页脚标签。译文是预先写好的。发送保持关闭。"
+    )
+    assert translate("Imported {n} synthetic inbound messages.", language="zh", n=30) == "已导入 30 封合成入站来信。"
     assert translate("Collaboration state", language="zh") == "协作状态"
     assert translate("Why recommended", language="zh") == "推荐原因"
     assert translate("Shortlist overlap", language="zh") == "入围名单重合度"

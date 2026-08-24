@@ -15,6 +15,7 @@ from infra.auth import require_write
 from infra.config import SCORE_WEIGHTS
 from infra.database import init_db, reset_db
 from src.data_loader import load_creators, load_mission
+from src.inbound import MX_MISSION, materialize_corpus
 from src.domain import (
     HEALTH_SHORTLISTED_STATES,
     WORKFLOW_STATES,
@@ -53,6 +54,9 @@ _PERSISTED_KEYS = (
     "performance_events",
     "brief_version",
     "live_evidence",
+    "inbound_messages",
+    "routing_decisions",
+    "opportunity_mission_links",
 )
 
 ENTRY_ALIASES = {
@@ -94,6 +98,29 @@ def _mission_seed() -> dict[str, Any]:
         "owner": raw.get("owner", "Olivia Chen"),
         "status": raw.get("status", "Active"),
     }
+
+
+def _mexico_mission_seed() -> dict[str, Any]:
+    """Second locale for inbound reverse-match. Does not replace the US default mission."""
+
+    return {
+        **MX_MISSION,
+        "markets": list(MX_MISSION.get("markets") or ["Mexico"]),
+        "languages": [MX_MISSION["language"]],
+        "min_brand_safety": 72,
+        "target_topics": list(MX_MISSION.get("target_topics") or []),
+        "target_styles": ["POV", "tutorial", "cinematic"],
+        "objective": "Drive awareness and early adoption among action-camera users in Mexico.",
+        "campaign_dates": "May 12 - Jul 12, 2026",
+        "budget_usd": 400_000,
+        "owner": "LATAM Creator Marketing",
+        "status": "Active",
+    }
+
+
+def _inbound_pack() -> dict[str, list[dict[str, Any]]]:
+    catalog = _load_creators().to_dict("records")
+    return materialize_corpus(catalog=catalog)
 
 
 def _scope_key(entry_type: str, entry_id: str, creator_id: str) -> str:
@@ -166,10 +193,15 @@ def bootstrap_state() -> None:
     mission = _mission_seed()
     eligible_ids = rank_creators(_load_creators(), mission)["creator_id"].tolist()
     shortlist_ids = eligible_ids[:3]
+    mexico = _mexico_mission_seed()
+    inbound = _inbound_pack()
     defaults: dict[str, Any] = {
         "mission": mission,
-        "missions": {mission["mission_id"]: mission},
-        "opportunities": _load_default_opportunities(),
+        "missions": {mission["mission_id"]: mission, mexico["mission_id"]: mexico},
+        "opportunities": _load_default_opportunities() + inbound["opportunities"],
+        "inbound_messages": inbound["messages"],
+        "routing_decisions": inbound["routing_decisions"],
+        "opportunity_mission_links": inbound["mission_links"],
         "active_entry_type": EntryType.LAUNCH_MISSION.value,
         "active_mission_id": mission["mission_id"],
         "active_opportunity_id": None,
@@ -199,10 +231,32 @@ def bootstrap_state() -> None:
         if not stored:
             persist_state()
     st.session_state.setdefault("live_evidence", [])
+    _merge_inbound_seed()
 
 
 def creators():
     return _load_creators().copy()
+
+
+def _merge_inbound_seed() -> None:
+    """Add inbound corpus and the Mexico mission without wiping operator edits."""
+
+    mexico = _mexico_mission_seed()
+    st.session_state.setdefault("missions", {})
+    st.session_state.missions.setdefault(mexico["mission_id"], mexico)
+    inbound = _inbound_pack()
+    st.session_state.setdefault("inbound_messages", inbound["messages"])
+    st.session_state.setdefault("routing_decisions", inbound["routing_decisions"])
+    st.session_state.setdefault("opportunity_mission_links", inbound["mission_links"])
+    existing_ids = {
+        str(item.get("opportunity_id")) for item in st.session_state.get("opportunities", [])
+    }
+    missing = [
+        item for item in inbound["opportunities"] if item["opportunity_id"] not in existing_ids
+    ]
+    if missing:
+        st.session_state.opportunities = list(st.session_state.opportunities) + missing
+        persist_state()
 
 
 def missions() -> list[dict[str, Any]]:
@@ -398,6 +452,148 @@ def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[st
     opportunity["linked_mission_id"] = mission_id
     persist_state()
     return deepcopy(opportunity)
+
+
+def import_inbound_corpus() -> dict[str, Any]:
+    """Reload the 30-message synthetic corpus. Does not touch live mail."""
+
+    require_write()
+    inbound = _inbound_pack()
+    kept = [
+        item
+        for item in st.session_state.opportunities
+        if not str(item.get("opportunity_id", "")).startswith("OPP-INB-")
+    ]
+    st.session_state.opportunities = kept + inbound["opportunities"]
+    st.session_state.inbound_messages = inbound["messages"]
+    st.session_state.routing_decisions = inbound["routing_decisions"]
+    st.session_state.opportunity_mission_links = inbound["mission_links"]
+    persist_state()
+    return {
+        "imported": len(inbound["messages"]),
+        "opportunities": len(inbound["opportunities"]),
+    }
+
+
+def assign_inbound_owner(opportunity_id: str, owner: str, *, actor: str) -> dict[str, Any]:
+    require_write()
+    opportunity = _opportunity_by_id(opportunity_id)
+    if opportunity is None:
+        raise ValueError(f"Unknown opportunity: {opportunity_id}")
+    if not str(owner).strip():
+        raise ValueError("owner is required")
+    previous = opportunity.get("owner")
+    opportunity["owner"] = str(owner).strip()
+    opportunity["inbound_status"] = (
+        "mission_matched"
+        if opportunity.get("recommended_mission_id") or opportunity.get("linked_mission_id")
+        else "routed"
+    )
+    st.session_state.setdefault("routing_decisions", [])
+    st.session_state.routing_decisions.append(
+        {
+            "recommended_owner": opportunity["owner"],
+            "team": opportunity["owner"],
+            "rule_version": opportunity.get("routing_rule_version") or "inbound-route-v1",
+            "model_version": opportunity.get("extractor_version"),
+            "confidence": 1.0,
+            "reason": f"Human override from {previous} to {opportunity['owner']}",
+            "human_override": actor,
+            "opportunity_id": opportunity_id,
+            "message_id": opportunity.get("message_id"),
+        }
+    )
+    persist_state()
+    return deepcopy(opportunity)
+
+
+def generate_inbound_reply(opportunity_id: str) -> dict[str, Any]:
+    """Refresh the local-language draft. Never sends and never commits a price."""
+
+    require_write()
+    from src.inbound import draft_reply
+
+    opportunity = _opportunity_by_id(opportunity_id)
+    if opportunity is None:
+        raise ValueError(f"Unknown opportunity: {opportunity_id}")
+    if opportunity.get("inbound_status") == "held":
+        raise ValueError("Held identities and spam do not get a reply draft")
+    opportunity["reply_draft"] = draft_reply(
+        language=str(opportunity.get("language") or "English"),
+        sender_name=str(opportunity.get("sender_name") or ""),
+        product=opportunity.get("product_interest"),
+        availability=opportunity.get("availability"),
+    )
+    opportunity["inbound_status"] = "reply_ready"
+    persist_state()
+    return deepcopy(opportunity)
+
+
+def approve_inbound_for_outreach(opportunity_id: str, *, actor: str, reason: str) -> dict[str, Any]:
+    """Record legal hops to approved and open Outreach. Nothing is sent externally."""
+
+    require_write()
+    opportunity = _opportunity_by_id(opportunity_id)
+    if opportunity is None:
+        raise ValueError(f"Unknown opportunity: {opportunity_id}")
+    creator_id = str(opportunity.get("creator_id") or "").strip()
+    if opportunity.get("identity_status") != "matched" or not creator_id:
+        raise ValueError(
+            "Only catalog-matched creators can enter Outreach. New, spam and impersonation stay in the inbox."
+        )
+    if opportunity.get("inbound_status") == "held":
+        raise ValueError("Held inbound items cannot be approved into Outreach")
+    set_active_context("opportunity", opportunity_id)
+    recommended = opportunity.get("recommended_mission_id")
+    if recommended and not opportunity.get("linked_mission_id"):
+        if recommended in st.session_state.missions:
+            link_opportunity_to_mission(opportunity_id, recommended)
+    evidence = opportunity.get("evidence") or [f"inbound://{opportunity.get('message_id')}"]
+    hops = 0
+    while True:
+        current = creator_state(creator_id)
+        if current == "approved" or current in {
+            "contacted",
+            "negotiating",
+            "contracted",
+            "content_in_review",
+            "published",
+            "measured",
+        }:
+            break
+        target = next_linear_creator_state(creator_id)
+        if not target or target == "measured":
+            break
+        transition_creator_state(
+            creator_id,
+            target,
+            actor=actor,
+            reason=reason,
+            evidence=evidence,
+        )
+        hops += 1
+        if hops > 8:
+            raise ValueError("Inbound approval stopped: too many hops")
+        if target == "approved":
+            break
+    case = ensure_outreach_case(creator_id, owner=actor)
+    draft = str(opportunity.get("reply_draft") or "").strip()
+    live = _live_case_for(creator_id) or case
+    if draft and live is not None:
+        live["outreach_message"] = draft
+        live["outreach_source"] = "Inbound reply draft · not sent"
+        live["updated_at"] = datetime.now(timezone.utc).isoformat()
+    opportunity = _opportunity_by_id(opportunity_id)
+    if opportunity is not None:
+        opportunity["inbound_status"] = "reply_ready"
+        opportunity["status"] = creator_state(creator_id)
+    persist_state()
+    return {
+        "opportunity": deepcopy(opportunity),
+        "outreach_case": deepcopy(_live_case_for(creator_id) or live),
+        "creator_state": creator_state(creator_id),
+        "sent": False,
+    }
 
 
 def active_mission() -> dict[str, Any]:

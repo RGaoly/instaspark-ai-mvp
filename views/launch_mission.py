@@ -130,7 +130,7 @@ def _dna_card() -> str:
     return f"""
     <div class="is-card" style="margin-top:10px">
       <div class="is-panel-head">
-        <span class="is-panel-title">Product DNA</span>
+        <span class="is-panel-title">{t("Product DNA")}</span>
         <span class="is-panel-link">{esc(dna.get("dna_id", ""))} · v{esc(str(dna.get("version", "")))}</span>
       </div>
       <div class="is-panel-body">

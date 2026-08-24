@@ -236,6 +236,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "open_launch_cta" in launch
     assert "load_product_dna" in launch
     assert "_dna_card" in launch
+    assert 't("Product DNA")' in launch
     assert "Versionable SKU object" in launch
     assert "genome_panel_html" in search
     assert "genome_panel_html" in compare
@@ -281,6 +282,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "generate_inbound_reply" in opportunity
     assert "_render_inbound_list" in opportunity
     assert "_render_scout_cards" in opportunity
+    render_body = opportunity.split("def render()")[-1]
+    assert render_body.index("_render_inbound_list") < render_body.index("_render_scout_cards")
     assert "Always-on scout cards" in opportunity
     assert "save_scout_card" in opportunity
     assert 'id="always-on-scout"' in opportunity
@@ -314,6 +317,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "src/evaluation.py" in growth
     assert 'st.expander(t("Pilot acceptance matrix")' not in growth
     assert "Not operator interviews" in growth
+    assert "not verified creator-owned" in growth
     assert "propose_budget_decision" in growth
     assert "Budget decision" in growth
     assert "Not a modeled forecast" in growth

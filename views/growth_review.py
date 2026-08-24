@@ -428,12 +428,10 @@ def render() -> None:
     )
     md(
         '<div class="is-card" id="pilot-acceptance-matrix" style="margin-top:10px">'
-        '<div class="is-panel-head"><span class="is-panel-title">Pilot acceptance matrix</span>'
-        '<span class="is-panel-link">Same rows as src/evaluation.py</span></div>'
+        f'<div class="is-panel-head"><span class="is-panel-title">{t("Pilot acceptance matrix")}</span>'
+        f'<span class="is-panel-link">{t("Same rows as src/evaluation.py")}</span></div>'
         '<div class="is-panel-body">'
-        "<small>Hard gates, evidence, stability, attribution, recall 60, "
-        "intensive-read 20 labeled-demo captions/keyframes/comment themes (ASR not_collected), "
-        "catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.</small>"
+        f"<small>{t('Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay is name-match or topic-search, not verified creator-owned. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.')}</small>"
         f"{_acceptance_html(rows)}</div></div>",
         unsafe_allow_html=True,
     )

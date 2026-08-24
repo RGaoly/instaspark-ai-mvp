@@ -18,6 +18,12 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Topic overlap", language="zh") == "主题重合"
     assert translate("Query boost", language="zh") == "查询加权"
     assert translate("Live YouTube evidence attached", language="zh") == "已挂接 YouTube 实时证据"
+    assert translate("Product DNA", language="zh") == "产品 DNA"
+    assert translate("Always-on scout cards", language="zh") == "持续侦察卡片"
+    assert "not verified creator-owned" in translate(
+        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay is name-match or topic-search, not verified creator-owned. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
+        language="en",
+    )
     assert (
         translate(
             "NL query is a lexical filter + small boost, not semantic search.",

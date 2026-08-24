@@ -1503,6 +1503,18 @@ def test_save_scout_card_creates_signal_opportunity_from_genome_windows(session)
     assert saved["opportunity_id"] in {item["opportunity_id"] for item in session.opportunities}
 
 
+def test_save_scout_card_survives_sqlite_reload(session):
+    from infra import repository
+    from src.scouting import scout_cards
+
+    cards = scout_cards(state.creators(), limit=1)
+    saved = state.save_scout_card(cards[0])
+    stored = repository.load_all_state()
+    ids = {item["opportunity_id"] for item in stored.get("opportunities") or []}
+    assert saved["opportunity_id"] in ids
+    assert any(item.get("source") == "catalog_momentum" for item in stored["opportunities"] if item["opportunity_id"] == saved["opportunity_id"])
+
+
 def test_viewer_cannot_save_scout_card(session):
     from src.scouting import scout_cards
 

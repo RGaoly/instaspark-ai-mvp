@@ -16,7 +16,7 @@ https://instaspark-ai-mvp.streamlit.app（当前 Streamlit workspace 可能要�
 2. 内容证据与风险提示；
 3. 人工采纳、驳回与 Reason Code；
 4. 多语言合作 Brief；
-5. 可回写的决策日志与评测框架。
+5. 可回写的决策日志。验收矩阵在 Growth Review 默认展示，没有单独评测页。
 
 ## Product paths
 
@@ -56,11 +56,11 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 版本化 Creator Genome 包（60 人；7/30/90 代理；clip 索引；ASR/评论/关键帧/年龄/成交标记为 not_collected）
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
 - 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
-- Top 10 推荐；Top 20 精读看标注时间戳
+- Top 10 推荐；Top 20 精读看标注时间戳。YouTube 叠加层按 ownership 标明：`channel_search_match`（目录名匹配公开频道标题，不是已核验本人账号）、`public_search_hit`（主题搜索）、`attached_channel`（运营当场挂接）
+- pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）；展示在 Growth Review，不是第八页
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成；镜头清单来自 Product DNA
 - 目录动量侦察卡片（7/30/90 代理，不是实时抓取）
-- pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）
 - 3 条 Creator Opportunity 非邮件信号 + 30 封合成入站来信（英 / 西 / 德；含 KOL、MCN、Affiliate、渠道商、垃圾邮件与身份冒用）
 - Mission / Opportunity 统一活动上下文
 - 可验证的状态迁移、审计事件和幂等 OutreachCase
@@ -80,15 +80,15 @@ Default login: `admin` / `admin123`. A read-only viewer is available as `demo` /
 
 ## 5-minute demo
 
-Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded events only. **Send to Creator** stays disabled.
+Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded events only. **Send to Creator** stays disabled. There is no Evaluation page — the acceptance matrix lives on Growth Review.
 
-1. Log in as `admin` / `admin123`. Open **Launch Mission** and expand **Why this is not TikTok Creator Marketplace**.
-2. Open **Creator Search & Match**. Filter by market / language / topics. Type a name or topic in NL search — that is a **lexical filter + small boost**, not semantic search. Ranking uses hard gates, the five-driver mix, and a **sparse TF-IDF cosine** boost from the mission + Product DNA — not an LLM and not a neural embedding.
-3. Optional: Live YouTube lookup → **Attach as evidence**. The selected catalog creator's match score and the “Live YouTube evidence attached” reason update. YouTube hits do **not** become new ranked creators.
-4. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
-5. Open **Content Studio** → **Generate Brief** and save it. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
-6. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. If the creator is in content review with no saved brief, the next-action CTA opens Content Studio.
-7. When the creator is published with 0 events, the next-action CTA (Launch, Search, Compare, Opportunity, or Outreach) opens **Growth Review**. Record a conversion; the creator advances to **Measured** automatically. ROI stays 0x until that recorded event exists.
+1. Log in as `admin` / `admin123`. Open **Launch Mission**. Product DNA is on the dashboard (versioned SKU claims), not hidden. Expand **Why this is not TikTok Creator Marketplace** if needed.
+2. Open **Creator Opportunity**. The default fold is the **Inbound inbox** (30 synthetic EN/ES/DE messages: parse, score, route, mission link). Import email reloads that corpus; it is not a live mailbox. Always-on scout cards sit **below** the inbox and save as catalog-momentum opportunities.
+3. Open **Creator Search & Match**. The catalog recall is **60** creators; hard gates then rank; Top 10 is the working cut. The **Top 20 intensive-read board** is on this page (not collapsed): labeled_demo timestamps plus a YouTube overlay whose **ownership** label says whether the clip is a name-matched channel, a topic-search hit, or an operator-attached channel. Name-match is not verified creator identity.
+4. Optional: Live YouTube lookup → **Attach as evidence**. That is `attached_channel` for intensive-read. Hits do **not** become new ranked creators.
+5. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
+6. Open **Content Studio** → **Generate Brief** and save it. Shot list comes from Product DNA. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
+7. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. When the creator is published with 0 events, open **Growth Review**, record a conversion (ROI stays 0x until that event), and read the **Pilot acceptance matrix** on the same page.
 
 运行测试：
 
@@ -203,7 +203,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md) for Docker and other hosts.
 
 ## Evaluation
 
-核心评测不以“页面数量”为目标，而以证据和可复现性为目标。验收矩阵由 `tests/test_acceptance_matrix.py` 对当前目录、排序和效果事件计算，Growth Review 上有只读展开，不是装饰仪表盘：
+核心评测不以“页面数量”为目标，而以证据和可复现性为目标。验收矩阵由 `tests/test_acceptance_matrix.py` 对当前目录、排序和效果事件计算，在 **Growth Review 默认展示**（`#pilot-acceptance-matrix`），不是单独评测页，也不是装饰仪表盘：
 
 - 硬门槛违规数（Top 10 = 0）
 - 证据覆盖率（Top 10 含正负证据、五维分数、标注时间戳）

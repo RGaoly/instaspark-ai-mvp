@@ -2,7 +2,8 @@
 
 Offline gates are implemented in `src/evaluation.py` and asserted by
 `tests/test_acceptance_matrix.py`. Growth Review shows the same matrix as a
-read-only expander. It is not a live operator-interview dashboard.
+default read-only board (`#pilot-acceptance-matrix`). It is not a separate
+Evaluation page and not a live operator-interview dashboard.
 
 ## 离线评测
 
@@ -13,6 +14,8 @@ read-only expander. It is not a live operator-interview dashboard.
 5. 召回池：合成目录 60 人；精读 Top 20 均有标注片段；目录视频 180 条。
 6. Creator Genome：Top 10 均有版本化基因组、clip 索引，且 ASR/评论/关键帧标记为 not_collected。
 7. 归因：已录入效果事件保留 creator、任务/机会根和来源；空事件 ROI 仍为 0x。
+
+YouTube 精读叠加层（`channel_search_match` / `public_search_hit` / `attached_channel`）是 Search 页的证据层，**不**把目录创作者声明为已核验的频道主人，也**不**进入排序。
 
 ## 人工评测
 
@@ -26,16 +29,6 @@ read-only expander. It is not a live operator-interview dashboard.
 
 本演示不伪造这些访谈结果。
 
-## 人工评测
-
-邀请 2–3 位内容或达人运营从业者：
-
-- 盲评 Top 10 是否愿意进入 shortlist
-- 判断推荐理由是否真实、有用
-- 记录驳回 Reason Code
-- 对比人工筛选耗时与系统辅助耗时
-- 评价 Brief 的可执行性与修改量
-
 ## MVP 目标
 
 | 指标 | 目标 |
@@ -47,4 +40,4 @@ read-only expander. It is not a live operator-interview dashboard.
 | Brief 严重事实错误 | 0 |
 | 单次任务运行时间 | < 5 秒 |
 
-以上均为作品集阶段目标，不代表真实企业基线。
+以上均为作品集阶段目标，不代表真实企业基线。访谈类指标在验收矩阵中保持 `not_collected`。

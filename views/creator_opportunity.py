@@ -759,10 +759,10 @@ def _render_scout_cards(opportunities: list[dict]) -> None:
     with st.container(border=True):
         md(
             '<div class="is-card" id="always-on-scout">'
-            '<div class="is-panel-head"><span class="is-panel-title">Always-on scout cards</span>'
-            '<span class="is-panel-link">Genome 7/30/90 · not a crawler</span></div>'
+            f'<div class="is-panel-head"><span class="is-panel-title">{t("Always-on scout cards")}</span>'
+            f'<span class="is-panel-link">{t("Genome 7/30/90 · not a crawler")}</span></div>'
             '<div class="is-panel-body">'
-            "<small>Source catalog_momentum. Catalog momentum proxies from Creator Genome windows. Not a live daily crawl.</small>"
+            f"<small>{t('Source catalog_momentum. Catalog momentum proxies from Creator Genome windows. Not a live daily crawl.')}</small>"
             "</div></div>",
             unsafe_allow_html=True,
         )
@@ -844,8 +844,6 @@ def render() -> None:
     if inbound:
         _render_inbound_kpis(inbound)
 
-    _render_scout_cards(opportunities)
-    _render_create_form(creators)
     list_col, detail_col = st.columns([0.48, 0.52], gap="small", vertical_alignment="top")
     with list_col:
         if inbound:
@@ -857,5 +855,8 @@ def render() -> None:
             _render_detail(selected, creators_by_id.get(selected.get("creator_id")))
         else:
             st.info("Create an opportunity to begin the creator-first workflow.")
+
+    _render_scout_cards(opportunities)
+    _render_create_form(creators)
 
     render_demo_notice()

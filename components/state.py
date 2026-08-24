@@ -472,7 +472,9 @@ def save_scout_card(card: dict[str, Any]) -> dict[str, Any]:
         opportunity_type="creator_signal",
         suggested_action="Qualify this scout card against the active launch mission.",
     )
-    return save_opportunity(opportunity)
+    saved = save_opportunity(opportunity)
+    persist_state()
+    return saved
 
 
 def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[str, Any]:

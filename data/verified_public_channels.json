@@ -1,0 +1,735 @@
+{
+  "pack_id": "verified_public_channels_v1",
+  "version": 1,
+  "source": "youtube_data_api",
+  "ownership": "verified_public_channel",
+  "note": "Demo catalog rows bound to real public YouTube channels for intensive-read. Catalog display names stay synthetic personas and are not the uploaders. Uploads prefer already-cached public videos and timedtext. attached_channel still wins. Never enters ranking.",
+  "bound_at": "2026-08-24T04:08:42+00:00",
+  "api_calls": {
+    "channel_searches": 28,
+    "upload_fetches": 14,
+    "video_list_batches": 3
+  },
+  "bind_count": 20,
+  "binds": [
+    {
+      "creator_id": "C051",
+      "catalog_name": "Catalina Mesa",
+      "channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+      "channel_title": "GoPro",
+      "bind_reason": "Public channel 'GoPro' (UCqhnX4jA0A5paNd1v-zEysw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "outdoor",
+        "travel",
+        "surfing",
+        "skiing",
+        "cycling"
+      ],
+      "uploads": [
+        {
+          "video_id": "zTO2yiEfjYQ",
+          "url": "https://www.youtube.com/watch?v=zTO2yiEfjYQ",
+          "title": "Wingsuit BASE Jumping the Infamous \"Death Star\"",
+          "thumbnail_url": "https://i.ytimg.com/vi/zTO2yiEfjYQ/hqdefault.jpg",
+          "channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+          "channel_title": "GoPro",
+          "duration": "PT1M46S"
+        },
+        {
+          "video_id": "JgCbDNsV17Q",
+          "url": "https://www.youtube.com/watch?v=JgCbDNsV17Q",
+          "title": "Crazy MTB Snake Run 🎬 Antoni Villoni #GoPro",
+          "thumbnail_url": "https://i.ytimg.com/vi/JgCbDNsV17Q/hqdefault.jpg",
+          "channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+          "channel_title": "GoPro",
+          "duration": "PT21S"
+        },
+        {
+          "video_id": "P9hi2bl49Q0",
+          "url": "https://www.youtube.com/watch?v=P9hi2bl49Q0",
+          "title": "Wakeboarding in Ultra Slow Motion 🎬 Max Blakesberg + Noah Flegel #GoPro",
+          "thumbnail_url": "https://i.ytimg.com/vi/P9hi2bl49Q0/hqdefault.jpg",
+          "channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+          "channel_title": "GoPro",
+          "duration": "PT15S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C055",
+      "catalog_name": "Nia Hollow",
+      "channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+      "channel_title": "Insta360",
+      "bind_reason": "Public channel 'Insta360' (UC3qWcF49rv8VMZO7Vg6kj5w). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "tech",
+        "travel",
+        "outdoor",
+        "cycling",
+        "motorcycle"
+      ],
+      "uploads": [
+        {
+          "video_id": "pgPVrAMmXg4",
+          "url": "https://www.youtube.com/watch?v=pgPVrAMmXg4",
+          "title": "How to Master Surfing Shots x Surfing With Noz | Insta360 Ace Pro 2",
+          "thumbnail_url": "https://i.ytimg.com/vi/pgPVrAMmXg4/hqdefault.jpg",
+          "channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+          "channel_title": "Insta360",
+          "duration": "PT5M27S"
+        },
+        {
+          "video_id": "gWscweuterk",
+          "url": "https://www.youtube.com/watch?v=gWscweuterk",
+          "title": "Meet Insta360 Luna Ultra - Flagship dual-lens 8K gimbal camera",
+          "thumbnail_url": "https://i.ytimg.com/vi/gWscweuterk/hqdefault.jpg",
+          "channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+          "channel_title": "Insta360",
+          "duration": "PT4M37S"
+        },
+        {
+          "video_id": "uK9J00EZPNY",
+          "url": "https://www.youtube.com/watch?v=uK9J00EZPNY",
+          "title": "Insta360 X5 - Through the Eyes of a Filmmaker (ft. Brandon Li）",
+          "thumbnail_url": "https://i.ytimg.com/vi/uK9J00EZPNY/hqdefault.jpg",
+          "channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+          "channel_title": "Insta360",
+          "duration": "PT9M30S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C038",
+      "catalog_name": "Reese Harbor",
+      "channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+      "channel_title": "DJI",
+      "bind_reason": "Public channel 'DJI' (UCsNGtpqGsyw0U6qEG-WHadA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "tech",
+        "travel",
+        "outdoor"
+      ],
+      "uploads": [
+        {
+          "video_id": "W4Ipe7Unr5M",
+          "url": "https://www.youtube.com/watch?v=W4Ipe7Unr5M",
+          "title": "Salad Prep, Mid-Air | DJI Omso 360 & DJI Osmo Action 6",
+          "thumbnail_url": "https://i.ytimg.com/vi/W4Ipe7Unr5M/hqdefault.jpg",
+          "channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+          "channel_title": "DJI",
+          "duration": "PT31S"
+        },
+        {
+          "video_id": "x9tnQS1xh2I",
+          "url": "https://www.youtube.com/watch?v=x9tnQS1xh2I",
+          "title": "Face to Fin Underwater | DJI Osmo Action 6",
+          "thumbnail_url": "https://i.ytimg.com/vi/x9tnQS1xh2I/hqdefault.jpg",
+          "channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+          "channel_title": "DJI",
+          "duration": "PT17S"
+        },
+        {
+          "video_id": "Zb1sF68eUMs",
+          "url": "https://www.youtube.com/watch?v=Zb1sF68eUMs",
+          "title": "What if these were yours? | DJI Lito X1",
+          "thumbnail_url": "https://i.ytimg.com/vi/Zb1sF68eUMs/hqdefault.jpg",
+          "channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+          "channel_title": "DJI",
+          "duration": "PT17S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C017",
+      "catalog_name": "Ryan Gear",
+      "channel_id": "UC6y_DbpezOinlzHv8O092zw",
+      "channel_title": "DC Rainmaker",
+      "bind_reason": "Public channel 'DC Rainmaker' (UC6y_DbpezOinlzHv8O092zw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "tech",
+        "cycling",
+        "outdoor",
+        "review"
+      ],
+      "uploads": [
+        {
+          "video_id": "P9wK7nayRog",
+          "url": "https://www.youtube.com/watch?v=P9wK7nayRog",
+          "title": "Insta360 GO Ultra In-Depth Review: 19 Things You Need to Know!",
+          "thumbnail_url": "https://i.ytimg.com/vi/P9wK7nayRog/hqdefault.jpg",
+          "channel_id": "UC6y_DbpezOinlzHv8O092zw",
+          "channel_title": "DC Rainmaker",
+          "duration": "PT13M6S"
+        },
+        {
+          "video_id": "5h5r0IpdDWU",
+          "url": "https://www.youtube.com/watch?v=5h5r0IpdDWU",
+          "title": "Insta360 X6 In-Depth Review: Actually Worth The Upgrade?",
+          "thumbnail_url": "https://i.ytimg.com/vi/5h5r0IpdDWU/hqdefault.jpg",
+          "channel_id": "UC6y_DbpezOinlzHv8O092zw",
+          "channel_title": "DC Rainmaker",
+          "duration": "PT15M59S"
+        },
+        {
+          "video_id": "XdJOQ2YS-dU",
+          "url": "https://www.youtube.com/watch?v=XdJOQ2YS-dU",
+          "title": "Ultimate 360 Action Cam Comparison: GoPro vs Insta360 vs DJI!",
+          "thumbnail_url": "https://i.ytimg.com/vi/XdJOQ2YS-dU/hqdefault.jpg",
+          "channel_id": "UC6y_DbpezOinlzHv8O092zw",
+          "channel_title": "DC Rainmaker",
+          "duration": "PT19M47S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C057",
+      "catalog_name": "Mila Ridgeway",
+      "channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+      "channel_title": "Global Mountain Bike Network",
+      "bind_reason": "Public channel 'Global Mountain Bike Network' (UC_A--fhX5gea0i4UtpD99Gg). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "cycling",
+        "outdoor",
+        "POV"
+      ],
+      "uploads": [
+        {
+          "video_id": "MuxauWB4EwM",
+          "url": "https://www.youtube.com/watch?v=MuxauWB4EwM",
+          "title": "27 Years Ago I Left Scotland. Today I Rode Back",
+          "thumbnail_url": "https://i.ytimg.com/vi/MuxauWB4EwM/hqdefault.jpg",
+          "channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+          "channel_title": "Global Mountain Bike Network",
+          "duration": "PT24M24S"
+        },
+        {
+          "video_id": "mA84FHmI1rQ",
+          "url": "https://www.youtube.com/watch?v=mA84FHmI1rQ",
+          "title": "First ever run on a DH bike 🚵 ‼️⁠",
+          "thumbnail_url": "https://i.ytimg.com/vi/mA84FHmI1rQ/hqdefault.jpg",
+          "channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+          "channel_title": "Global Mountain Bike Network",
+          "duration": "PT1M27S"
+        },
+        {
+          "video_id": "pIBGB-MdLJo",
+          "url": "https://www.youtube.com/watch?v=pIBGB-MdLJo",
+          "title": "Riders supporting things they don't believe in ❓⁠",
+          "thumbnail_url": "https://i.ytimg.com/vi/pIBGB-MdLJo/hqdefault.jpg",
+          "channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+          "channel_title": "Global Mountain Bike Network",
+          "duration": "PT1M30S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C031",
+      "catalog_name": "Jordan Ridge",
+      "channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+      "channel_title": "NorCal Cycling",
+      "bind_reason": "Public channel 'NorCal Cycling' (UCIfRR1N2Gm1vjj9X955iWSQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "cycling",
+        "outdoor"
+      ],
+      "uploads": [
+        {
+          "video_id": "Hl2PiQRCkX0",
+          "url": "https://www.youtube.com/watch?v=Hl2PiQRCkX0",
+          "title": "Get CINEMATIC Action Camera Footage [Tutorial]",
+          "thumbnail_url": "https://i.ytimg.com/vi/Hl2PiQRCkX0/hqdefault.jpg",
+          "channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+          "channel_title": "NorCal Cycling",
+          "duration": "PT17M13S"
+        },
+        {
+          "video_id": "91wCvlA6Zxw",
+          "url": "https://www.youtube.com/watch?v=91wCvlA6Zxw",
+          "title": "My new 360 camera setup",
+          "thumbnail_url": "https://i.ytimg.com/vi/91wCvlA6Zxw/hqdefault.jpg",
+          "channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+          "channel_title": "NorCal Cycling",
+          "duration": "PT6M44S"
+        },
+        {
+          "video_id": "fpVKGPKhT6U",
+          "url": "https://www.youtube.com/watch?v=fpVKGPKhT6U",
+          "title": "Amateurs Behaving Badly",
+          "thumbnail_url": "https://i.ytimg.com/vi/fpVKGPKhT6U/hqdefault.jpg",
+          "channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+          "channel_title": "NorCal Cycling",
+          "duration": "PT9M48S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C040",
+      "catalog_name": "Hayden Brook",
+      "channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+      "channel_title": "Chaseontwowheels",
+      "bind_reason": "Public channel 'Chaseontwowheels' (UCidMMQafCAomjuD_a3DcdHw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "cycling",
+        "POV"
+      ],
+      "uploads": [
+        {
+          "video_id": "u4zuoBRiIaE",
+          "url": "https://www.youtube.com/watch?v=u4zuoBRiIaE",
+          "title": "The Best Action Camera For Riders WILL Surprise You…  | DJI Action 5 Pro vs Insta360 Ace Pro 2",
+          "thumbnail_url": "https://i.ytimg.com/vi/u4zuoBRiIaE/hqdefault.jpg",
+          "channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+          "channel_title": "Chaseontwowheels",
+          "duration": "PT15M33S"
+        },
+        {
+          "video_id": "geooUZBWkN8",
+          "url": "https://www.youtube.com/watch?v=geooUZBWkN8",
+          "title": "Is the NEW DJI Action 6 Now THE BEST Camera for Motovlogging?",
+          "thumbnail_url": "https://i.ytimg.com/vi/geooUZBWkN8/hqdefault.jpg",
+          "channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+          "channel_title": "Chaseontwowheels",
+          "duration": "PT21M12S"
+        },
+        {
+          "video_id": "rnXRBb-EEcE",
+          "url": "https://www.youtube.com/watch?v=rnXRBb-EEcE",
+          "title": "I Tested Both. Here’s the One You Should Buy. | Insta360 X5 vs Ace Pro 2",
+          "thumbnail_url": "https://i.ytimg.com/vi/rnXRBb-EEcE/hqdefault.jpg",
+          "channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+          "channel_title": "Chaseontwowheels",
+          "duration": "PT23M58S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C032",
+      "catalog_name": "Harper Coast",
+      "channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+      "channel_title": "Patagonia",
+      "bind_reason": "Public channel 'Patagonia' (UCl3xZ-f3cQhOHvH6f-7-ssQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "outdoor",
+        "travel"
+      ],
+      "uploads": [
+        {
+          "video_id": "DctA4gFfTZg",
+          "url": "https://www.youtube.com/watch?v=DctA4gFfTZg",
+          "title": "Smudge is sooo hot rn w/ Daniella and Cara 🎨",
+          "thumbnail_url": "https://i.ytimg.com/vi/DctA4gFfTZg/hqdefault.jpg",
+          "channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+          "channel_title": "Patagonia",
+          "duration": "PT1M6S"
+        },
+        {
+          "video_id": "qCLcRIEDZvI",
+          "url": "https://www.youtube.com/watch?v=qCLcRIEDZvI",
+          "title": "Take a glimpse inside the mind of our color designer who sees them everywhere ✨",
+          "thumbnail_url": "https://i.ytimg.com/vi/qCLcRIEDZvI/hqdefault.jpg",
+          "channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+          "channel_title": "Patagonia",
+          "duration": "PT1M27S"
+        },
+        {
+          "video_id": "pH37mQwGtm0",
+          "url": "https://www.youtube.com/watch?v=pH37mQwGtm0",
+          "title": "Running with Huemuls",
+          "thumbnail_url": "https://i.ytimg.com/vi/pH37mQwGtm0/hqdefault.jpg",
+          "channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+          "channel_title": "Patagonia",
+          "duration": "PT4M15S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C052",
+      "catalog_name": "Ignacio Brisa",
+      "channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+      "channel_title": "The North Face",
+      "bind_reason": "Public channel 'The North Face' (UCNfWDbERpf34FsSWIpqGD0Q). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "outdoor",
+        "travel"
+      ],
+      "uploads": [
+        {
+          "video_id": "nnR5fiJ6cPo",
+          "url": "https://www.youtube.com/watch?v=nnR5fiJ6cPo",
+          "title": "The North Face Presents: SUFFERFEST (Episode 3)",
+          "thumbnail_url": "https://i.ytimg.com/vi/nnR5fiJ6cPo/hqdefault.jpg",
+          "channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+          "channel_title": "The North Face",
+          "duration": "PT27M27S"
+        },
+        {
+          "video_id": "ONCCln4R458",
+          "url": "https://www.youtube.com/watch?v=ONCCln4R458",
+          "title": "The North Face Presents: SUFFERFEST (Episode 1)",
+          "thumbnail_url": "https://i.ytimg.com/vi/ONCCln4R458/hqdefault.jpg",
+          "channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+          "channel_title": "The North Face",
+          "duration": "PT21M10S"
+        },
+        {
+          "video_id": "2wGpiKb2n88",
+          "url": "https://www.youtube.com/watch?v=2wGpiKb2n88",
+          "title": "The North Face Presents: SUFFERFEST (Episode 2)",
+          "thumbnail_url": "https://i.ytimg.com/vi/2wGpiKb2n88/hqdefault.jpg",
+          "channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+          "channel_title": "The North Face",
+          "duration": "PT25M8S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C037",
+      "catalog_name": "Morgan Vale",
+      "channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+      "channel_title": "Insta360 Tutorials",
+      "bind_reason": "Public channel 'Insta360 Tutorials' (UCFeUhzdN15jFTuT-ZruAqVw). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [
+        "tech",
+        "tutorial"
+      ],
+      "uploads": [
+        {
+          "video_id": "xc-9JRMfz90",
+          "url": "https://www.youtube.com/watch?v=xc-9JRMfz90",
+          "title": "Get cool cycling shots with #Insta360X4 🚴 #Insta360 #cycling #shorts #biking #accessories #shorts",
+          "thumbnail_url": "https://i.ytimg.com/vi/xc-9JRMfz90/hqdefault.jpg",
+          "channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+          "channel_title": "Insta360 Tutorials",
+          "duration": "PT35S"
+        },
+        {
+          "video_id": "UOn-sRcCQVo",
+          "url": "https://www.youtube.com/watch?v=UOn-sRcCQVo",
+          "title": "How to add stats on your ride videos with #Insta360GO3S 🚴#Insta360 #cycling #roadbike #shorts #gps",
+          "thumbnail_url": "https://i.ytimg.com/vi/UOn-sRcCQVo/hqdefault.jpg",
+          "channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+          "channel_title": "Insta360 Tutorials",
+          "duration": "PT30S"
+        },
+        {
+          "video_id": "fqpHd8RMvkk",
+          "url": "https://www.youtube.com/watch?v=fqpHd8RMvkk",
+          "title": "Insta360 Ace Pro - Best Settings and Setup for Motorcycle POVs (ft. Niccolò Canepa)",
+          "thumbnail_url": "https://i.ytimg.com/vi/fqpHd8RMvkk/hqdefault.jpg",
+          "channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+          "channel_title": "Insta360 Tutorials",
+          "duration": "PT8M19S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C016",
+      "catalog_name": "Valeria Vlog",
+      "channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+      "channel_title": "Oscar Hikes",
+      "bind_reason": "Public channel 'Oscar Hikes' (UCGQNEhX3SQw3jkcQoHTipvQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "R0yj6c_Y464",
+          "url": "https://www.youtube.com/watch?v=R0yj6c_Y464",
+          "title": "The BEST Hiking Camera Just Got Even Better (Insta360 X4)",
+          "thumbnail_url": "https://i.ytimg.com/vi/R0yj6c_Y464/hqdefault.jpg",
+          "channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+          "channel_title": "Oscar Hikes",
+          "duration": "PT9M47S"
+        },
+        {
+          "video_id": "19cvzM1J0NE",
+          "url": "https://www.youtube.com/watch?v=19cvzM1J0NE",
+          "title": "The IDEAL Camera for Hiking: Insta360 X3",
+          "thumbnail_url": "https://i.ytimg.com/vi/19cvzM1J0NE/hqdefault.jpg",
+          "channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+          "channel_title": "Oscar Hikes",
+          "duration": "PT8M47S"
+        },
+        {
+          "video_id": "p5MNYrAK0GA",
+          "url": "https://www.youtube.com/watch?v=p5MNYrAK0GA",
+          "title": "Insta360 Ace Pro 2 Camera: An Honest Hiker's Review",
+          "thumbnail_url": "https://i.ytimg.com/vi/p5MNYrAK0GA/hqdefault.jpg",
+          "channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+          "channel_title": "Oscar Hikes",
+          "duration": "PT13M20S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C012",
+      "catalog_name": "Emma Peaks",
+      "channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+      "channel_title": "Surfing With Noz",
+      "bind_reason": "Public channel 'Surfing With Noz' (UCoicMEw3njXscfwHlaAJVcQ). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "Y04JwsCjWXg",
+          "url": "https://www.youtube.com/watch?v=Y04JwsCjWXg",
+          "title": "POV SURFING THE CRAZIEST FOOTAGE EVER! (NEW INSTA360 X5)",
+          "thumbnail_url": "https://i.ytimg.com/vi/Y04JwsCjWXg/hqdefault.jpg",
+          "channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+          "channel_title": "Surfing With Noz",
+          "duration": "PT9M10S"
+        },
+        {
+          "video_id": "az2jtIjU4f8",
+          "url": "https://www.youtube.com/watch?v=az2jtIjU4f8",
+          "title": "SURFING JELLO WAVES IN 360° POV! (INSTA360 X4)",
+          "thumbnail_url": "https://i.ytimg.com/vi/az2jtIjU4f8/hqdefault.jpg",
+          "channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+          "channel_title": "Surfing With Noz",
+          "duration": "PT6M19S"
+        },
+        {
+          "video_id": "0to1tqCMX0k",
+          "url": "https://www.youtube.com/watch?v=0to1tqCMX0k",
+          "title": "SURFING PUMPING WAVES IN TASMANIA! (POV INSTA360)",
+          "thumbnail_url": "https://i.ytimg.com/vi/0to1tqCMX0k/hqdefault.jpg",
+          "channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+          "channel_title": "Surfing With Noz",
+          "duration": "PT8M36S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C058",
+      "catalog_name": "Kai Stillwater",
+      "channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
+      "channel_title": "Brandon Li",
+      "bind_reason": "Public channel 'Brandon Li' (UC3stPIuUoCDHG7COfwr0tEA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "3RUBtM3UFQ8",
+          "url": "https://www.youtube.com/watch?v=3RUBtM3UFQ8",
+          "title": "Insta360 Luna Ultra: In-depth first look and tutorial",
+          "thumbnail_url": "https://i.ytimg.com/vi/3RUBtM3UFQ8/hqdefault.jpg",
+          "channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
+          "channel_title": "Brandon Li",
+          "duration": "PT12M4S"
+        },
+        {
+          "video_id": "UtP4iHaGMtE",
+          "url": "https://www.youtube.com/watch?v=UtP4iHaGMtE",
+          "title": "Insta360 X6 360 camera - Cinematic Travel Film + Review",
+          "thumbnail_url": "https://i.ytimg.com/vi/UtP4iHaGMtE/hqdefault.jpg",
+          "channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
+          "channel_title": "Brandon Li",
+          "duration": "PT14M14S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C004",
+      "catalog_name": "Maya Outdoors",
+      "channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
+      "channel_title": "Haze Outdoors",
+      "bind_reason": "Public channel 'Haze Outdoors' (UCDzwHsfeQcQJ_0FDnLheU9w). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "jLGOWDpmHco",
+          "url": "https://www.youtube.com/watch?v=jLGOWDpmHco",
+          "title": "Wild Camping in the Mountains | Testing the NEW Insta 360 X5",
+          "thumbnail_url": "https://i.ytimg.com/vi/jLGOWDpmHco/hqdefault.jpg",
+          "channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
+          "channel_title": "Haze Outdoors",
+          "duration": "PT9M42S"
+        },
+        {
+          "video_id": "1FOQIosL5kM",
+          "url": "https://www.youtube.com/watch?v=1FOQIosL5kM",
+          "title": "The Best Camera for Hikers? Insta 360 X5 #insta360 #insta360X5",
+          "thumbnail_url": "https://i.ytimg.com/vi/1FOQIosL5kM/hqdefault.jpg",
+          "channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
+          "channel_title": "Haze Outdoors",
+          "duration": "PT48S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C035",
+      "catalog_name": "Avery Drift",
+      "channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
+      "channel_title": "MountMedia",
+      "bind_reason": "Public channel 'MountMedia' (UC_Nql0AlGzl7dSAuTqBUPEA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "ZFwu5BvCchs",
+          "url": "https://www.youtube.com/watch?v=ZFwu5BvCchs",
+          "title": "Insta360 X6 vs X5 vs DJI Osmo 360: THIS is the BEST 360 Camera!",
+          "thumbnail_url": "https://i.ytimg.com/vi/ZFwu5BvCchs/hqdefault.jpg",
+          "channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
+          "channel_title": "MountMedia",
+          "duration": "PT20M42S"
+        },
+        {
+          "video_id": "rMMQbC6V4TE",
+          "url": "https://www.youtube.com/watch?v=rMMQbC6V4TE",
+          "title": "DJI Osmo 360 vs Insta360 X5 Test #insta360x5 #djiosmo360",
+          "thumbnail_url": "https://i.ytimg.com/vi/rMMQbC6V4TE/hqdefault.jpg",
+          "channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
+          "channel_title": "MountMedia",
+          "duration": "PT35S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C015",
+      "catalog_name": "Daniel Surf",
+      "channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
+      "channel_title": "The Tech Chap",
+      "bind_reason": "Public channel 'The Tech Chap' (UCzlXf-yUIaOpOjEjPrOO9TA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "cT2rghQcQw8",
+          "url": "https://www.youtube.com/watch?v=cT2rghQcQw8",
+          "title": "Insta360 Luna Ultra TESTED - What You NEED to know!",
+          "thumbnail_url": "https://i.ytimg.com/vi/cT2rghQcQw8/hqdefault.jpg",
+          "channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
+          "channel_title": "The Tech Chap",
+          "duration": "PT14M"
+        },
+        {
+          "video_id": "9hXpuyUdjYo",
+          "url": "https://www.youtube.com/watch?v=9hXpuyUdjYo",
+          "title": "1 MONTH with the Insta360 X5... What You Need to Know! [8K 360]",
+          "thumbnail_url": "https://i.ytimg.com/vi/9hXpuyUdjYo/hqdefault.jpg",
+          "channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
+          "channel_title": "The Tech Chap",
+          "duration": "PT13M28S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C013",
+      "catalog_name": "Mateo Wheels",
+      "channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
+      "channel_title": "Best360",
+      "bind_reason": "Public channel 'Best360' (UCeqky0tc84Ezl0CYMW3xKkA). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "p7vcnXtcULY",
+          "url": "https://www.youtube.com/watch?v=p7vcnXtcULY",
+          "title": "Insta360 X5 Easy Travel Video Idea",
+          "thumbnail_url": "https://i.ytimg.com/vi/p7vcnXtcULY/hqdefault.jpg",
+          "channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
+          "channel_title": "Best360",
+          "duration": "PT21S"
+        },
+        {
+          "video_id": "eBLugwd1iuU",
+          "url": "https://www.youtube.com/watch?v=eBLugwd1iuU",
+          "title": "Trekking Video Idea🎒💡. Shot w/ Insta360 RS 1-INCH 360 + Best360 Selfie Stick + Best360 Backpack",
+          "thumbnail_url": "https://i.ytimg.com/vi/eBLugwd1iuU/hqdefault.jpg",
+          "channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
+          "channel_title": "Best360",
+          "duration": "PT15S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C033",
+      "catalog_name": "Quinn Summit",
+      "channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
+      "channel_title": "Insta360 Moto",
+      "bind_reason": "Public channel 'Insta360 Moto' (UC9rhVOE9V5abTKrDGFeRZWg). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "rhsw1pyAK7g",
+          "url": "https://www.youtube.com/watch?v=rhsw1pyAK7g",
+          "title": "Insta360 GO Ultra Motorcycle POV",
+          "thumbnail_url": "https://i.ytimg.com/vi/rhsw1pyAK7g/hqdefault.jpg",
+          "channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
+          "channel_title": "Insta360 Moto",
+          "duration": "PT12S"
+        },
+        {
+          "video_id": "vi_3xRwOmeU",
+          "url": "https://www.youtube.com/watch?v=vi_3xRwOmeU",
+          "title": "Best action camera for cinematic rides | Insta360 Ace Pro 2",
+          "thumbnail_url": "https://i.ytimg.com/vi/vi_3xRwOmeU/hqdefault.jpg",
+          "channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
+          "channel_title": "Insta360 Moto",
+          "duration": "PT10S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C036",
+      "catalog_name": "Casey Bluff",
+      "channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
+      "channel_title": "The Skiing Ram",
+      "bind_reason": "Public channel 'The Skiing Ram' (UCIj8c5QtM74AFS5RaESr90Q). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "rkbNpA14fY4",
+          "url": "https://www.youtube.com/watch?v=rkbNpA14fY4",
+          "title": "GoPro Skiing Chest Mount (Chesty) vs Helmet Mount (REDUX) - Chesty the BEST GoPro Mount?",
+          "thumbnail_url": "https://i.ytimg.com/vi/rkbNpA14fY4/hqdefault.jpg",
+          "channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
+          "channel_title": "The Skiing Ram",
+          "duration": "PT6M56S"
+        },
+        {
+          "video_id": "KLKxXO3QxAk",
+          "url": "https://www.youtube.com/watch?v=KLKxXO3QxAk",
+          "title": "GoPro Hero 7 Skiing: Helmet Cam vs Chest Cam",
+          "thumbnail_url": "https://i.ytimg.com/vi/KLKxXO3QxAk/hqdefault.jpg",
+          "channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
+          "channel_title": "The Skiing Ram",
+          "duration": "PT2M43S"
+        }
+      ]
+    },
+    {
+      "creator_id": "C053",
+      "catalog_name": "Paula Mirador",
+      "channel_id": "UCEbFX3P9ADiJvle5Z0Qyw2A",
+      "channel_title": "Becca Farsace",
+      "bind_reason": "Public channel 'Becca Farsace' (UCEbFX3P9ADiJvle5Z0Qyw2A). Bound to this demo catalog row for intensive-read of that channel's public uploads. The CSV display name is a synthetic persona and is not the uploader.",
+      "ownership": "verified_public_channel",
+      "topics": [],
+      "uploads": [
+        {
+          "video_id": "8S7t7Rs4i9c",
+          "url": "https://www.youtube.com/watch?v=8S7t7Rs4i9c",
+          "title": "The Insta360 Luna Ultra review they didn't pay for",
+          "thumbnail_url": "https://i.ytimg.com/vi/8S7t7Rs4i9c/hqdefault.jpg",
+          "channel_id": "UCEbFX3P9ADiJvle5Z0Qyw2A",
+          "channel_title": "Becca Farsace",
+          "duration": "PT12M31S"
+        }
+      ]
+    }
+  ]
+}

@@ -431,7 +431,7 @@ def render() -> None:
         f'<div class="is-panel-head"><span class="is-panel-title">{t("Pilot acceptance matrix")}</span>'
         f'<span class="is-panel-link">{t("Same rows as src/evaluation.py")}</span></div>'
         '<div class="is-panel-body">'
-        f"<small>{t('Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay is name-match or topic-search, not verified creator-owned. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.')}</small>"
+        f"<small>{t('Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay is a verified public-channel bind or leftover topic-search, not catalog-persona-owned. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.')}</small>"
         f"{_acceptance_html(rows)}</div></div>",
         unsafe_allow_html=True,
     )

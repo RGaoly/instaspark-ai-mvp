@@ -15,7 +15,7 @@ Evaluation page and not a live operator-interview dashboard.
 6. Creator Genome：Top 10 均有版本化基因组、clip 索引，且 ASR/评论/关键帧标记为 not_collected。
 7. 归因：已录入效果事件保留 creator、任务/机会根和来源；空事件 ROI 仍为 0x。
 
-YouTube 精读叠加层（`channel_search_match` / `public_search_hit` / `attached_channel`）是 Search 页的证据层，**不**把目录创作者声明为已核验的频道主人，也**不**进入排序。
+YouTube 精读叠加层（`verified_public_channel` / `channel_search_match` / `public_search_hit` / `attached_channel`）是 Search 页的证据层。`verified_public_channel` 把演示行绑到真实公开频道，**不**把目录显示名说成上传者，也**不**进入排序。
 
 ## 人工评测
 

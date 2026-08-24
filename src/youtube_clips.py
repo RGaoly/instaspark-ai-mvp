@@ -17,7 +17,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_YOUTUBE_CLIPS_PATH = ROOT / "data" / "youtube_intensive_clips.json"
 ALLOWED_THUMB_HOSTS = (".ytimg.com", "i.ytimg.com", "img.youtube.com")
 ALLOWED_BODY_STATUS = frozenset({"not_downloaded", "downloaded_public_timedtext"})
-ALLOWED_OWNERSHIP = frozenset({"public_search_hit", "channel_search_match", "attached_channel"})
+ALLOWED_OWNERSHIP = frozenset(
+    {"public_search_hit", "channel_search_match", "attached_channel", "verified_public_channel"}
+)
 TIMEDTEXT_SOURCE = "youtube_public_timedtext"
 
 
@@ -108,7 +110,7 @@ def load_youtube_intensive_clips(
         if ownership not in ALLOWED_OWNERSHIP:
             raise ValueError(f"{post_id} ownership {ownership!r} is not allowed.")
         channel_id = _as_text(item.get("channel_id"))
-        if ownership in {"attached_channel", "channel_search_match"} and not channel_id:
+        if ownership in {"attached_channel", "channel_search_match", "verified_public_channel"} and not channel_id:
             raise ValueError(f"{post_id} creator-linked ownership requires channel_id.")
         ids.append(post_id)
         cleaned.append(

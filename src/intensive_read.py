@@ -12,6 +12,13 @@ from typing import Any, Iterable, Mapping, Sequence
 import pandas as pd
 
 from src.content_evidence import clips_for, load_creator_content
+from src.verified_channels import (
+    LEFTOVER_SEARCH_NOTE,
+    binds_by_creator_id,
+    cache_clips_by_video_id,
+    overlay_for_verified_bind,
+    verified_row_label,
+)
 from src.youtube_clips import attach_youtube_overlay, bind_uploads_to_posts, youtube_clips_by_post_id
 
 
@@ -21,6 +28,7 @@ YT_LEGEND = (
     "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. "
     "youtube_public_timedtext: caption lines when YouTube exposes them. "
     "ownership attached_channel = operator-attached channel uploads; "
+    "verified_public_channel = demo row bound to a real public channel, catalog name is not the uploader; "
     "channel_search_match = catalog name matched a public channel title; "
     "public_search_hit = topic search, not the catalog creator. "
     "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
@@ -37,7 +45,7 @@ def intensive_read_pack(
 ) -> list[dict[str, Any]]:
     """Return one inspectable row per Top-N ranked creator. Empty ranking is [].
 
-    attached_by_creator wins over the topic-search cache for that creator.
+    attached_by_creator wins over a verified public-channel bind and the topic-search cache.
     """
 
     if ranked is None or ranked.empty:
@@ -45,10 +53,13 @@ def intensive_read_pack(
     clip_source = list(posts) if posts is not None else load_creator_content()
     overlay = dict(youtube_clips if youtube_clips is not None else youtube_clips_by_post_id())
     attached_by_creator = attached_by_creator or {}
+    verified_binds = binds_by_creator_id()
+    cache_by_video = cache_clips_by_video_id(overlay.values())
     rows: list[dict[str, Any]] = []
     for rank, (_, row) in enumerate(ranked.head(n).iterrows(), start=1):
         creator_id = str(row.get("creator_id") or "")
         creator_posts = clips_for(creator_id, clip_source)
+        verified_bind = None
         if creator_id in attached_by_creator:
             attached_rows = [dict(item) for item in attached_by_creator.get(creator_id) or []]
             if attached_rows and all(str(item.get("post_id") or "").strip() for item in attached_rows):
@@ -63,6 +74,22 @@ def intensive_read_pack(
                 post_id = str(post.get("post_id") or "")
                 if post_id in bound:
                     overlay[post_id] = bound[post_id]
+                else:
+                    overlay.pop(post_id, None)
+        elif creator_id in verified_binds:
+            verified_bind = verified_binds[creator_id]
+            bound = overlay_for_verified_bind(
+                verified_bind,
+                creator_posts,
+                cache_by_video=cache_by_video,
+            )
+            for post in creator_posts:
+                post_id = str(post.get("post_id") or "")
+                if post_id in bound:
+                    overlay[post_id] = bound[post_id]
+                    video_id = str(bound[post_id].get("video_id") or "")
+                    if video_id:
+                        cache_by_video[video_id] = bound[post_id]
                 else:
                     overlay.pop(post_id, None)
         clips = []
@@ -98,6 +125,13 @@ def intensive_read_pack(
                 "creator_id": creator_id,
                 "creator_name": str(row.get("creator_name") or creator_id),
                 "clips": clips,
+                "verified_bind": {
+                    "channel_id": verified_bind.get("channel_id"),
+                    "channel_title": verified_bind.get("channel_title"),
+                    "bind_reason": verified_bind.get("bind_reason"),
+                }
+                if verified_bind
+                else None,
             }
         )
     return rows
@@ -262,10 +296,21 @@ def intensive_read_html(pack: Iterable[Mapping[str, Any]]) -> str:
                 f"<small>Labeled demo comment themes ({esc(str(clip.get('comment_status') or 'labeled_demo_themes'))}): {themes}</small>"
                 "</div>"
             )
+        bind = item.get("verified_bind") if isinstance(item.get("verified_bind"), Mapping) else None
+        if bind:
+            row_note = (
+                f"<br/><small>{esc(verified_row_label(bind))}. "
+                "Catalog name stays a demo persona; this is not the uploader.</small>"
+            )
+        elif any(str(clip.get("ownership") or "") == "public_search_hit" for clip in item.get("clips") or []):
+            row_note = f"<br/><small>{esc(LEFTOVER_SEARCH_NOTE)}</small>"
+        else:
+            row_note = ""
         cards.append(
             f'<div class="is-intensive-row" data-creator-id="{esc(str(item.get("creator_id", "")))}">'
             f'<b>{int(item.get("rank") or 0):02d}. {esc(str(item.get("creator_name", "")))}</b> '
             f'<small>{esc(str(item.get("creator_id", "")))} · {len(item.get("clips") or [])} clips</small>'
+            f"{row_note}"
             f"{_youtube_block_html(item.get('youtube_captions'), esc)}"
             f'{"".join(clip_blocks)}</div>'
         )

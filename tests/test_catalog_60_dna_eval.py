@@ -27,10 +27,16 @@ def test_creator_content_is_one_hundred_eighty_authored_clips():
     for post in posts:
         assert post.get("asr") in (None, "")
         assert post.get("asr_status") == "not_collected"
+        assert post.get("caption_source") == "labeled_demo"
+        assert post.get("keyframe_status") == "labeled_demo_note"
+        assert post.get("comment_status") == "labeled_demo_themes"
+        assert 1 <= len(post.get("comment_themes") or []) <= 3
         assert post["url"].startswith("https://example.com/demo/")
         assert post["timestamps"]
         assert all(stamp.get("t") and stamp.get("label") for stamp in post["timestamps"])
         assert all(stamp.get("claim_id") in {"all_day", "pov", "rugged", "360"} for stamp in post["timestamps"])
+        assert all(stamp.get("caption") and stamp.get("keyframe_note") for stamp in post["timestamps"])
+        assert all(stamp.get("caption_source") == "labeled_demo" for stamp in post["timestamps"])
 
 
 def test_product_dna_is_versionable_visual_object():

@@ -35,10 +35,10 @@ from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.content_evidence import clips_for
 from src.creator_genome import genome_panel_html
-from src.intensive_read import intensive_read_html, intensive_read_pack
+from src.intensive_read import LEGEND, intensive_read_html, intensive_read_pack
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
-from services.youtube_service import search_channels, youtube_status_label
+from services.youtube_service import captions_for_channel, search_channels, youtube_status_label
 from views.content_studio import _catalog_join
 
 
@@ -333,17 +333,32 @@ def _clips_html(clips: list) -> str:
     blocks = []
     for clip in clips[:3]:
         stamps = "".join(
-            f'<li><b>{esc(stamp.get("t", ""))}</b> {esc(stamp.get("label", ""))}'
-            f' · {esc(stamp.get("claim_id", ""))}</li>'
+            "<li>"
+            f'<b>{esc(stamp.get("t", ""))}</b> · claim {esc(stamp.get("claim_id", ""))}'
+            + (
+                f'<br/><small>Caption ({esc(stamp.get("caption_source") or clip.get("caption_source") or "labeled_demo")}): '
+                f"{esc(stamp.get('caption', ''))}</small>"
+                if stamp.get("caption")
+                else f' {esc(stamp.get("label", ""))}'
+            )
+            + (
+                f"<br/><small>Keyframe: {esc(stamp.get('keyframe_note', ''))}</small>"
+                if stamp.get("keyframe_note")
+                else ""
+            )
+            + "</li>"
             for stamp in clip.get("timestamps") or []
         )
+        themes = ", ".join(esc(theme) for theme in clip.get("comment_themes") or [])
         blocks.append(
             '<div style="margin-top:8px">'
             f'<b>{esc(clip.get("title") or clip.get("post_id") or "Clip")}</b><br/>'
             f'<small><a href="{esc(clip.get("url", ""))}">{esc(clip.get("url", ""))}</a>'
-            f' · {esc(clip.get("source", "synthetic_catalog"))}</small>'
+            f' · {esc(clip.get("source", "synthetic_catalog"))}'
+            f' · ASR {esc(str(clip.get("asr_status") or "not_collected"))}</small>'
             f'<ul style="margin:4px 0 0 16px">{stamps}</ul>'
-            f'<small style="color:#879198">{esc(clip.get("note", ""))}</small>'
+            + (f"<small>Comment themes: {themes}</small><br/>" if themes else "")
+            + f'<small style="color:#879198">{esc(clip.get("note", ""))}</small>'
             "</div>"
         )
     return "".join(blocks)
@@ -513,9 +528,15 @@ def render() -> None:
             with st.expander(t("Additional gated candidates"), expanded=False):
                 _render_creator_table(rest)
         pack = intensive_read_pack(visible, n=20)
-        st.caption(
-            t("Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.")
-        )
+        selected_id = st.session_state.get("selected_creator_id")
+        live_rows = live_evidence_for(selected_id) if selected_id else []
+        if live_rows:
+            overlay = captions_for_channel(str(live_rows[0].get("channel_id") or ""))
+            for item in pack:
+                if item.get("creator_id") == selected_id:
+                    item["youtube_captions"] = overlay
+                    break
+        st.caption(t(LEGEND))
         md(intensive_read_html(pack), unsafe_allow_html=True)
         if pack:
             inspect_cols = st.columns(5)

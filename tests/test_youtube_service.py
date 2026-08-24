@@ -66,6 +66,38 @@ def test_search_channels_maps_live_payload(monkeypatch):
     assert item["source"] == "youtube_data_api"
 
 
+def test_captions_for_channel_do_not_invent_tracks_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
+    result = youtube_service.captions_for_channel("UC123")
+    assert result["source"] == "youtube_data_api"
+    assert result["available"] is False
+    assert result["items"] == []
+    assert result["transcript"] is None
+    assert "YOUTUBE_API_KEY" in result["error"]
+
+
+def test_captions_for_channel_lists_tracks_without_downloading(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str]) -> dict:
+        if path == "search":
+            return {"items": [{"id": {"videoId": "vid1"}}]}
+        assert path == "captions"
+        return {
+            "items": [
+                {"id": "cap1", "snippet": {"language": "en", "name": "English", "trackKind": "standard"}}
+            ]
+        }
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    result = youtube_service.captions_for_channel("UC123")
+    assert result["source"] == "youtube_data_api"
+    assert result["video_id"] == "vid1"
+    assert result["transcript"] is None
+    assert result["items"][0]["language"] == "en"
+    assert result["items"][0]["source"] == "youtube_data_api"
+
+
 def test_search_channels_surfaces_api_errors(monkeypatch):
     monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
 

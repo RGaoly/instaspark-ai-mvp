@@ -145,3 +145,67 @@ def search_channels(query: str, *, max_results: int = 6) -> dict[str, Any]:
             "items": [],
             "error": str(exc),
         }
+
+
+def captions_for_channel(channel_id: str) -> dict[str, Any]:
+    """List caption tracks for a channel's latest public video. Never ranks.
+
+    Transcript bodies are not downloaded. Missing keys stay empty with an error.
+    """
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "video_id": None,
+        "items": [],
+        "transcript": None,
+        "error": None,
+        "note": "Caption tracks are listed only. Transcript text is not downloaded. This block never enters ranking.",
+    }
+    if not cleaned:
+        result["error"] = "A live channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        search_payload = _request(
+            "search",
+            {
+                "part": "snippet",
+                "type": "video",
+                "channelId": cleaned,
+                "maxResults": "1",
+                "order": "date",
+            },
+        )
+        video_id = ""
+        items = search_payload.get("items") or []
+        if items:
+            video_id = str((items[0].get("id") or {}).get("videoId") or "")
+        result["video_id"] = video_id or None
+        if not video_id:
+            result["error"] = "No public video found on this channel to list caption tracks."
+            return result
+        caption_payload = _request("captions", {"part": "snippet", "videoId": video_id})
+        tracks = []
+        for item in caption_payload.get("items") or []:
+            snippet = item.get("snippet") or {}
+            tracks.append(
+                {
+                    "id": item.get("id"),
+                    "language": snippet.get("language"),
+                    "name": snippet.get("name"),
+                    "track_kind": snippet.get("trackKind"),
+                    "source": "youtube_data_api",
+                }
+            )
+        result["items"] = tracks
+        if not tracks:
+            result["error"] = "API returned no caption tracks for the latest public video."
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result

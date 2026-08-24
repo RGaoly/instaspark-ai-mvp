@@ -71,6 +71,10 @@ def test_core_navigation_has_chinese_labels():
     )
     assert translate("Click a row to inspect that creator.", language="zh") == "点击一行即可查看该创作者。"
     assert translate("Inspect {creator_id}", language="zh", creator_id="C051") == "精读 C051"
+    assert (
+        translate("Labeled demo evidence — not ASR, not scraped comments.", language="zh")
+        == "标注演示证据 — 不是语音转写，不是抓取评论。"
+    )
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert (
         translate(

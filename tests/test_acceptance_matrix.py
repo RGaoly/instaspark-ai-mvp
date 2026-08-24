@@ -32,6 +32,8 @@ def test_acceptance_matrix_passes_on_demo_catalog():
     assert rows["intensive_read"]["passed"] is True
     assert rows["intensive_read"]["value"] == 20
     assert "not_collected" in rows["intensive_read"]["detail"]
+    assert "labeled-demo" in rows["intensive_read"]["detail"]
+    assert rows["intensive_read"]["target"].startswith("20 creators")
     assert rows["catalog_videos"]["passed"] is True
     assert rows["catalog_videos"]["value"] == 180
     assert rows["creator_genome"]["passed"] is True

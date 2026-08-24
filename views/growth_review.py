@@ -431,7 +431,8 @@ def render() -> None:
         '<div class="is-panel-head"><span class="is-panel-title">Pilot acceptance matrix</span>'
         '<span class="is-panel-link">Same rows as src/evaluation.py</span></div>'
         '<div class="is-panel-body">'
-        "<small>Hard gates, evidence, stability, attribution, recall 60, intensive-read 20, "
+        "<small>Hard gates, evidence, stability, attribution, recall 60, "
+        "intensive-read 20 labeled-demo captions/keyframes/comment themes (ASR not_collected), "
         "catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.</small>"
         f"{_acceptance_html(rows)}</div></div>",
         unsafe_allow_html=True,

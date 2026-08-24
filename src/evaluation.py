@@ -112,12 +112,30 @@ def intensive_read_coverage(
     invented_asr: list[str] = []
     for item in pack:
         clips = item.get("clips") or []
-        timed = any(clip.get("timestamps") for clip in clips)
-        if not clips or not timed:
-            missing.append(str(item.get("creator_id") or ""))
+        complete = bool(clips)
         for clip in clips:
+            themes = [str(theme).strip() for theme in (clip.get("comment_themes") or []) if str(theme).strip()]
+            stamps = clip.get("timestamps") or []
+            stamp_ok = bool(stamps) and all(
+                str(stamp.get("t") or "").strip()
+                and str(stamp.get("claim_id") or "").strip()
+                and str(stamp.get("caption") or "").strip()
+                and str(stamp.get("keyframe_note") or "").strip()
+                for stamp in stamps
+            )
+            layer_ok = (
+                clip.get("caption_source") == "labeled_demo"
+                and clip.get("keyframe_status") == "labeled_demo_note"
+                and clip.get("comment_status") == "labeled_demo_themes"
+                and 1 <= len(themes) <= 3
+                and stamp_ok
+            )
+            if not layer_ok:
+                complete = False
             if clip.get("asr_status") != "not_collected" or clip.get("asr") not in (None, ""):
                 invented_asr.append(str(item.get("creator_id") or ""))
+        if not complete:
+            missing.append(str(item.get("creator_id") or ""))
     total = len(pack)
     return {
         "total": total,
@@ -213,15 +231,15 @@ def acceptance_matrix(
         {
             "id": "intensive_read",
             "dimension": "Top 20 intensive-read clips",
-            "target": "Every Top 20 row has labeled timestamps (not ASR)",
+            "target": "20 creators × clips × timestamps × labeled caption/keyframe/comment themes; ASR not_collected",
             "value": intensive["covered"],
             "passed": intensive["rate"] >= 1.0
-            and intensive["total"] >= 1
+            and intensive["total"] >= 20
             and not intensive.get("invented_asr"),
             "detail": (
-                f"{intensive['covered']}/{intensive['total']} have authored clip timestamps. "
+                f"{intensive['covered']}/{intensive['total']} have labeled-demo caption, keyframe note and comment themes. "
                 f"Missing: {', '.join(intensive['missing']) or 'none'}. "
-                "ASR/comments/keyframes remain not_collected."
+                "Platform ASR stays not_collected. Interview adoption ≥70% is not_collected."
             ),
         },
         {

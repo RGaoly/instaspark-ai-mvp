@@ -168,6 +168,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Top 10 working cut" in search
     assert "intensive_read_html" in search
     assert "intensive_read_pack" in search
+    assert "captions_for_channel" in search
+    assert "LEGEND" in search
     assert 'st.expander(t("Top 20 intensive-read clips")' not in search
     assert "intensive_inspect_" in search
     intensive = (ROOT / "src/intensive_read.py").read_text(encoding="utf-8")
@@ -175,6 +177,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'id="intensive-read-board"' in intensive
     assert "asr_status" in intensive
     assert "This is not multimodal ASR" in intensive
+    assert "Labeled demo evidence — not ASR, not scraped comments." in intensive
+    assert "caption_source" in intensive
+    assert "keyframe_note" in intensive
+    assert "comment_themes" in intensive
     assert "clips_for" in search
     assert "not LLM / not neural embeddings" in search
     assert "Topic overlap" in search

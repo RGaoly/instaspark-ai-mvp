@@ -75,6 +75,10 @@ def test_core_navigation_has_chinese_labels():
         translate("Labeled demo evidence — not ASR, not scraped comments.", language="zh")
         == "标注演示证据 — 不是语音转写，不是抓取评论。"
     )
+    assert "youtube_data_api" in translate(
+        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. labeled_demo: DNA claim timestamps (no true caption times). ASR not_collected. Caption tracks listed, body not downloaded. Not ranked.",
+        language="en",
+    )
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert (
         translate(

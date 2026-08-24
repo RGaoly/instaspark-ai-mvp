@@ -1345,6 +1345,7 @@ ZH: dict[str, str] = {
     "Top 20 intensive-read clips": "Top 20 精读片段",
     "Authored timestamps mapped to Product DNA claims. Not ASR, not comments, not live platform analytics.": "时间戳是按产品 DNA 卖点标注的演示标记。不是语音转写，不是评论挖掘，也不是平台分析。",
     "Labeled demo evidence — not ASR, not scraped comments.": "标注演示证据 — 不是语音转写，不是抓取评论。",
+    "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. labeled_demo: DNA claim timestamps (no true caption times). ASR not_collected. Caption tracks listed, body not downloaded. Not ranked.": "youtube_data_api：公开视频链接、缩略图关键帧代理、评论摘录。labeled_demo：DNA 卖点时间戳（没有真实字幕时间）。ASR 未采集。字幕轨道已列出，正文未下载。不进入排序。",
     "Inspect {creator_id}": "精读 {creator_id}",
     "Always-on scout cards": "持续侦察卡片",
     "Catalog momentum proxies (7d ≈ inverted decline, 30d ≈ engagement, 90d ≈ consistency). Not a live crawl.": "目录动量代理（7 日≈下滑取反，30 日≈互动，90 日≈稳定）。不是实时抓取。",

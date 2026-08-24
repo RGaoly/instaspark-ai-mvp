@@ -98,6 +98,92 @@ def test_captions_for_channel_lists_tracks_without_downloading(monkeypatch):
     assert result["items"][0]["source"] == "youtube_data_api"
 
 
+def test_search_videos_does_not_invent_rows_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
+    result = youtube_service.search_videos("insta360 cycling")
+    assert result["source"] == "youtube_data_api"
+    assert result["available"] is False
+    assert result["items"] == []
+    assert "YOUTUBE_API_KEY" in result["error"]
+
+
+def test_videos_list_maps_public_thumbnails(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str], *, timeout=None) -> dict:
+        assert path == "videos"
+        return {
+            "items": [
+                {
+                    "id": "abc123",
+                    "snippet": {
+                        "title": "Trail POV",
+                        "channelTitle": "Public Cam",
+                        "channelId": "UCpub",
+                        "thumbnails": {"high": {"url": "https://i.ytimg.com/vi/abc123/hqdefault.jpg"}},
+                    },
+                    "contentDetails": {"duration": "PT2M10S"},
+                    "status": {"privacyStatus": "public"},
+                }
+            ]
+        }
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    result = youtube_service.videos_list(["abc123"])
+    assert result["items"][0]["url"] == "https://www.youtube.com/watch?v=abc123"
+    assert result["items"][0]["keyframe_source"] == "youtube_thumbnail"
+    assert result["items"][0]["privacy"] == "public"
+
+
+def test_videos_list_drops_non_public(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str], *, timeout=None) -> dict:
+        return {
+            "items": [
+                {
+                    "id": "priv1",
+                    "snippet": {"title": "Hidden", "thumbnails": {}},
+                    "contentDetails": {},
+                    "status": {"privacyStatus": "private"},
+                }
+            ]
+        }
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    result = youtube_service.videos_list(["priv1"])
+    assert result["items"] == []
+
+
+def test_comment_threads_and_captions_stay_not_asr(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str], *, timeout=None) -> dict:
+        if path == "commentThreads":
+            return {
+                "items": [
+                    {
+                        "snippet": {
+                            "topLevelComment": {
+                                "snippet": {"textDisplay": "Love this insta360 POV on the trail"}
+                            }
+                        }
+                    }
+                ]
+            }
+        assert path == "captions"
+        return {"items": [{"id": "cap1", "snippet": {"language": "en", "name": "English", "trackKind": "asr"}}]}
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    comments = youtube_service.comment_threads_for_video("abc123")
+    tracks = youtube_service.caption_tracks_for_video("abc123")
+    assert comments["snippets"]
+    assert any("insta360" in theme.lower() or "pov" in theme.lower() for theme in comments["themes"])
+    assert tracks["transcript"] is None
+    assert tracks["caption_body_status"] == "not_downloaded"
+    assert "asr" not in {key.lower() for key in comments}
+
+
 def test_search_channels_surfaces_api_errors(monkeypatch):
     monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
 

@@ -170,6 +170,7 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "intensive_read_pack" in search
     assert "captions_for_channel" in search
     assert "LEGEND" in search
+    assert "YT_LEGEND" in search
     assert 'st.expander(t("Top 20 intensive-read clips")' not in search
     assert "intensive_inspect_" in search
     intensive = (ROOT / "src/intensive_read.py").read_text(encoding="utf-8")
@@ -178,6 +179,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "asr_status" in intensive
     assert "This is not multimodal ASR" in intensive
     assert "Labeled demo evidence — not ASR, not scraped comments." in intensive
+    assert "youtube_data_api" in intensive
+    assert "youtube_thumbnail" in intensive
     assert "caption_source" in intensive
     assert "keyframe_note" in intensive
     assert "comment_themes" in intensive

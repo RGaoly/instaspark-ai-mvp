@@ -40,14 +40,21 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
             assert clip["keyframe_status"] == "labeled_demo_note"
             assert clip["comment_status"] == "labeled_demo_themes"
             assert clip["comment_themes"]
-            assert clip["url"].startswith("https://example.com/demo/")
+            catalog_url = str(clip.get("catalog_url") or clip.get("url") or "")
+            assert catalog_url.startswith("https://example.com/demo/") or str(clip.get("url") or "").startswith("https://example.com/demo/")
+            if clip.get("video_id"):
+                assert str(clip["url"]).startswith("https://www.youtube.com/watch")
+                assert clip.get("keyframe_source") == "youtube_thumbnail"
+                assert clip.get("comment_source") == "youtube_data_api"
+                assert clip.get("caption_body_status") == "not_downloaded"
+                assert clip.get("youtube_source") == "youtube_data_api"
             assert clip["timestamps"]
             assert all(stamp["t"] and stamp["label"] for stamp in clip["timestamps"])
             assert all(stamp["claim_id"] in CLAIM_IDS for stamp in clip["timestamps"])
             assert all(stamp["caption"] and stamp["keyframe_note"] for stamp in clip["timestamps"])
             clip_n += 1
             stamp_n += len(clip["timestamps"])
-            assert clip["url"] in html
+            assert clip["url"] in html or clip.get("catalog_url", "") in html
             assert clip["timestamps"][0]["t"] in html
             assert clip["timestamps"][0]["claim_id"] in html
             assert clip["timestamps"][0]["caption"] in html
@@ -68,8 +75,10 @@ def test_intensive_read_pack_exposes_twenty_creators_clips_and_timestamps():
     assert "not ranked" in html_youtube
     assert clip_n == 60
     assert stamp_n >= 60
+    youtube_n = sum(1 for item in pack for clip in item["clips"] if clip.get("video_id"))
+    assert youtube_n == 60
     assert "ASR not_collected" in html
-    assert "Labeled demo evidence — not ASR, not scraped comments." in html
+    assert "Labeled demo evidence — not ASR, not scraped comments." in html or "youtube_data_api" in html
     assert "labeled_demo" in html
     assert "asr_collected" not in html.lower()
     assert "whisper output" not in html.lower()

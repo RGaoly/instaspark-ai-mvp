@@ -35,7 +35,7 @@ from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.content_evidence import clips_for
 from src.creator_genome import genome_panel_html
-from src.intensive_read import LEGEND, intensive_read_html, intensive_read_pack
+from src.intensive_read import LEGEND, YT_LEGEND, intensive_read_html, intensive_read_pack
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from services.youtube_service import captions_for_channel, search_channels, youtube_status_label
@@ -536,7 +536,8 @@ def render() -> None:
                 if item.get("creator_id") == selected_id:
                     item["youtube_captions"] = overlay
                     break
-        st.caption(t(LEGEND))
+        has_youtube = any(clip.get("video_id") for item in pack for clip in item.get("clips") or [])
+        st.caption(t(YT_LEGEND if has_youtube else LEGEND))
         md(intensive_read_html(pack), unsafe_allow_html=True)
         if pack:
             inspect_cols = st.columns(5)

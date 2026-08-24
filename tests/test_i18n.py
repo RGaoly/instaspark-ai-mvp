@@ -65,6 +65,11 @@ def test_core_navigation_has_chinese_labels():
         == "效果事件已录入。创作者已进入已衡量。"
     )
     assert translate("Select this creator", language="zh") == "选择该创作者"
+    assert (
+        translate("Stay on Search. Detail, Shortlist, Compare, and Brief apply to this creator.", language="zh")
+        == "留在搜索页。详情、短名单、对比和简报都针对该创作者。"
+    )
+    assert translate("Click a row to inspect that creator.", language="zh") == "点击一行即可查看该创作者。"
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert translate("Collaboration state", language="zh") == "协作状态"
     assert translate("Why recommended", language="zh") == "推荐原因"

@@ -1172,6 +1172,26 @@ def test_selecting_via_list_updates_selected_creator_id(session):
     assert 'open_workspace_page' not in outreach_operations._render_list.__code__.co_names
 
 
+def test_selecting_via_search_updates_selected_creator_id(session):
+    from views import creator_search
+
+    ranked = state.ranking()
+    first_id = ranked.iloc[0]["creator_id"]
+    second_id = ranked.iloc[1]["creator_id"]
+    second_name = ranked.iloc[1]["creator_name"]
+    state.select_creator(first_id)
+    assert session.selected_creator_id == first_id
+
+    result = creator_search.select_search_creator(second_id)
+    assert result == second_id
+    assert session.selected_creator_id == second_id
+
+    html = creator_search._creator_table(ranked)
+    assert "is-selected" in html
+    assert second_name in html
+    assert 'open_workspace_page' not in creator_search._render_creator_table.__code__.co_names
+
+
 def test_opportunity_cta_targets_growth_and_content_studio(session):
     from views import creator_opportunity
 

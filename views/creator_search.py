@@ -38,6 +38,7 @@ from src.creator_genome import genome_panel_html
 from src.intensive_read import LEGEND, YT_LEGEND, intensive_read_html, intensive_read_pack
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
+from src.youtube_channel_fetch import hydrate_channel_clips
 from services.youtube_service import captions_for_channel, search_channels, youtube_status_label
 from views.content_studio import _catalog_join
 
@@ -73,6 +74,30 @@ def select_search_creator(creator_id: str) -> str:
 
     select_creator(creator_id)
     return creator_id
+
+
+def _attached_overlays_for_pack(visible) -> dict[str, list[dict]]:
+    """Operator-attached channel uploads for intensive-read. Empty list means attached but no public uploads."""
+
+    cache = st.session_state.setdefault("_attached_channel_clips", {})
+    bound: dict[str, list[dict]] = {}
+    if visible is None or getattr(visible, "empty", True):
+        return bound
+    for creator_id in list(visible.head(20)["creator_id"]):
+        creator_id = str(creator_id)
+        rows = live_evidence_for(creator_id)
+        if not rows:
+            continue
+        channel = rows[0]
+        key = f"{creator_id}:{channel.get('channel_id')}"
+        if key not in cache:
+            cache[key] = hydrate_channel_clips(
+                channel,
+                clips_for(creator_id),
+                ownership="attached_channel",
+            )
+        bound[creator_id] = cache[key]
+    return bound
 
 
 def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
@@ -115,7 +140,14 @@ def _render_live_lookup(context: dict) -> None:
                 disabled=writes_locked() or not st.session_state.get("selected_creator_id"),
             ):
                 try:
-                    attach_live_evidence(st.session_state.selected_creator_id, item)
+                    creator_id = st.session_state.selected_creator_id
+                    attach_live_evidence(creator_id, item)
+                    key = f"{creator_id}:{item['channel_id']}"
+                    st.session_state.setdefault("_attached_channel_clips", {})[key] = hydrate_channel_clips(
+                        item,
+                        clips_for(creator_id),
+                        ownership="attached_channel",
+                    )
                     st.toast(t("YouTube channel attached as evidence"))
                 except (ValueError, PermissionError) as exc:
                     st.error(str(exc))
@@ -527,7 +559,7 @@ def render() -> None:
         if not rest.empty:
             with st.expander(t("Additional gated candidates"), expanded=False):
                 _render_creator_table(rest)
-        pack = intensive_read_pack(visible, n=20)
+        pack = intensive_read_pack(visible, n=20, attached_by_creator=_attached_overlays_for_pack(visible))
         selected_id = st.session_state.get("selected_creator_id")
         live_rows = live_evidence_for(selected_id) if selected_id else []
         if live_rows:

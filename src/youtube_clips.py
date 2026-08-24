@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_YOUTUBE_CLIPS_PATH = ROOT / "data" / "youtube_intensive_clips.json"
 ALLOWED_THUMB_HOSTS = (".ytimg.com", "i.ytimg.com", "img.youtube.com")
 ALLOWED_BODY_STATUS = frozenset({"not_downloaded", "downloaded_public_timedtext"})
+ALLOWED_OWNERSHIP = frozenset({"public_search_hit", "channel_search_match", "attached_channel"})
 TIMEDTEXT_SOURCE = "youtube_public_timedtext"
 
 
@@ -103,6 +104,12 @@ def load_youtube_intensive_clips(
             raise ValueError(f"{post_id} keyframe_source must be youtube_thumbnail.")
         if str(item.get("comment_source") or "") != "youtube_data_api":
             raise ValueError(f"{post_id} comment_source must be youtube_data_api.")
+        ownership = str(item.get("ownership") or "public_search_hit")
+        if ownership not in ALLOWED_OWNERSHIP:
+            raise ValueError(f"{post_id} ownership {ownership!r} is not allowed.")
+        channel_id = _as_text(item.get("channel_id"))
+        if ownership in {"attached_channel", "channel_search_match"} and not channel_id:
+            raise ValueError(f"{post_id} creator-linked ownership requires channel_id.")
         ids.append(post_id)
         cleaned.append(
             {
@@ -118,6 +125,8 @@ def load_youtube_intensive_clips(
                 "caption_body_source": body_source or None,
                 "caption_lines": lines,
                 "asr_status": "not_collected",
+                "ownership": ownership,
+                "channel_id": channel_id or None,
                 "source": "youtube_data_api",
             }
         )
@@ -165,7 +174,99 @@ def attach_youtube_overlay(clip: Mapping[str, Any], overlay: Mapping[str, Any] |
     merged["caption_body_source"] = body_source
     merged["caption_lines"] = [{"t": str(item.get("t") or ""), "text": str(item.get("text") or "")} for item in lines if str(item.get("t") or "").strip() and str(item.get("text") or "").strip()]
     merged["youtube_source"] = "youtube_data_api"
-    merged["ownership"] = overlay.get("ownership") or "public_search_hit"
+    merged["ownership"] = str(overlay.get("ownership") or "public_search_hit")
+    if merged["ownership"] not in ALLOWED_OWNERSHIP:
+        merged["ownership"] = "public_search_hit"
+    merged["channel_id"] = overlay.get("channel_id")
+    merged["channel_title"] = overlay.get("channel_title")
     merged["asr_status"] = "not_collected"
     merged["asr"] = None
     return merged
+
+
+def overlay_clip_from_upload(
+    post: Mapping[str, Any],
+    video: Mapping[str, Any],
+    *,
+    ownership: str,
+    comments: Mapping[str, Any] | None = None,
+    tracks: list | None = None,
+    timedtext: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build a cache/overlay row from a public channel upload. Does not invent bodies."""
+
+    if ownership not in ALLOWED_OWNERSHIP:
+        raise ValueError(f"ownership {ownership!r} is not allowed.")
+    status = "not_downloaded"
+    lines: list[dict[str, str]] = []
+    body_source = None
+    if timedtext and timedtext.get("caption_body_status") == "downloaded_public_timedtext":
+        raw_lines = list(timedtext.get("caption_lines") or [])
+        lines = [
+            {"t": str(item.get("t") or ""), "text": str(item.get("text") or "")}
+            for item in raw_lines
+            if str(item.get("t") or "").strip() and str(item.get("text") or "").strip()
+        ]
+        if lines:
+            status = "downloaded_public_timedtext"
+            body_source = str(timedtext.get("source") or TIMEDTEXT_SOURCE)
+    comments = comments or {}
+    return {
+        "post_id": str(post.get("post_id") or ""),
+        "creator_id": str(post.get("creator_id") or ""),
+        "video_id": str(video.get("video_id") or ""),
+        "url": str(video.get("url") or ""),
+        "title": video.get("title"),
+        "duration": video.get("duration"),
+        "thumbnail_url": video.get("thumbnail_url"),
+        "channel_title": video.get("channel_title"),
+        "channel_id": video.get("channel_id"),
+        "privacy": "public",
+        "keyframe_source": "youtube_thumbnail",
+        "comment_source": "youtube_data_api",
+        "comment_snippets": list(comments.get("snippets") or []),
+        "comment_themes": list(comments.get("themes") or []),
+        "caption_tracks": list(tracks or []),
+        "caption_body_status": status,
+        "caption_body_source": body_source,
+        "caption_lines": lines,
+        "caption_language": (timedtext or {}).get("language"),
+        "caption_track_kind": (timedtext or {}).get("track_kind"),
+        "caption_body_error": None if lines else (timedtext or {}).get("error"),
+        "asr_status": "not_collected",
+        "asr": None,
+        "transcript": None,
+        "ownership": ownership,
+        "source": "youtube_data_api",
+    }
+
+
+def bind_uploads_to_posts(
+    posts: list[Mapping[str, Any]],
+    videos: list[Mapping[str, Any]],
+    *,
+    ownership: str,
+    comments_by_video: Mapping[str, Mapping[str, Any]] | None = None,
+    tracks_by_video: Mapping[str, list] | None = None,
+    timedtext_by_video: Mapping[str, Mapping[str, Any]] | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Zip catalog posts to channel uploads. Extra posts are omitted, not filled from topic search."""
+
+    comments_by_video = comments_by_video or {}
+    tracks_by_video = tracks_by_video or {}
+    timedtext_by_video = timedtext_by_video or {}
+    bound: dict[str, dict[str, Any]] = {}
+    for post, video in zip(posts, videos):
+        video_id = str(video.get("video_id") or "")
+        post_id = str(post.get("post_id") or "")
+        if not post_id or not video_id:
+            continue
+        bound[post_id] = overlay_clip_from_upload(
+            post,
+            video,
+            ownership=ownership,
+            comments=comments_by_video.get(video_id),
+            tracks=tracks_by_video.get(video_id),
+            timedtext=timedtext_by_video.get(video_id),
+        )
+    return bound

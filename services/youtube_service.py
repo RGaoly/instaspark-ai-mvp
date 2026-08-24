@@ -266,6 +266,52 @@ def search_videos(query: str, *, max_results: int = 25) -> dict[str, Any]:
         return empty
 
 
+def videos_for_channel(channel_id: str, *, max_results: int = 3) -> dict[str, Any]:
+    """Public uploads for a channel via search.list + videos.list. Never ranked."""
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "items": [],
+        "error": None,
+    }
+    if not cleaned:
+        result["error"] = "channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        payload = _request(
+            "search",
+            {
+                "part": "snippet",
+                "type": "video",
+                "channelId": cleaned,
+                "order": "date",
+                "maxResults": str(max(1, min(max_results, 10))),
+            },
+            timeout=20,
+        )
+        video_ids = [
+            str((raw.get("id") or {}).get("videoId") or "")
+            for raw in payload.get("items") or []
+        ]
+        video_ids = [item for item in video_ids if item]
+        if not video_ids:
+            result["error"] = "No public uploads returned for this channel."
+            return result
+        listed = videos_list(video_ids[: max(1, min(max_results, 10))])
+        result["items"] = list(listed.get("items") or [])
+        result["error"] = listed.get("error")
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
 def videos_list(video_ids: list[str]) -> dict[str, Any]:
     """Hydrate public video metadata and thumbnails. Does not download captions."""
 

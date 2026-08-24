@@ -168,6 +168,8 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Top 10 working cut" in search
     assert "intensive_read_html" in search
     assert "intensive_read_pack" in search
+    assert "attached_by_creator" in search
+    assert "hydrate_channel_clips" in search
     assert "captions_for_channel" in search
     assert "LEGEND" in search
     assert "YT_LEGEND" in search

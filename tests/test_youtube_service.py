@@ -194,3 +194,53 @@ def test_search_channels_surfaces_api_errors(monkeypatch):
     result = youtube_service.search_channels("x5")
     assert result["items"] == []
     assert "403" in result["error"]
+
+
+def test_videos_for_channel_lists_public_uploads(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str], *, timeout=None) -> dict:
+        if path == "search":
+            assert params["channelId"] == "UCpub"
+            assert params["type"] == "video"
+            return {"items": [{"id": {"videoId": "upl1"}}, {"id": {"videoId": "upl2"}}]}
+        assert path == "videos"
+        return {
+            "items": [
+                {
+                    "id": "upl1",
+                    "snippet": {
+                        "title": "Own upload one",
+                        "channelTitle": "Alex Rides",
+                        "channelId": "UCpub",
+                        "thumbnails": {"high": {"url": "https://i.ytimg.com/vi/upl1/hqdefault.jpg"}},
+                    },
+                    "contentDetails": {"duration": "PT1M"},
+                    "status": {"privacyStatus": "public"},
+                },
+                {
+                    "id": "upl2",
+                    "snippet": {
+                        "title": "Own upload two",
+                        "channelTitle": "Alex Rides",
+                        "channelId": "UCpub",
+                        "thumbnails": {"medium": {"url": "https://i.ytimg.com/vi/upl2/hqdefault.jpg"}},
+                    },
+                    "contentDetails": {"duration": "PT2M"},
+                    "status": {"privacyStatus": "public"},
+                },
+            ]
+        }
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    result = youtube_service.videos_for_channel("UCpub", max_results=3)
+    assert result["error"] is None
+    assert [item["video_id"] for item in result["items"]] == ["upl1", "upl2"]
+    assert all(item["url"].startswith("https://www.youtube.com/watch") for item in result["items"])
+
+
+def test_videos_for_channel_does_not_invent_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
+    result = youtube_service.videos_for_channel("UCpub")
+    assert result["items"] == []
+    assert "YOUTUBE_API_KEY" in result["error"]

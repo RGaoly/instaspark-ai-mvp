@@ -76,7 +76,7 @@ def test_core_navigation_has_chinese_labels():
         == "标注演示证据 — 不是语音转写，不是抓取评论。"
     )
     assert "youtube_data_api" in translate(
-        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
+        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; channel_search_match = catalog name matched a public channel title; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
         language="en",
     )
     assert translate("Selected creator", language="zh") == "已选择该创作者"

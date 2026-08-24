@@ -35,6 +35,10 @@ def test_committed_cache_covers_sixty_creators_when_present():
     assert len(clips) >= 60
     assert len({item["creator_id"] for item in clips}) == 60
     assert all(item["asr_status"] == "not_collected" for item in clips)
+    assert all(item.get("ownership") in {"public_search_hit", "channel_search_match", "attached_channel"} for item in clips)
+    for item in clips:
+        if item.get("ownership") in {"channel_search_match", "attached_channel"}:
+            assert item.get("channel_id")
     assert all(item["caption_body_status"] in {"not_downloaded", "downloaded_public_timedtext"} for item in clips)
     downloaded = [item for item in clips if item["caption_body_status"] == "downloaded_public_timedtext"]
     for item in downloaded:
@@ -214,4 +218,50 @@ def test_attach_overlay_does_not_claim_download_when_lines_empty():
     assert merged["caption_body_status"] == "not_downloaded"
     assert merged["caption_lines"] == []
     assert merged["caption_body_source"] is None
+
+
+def test_loader_requires_channel_id_for_creator_linked_ownership(tmp_path):
+    path = tmp_path / "yt.json"
+    path.write_text(
+        json.dumps(
+            {
+                "pack_id": "t",
+                "version": 2,
+                "source": "youtube_data_api",
+                "clips": [
+                    _clip_row(
+                        ownership="channel_search_match",
+                        caption_body_status="not_downloaded",
+                    )
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="channel_id"):
+        load_youtube_intensive_clips(path)
+
+
+def test_bind_uploads_to_posts_does_not_pad_from_topic_search():
+    from src.youtube_clips import bind_uploads_to_posts
+
+    posts = [
+        {"post_id": "POST-A", "creator_id": "C001"},
+        {"post_id": "POST-B", "creator_id": "C001"},
+        {"post_id": "POST-C", "creator_id": "C001"},
+    ]
+    videos = [
+        {
+            "video_id": "own1",
+            "url": "https://www.youtube.com/watch?v=own1",
+            "title": "Own",
+            "channel_id": "UC1",
+            "thumbnail_url": "https://i.ytimg.com/vi/own1/hqdefault.jpg",
+        }
+    ]
+    bound = bind_uploads_to_posts(posts, videos, ownership="attached_channel")
+    assert set(bound) == {"POST-A"}
+    assert bound["POST-A"]["ownership"] == "attached_channel"
+    assert bound["POST-A"]["caption_body_status"] == "not_downloaded"
+    assert bound["POST-A"]["caption_lines"] == []
 

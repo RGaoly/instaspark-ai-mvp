@@ -7,12 +7,12 @@ layer from labeled_demo DNA timestamps. Bodies are never invented from demo text
 from __future__ import annotations
 
 import html
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 import pandas as pd
 
 from src.content_evidence import clips_for, load_creator_content
-from src.youtube_clips import attach_youtube_overlay, youtube_clips_by_post_id
+from src.youtube_clips import attach_youtube_overlay, bind_uploads_to_posts, youtube_clips_by_post_id
 
 
 INTENSIVE_N = 20
@@ -20,6 +20,9 @@ LEGEND = "Labeled demo evidence — not ASR, not scraped comments."
 YT_LEGEND = (
     "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. "
     "youtube_public_timedtext: caption lines when YouTube exposes them. "
+    "ownership attached_channel = operator-attached channel uploads; "
+    "channel_search_match = catalog name matched a public channel title; "
+    "public_search_hit = topic search, not the catalog creator. "
     "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
 )
 
@@ -30,18 +33,40 @@ def intensive_read_pack(
     *,
     n: int = INTENSIVE_N,
     youtube_clips: Mapping[str, Mapping[str, Any]] | None = None,
+    attached_by_creator: Mapping[str, Sequence[Mapping[str, Any]]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Return one inspectable row per Top-N ranked creator. Empty ranking is []."""
+    """Return one inspectable row per Top-N ranked creator. Empty ranking is [].
+
+    attached_by_creator wins over the topic-search cache for that creator.
+    """
 
     if ranked is None or ranked.empty:
         return []
     clip_source = list(posts) if posts is not None else load_creator_content()
-    overlay = youtube_clips if youtube_clips is not None else youtube_clips_by_post_id()
+    overlay = dict(youtube_clips if youtube_clips is not None else youtube_clips_by_post_id())
+    attached_by_creator = attached_by_creator or {}
     rows: list[dict[str, Any]] = []
     for rank, (_, row) in enumerate(ranked.head(n).iterrows(), start=1):
         creator_id = str(row.get("creator_id") or "")
+        creator_posts = clips_for(creator_id, clip_source)
+        if creator_id in attached_by_creator:
+            attached_rows = [dict(item) for item in attached_by_creator.get(creator_id) or []]
+            if attached_rows and all(str(item.get("post_id") or "").strip() for item in attached_rows):
+                bound = {
+                    str(item["post_id"]): {**item, "ownership": "attached_channel"}
+                    for item in attached_rows
+                    if item.get("video_id")
+                }
+            else:
+                bound = bind_uploads_to_posts(creator_posts, attached_rows, ownership="attached_channel")
+            for post in creator_posts:
+                post_id = str(post.get("post_id") or "")
+                if post_id in bound:
+                    overlay[post_id] = bound[post_id]
+                else:
+                    overlay.pop(post_id, None)
         clips = []
-        for clip in clips_for(creator_id, clip_source):
+        for clip in creator_posts:
             stamps = [
                 {
                     "t": str(stamp.get("t") or ""),
@@ -178,8 +203,13 @@ def _clip_youtube_html(clip: Mapping[str, Any], esc) -> str:
     return (
         "<div style=\"margin:4px 0 0 8px\">"
         f'<a href="{esc(str(clip.get("url") or ""))}">{esc(str(clip.get("youtube_title") or clip.get("url") or "YouTube"))}</a> '
-        f'<small>source: youtube_data_api · ownership: {esc(str(clip.get("ownership") or "public_search_hit"))} · '
-        f"keyframe_source: youtube_thumbnail · {esc(track_line)}</small>"
+        f'<small>source: youtube_data_api · ownership: {esc(str(clip.get("ownership") or "public_search_hit"))}'
+        + (
+            f' · channel_id: {esc(str(clip.get("channel_id")))}'
+            if clip.get("channel_id")
+            else ""
+        )
+        + f" · keyframe_source: youtube_thumbnail · {esc(track_line)}</small>"
         f"{img}"
         f"<small>Public comments (comment_source: youtube_data_api): {yt_themes}</small>"
         f"<ul style=\"margin:2px 0 0 16px\">{snippets}</ul>"

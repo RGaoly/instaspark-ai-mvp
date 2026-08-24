@@ -201,9 +201,14 @@ def resolve_identity(
     if persona == "impersonation" or extra_tokens:
         suspected = exact
         if suspected is None:
+            former_names_by_id: dict[str, list[str]] = {}
+            for name, cid in _former_catalog_ids().items():
+                former_names_by_id.setdefault(cid, []).append(name)
             for row in records:
-                catalog_name = _normalize_name(str(row.get("creator_name") or ""))
-                if catalog_name and catalog_name in normalized:
+                cid = str(row.get("creator_id") or "")
+                aliases = [_normalize_name(str(row.get("creator_name") or ""))]
+                aliases.extend(former_names_by_id.get(cid) or [])
+                if any(alias and alias in normalized for alias in aliases):
                     suspected = row
                     break
         return {

@@ -21,7 +21,7 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Product DNA", language="zh") == "产品 DNA"
     assert translate("Always-on scout cards", language="zh") == "持续侦察卡片"
     assert "not KYC" in translate(
-        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay: Top 20 rows are public channels (catalog_channel), not KYC. Remaining recall is synthetic. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
+        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay: all 60 recalled rows are public channels (catalog_channel), not KYC. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
         language="en",
     )
     assert translate(
@@ -87,7 +87,7 @@ def test_core_navigation_has_chinese_labels():
         == "标注演示证据 — 不是语音转写，不是抓取评论。"
     )
     assert "youtube_data_api" in translate(
-        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; catalog_channel = this catalog row is that public YouTube channel, not KYC; channel_search_match = leftover name match on an unbound synthetic row; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
+        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; catalog_channel = this catalog row is that public YouTube channel, not KYC; channel_search_match = leftover name match if an unbound row remains; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
         language="en",
     )
     assert translate("Selected creator", language="zh") == "已选择该创作者"

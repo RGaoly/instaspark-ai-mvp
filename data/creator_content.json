@@ -3,7 +3,7 @@
     "post_id": "POST-C001-01",
     "creator_id": "C001",
     "url": "https://example.com/demo/c001/clip-01",
-    "title": "Alex Rides · catalog clip 01",
+    "title": "Peak Design · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -36,7 +36,7 @@
     "post_id": "POST-C001-02",
     "creator_id": "C001",
     "url": "https://example.com/demo/c001/clip-02",
-    "title": "Alex Rides · catalog clip 02",
+    "title": "Peak Design · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -69,7 +69,7 @@
     "post_id": "POST-C001-03",
     "creator_id": "C001",
     "url": "https://example.com/demo/c001/clip-03",
-    "title": "Alex Rides · catalog clip 03",
+    "title": "Peak Design · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "travel"
@@ -101,7 +101,7 @@
     "post_id": "POST-C002-01",
     "creator_id": "C002",
     "url": "https://example.com/demo/c002/clip-01",
-    "title": "Sofia Motion · catalog clip 01",
+    "title": "Action Cam Guy · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -134,7 +134,7 @@
     "post_id": "POST-C002-02",
     "creator_id": "C002",
     "url": "https://example.com/demo/c002/clip-02",
-    "title": "Sofia Motion · catalog clip 02",
+    "title": "Action Cam Guy · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -167,7 +167,7 @@
     "post_id": "POST-C002-03",
     "creator_id": "C002",
     "url": "https://example.com/demo/c002/clip-03",
-    "title": "Sofia Motion · catalog clip 03",
+    "title": "Action Cam Guy · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -199,7 +199,7 @@
     "post_id": "POST-C003-01",
     "creator_id": "C003",
     "url": "https://example.com/demo/c003/clip-01",
-    "title": "Diego Trail · catalog clip 01",
+    "title": "AuthenTech - Ben Schmanke · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -233,7 +233,7 @@
     "post_id": "POST-C003-02",
     "creator_id": "C003",
     "url": "https://example.com/demo/c003/clip-02",
-    "title": "Diego Trail · catalog clip 02",
+    "title": "AuthenTech - Ben Schmanke · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -266,7 +266,7 @@
     "post_id": "POST-C003-03",
     "creator_id": "C003",
     "url": "https://example.com/demo/c003/clip-03",
-    "title": "Diego Trail · catalog clip 03",
+    "title": "AuthenTech - Ben Schmanke · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor"
@@ -396,7 +396,7 @@
     "post_id": "POST-C005-01",
     "creator_id": "C005",
     "url": "https://example.com/demo/c005/clip-01",
-    "title": "Liam Frames · catalog clip 01",
+    "title": "Backcountry Exposure · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -429,7 +429,7 @@
     "post_id": "POST-C005-02",
     "creator_id": "C005",
     "url": "https://example.com/demo/c005/clip-02",
-    "title": "Liam Frames · catalog clip 02",
+    "title": "Backcountry Exposure · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -462,7 +462,7 @@
     "post_id": "POST-C005-03",
     "creator_id": "C005",
     "url": "https://example.com/demo/c005/clip-03",
-    "title": "Liam Frames · catalog clip 03",
+    "title": "Backcountry Exposure · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -494,7 +494,7 @@
     "post_id": "POST-C006-01",
     "creator_id": "C006",
     "url": "https://example.com/demo/c006/clip-01",
-    "title": "Yuki Journey · catalog clip 01",
+    "title": "Peter McKinnon · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -528,7 +528,7 @@
     "post_id": "POST-C006-02",
     "creator_id": "C006",
     "url": "https://example.com/demo/c006/clip-02",
-    "title": "Yuki Journey · catalog clip 02",
+    "title": "Peter McKinnon · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -561,7 +561,7 @@
     "post_id": "POST-C006-03",
     "creator_id": "C006",
     "url": "https://example.com/demo/c006/clip-03",
-    "title": "Yuki Journey · catalog clip 03",
+    "title": "Peter McKinnon · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "travel"
@@ -593,7 +593,7 @@
     "post_id": "POST-C007-01",
     "creator_id": "C007",
     "url": "https://example.com/demo/c007/clip-01",
-    "title": "Noah Tech · catalog clip 01",
+    "title": "Ben Claremont · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -626,7 +626,7 @@
     "post_id": "POST-C007-02",
     "creator_id": "C007",
     "url": "https://example.com/demo/c007/clip-02",
-    "title": "Noah Tech · catalog clip 02",
+    "title": "Ben Claremont · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -659,7 +659,7 @@
     "post_id": "POST-C007-03",
     "creator_id": "C007",
     "url": "https://example.com/demo/c007/clip-03",
-    "title": "Noah Tech · catalog clip 03",
+    "title": "Ben Claremont · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -691,7 +691,7 @@
     "post_id": "POST-C008-01",
     "creator_id": "C008",
     "url": "https://example.com/demo/c008/clip-01",
-    "title": "Camila Waves · catalog clip 01",
+    "title": "Berm Peak · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -725,7 +725,7 @@
     "post_id": "POST-C008-02",
     "creator_id": "C008",
     "url": "https://example.com/demo/c008/clip-02",
-    "title": "Camila Waves · catalog clip 02",
+    "title": "Berm Peak · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -758,7 +758,7 @@
     "post_id": "POST-C008-03",
     "creator_id": "C008",
     "url": "https://example.com/demo/c008/clip-03",
-    "title": "Camila Waves · catalog clip 03",
+    "title": "Berm Peak · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing"
@@ -790,7 +790,7 @@
     "post_id": "POST-C009-01",
     "creator_id": "C009",
     "url": "https://example.com/demo/c009/clip-01",
-    "title": "Ethan Explore · catalog clip 01",
+    "title": "Boards, Bikes, And Hikes · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -823,7 +823,7 @@
     "post_id": "POST-C009-02",
     "creator_id": "C009",
     "url": "https://example.com/demo/c009/clip-02",
-    "title": "Ethan Explore · catalog clip 02",
+    "title": "Boards, Bikes, And Hikes · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -856,7 +856,7 @@
     "post_id": "POST-C009-03",
     "creator_id": "C009",
     "url": "https://example.com/demo/c009/clip-03",
-    "title": "Ethan Explore · catalog clip 03",
+    "title": "Boards, Bikes, And Hikes · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -888,7 +888,7 @@
     "post_id": "POST-C010-01",
     "creator_id": "C010",
     "url": "https://example.com/demo/c010/clip-01",
-    "title": "Isabella Road · catalog clip 01",
+    "title": "BuzzAlong · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -922,7 +922,7 @@
     "post_id": "POST-C010-02",
     "creator_id": "C010",
     "url": "https://example.com/demo/c010/clip-02",
-    "title": "Isabella Road · catalog clip 02",
+    "title": "BuzzAlong · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -955,7 +955,7 @@
     "post_id": "POST-C010-03",
     "creator_id": "C010",
     "url": "https://example.com/demo/c010/clip-03",
-    "title": "Isabella Road · catalog clip 03",
+    "title": "BuzzAlong · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -987,7 +987,7 @@
     "post_id": "POST-C011-01",
     "creator_id": "C011",
     "url": "https://example.com/demo/c011/clip-01",
-    "title": "Lucas POV · catalog clip 01",
+    "title": "Global Cycling Network · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -1021,7 +1021,7 @@
     "post_id": "POST-C011-02",
     "creator_id": "C011",
     "url": "https://example.com/demo/c011/clip-02",
-    "title": "Lucas POV · catalog clip 02",
+    "title": "Global Cycling Network · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -1054,7 +1054,7 @@
     "post_id": "POST-C011-03",
     "creator_id": "C011",
     "url": "https://example.com/demo/c011/clip-03",
-    "title": "Lucas POV · catalog clip 03",
+    "title": "Global Cycling Network · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -1283,7 +1283,7 @@
     "post_id": "POST-C014-01",
     "creator_id": "C014",
     "url": "https://example.com/demo/c014/clip-01",
-    "title": "Olivia Lens · catalog clip 01",
+    "title": "GT Biking · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -1317,7 +1317,7 @@
     "post_id": "POST-C014-02",
     "creator_id": "C014",
     "url": "https://example.com/demo/c014/clip-02",
-    "title": "Olivia Lens · catalog clip 02",
+    "title": "GT Biking · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -1350,7 +1350,7 @@
     "post_id": "POST-C014-03",
     "creator_id": "C014",
     "url": "https://example.com/demo/c014/clip-03",
-    "title": "Olivia Lens · catalog clip 03",
+    "title": "GT Biking · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -1679,7 +1679,7 @@
     "post_id": "POST-C018-01",
     "creator_id": "C018",
     "url": "https://example.com/demo/c018/clip-01",
-    "title": "Ava Horizon · catalog clip 01",
+    "title": "Chris Brockhurst · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -1713,7 +1713,7 @@
     "post_id": "POST-C018-02",
     "creator_id": "C018",
     "url": "https://example.com/demo/c018/clip-02",
-    "title": "Ava Horizon · catalog clip 02",
+    "title": "Chris Brockhurst · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -1746,7 +1746,7 @@
     "post_id": "POST-C018-03",
     "creator_id": "C018",
     "url": "https://example.com/demo/c018/clip-03",
-    "title": "Ava Horizon · catalog clip 03",
+    "title": "Chris Brockhurst · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing"
@@ -1778,7 +1778,7 @@
     "post_id": "POST-C019-01",
     "creator_id": "C019",
     "url": "https://example.com/demo/c019/clip-01",
-    "title": "Samuel Ride · catalog clip 01",
+    "title": "HondaFanboy35 · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -1812,7 +1812,7 @@
     "post_id": "POST-C019-02",
     "creator_id": "C019",
     "url": "https://example.com/demo/c019/clip-02",
-    "title": "Samuel Ride · catalog clip 02",
+    "title": "HondaFanboy35 · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -1845,7 +1845,7 @@
     "post_id": "POST-C019-03",
     "creator_id": "C019",
     "url": "https://example.com/demo/c019/clip-03",
-    "title": "Samuel Ride · catalog clip 03",
+    "title": "HondaFanboy35 · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -1877,7 +1877,7 @@
     "post_id": "POST-C020-01",
     "creator_id": "C020",
     "url": "https://example.com/demo/c020/clip-01",
-    "title": "Chloe Wild · catalog clip 01",
+    "title": "Chris Rogers · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -1911,7 +1911,7 @@
     "post_id": "POST-C020-02",
     "creator_id": "C020",
     "url": "https://example.com/demo/c020/clip-02",
-    "title": "Chloe Wild · catalog clip 02",
+    "title": "Chris Rogers · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -1944,7 +1944,7 @@
     "post_id": "POST-C020-03",
     "creator_id": "C020",
     "url": "https://example.com/demo/c020/clip-03",
-    "title": "Chloe Wild · catalog clip 03",
+    "title": "Chris Rogers · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing"
@@ -1976,7 +1976,7 @@
     "post_id": "POST-C021-01",
     "creator_id": "C021",
     "url": "https://example.com/demo/c021/clip-01",
-    "title": "Leo Action · catalog clip 01",
+    "title": "JCUTMoto · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -2010,7 +2010,7 @@
     "post_id": "POST-C021-02",
     "creator_id": "C021",
     "url": "https://example.com/demo/c021/clip-02",
-    "title": "Leo Action · catalog clip 02",
+    "title": "JCUTMoto · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -2043,7 +2043,7 @@
     "post_id": "POST-C021-03",
     "creator_id": "C021",
     "url": "https://example.com/demo/c021/clip-03",
-    "title": "Leo Action · catalog clip 03",
+    "title": "JCUTMoto · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -2075,7 +2075,7 @@
     "post_id": "POST-C022-01",
     "creator_id": "C022",
     "url": "https://example.com/demo/c022/clip-01",
-    "title": "Mia Travel · catalog clip 01",
+    "title": "Dork in the Road · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -2108,7 +2108,7 @@
     "post_id": "POST-C022-02",
     "creator_id": "C022",
     "url": "https://example.com/demo/c022/clip-02",
-    "title": "Mia Travel · catalog clip 02",
+    "title": "Dork in the Road · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -2141,7 +2141,7 @@
     "post_id": "POST-C022-03",
     "creator_id": "C022",
     "url": "https://example.com/demo/c022/clip-03",
-    "title": "Mia Travel · catalog clip 03",
+    "title": "Dork in the Road · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor"
@@ -2173,7 +2173,7 @@
     "post_id": "POST-C023-01",
     "creator_id": "C023",
     "url": "https://example.com/demo/c023/clip-01",
-    "title": "Gabriel Motion · catalog clip 01",
+    "title": "Kitesurfing Official · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -2206,7 +2206,7 @@
     "post_id": "POST-C023-02",
     "creator_id": "C023",
     "url": "https://example.com/demo/c023/clip-02",
-    "title": "Gabriel Motion · catalog clip 02",
+    "title": "Kitesurfing Official · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -2239,7 +2239,7 @@
     "post_id": "POST-C023-03",
     "creator_id": "C023",
     "url": "https://example.com/demo/c023/clip-03",
-    "title": "Gabriel Motion · catalog clip 03",
+    "title": "Kitesurfing Official · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing"
@@ -2271,7 +2271,7 @@
     "post_id": "POST-C024-01",
     "creator_id": "C024",
     "url": "https://example.com/demo/c024/clip-01",
-    "title": "Zoe Alpine · catalog clip 01",
+    "title": "Dots on a Map · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -2305,7 +2305,7 @@
     "post_id": "POST-C024-02",
     "creator_id": "C024",
     "url": "https://example.com/demo/c024/clip-02",
-    "title": "Zoe Alpine · catalog clip 02",
+    "title": "Dots on a Map · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -2338,7 +2338,7 @@
     "post_id": "POST-C024-03",
     "creator_id": "C024",
     "url": "https://example.com/demo/c024/clip-03",
-    "title": "Zoe Alpine · catalog clip 03",
+    "title": "Dots on a Map · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -2370,7 +2370,7 @@
     "post_id": "POST-C025-01",
     "creator_id": "C025",
     "url": "https://example.com/demo/c025/clip-01",
-    "title": "Nico Adventure · catalog clip 01",
+    "title": "Emory, By Land · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2404,7 +2404,7 @@
     "post_id": "POST-C025-02",
     "creator_id": "C025",
     "url": "https://example.com/demo/c025/clip-02",
-    "title": "Nico Adventure · catalog clip 02",
+    "title": "Emory, By Land · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2437,7 +2437,7 @@
     "post_id": "POST-C025-03",
     "creator_id": "C025",
     "url": "https://example.com/demo/c025/clip-03",
-    "title": "Nico Adventure · catalog clip 03",
+    "title": "Emory, By Land · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -2469,7 +2469,7 @@
     "post_id": "POST-C026-01",
     "creator_id": "C026",
     "url": "https://example.com/demo/c026/clip-01",
-    "title": "Ella Review · catalog clip 01",
+    "title": "Her Two Wheels · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -2503,7 +2503,7 @@
     "post_id": "POST-C026-02",
     "creator_id": "C026",
     "url": "https://example.com/demo/c026/clip-02",
-    "title": "Ella Review · catalog clip 02",
+    "title": "Her Two Wheels · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -2536,7 +2536,7 @@
     "post_id": "POST-C026-03",
     "creator_id": "C026",
     "url": "https://example.com/demo/c026/clip-03",
-    "title": "Ella Review · catalog clip 03",
+    "title": "Her Two Wheels · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing"
@@ -2568,7 +2568,7 @@
     "post_id": "POST-C027-01",
     "creator_id": "C027",
     "url": "https://example.com/demo/c027/clip-01",
-    "title": "Marco Journey · catalog clip 01",
+    "title": "Frost Ops · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -2602,7 +2602,7 @@
     "post_id": "POST-C027-02",
     "creator_id": "C027",
     "url": "https://example.com/demo/c027/clip-02",
-    "title": "Marco Journey · catalog clip 02",
+    "title": "Frost Ops · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -2635,7 +2635,7 @@
     "post_id": "POST-C027-03",
     "creator_id": "C027",
     "url": "https://example.com/demo/c027/clip-03",
-    "title": "Marco Journey · catalog clip 03",
+    "title": "Frost Ops · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -2667,7 +2667,7 @@
     "post_id": "POST-C028-01",
     "creator_id": "C028",
     "url": "https://example.com/demo/c028/clip-01",
-    "title": "Luna Camera · catalog clip 01",
+    "title": "Geekyranjit · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2701,7 +2701,7 @@
     "post_id": "POST-C028-02",
     "creator_id": "C028",
     "url": "https://example.com/demo/c028/clip-02",
-    "title": "Luna Camera · catalog clip 02",
+    "title": "Geekyranjit · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2734,7 +2734,7 @@
     "post_id": "POST-C028-03",
     "creator_id": "C028",
     "url": "https://example.com/demo/c028/clip-03",
-    "title": "Luna Camera · catalog clip 03",
+    "title": "Geekyranjit · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -2766,7 +2766,7 @@
     "post_id": "POST-C029-01",
     "creator_id": "C029",
     "url": "https://example.com/demo/c029/clip-01",
-    "title": "Ben Trails · catalog clip 01",
+    "title": "Sulit Tech Reviews · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2799,7 +2799,7 @@
     "post_id": "POST-C029-02",
     "creator_id": "C029",
     "url": "https://example.com/demo/c029/clip-02",
-    "title": "Ben Trails · catalog clip 02",
+    "title": "Sulit Tech Reviews · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -2832,7 +2832,7 @@
     "post_id": "POST-C029-03",
     "creator_id": "C029",
     "url": "https://example.com/demo/c029/clip-03",
-    "title": "Ben Trails · catalog clip 03",
+    "title": "Sulit Tech Reviews · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -2864,7 +2864,7 @@
     "post_id": "POST-C030-01",
     "creator_id": "C030",
     "url": "https://example.com/demo/c030/clip-01",
-    "title": "Sara Stories · catalog clip 01",
+    "title": "JB Outside · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -2898,7 +2898,7 @@
     "post_id": "POST-C030-02",
     "creator_id": "C030",
     "url": "https://example.com/demo/c030/clip-02",
-    "title": "Sara Stories · catalog clip 02",
+    "title": "JB Outside · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -2931,7 +2931,7 @@
     "post_id": "POST-C030-03",
     "creator_id": "C030",
     "url": "https://example.com/demo/c030/clip-03",
-    "title": "Sara Stories · catalog clip 03",
+    "title": "JB Outside · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -3257,7 +3257,7 @@
     "post_id": "POST-C034-01",
     "creator_id": "C034",
     "url": "https://example.com/demo/c034/clip-01",
-    "title": "Riley Canyon · catalog clip 01",
+    "title": "JORDAN HETRICK · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -3290,7 +3290,7 @@
     "post_id": "POST-C034-02",
     "creator_id": "C034",
     "url": "https://example.com/demo/c034/clip-02",
-    "title": "Riley Canyon · catalog clip 02",
+    "title": "JORDAN HETRICK · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -3323,7 +3323,7 @@
     "post_id": "POST-C034-03",
     "creator_id": "C034",
     "url": "https://example.com/demo/c034/clip-03",
-    "title": "Riley Canyon · catalog clip 03",
+    "title": "JORDAN HETRICK · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -3747,7 +3747,7 @@
     "post_id": "POST-C039-01",
     "creator_id": "C039",
     "url": "https://example.com/demo/c039/clip-01",
-    "title": "Skyler Pond · catalog clip 01",
+    "title": "GoPronaut · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -3780,7 +3780,7 @@
     "post_id": "POST-C039-02",
     "creator_id": "C039",
     "url": "https://example.com/demo/c039/clip-02",
-    "title": "Skyler Pond · catalog clip 02",
+    "title": "GoPronaut · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -3813,7 +3813,7 @@
     "post_id": "POST-C039-03",
     "creator_id": "C039",
     "url": "https://example.com/demo/c039/clip-03",
-    "title": "Skyler Pond · catalog clip 03",
+    "title": "GoPronaut · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -3943,7 +3943,7 @@
     "post_id": "POST-C041-01",
     "creator_id": "C041",
     "url": "https://example.com/demo/c041/clip-01",
-    "title": "Valentina Ruta · catalog clip 01",
+    "title": "Life at Lean · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -3976,7 +3976,7 @@
     "post_id": "POST-C041-02",
     "creator_id": "C041",
     "url": "https://example.com/demo/c041/clip-02",
-    "title": "Valentina Ruta · catalog clip 02",
+    "title": "Life at Lean · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -4009,7 +4009,7 @@
     "post_id": "POST-C041-03",
     "creator_id": "C041",
     "url": "https://example.com/demo/c041/clip-03",
-    "title": "Valentina Ruta · catalog clip 03",
+    "title": "Life at Lean · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -4041,7 +4041,7 @@
     "post_id": "POST-C042-01",
     "creator_id": "C042",
     "url": "https://example.com/demo/c042/clip-01",
-    "title": "Santiago Peak · catalog clip 01",
+    "title": "Insta360 Shorts · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -4074,7 +4074,7 @@
     "post_id": "POST-C042-02",
     "creator_id": "C042",
     "url": "https://example.com/demo/c042/clip-02",
-    "title": "Santiago Peak · catalog clip 02",
+    "title": "Insta360 Shorts · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -4107,7 +4107,7 @@
     "post_id": "POST-C042-03",
     "creator_id": "C042",
     "url": "https://example.com/demo/c042/clip-03",
-    "title": "Santiago Peak · catalog clip 03",
+    "title": "Insta360 Shorts · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor"
@@ -4139,7 +4139,7 @@
     "post_id": "POST-C043-01",
     "creator_id": "C043",
     "url": "https://example.com/demo/c043/clip-01",
-    "title": "Regina Sierra · catalog clip 01",
+    "title": "Nick Kendall · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -4172,7 +4172,7 @@
     "post_id": "POST-C043-02",
     "creator_id": "C043",
     "url": "https://example.com/demo/c043/clip-02",
-    "title": "Regina Sierra · catalog clip 02",
+    "title": "Nick Kendall · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -4205,7 +4205,7 @@
     "post_id": "POST-C043-03",
     "creator_id": "C043",
     "url": "https://example.com/demo/c043/clip-03",
-    "title": "Regina Sierra · catalog clip 03",
+    "title": "Nick Kendall · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "travel"
@@ -4237,7 +4237,7 @@
     "post_id": "POST-C044-01",
     "creator_id": "C044",
     "url": "https://example.com/demo/c044/clip-01",
-    "title": "Pablo Costa · catalog clip 01",
+    "title": "Lost LeBlanc · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -4270,7 +4270,7 @@
     "post_id": "POST-C044-02",
     "creator_id": "C044",
     "url": "https://example.com/demo/c044/clip-02",
-    "title": "Pablo Costa · catalog clip 02",
+    "title": "Lost LeBlanc · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing",
@@ -4303,7 +4303,7 @@
     "post_id": "POST-C044-03",
     "creator_id": "C044",
     "url": "https://example.com/demo/c044/clip-03",
-    "title": "Pablo Costa · catalog clip 03",
+    "title": "Lost LeBlanc · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "surfing"
@@ -4335,7 +4335,7 @@
     "post_id": "POST-C045-01",
     "creator_id": "C045",
     "url": "https://example.com/demo/c045/clip-01",
-    "title": "Jimena Valle · catalog clip 01",
+    "title": "MyLifeOutdoors · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -4368,7 +4368,7 @@
     "post_id": "POST-C045-02",
     "creator_id": "C045",
     "url": "https://example.com/demo/c045/clip-02",
-    "title": "Jimena Valle · catalog clip 02",
+    "title": "MyLifeOutdoors · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -4401,7 +4401,7 @@
     "post_id": "POST-C045-03",
     "creator_id": "C045",
     "url": "https://example.com/demo/c045/clip-03",
-    "title": "Jimena Valle · catalog clip 03",
+    "title": "MyLifeOutdoors · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -4433,7 +4433,7 @@
     "post_id": "POST-C046-01",
     "creator_id": "C046",
     "url": "https://example.com/demo/c046/clip-01",
-    "title": "Andres Nube · catalog clip 01",
+    "title": "OTM Cars & Motorcycles · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -4466,7 +4466,7 @@
     "post_id": "POST-C046-02",
     "creator_id": "C046",
     "url": "https://example.com/demo/c046/clip-02",
-    "title": "Andres Nube · catalog clip 02",
+    "title": "OTM Cars & Motorcycles · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -4499,7 +4499,7 @@
     "post_id": "POST-C046-03",
     "creator_id": "C046",
     "url": "https://example.com/demo/c046/clip-03",
-    "title": "Andres Nube · catalog clip 03",
+    "title": "OTM Cars & Motorcycles · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"
@@ -4531,7 +4531,7 @@
     "post_id": "POST-C047-01",
     "creator_id": "C047",
     "url": "https://example.com/demo/c047/clip-01",
-    "title": "Fernanda Lago · catalog clip 01",
+    "title": "Tahoe Meg · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -4564,7 +4564,7 @@
     "post_id": "POST-C047-02",
     "creator_id": "C047",
     "url": "https://example.com/demo/c047/clip-02",
-    "title": "Fernanda Lago · catalog clip 02",
+    "title": "Tahoe Meg · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "travel",
@@ -4597,7 +4597,7 @@
     "post_id": "POST-C047-03",
     "creator_id": "C047",
     "url": "https://example.com/demo/c047/clip-03",
-    "title": "Fernanda Lago · catalog clip 03",
+    "title": "Tahoe Meg · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "travel"
@@ -4629,7 +4629,7 @@
     "post_id": "POST-C048-01",
     "creator_id": "C048",
     "url": "https://example.com/demo/c048/clip-01",
-    "title": "Hector Cumbre · catalog clip 01",
+    "title": "Open Air Problems · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -4662,7 +4662,7 @@
     "post_id": "POST-C048-02",
     "creator_id": "C048",
     "url": "https://example.com/demo/c048/clip-02",
-    "title": "Hector Cumbre · catalog clip 02",
+    "title": "Open Air Problems · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -4695,7 +4695,7 @@
     "post_id": "POST-C048-03",
     "creator_id": "C048",
     "url": "https://example.com/demo/c048/clip-03",
-    "title": "Hector Cumbre · catalog clip 03",
+    "title": "Open Air Problems · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -4727,7 +4727,7 @@
     "post_id": "POST-C049-01",
     "creator_id": "C049",
     "url": "https://example.com/demo/c049/clip-01",
-    "title": "Daniela Faro · catalog clip 01",
+    "title": "Scrambler POV · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "fashion",
@@ -4760,7 +4760,7 @@
     "post_id": "POST-C049-02",
     "creator_id": "C049",
     "url": "https://example.com/demo/c049/clip-02",
-    "title": "Daniela Faro · catalog clip 02",
+    "title": "Scrambler POV · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "fashion",
@@ -4793,7 +4793,7 @@
     "post_id": "POST-C049-03",
     "creator_id": "C049",
     "url": "https://example.com/demo/c049/clip-03",
-    "title": "Daniela Faro · catalog clip 03",
+    "title": "Scrambler POV · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "fashion"
@@ -4825,7 +4825,7 @@
     "post_id": "POST-C050-01",
     "creator_id": "C050",
     "url": "https://example.com/demo/c050/clip-01",
-    "title": "Bruno Sendero · catalog clip 01",
+    "title": "The Bergreens · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -4858,7 +4858,7 @@
     "post_id": "POST-C050-02",
     "creator_id": "C050",
     "url": "https://example.com/demo/c050/clip-02",
-    "title": "Bruno Sendero · catalog clip 02",
+    "title": "The Bergreens · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing",
@@ -4891,7 +4891,7 @@
     "post_id": "POST-C050-03",
     "creator_id": "C050",
     "url": "https://example.com/demo/c050/clip-03",
-    "title": "Bruno Sendero · catalog clip 03",
+    "title": "The Bergreens · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "skiing"
@@ -5218,7 +5218,7 @@
     "post_id": "POST-C054-01",
     "creator_id": "C054",
     "url": "https://example.com/demo/c054/clip-01",
-    "title": "Tomas Sendero · catalog clip 01",
+    "title": "The Ride with Ben Delaney · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -5251,7 +5251,7 @@
     "post_id": "POST-C054-02",
     "creator_id": "C054",
     "url": "https://example.com/demo/c054/clip-02",
-    "title": "Tomas Sendero · catalog clip 02",
+    "title": "The Ride with Ben Delaney · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling",
@@ -5284,7 +5284,7 @@
     "post_id": "POST-C054-03",
     "creator_id": "C054",
     "url": "https://example.com/demo/c054/clip-03",
-    "title": "Tomas Sendero · catalog clip 03",
+    "title": "The Ride with Ben Delaney · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "cycling"
@@ -5415,7 +5415,7 @@
     "post_id": "POST-C056-01",
     "creator_id": "C056",
     "url": "https://example.com/demo/c056/clip-01",
-    "title": "Owen Kite · catalog clip 01",
+    "title": "TheCuriousEngineer · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -5448,7 +5448,7 @@
     "post_id": "POST-C056-02",
     "creator_id": "C056",
     "url": "https://example.com/demo/c056/clip-02",
-    "title": "Owen Kite · catalog clip 02",
+    "title": "TheCuriousEngineer · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "tech",
@@ -5481,7 +5481,7 @@
     "post_id": "POST-C056-03",
     "creator_id": "C056",
     "url": "https://example.com/demo/c056/clip-03",
-    "title": "Owen Kite · catalog clip 03",
+    "title": "TheCuriousEngineer · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "tech"
@@ -5710,7 +5710,7 @@
     "post_id": "POST-C059-01",
     "creator_id": "C059",
     "url": "https://example.com/demo/c059/clip-01",
-    "title": "Yara Campo · catalog clip 01",
+    "title": "Surf Life Siargao · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -5743,7 +5743,7 @@
     "post_id": "POST-C059-02",
     "creator_id": "C059",
     "url": "https://example.com/demo/c059/clip-02",
-    "title": "Yara Campo · catalog clip 02",
+    "title": "Surf Life Siargao · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor",
@@ -5776,7 +5776,7 @@
     "post_id": "POST-C059-03",
     "creator_id": "C059",
     "url": "https://example.com/demo/c059/clip-03",
-    "title": "Yara Campo · catalog clip 03",
+    "title": "Surf Life Siargao · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "outdoor"
@@ -5808,7 +5808,7 @@
     "post_id": "POST-C060-01",
     "creator_id": "C060",
     "url": "https://example.com/demo/c060/clip-01",
-    "title": "Felix North · catalog clip 01",
+    "title": "Weekend On Wheels #Wow · catalog clip 01",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -5842,7 +5842,7 @@
     "post_id": "POST-C060-02",
     "creator_id": "C060",
     "url": "https://example.com/demo/c060/clip-02",
-    "title": "Felix North · catalog clip 02",
+    "title": "Weekend On Wheels #Wow · catalog clip 02",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle",
@@ -5875,7 +5875,7 @@
     "post_id": "POST-C060-03",
     "creator_id": "C060",
     "url": "https://example.com/demo/c060/clip-03",
-    "title": "Felix North · catalog clip 03",
+    "title": "Weekend On Wheels #Wow · catalog clip 03",
     "source": "synthetic_catalog",
     "keywords": [
       "motorcycle"

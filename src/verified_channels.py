@@ -2,7 +2,7 @@
 
 For bound rows, creator_name === channel_title and youtube_channel_id is
 persisted. That is not KYC. attached_channel still wins at runtime.
-Unbound rows stay synthetic personas.
+Unbound leftover rows, if any, stay synthetic personas.
 """
 
 from __future__ import annotations
@@ -163,3 +163,14 @@ def verified_row_label(bind: Mapping[str, Any] | None) -> str:
         return ""
     title = _as_text(bind.get("channel_title")) or "public channel"
     return VERIFIED_ROW_LABEL.format(channel_title=title)
+
+
+def recall_pool_caption(catalog_n: int, bind_n: int | None = None) -> str:
+    """Honest Search copy: 60 public-channel rows, or N catalog_channel + leftover."""
+
+    bound = len(binds_by_creator_id()) if bind_n is None else int(bind_n)
+    catalog_n = int(catalog_n)
+    if bound >= catalog_n and catalog_n > 0:
+        return f"{catalog_n} recalled · public YouTube channel rows"
+    leftover = max(0, catalog_n - bound)
+    return f"{catalog_n} recalled · {bound} catalog_channel + {leftover} leftover"

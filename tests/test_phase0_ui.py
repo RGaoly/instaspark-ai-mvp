@@ -188,6 +188,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "comment_themes" in intensive
     assert "clips_for" in search
     assert "not LLM / not neural embeddings" in search
+    assert "recall_pool_caption" in search
+    verified = (ROOT / "src" / "verified_channels.py").read_text(encoding="utf-8")
+    assert "public YouTube channel rows" in verified
+    assert "catalog_channel +" in verified
     assert "Topic overlap" in search
     assert "search_filter_markets" in search
     assert "filter_ranked_creators" in search

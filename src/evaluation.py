@@ -223,10 +223,10 @@ def acceptance_matrix(
         {
             "id": "recall",
             "dimension": "Recall pool",
-            "target": "60 synthetic catalog creators",
+            "target": "60 public-channel catalog rows",
             "value": catalog_size,
             "passed": catalog_size >= 60,
-            "detail": "Demo catalog recall. Not a live platform crawl.",
+            "detail": "Demo catalog recall of public YouTube channel rows. Not a live platform crawl. Not KYC.",
         },
         {
             "id": "intensive_read",

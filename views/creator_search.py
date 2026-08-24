@@ -38,6 +38,7 @@ from src.creator_genome import genome_panel_html
 from src.intensive_read import LEGEND, YT_LEGEND, intensive_read_html, intensive_read_pack
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
+from src.verified_channels import binds_by_creator_id, recall_pool_caption
 from src.youtube_channel_fetch import hydrate_channel_clips
 from services.youtube_service import captions_for_channel, search_channels, youtube_status_label
 from views.content_studio import _catalog_join
@@ -540,11 +541,12 @@ def render() -> None:
         select_creator(visible_ids[0])
     catalog_n = len(creators())
     gated_n = len(ranked)
+    pool = recall_pool_caption(catalog_n, len(binds_by_creator_id()))
     toolbar_left, toolbar_right = st.columns([0.85, 0.15], vertical_alignment="center")
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{catalog_n} recalled · {gated_n} gated · Top 10 working cut · hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · demo catalog · {ai_badge("Not an LLM ranker")}'
+            f'{pool} · {gated_n} gated · Top 10 working cut · hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )

@@ -29,6 +29,7 @@ def test_acceptance_matrix_passes_on_demo_catalog():
     assert rows["attribution"]["passed"] is True
     assert rows["recall"]["passed"] is True
     assert rows["recall"]["value"] == 60
+    assert "public-channel" in rows["recall"]["target"]
     assert rows["intensive_read"]["passed"] is True
     assert rows["intensive_read"]["value"] == 20
     assert "not_collected" in rows["intensive_read"]["detail"]

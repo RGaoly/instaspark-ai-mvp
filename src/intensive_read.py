@@ -29,7 +29,7 @@ YT_LEGEND = (
     "youtube_public_timedtext: caption lines when YouTube exposes them. "
     "ownership attached_channel = operator-attached channel uploads; "
     "catalog_channel = this catalog row is that public YouTube channel, not KYC; "
-    "channel_search_match = leftover name match on an unbound synthetic row; "
+    "channel_search_match = leftover name match if an unbound row remains; "
     "public_search_hit = topic search, not the catalog creator. "
     "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
 )

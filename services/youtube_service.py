@@ -12,7 +12,7 @@ import logging
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any
+from typing import Any, Sequence
 
 from infra.config import YOUTUBE_API_TIMEOUT_SECONDS, _resolve_secret
 
@@ -369,6 +369,123 @@ def videos_list(video_ids: list[str]) -> dict[str, Any]:
     except RuntimeError as exc:
         result["error"] = str(exc)
         result["items"] = items
+        return result
+
+
+def channels_list(channel_ids: Sequence[str]) -> dict[str, Any]:
+    """Hydrate public channel snippet + uploads playlist. Does not use search.list."""
+
+    ids = [str(item).strip() for item in channel_ids if str(item).strip()]
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "items": [],
+        "error": None,
+    }
+    if not ids:
+        result["error"] = "channel_ids are required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    items: list[dict[str, Any]] = []
+    try:
+        for start in range(0, len(ids), 50):
+            chunk = ids[start : start + 50]
+            payload = _request(
+                "channels",
+                {"part": "snippet,contentDetails", "id": ",".join(chunk)},
+                timeout=20,
+            )
+            for raw in payload.get("items") or []:
+                snippet = raw.get("snippet") or {}
+                related = ((raw.get("contentDetails") or {}).get("relatedPlaylists") or {})
+                items.append(
+                    {
+                        "channel_id": str(raw.get("id") or ""),
+                        "title": snippet.get("title") or str(raw.get("id") or ""),
+                        "uploads_playlist_id": str(related.get("uploads") or ""),
+                        "source": "youtube_data_api",
+                    }
+                )
+        result["items"] = items
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def uploads_via_playlist(
+    channel_id: str,
+    *,
+    max_results: int = 3,
+    uploads_playlist_id: str | None = None,
+) -> dict[str, Any]:
+    """Public uploads via channels.list + playlistItems + videos.list. Never ranked.
+
+    Avoids search.list. Empty when the key is missing. Does not invent rows.
+    """
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "items": [],
+        "error": None,
+        "via": "playlistItems",
+    }
+    if not cleaned:
+        result["error"] = "channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        playlist_id = str(uploads_playlist_id or "").strip()
+        if not playlist_id:
+            listed = channels_list([cleaned])
+            if listed.get("error") and not listed.get("items"):
+                result["error"] = listed.get("error")
+                return result
+            found = next(
+                (item for item in (listed.get("items") or []) if str(item.get("channel_id") or "") == cleaned),
+                None,
+            )
+            playlist_id = str((found or {}).get("uploads_playlist_id") or "")
+        if not playlist_id:
+            result["error"] = "No uploads playlist on this channel."
+            return result
+        payload = _request(
+            "playlistItems",
+            {
+                "part": "contentDetails,snippet",
+                "playlistId": playlist_id,
+                "maxResults": str(max(1, min(max_results, 10))),
+            },
+            timeout=20,
+        )
+        video_ids = [
+            str((raw.get("contentDetails") or {}).get("videoId") or "")
+            for raw in payload.get("items") or []
+        ]
+        video_ids = [item for item in video_ids if item]
+        if not video_ids:
+            result["error"] = "No public uploads returned for this channel."
+            return result
+        listed = videos_list(video_ids[: max(1, min(max_results, 10))])
+        owned = [
+            item
+            for item in (listed.get("items") or [])
+            if str(item.get("channel_id") or "") == cleaned
+        ]
+        result["items"] = owned or list(listed.get("items") or [])
+        result["error"] = listed.get("error")
+        if not result["items"] and not result["error"]:
+            result["error"] = "No public uploads returned for this channel."
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
         return result
 
 

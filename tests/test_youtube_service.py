@@ -244,3 +244,71 @@ def test_videos_for_channel_does_not_invent_without_key(monkeypatch):
     result = youtube_service.videos_for_channel("UCpub")
     assert result["items"] == []
     assert "YOUTUBE_API_KEY" in result["error"]
+
+
+def test_uploads_via_playlist_does_not_invent_without_key(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "")
+    result = youtube_service.uploads_via_playlist("UCpub")
+    assert result["items"] == []
+    assert "YOUTUBE_API_KEY" in result["error"]
+    listed = youtube_service.channels_list(["UCpub"])
+    assert listed["items"] == []
+    assert "YOUTUBE_API_KEY" in listed["error"]
+
+
+def test_uploads_via_playlist_maps_public_uploads(monkeypatch):
+    monkeypatch.setattr(youtube_service, "YOUTUBE_API_KEY", "test-key")
+
+    def fake_request(path: str, params: dict[str, str], *, timeout=None) -> dict:
+        if path == "channels":
+            return {
+                "items": [
+                    {
+                        "id": "UCpub",
+                        "snippet": {"title": "Public Cam"},
+                        "contentDetails": {"relatedPlaylists": {"uploads": "UUpub"}},
+                    }
+                ]
+            }
+        if path == "playlistItems":
+            assert params["playlistId"] == "UUpub"
+            return {
+                "items": [
+                    {"contentDetails": {"videoId": "upl1"}},
+                    {"contentDetails": {"videoId": "upl2"}},
+                ]
+            }
+        assert path == "videos"
+        return {
+            "items": [
+                {
+                    "id": "upl1",
+                    "snippet": {
+                        "title": "Own upload one",
+                        "channelTitle": "Public Cam",
+                        "channelId": "UCpub",
+                        "thumbnails": {"high": {"url": "https://i.ytimg.com/vi/upl1/hqdefault.jpg"}},
+                    },
+                    "contentDetails": {"duration": "PT1M"},
+                    "status": {"privacyStatus": "public"},
+                },
+                {
+                    "id": "upl2",
+                    "snippet": {
+                        "title": "Own upload two",
+                        "channelTitle": "Public Cam",
+                        "channelId": "UCpub",
+                        "thumbnails": {"medium": {"url": "https://i.ytimg.com/vi/upl2/hqdefault.jpg"}},
+                    },
+                    "contentDetails": {"duration": "PT2M"},
+                    "status": {"privacyStatus": "public"},
+                },
+            ]
+        }
+
+    monkeypatch.setattr(youtube_service, "_request", fake_request)
+    result = youtube_service.uploads_via_playlist("UCpub", max_results=3)
+    assert result["error"] is None
+    assert result["via"] == "playlistItems"
+    assert [item["video_id"] for item in result["items"]] == ["upl1", "upl2"]
+    assert all(item["channel_id"] == "UCpub" for item in result["items"])

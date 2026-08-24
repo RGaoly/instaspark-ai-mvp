@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.content_evidence import load_creator_content
+from src.content_evidence import clips_for, load_creator_content
 from src.data_loader import load_creators, load_mission
 from src.intensive_read import intensive_read_html, intensive_read_pack
 from src.scoring import rank_creators
@@ -10,9 +10,13 @@ from src.verified_channels import (
     OWNERSHIP,
     VERIFIED_ROW_LABEL,
     binds_by_creator_id,
+    cache_clips_by_video_id,
     load_verified_public_channels,
+    overlay_for_verified_bind,
+    recall_pool_caption,
     verified_row_label,
 )
+from src.youtube_clips import youtube_clips_by_post_id
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +26,7 @@ def test_verified_bind_table_is_catalog_identity_not_kyc():
     pack = load_verified_public_channels()
     assert pack.get("available")
     binds = pack["binds"]
-    assert len(binds) == 20
+    assert len(binds) == 60
     catalog = load_creators(ROOT / "data" / "creators.csv")
     by_id = catalog.set_index("creator_id")
     creator_ids = [item["creator_id"] for item in binds]
@@ -41,9 +45,10 @@ def test_verified_bind_table_is_catalog_identity_not_kyc():
         assert item["uploads"]
         assert all(str(upload.get("url") or "").startswith("https://www.youtube.com/watch") for upload in item["uploads"])
         assert all(upload.get("channel_id") == item["channel_id"] for upload in item["uploads"])
+        assert item.get("former_catalog_name")
     unbound = catalog[~catalog["creator_id"].isin(creator_ids)]
-    assert len(unbound) == 40
-    assert (unbound["youtube_channel_id"].fillna("") == "").all()
+    assert len(unbound) == 0
+    assert recall_pool_caption(len(catalog), len(binds)) == "60 recalled · public YouTube channel rows"
 
 
 def test_top20_names_and_clips_are_the_catalog_channel():
@@ -55,7 +60,7 @@ def test_top20_names_and_clips_are_the_catalog_channel():
     pack = intensive_read_pack(ranked, posts, n=20)
     html = intensive_read_html(pack)
     assert len(pack) == 20
-    assert len(binds) == 20
+    assert len(binds) == 60
     for item in pack:
         bind = binds[item["creator_id"]]
         row = catalog[catalog["creator_id"] == item["creator_id"]].iloc[0]
@@ -112,3 +117,27 @@ def test_attached_channel_still_wins_over_catalog_channel():
     assert first["video_id"] == "operatorAttach1"
     html = intensive_read_html(pack)
     assert "ownership: attached_channel" in html
+
+
+def test_all_sixty_rows_are_catalog_channel_with_matching_clips():
+    catalog = load_creators(ROOT / "data" / "creators.csv")
+    posts = load_creator_content()
+    binds = binds_by_creator_id()
+    assert set(catalog["creator_id"].astype(str)) == set(binds)
+    cache_by_video = cache_clips_by_video_id(youtube_clips_by_post_id().values())
+    for _, row in catalog.iterrows():
+        creator_id = str(row["creator_id"])
+        bind = binds[creator_id]
+        assert str(row["creator_name"]) == bind["channel_title"]
+        assert str(row["youtube_channel_id"]) == bind["channel_id"]
+        overlay = overlay_for_verified_bind(
+            bind,
+            clips_for(creator_id, posts),
+            cache_by_video=cache_by_video,
+        )
+        assert overlay
+        for clip in overlay.values():
+            assert clip.get("ownership") == OWNERSHIP
+            assert clip.get("channel_id") == bind["channel_id"]
+            assert clip.get("channel_title") == bind["channel_title"]
+            assert str(clip.get("url") or "").startswith("https://www.youtube.com/watch")

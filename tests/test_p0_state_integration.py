@@ -1421,3 +1421,63 @@ def test_opportunity_viewer_cannot_advance(session):
             evidence=["opportunity://OPP-002"],
         )
     assert state.creator_state("C003") == "shortlisted"
+
+
+def test_bootstrap_loads_inbound_corpus_and_mexico_mission(session):
+    inbound = [item for item in session.opportunities if item.get("opportunity_type") == "inbound"]
+    signals = [item for item in session.opportunities if item.get("opportunity_type") != "inbound"]
+    assert len(inbound) == 30
+    assert len(signals) == 3
+    assert "launch_x5_mx_001" in session.missions
+    assert len(session.inbound_messages) == 30
+    maya = next(item for item in inbound if item["opportunity_id"] == "OPP-INB-014")
+    assert maya["creator_id"] == "C004"
+    assert maya["raw_content"]
+    assert maya["recommended_mission_id"] == "launch_x5_mx_001"
+
+
+def test_approve_inbound_matched_creator_opens_outreach_without_sending(session):
+    result = state.approve_inbound_for_outreach(
+        "OPP-INB-014",
+        actor="LATAM Creator Marketing",
+        reason="Inbound reply draft approved internally; nothing sent externally.",
+    )
+    assert result["sent"] is False
+    assert result["creator_state"] == "approved"
+    assert state.creator_state("C004") == "approved"
+    linked = next(item for item in session.opportunities if item["opportunity_id"] == "OPP-INB-014")
+    assert linked["linked_mission_id"] == "launch_x5_mx_001"
+    case = result["outreach_case"]
+    assert case["creator_id"] == "C004"
+    assert "tarifa" in case["outreach_message"].lower() or "rate" in case["outreach_message"].lower()
+    assert any(event["to_state"] == "approved" for event in state.workflow_events_for("C004"))
+
+
+def test_approve_inbound_rejects_new_and_held_identities(session):
+    lucia = next(item for item in session.opportunities if item.get("sender_name") == "Lucía García")
+    with pytest.raises(ValueError, match="catalog-matched"):
+        state.approve_inbound_for_outreach(
+            lucia["opportunity_id"],
+            actor="LATAM Creator Marketing",
+            reason="Should not enter outreach",
+        )
+    spam = next(item for item in session.opportunities if item.get("persona") == "spam")
+    with pytest.raises(ValueError, match="Held|catalog-matched"):
+        state.approve_inbound_for_outreach(
+            spam["opportunity_id"],
+            actor="Brand Safety Review",
+            reason="Spam must stay held",
+        )
+
+
+def test_viewer_cannot_import_or_approve_inbound(session):
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    with pytest.raises(PermissionError, match="read-only"):
+        state.import_inbound_corpus()
+    with pytest.raises(PermissionError, match="read-only"):
+        state.approve_inbound_for_outreach(
+            "OPP-INB-014",
+            actor="Demo Viewer",
+            reason="Viewer should not approve inbound",
+        )
+

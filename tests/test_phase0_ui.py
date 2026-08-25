@@ -326,6 +326,10 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "propose_budget_decision" in growth
     assert "Budget decision" in growth
     assert "Not a modeled forecast" in growth
+    assert "load_report" in growth
+    assert "_benchmark_html" in growth
+    assert 'id="claim-evidence-benchmark"' in growth
+    assert "Claim-evidence benchmark" in growth
     assert "Command Center" not in (ROOT / "app.py").read_text(encoding="utf-8")
     assert "Knowledge Hub" not in (ROOT / "app.py").read_text(encoding="utf-8")
     assert (ROOT / "app.py").read_text(encoding="utf-8").count("st.Page(") == 7
@@ -333,3 +337,6 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "resolve_compare_focus" in compare_src
     assert 'key="compare_focus_name"' in compare_src
     assert "_compare_grid(compare, focus" in compare_src
+    assert "ceg_trace_panel_html" in compare_src
+    assert 'id="ceg-run-trace"' in compare_src
+    assert "latest_ceg_run" in compare_src

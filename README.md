@@ -57,8 +57,10 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
 - 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
 - Top 10 推荐；Top 20 精读看标注时间戳。60 行目录的 `creator_name` 就是公开频道标题，并带 `youtube_channel_id`；精读 ownership 为 `catalog_channel`（该行就是该频道的公开上传，不是 KYC）。`attached_channel` 仍是运营当场挂接
-- Evidence Reader Agent（`src/evidence_reader.py`）：把公开 YouTube 字幕正文（`downloaded_public_timedtext`，103 条）和 Product DNA claim 一起交给大模型，产出 claim 级结构化证据（claim_id / supported / confidence / 逐字引用 / 时间戳 / 矛盾点 / 品牌安全标记）。落地校验器会丢弃任何不是字幕原文子串的引用和不在输入里的时间戳；没有模型 key 时返回 `unavailable_no_model`，**不会**退化成关键词匹配假装证据。缓存在 `data/evidence_extractions.json`（版本化，无任何密钥），由 `scripts/run_evidence_reader.py` 生成
+- Evidence Reader Agent（`src/evidence_reader.py`）：把公开 YouTube 字幕正文（`downloaded_public_timedtext`，103 条）和 Product DNA claim 一起交给大模型，产出 claim 级结构化证据（claim_id / supported / confidence / 逐字引用 / 时间戳 / 矛盾点 / 品牌安全标记）。落地校验器会丢弃任何不是**单行**字幕原文子串的引用和不在输入里的时间戳；模型如实声明 unsupported 会计入 `declared_unsupported`，不算幻觉。没有模型 key 时返回 `unavailable_no_model`，**不会**退化成关键词匹配假装证据。缓存在 `data/evidence_extractions.json`（版本化，无任何密钥），由 `scripts/run_evidence_reader.py` 生成
+- **Claim–Evidence–Guardrail (CEG)**：Scout → EvidenceReader → MatchArbiter → BriefWriter → ComplianceGuard。具名 typed 契约在 `src/ceg.py`；批准或保存简报会写入运行轨迹，展示在 Creator Compare（`#ceg-run-trace`），不是第八页。无模型时 EvidenceReader 阻断、零 claim；BriefWriter 降级到确定性模板并记录 `degraded_reason`
 - 外联审批闸门：批准某位创作者的外联，必须有 Evidence Reader 给出的 claim 级证据（≥1 条成立的 DNA claim + 通过校验的引用与时间戳）。没有模型时 UI 明说抽取不可用、规则无法替代，闸门进入显式阻断态；只能由带理由的人工覆盖放行，覆盖写入审批审计流水；Viewer 仍然只读
+- Gold set + 双臂基准：`data/gold_evidence_labels.json` 是运营人工阅读字幕（`manual_read`），不是模型输出。`scripts/run_benchmark.py` 对关键词基线 vs Evidence Reader 缓存计算 P/R/F1 与引用落地准确率；报告 `data/benchmark_report.json` 展示在 Growth Review（`#claim-evidence-benchmark`），页面不写死数字
 - pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）；展示在 Growth Review，不是第八页
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成；镜头清单来自 Product DNA
@@ -88,9 +90,18 @@ Walk the real operator path. Ranking is rule-based, not an LLM. ROI is recorded 
 2. Open **Creator Opportunity**. The default fold is the **Inbound inbox** (30 synthetic EN/ES/DE messages: parse, score, route, mission link). Import email reloads that corpus; it is not a live mailbox. Always-on scout cards sit **below** the inbox and save as catalog-momentum opportunities.
 3. Open **Creator Search & Match**. The catalog recall is **60** public YouTube channel rows (name + channel id, not KYC); hard gates then rank; Top 10 is the working cut. The **Top 20 intensive-read board** is on this page (not collapsed). Clips are that row's channel uploads (`catalog_channel`).
 4. Optional: Live YouTube lookup → **Attach as evidence**. That is `attached_channel` for intensive-read. Hits do **not** become new ranked creators.
-5. Open **Creator Compare**. Review shortlist overlap (Jaccard). **Approve** one creator — that mints a unique coupon and UTM tracking asset.
-6. Open **Content Studio** → **Generate Brief** and save it. Shot list comes from Product DNA. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
-7. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. When the creator is published with 0 events, open **Growth Review**, record a conversion (ROI stays 0x until that event), and read the **Pilot acceptance matrix** on the same page.
+5. Open **Creator Compare**. Review shortlist overlap (Jaccard) and the **Outreach approval gate**. Approve is enabled only when Evidence Reader grounded a DNA claim (or after an audited override). Approve records a **Claim–Evidence–Guardrail** trace on this page (`#ceg-run-trace`) and mints a unique coupon / UTM tracking asset.
+6. Open **Content Studio** → **Generate Brief** and save it. Shot list comes from Product DNA. Saving a brief appends another CEG run. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
+7. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. When the creator is published with 0 events, open **Growth Review**, record a conversion (ROI stays 0x until that event), and read the **Pilot acceptance matrix** plus the **Claim-evidence benchmark** on the same page.
+
+Without `LLM_API_KEY` the app still starts. Ranking, Search, and the state machine work. Evidence Reader and the approval gate stay blocked and say so — they do not fall back to keywords. Content Studio uses the deterministic template. With a key, regenerate the cache and the report:
+
+```bash
+python -m scripts.run_evidence_reader --workers 6
+python -m scripts.run_benchmark
+```
+
+Typed contracts and the degrade matrix: [`docs/07_ceg.md`](docs/07_ceg.md).
 
 运行测试：
 
@@ -121,6 +132,8 @@ pytest -q
 │   ├── inbound_messages.json
 │   ├── launch_mission.json
 │   ├── evidence_extractions.json  # Evidence Reader 缓存（版本化，无密钥）
+│   ├── gold_evidence_labels.json  # 人工阅读字幕的 gold set
+│   ├── benchmark_report.json      # 关键词基线 vs Evidence Reader
 │   └── product_dna.json           # versionable SKU visual-proof object
 ├── docs/
 │   ├── 00_project_charter.md
@@ -130,7 +143,8 @@ pytest -q
 │   ├── 04_roadmap.md
 │   ├── 05_phase0_architecture.md
 │   ├── 05_phase0_ui_system.md
-│   └── 06_p0_product_contract.md
+│   ├── 06_p0_product_contract.md
+│   └── 07_ceg.md                  # Claim-Evidence-Guardrail 契约与降级矩阵
 ├── infra/
 │   ├── auth.py                    # PBKDF2 用户校验
 │   ├── config.py
@@ -150,6 +164,8 @@ pytest -q
 │   ├── domain.py                  # 核心对象与统一状态机
 │   ├── evaluation.py              # pytest acceptance matrix
 │   ├── evidence_reader.py         # Evidence Reader Agent + 引用落地校验 + 审批闸门判定
+│   ├── ceg.py                     # Claim-Evidence-Guardrail typed 契约与编排
+│   ├── benchmark.py               # gold set P/R/F1：关键词基线 vs Evidence Reader
 │   ├── inbound.py                 # 入站来信抽取、身份、评分、派单
 │   ├── product_dna.py
 │   ├── retrieval.py               # sparse TF-IDF cosine, not neural embeddings
@@ -191,7 +207,7 @@ Required for live YouTube lookup on Creator Search:
 YOUTUBE_API_KEY = "..."
 ```
 
-Optional for live Content Studio (otherwise the studio stays on the deterministic mock):
+Required for Evidence Reader, the outreach approval gate, and live Content Studio (otherwise the reader/gate stay blocked, and the studio stays on the deterministic template):
 
 ```toml
 LLM_API_KEY = "..."
@@ -215,6 +231,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md) for Docker and other hosts.
 - 召回池 60、目录视频 180
 - 排序稳定性（同输入同 Top 10）
 - 归因完整性（事件保留 creator + root + source）
+- Claim 证据基准（gold set `manual_read`；关键词基线 vs Evidence Reader；P/R/F1 + 引用落地准确率）
 - Top 10 人工采纳率、推荐理由准确率、Brief 人工修改距离、单次任务耗时仍需运营盲评，本演示不伪造访谈结果
 
 详见 [`docs/03_evaluation.md`](docs/03_evaluation.md)。

@@ -3,30 +3,50 @@
   "version": 1,
   "prompt_version": "evidence_reader_v1",
   "extractor": "evidence_reader",
-  "model": "",
+  "model": "deepseek-chat",
   "caption_source": "youtube_public_timedtext",
   "dna_id": "dna_x5_v1",
   "dna_version": 1,
-  "extracted_at": "2026-08-25T09:00:01.229804+00:00",
+  "extracted_at": "2026-08-25T13:08:53.159816+00:00",
   "note": "Model-grounded DNA claim evidence read from public YouTube timedtext. Every quote is validated as a verbatim substring of a supplied caption line; ungrounded quotes are dropped, not repaired. Not ASR, not labeled_demo, not ranking input.",
   "coverage": {
     "eligible_clips": 103,
     "attempted_clips": 103,
     "limit": null,
-    "extracted": 0,
-    "unavailable_no_model": 103,
+    "extracted": 103,
+    "unavailable_no_model": 0,
     "error": 0,
-    "supported_claims": 0,
-    "grounded_clips": 0,
-    "grounded_creators": 0,
-    "contradictions": 0,
-    "brand_safety_flags": 0,
-    "rejected_hallucinated_quotes": 0,
+    "supported_claims": 28,
+    "grounded_clips": 21,
+    "grounded_creators": 14,
+    "contradictions": 4,
+    "brand_safety_flags": 26,
+    "declared_unsupported": 217,
+    "rejected_missing_quote": 3,
+    "rejected_hallucinated_quotes": 2,
+    "rejected_cross_line_quotes": 122,
     "rejected_unknown_timestamps": 0,
     "rejected_unknown_claim_ids": 0,
-    "retimed_quotes": 0
+    "retimed_quotes": 3,
+    "case_normalized_quotes": 1,
+    "rejected_quotes_total": 127
   },
-  "grounded_creator_ids": [],
+  "grounded_creator_ids": [
+    "C004",
+    "C006",
+    "C012",
+    "C017",
+    "C022",
+    "C025",
+    "C026",
+    "C030",
+    "C031",
+    "C034",
+    "C037",
+    "C039",
+    "C055",
+    "C059"
+  ],
   "clips": [
     {
       "clip_id": "POST-C001-01",
@@ -40,19 +60,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 32,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -67,19 +91,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 39,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "lifetime [music] freaking guarantee",
+          "timestamp": "00:40",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -94,19 +128,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 2,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -121,19 +159,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 187,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -148,19 +190,38 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 178,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "This thing shoots in 8K 360°.",
+          "timestamp": "04:24",
+          "note": "Explicitly states 360 capture."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "I'll be fine.",
+          "timestamp": "09:26",
+          "category": "unsafe_act"
+        }
+      ],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -175,19 +236,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 21,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "I spent a couple of days in the lakes",
+          "timestamp": "00:00",
+          "note": "Mentions multiple days of use, but no explicit outdoor scenes."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -202,19 +276,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -229,19 +307,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -256,19 +338,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 45,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -283,19 +369,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 34,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "you're flying through the air.",
+          "timestamp": "00:28",
+          "note": "First-person flying action suggests immersive POV."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -310,19 +409,56 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 390,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "Every day, all day.",
+          "timestamp": "07:10",
+          "note": "Mentions all-day but refers to wall rattle, not camera use."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "It films everything around you.",
+          "timestamp": "00:45",
+          "note": "Describes 360 capture capability."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "that's what she said.",
+          "timestamp": "01:53",
+          "category": "other"
+        },
+        {
+          "quote": "Shut up.",
+          "timestamp": "03:00",
+          "category": "profanity"
+        },
+        {
+          "quote": "That's freaking cinematic.",
+          "timestamp": "03:32",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 2,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 1
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -337,19 +473,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -364,19 +504,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 9,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -391,19 +535,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 379,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -418,19 +566,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -445,19 +597,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -472,19 +628,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -499,19 +659,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 15,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "there's one hell of a reward waiting.",
+          "timestamp": "00:28",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -526,19 +696,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 32,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -553,19 +727,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 39,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -580,19 +758,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 375,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -607,19 +789,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 127,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -634,19 +820,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 80,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "we are at the beach it is so small is",
+          "timestamp": "00:13",
+          "note": "Beach scene suggests outdoor daylight use, but not full day."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -661,19 +860,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 61,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "Let's go get some 360 POV.",
+          "timestamp": "03:47",
+          "note": "Explicit mention of 360 POV capture."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -688,19 +900,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 3,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -715,19 +931,34 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 6,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "I don't like no whips and chains.",
+          "timestamp": "00:00",
+          "category": "other"
+        },
+        {
+          "quote": "I'm vanilla, baby. I'll choke you, but I",
+          "timestamp": "00:09",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -742,19 +973,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 2,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -769,19 +1004,39 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 10,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "I don't like no whips and CH can't me",
+          "timestamp": "00:00",
+          "category": "profanity"
+        },
+        {
+          "quote": "your I'm vanilla baby I'll choke you but",
+          "timestamp": "00:08",
+          "category": "other"
+        },
+        {
+          "quote": "I ain't no killer baby she 28 telling me",
+          "timestamp": "00:11",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -796,19 +1051,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 386,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "This is so silly.",
+          "timestamp": "02:11",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -823,19 +1088,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 370,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -850,19 +1119,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -877,19 +1150,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 241,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -904,19 +1181,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 219,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 5,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -931,19 +1212,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 319,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -958,19 +1243,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "which drives me bonkers.",
+          "timestamp": "06:31",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -985,19 +1280,46 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "I've been using this a ton.",
+          "timestamp": "02:20",
+          "note": "Implies extensive use across scenarios, but no explicit time duration."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "Underwater, on the water, on the ground,",
+          "timestamp": "00:07",
+          "note": "Mentions use in wet and ground scenarios, implying ruggedness."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "marketing junk they want you to hear",
+          "timestamp": "00:16",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 2,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1012,19 +1334,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1039,19 +1365,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1066,19 +1396,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 1,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1093,19 +1427,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 179,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1120,19 +1458,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 106,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": ">> That's what she said. [laughter]",
+          "timestamp": "03:49",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1147,19 +1495,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 110,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1174,19 +1526,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1201,19 +1557,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 3,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1228,19 +1588,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 45,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "Next up is my GoPro Max 2.",
+          "timestamp": "00:32",
+          "category": "competitor_claim"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1255,19 +1625,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1282,19 +1656,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1309,19 +1687,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1336,19 +1718,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 378,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1363,19 +1749,43 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "There's a creek, very pretty.",
+          "timestamp": "02:01",
+          "note": "Mentions creek, but no explicit wet/dusty scene; dusty trail implied."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "pretty damn cool",
+          "timestamp": "00:10",
+          "category": "profanity"
+        },
+        {
+          "quote": "Damn.",
+          "timestamp": "05:08",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 0,
-        "kept": 0
+        "retimed_quotes": 1,
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1390,19 +1800,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1417,19 +1831,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 4,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1444,19 +1862,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 347,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "Damn, this is nice.",
+          "timestamp": "08:47",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1471,19 +1899,34 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "Holy [ __ ]",
+          "timestamp": "01:55",
+          "category": "profanity"
+        },
+        {
+          "quote": "Holy [ __ ]",
+          "timestamp": "01:57",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1498,19 +1941,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 64,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1525,19 +1972,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 73,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "As you kind of go through the gauntlet,",
+          "timestamp": "00:00",
+          "note": "Implies trail context but no explicit 360 capture mention."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1552,19 +2012,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 84,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1579,19 +2043,40 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "I've ridden my motorcycle to the",
+          "timestamp": "00:00",
+          "note": "Depicts long-distance motorcycle trip over multiple days."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "they're in a pretty bad drought here.",
+          "timestamp": "07:17",
+          "note": "Mentions dusty conditions and gravel road riding."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 2,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 0,
-        "kept": 0
+        "retimed_quotes": 1,
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1606,19 +2091,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1633,19 +2122,38 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 311,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "nicer to carry around all day.",
+          "timestamp": "00:57",
+          "note": "Mentions carrying all day, but not explicitly shooting all day."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "I like to drop my cameras.",
+          "timestamp": "10:33",
+          "category": "unsafe_act"
+        }
+      ],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1660,19 +2168,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 266,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "WHAT THE HELL?",
+          "timestamp": "07:19",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1687,19 +2205,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 24,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1714,19 +2236,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 17,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1741,19 +2267,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1768,19 +2298,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1795,19 +2329,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 203,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1822,19 +2360,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 286,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1849,19 +2391,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 74,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "pwede ka na makabili ng flagship level",
+          "timestamp": "00:03",
+          "why": "Captions are about a phone (Redmi K90 Ultra), not an Insta360 X5 camera."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 1,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1876,19 +2428,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1903,19 +2459,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 78,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1930,19 +2490,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "Today on the channel, and yes, I'm back",
+          "timestamp": "00:01",
+          "note": "Video opens outdoors, but no explicit all-day shooting duration mentioned."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1957,19 +2530,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 31,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -1984,19 +2561,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2011,19 +2592,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 181,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "This is my new 360 camera setup",
+          "timestamp": "00:24",
+          "note": "Explicitly states 360 camera setup; not a specific real location."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2038,19 +2632,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 4,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2065,19 +2663,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2092,19 +2694,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 227,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "You can either record 360, full spherical 360 photos and videos",
+          "timestamp": "02:58",
+          "note": "Directly states 360 recording capability."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "rejected_hallucinated_quotes": 0,
+        "kept": 1,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 1,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 0,
-        "kept": 0
+        "retimed_quotes": 1,
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2119,19 +2734,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 33,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2146,19 +2765,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 244,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "The Insta360 X6 is here. And this clip was created automatically by the camera and the app.",
+          "timestamp": "00:00",
+          "why": "The video discusses X6, but the SKU is X5. This may be a mismatch, but not a direct contradiction of claims."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2173,19 +2802,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2200,19 +2833,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 111,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2227,19 +2864,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 22,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2254,19 +2895,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 15,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2281,19 +2926,40 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 120,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "This is the camera that I use for the POV videos,",
+          "timestamp": "00:03",
+          "note": "Creator mentions using camera for POV videos, not explicitly all-day shooting."
+        },
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "This is the camera that I use for the POV videos,",
+          "timestamp": "00:03",
+          "note": "Directly references POV videos and onboard footage."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 2,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2308,19 +2974,46 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
-      "contradictions": [],
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.5,
+          "quote": "I'm going to be mounting mine front and center, so I can capture forward-facing point of view",
+          "timestamp": "00:57",
+          "note": "Mentions POV but captions show mounting tutorial, not actual scenes."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.4,
+          "quote": "stand up to the most extreme environments.",
+          "timestamp": "00:15",
+          "note": "Vague reference to extreme environments, not specific wet/dusty scenes."
+        }
+      ],
+      "contradictions": [
+        {
+          "quote": "GoPro's adhesive mounts are arguably the most versatile option for mounting your GoPro to",
+          "timestamp": "00:04",
+          "why": "Video promotes GoPro mounts, not Insta360 X5, contradicting product focus."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 2,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 1,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2335,19 +3028,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 47,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "Arguably, the best feature of this tripod, is the integrated aluminum ballhead - giving",
+          "timestamp": "00:55",
+          "note": "Mentions 360-degree panning capability but not specifically 360 video capture."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2362,19 +3068,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 397,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2389,19 +3099,34 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": ">> Hell no, man. What the man?",
+          "timestamp": "09:27",
+          "category": "profanity"
+        },
+        {
+          "quote": ">> Get your ass off.",
+          "timestamp": "09:30",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2416,19 +3141,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2443,19 +3172,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 251,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2470,19 +3203,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 308,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2497,19 +3234,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 307,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2524,19 +3265,29 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 18,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "straight dude there's so many fun kants",
+          "timestamp": "00:24",
+          "category": "other"
+        }
+      ],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2551,19 +3302,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 385,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2578,19 +3333,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2605,19 +3364,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 169,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.95,
+          "quote": "the best settings to capture POV surfing",
+          "timestamp": "00:02",
+          "note": "Explicitly discusses POV surfing settings and techniques."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2632,19 +3404,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 110,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "rejected_hallucinated_quotes": 0,
+        "kept": 0,
+        "declared_unsupported": 3,
+        "rejected_missing_quote": 0,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2659,19 +3435,48 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 217,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "Hey, I'm Brandon Lee and I am here in",
+          "timestamp": "00:00",
+          "note": "Clip opens with Paris at sunrise, indicating daylight start."
+        },
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "Something I really like to do with",
+          "timestamp": "07:50",
+          "note": "Demonstrates first-person POV over water using selfie stick."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "360 cameras are best for shots",
+          "timestamp": "02:05",
+          "note": "Shows wide establishing shots of Paris and group ride."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 3,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2686,19 +3491,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 354,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 5,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2713,19 +3522,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 397,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 0,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2740,19 +3553,23 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 117,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 0,
+        "declared_unsupported": 4,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2767,19 +3584,38 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 82,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
-      "contradictions": [],
+      "claims": [
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "sadly we don't have a waterproof camera.",
+          "timestamp": "00:08",
+          "note": "Implies need for waterproof; later use in water suggests rugged use."
+        }
+      ],
+      "contradictions": [
+        {
+          "quote": "sadly we don't have a waterproof camera.",
+          "timestamp": "00:08",
+          "why": "Implies camera is waterproof, but captions later mention water droplets on lens causing blur, suggesting not fully waterproof in practice."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     },
     {
@@ -2794,19 +3630,32 @@
       "caption_source": "youtube_public_timedtext",
       "caption_lines_read": 398,
       "extractor": "evidence_reader",
-      "model": "",
+      "model": "deepseek-chat",
       "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "well I got it works great as a 360 Cam",
+          "timestamp": "10:09",
+          "note": "Explicitly states 360 capability, but no specific location scenes described."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
+        "kept": 1,
+        "declared_unsupported": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "kept": 0
+        "case_normalized_quotes": 0
       },
-      "status": "unavailable_no_model",
+      "status": "extracted",
       "error": null
     }
   ]

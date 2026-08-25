@@ -137,8 +137,38 @@ def test_grounding_validator_drops_hallucinated_quote_from_the_model():
     assert result["claims"][0]["timestamp"] == real["t"]
     assert result["contradictions"] == []
     assert result["grounding"]["rejected_hallucinated_quotes"] == 2
+    assert result["grounding"]["declared_unsupported"] == 0
     assert result["model"] == FAKE_MODEL
     assert result["prompt_version"] == evidence_reader.PROMPT_VERSION
+
+
+def test_honest_unsupported_claim_is_not_counted_as_a_hallucination():
+    clip = _clip_with_body()
+
+    def honest_call(system_prompt: str, user_prompt: str) -> str:
+        return json.dumps(
+            {
+                "claims": [
+                    {
+                        "claim_id": "pov",
+                        "supported": False,
+                        "confidence": 0.1,
+                        "quote": "",
+                        "timestamp": "",
+                        "note": "the clip does not support this claim",
+                    }
+                ],
+                "contradictions": [],
+                "brand_safety_flags": [],
+            }
+        )
+
+    result = evidence_reader.extract_clip(clip, _dna(), call=honest_call, model=FAKE_MODEL, available=True)
+    assert result["status"] == "extracted"
+    assert result["claims"] == []
+    assert result["grounding"]["declared_unsupported"] == 1
+    assert result["grounding"]["rejected_hallucinated_quotes"] == 0
+    assert result["grounding"]["rejected_missing_quote"] == 0
 
 
 def test_grounding_validator_drops_timestamps_and_claim_ids_not_in_the_input():
@@ -427,7 +457,11 @@ def test_stale_cached_quotes_are_dropped_before_display():
 
 def test_approval_gate_blocks_without_grounded_evidence_and_records_an_audited_override(session):
     ranked = state.ranking()
-    creator_id = str(ranked.iloc[0]["creator_id"])
+    creator_id = next(
+        str(row["creator_id"])
+        for _, row in ranked.iterrows()
+        if state.evidence_gate_state(str(row["creator_id"]))["blocked"]
+    )
     gate = state.evidence_gate_state(creator_id)
     assert gate["blocked"] is True
     assert gate["grounded"] is False
@@ -505,6 +539,16 @@ def test_grounded_extraction_satisfies_the_gate_and_lands_on_the_decision(sessio
     assert any(str(item).startswith("evidence_reader://") for item in decision["evidence"])
     assert state.creator_state(creator_id) == "approved"
     assert state.evidence_gate_overrides() == []
+    trace = state.latest_ceg_run(creator_id)
+    assert trace is not None
+    assert [step["role"] for step in trace["steps"]] == [
+        "Scout",
+        "EvidenceReader",
+        "MatchArbiter",
+        "BriefWriter",
+        "ComplianceGuard",
+    ]
+    assert "pov" in trace["claim_ids"]
 
 
 def test_override_is_refused_when_grounded_evidence_already_exists(session, monkeypatch):

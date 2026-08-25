@@ -29,6 +29,27 @@ YouTube 精读叠加层：60 行目录的身份就是对应公开频道（`catal
 
 本演示不伪造这些访谈结果。
 
+## Claim-evidence gold set
+
+`data/gold_evidence_labels.json` is operator-read public timedtext
+(`method: manual_read`), not model output and not the keyword baseline.
+Twelve clips × four Product DNA claims = 48 claim labels.
+
+`scripts/run_benchmark.py` scores two arms against that gold set:
+
+1. Keyword baseline (`src/benchmark.py` `CLAIM_KEYWORDS`) over the same caption lines.
+2. Evidence Reader cache (`data/evidence_extractions.json`). If no model and no
+   cache, the model arm is `not_run_no_model` — it is not silently replaced by
+   keywords.
+
+Metrics are precision / recall / F1 plus quote-grounding accuracy (predicted
+positive quotes that are a verbatim substring of one caption line). Growth
+Review renders `data/benchmark_report.json` at `#claim-evidence-benchmark`.
+The view does not hard-code the numbers.
+
+Ranking is not part of this benchmark. YouTube overlay is not part of this
+benchmark. Empty performance events still keep ROI at 0x.
+
 ## MVP 目标
 
 | 指标 | 目标 |

@@ -59,6 +59,7 @@ _PERSISTED_KEYS = (
     "routing_decisions",
     "opportunity_mission_links",
     "evidence_gate_overrides",
+    "ceg_runs",
 )
 
 ENTRY_ALIASES = {
@@ -220,6 +221,7 @@ def bootstrap_state() -> None:
         "show_mission_form": False,
         "live_evidence": [],
         "evidence_gate_overrides": [],
+        "ceg_runs": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -235,6 +237,7 @@ def bootstrap_state() -> None:
             persist_state()
     st.session_state.setdefault("live_evidence", [])
     st.session_state.setdefault("evidence_gate_overrides", [])
+    st.session_state.setdefault("ceg_runs", [])
     _merge_inbound_seed()
 
 
@@ -1049,6 +1052,83 @@ def evidence_gate_message(gate: dict[str, Any]) -> str:
     return EVIDENCE_GATE_BLOCKED_NO_EVIDENCE
 
 
+def record_ceg_run(creator_id: str, *, artifact: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Persist one Claim-Evidence-Guardrail trace for the active root.
+
+    This is the real execution path for EvidenceReader → MatchArbiter → BriefWriter:
+    it reads the live evidence gate, the live match record, and the latest brief
+    (or the one just saved). It does not re-rank creators.
+    """
+
+    from src.ceg import run as run_ceg
+    from src.product_dna import load_product_dna
+    from services.llm_service import generation_mode_label, is_llm_available
+
+    context = active_context()
+    gate = evidence_gate_state(creator_id)
+    match = match_for_creator(creator_id) or {}
+    match_payload = {
+        "match_id": match.get("match_id"),
+        "score": match.get("total_score", match.get("score")),
+        "model_version": match.get("model_version") or match.get("ranking_model_version") or "rule_mix_tfidf_v1",
+    }
+    brief = artifact
+    if brief is None:
+        assets = content_assets_for(creator_id)
+        brief = assets[-1] if assets else None
+    artifact_payload = None
+    if brief:
+        artifact_payload = {
+            "kind": "brief",
+            "text": str(brief.get("body") or ""),
+            "artifact_id": brief.get("asset_id") or brief.get("content_asset_id"),
+            "title": brief.get("title"),
+            "source_label": generation_mode_label(),
+        }
+    st.session_state.setdefault("ceg_runs", [])
+    seq = 1 + sum(
+        1
+        for item in st.session_state.ceg_runs
+        if item.get("creator_id") == creator_id
+        and item.get("entry_id") == context["entry_id"]
+        and item.get("entry_type") == context["entry_type"]
+    )
+    trace = run_ceg(
+        creator_id=creator_id,
+        entry_type=context["entry_type"],
+        entry_id=context["entry_id"],
+        dna=load_product_dna(),
+        gate=gate,
+        match=match_payload,
+        scout={"source": "catalog_momentum", "score": match_payload.get("score")},
+        artifact=artifact_payload,
+        model_available=is_llm_available(),
+        seq=seq,
+    )
+    payload = trace.to_dict()
+    st.session_state.ceg_runs.append(payload)
+    repository.append_creator_event(
+        str(creator_id),
+        "CEG",
+        "Claim-Evidence-Guardrail run",
+        f'{payload["status"]} · claims {",".join(payload["claim_ids"]) or "none"}',
+        str(context.get("owner") or "Operator"),
+    )
+    return deepcopy(payload)
+
+
+def latest_ceg_run(creator_id: str) -> dict[str, Any] | None:
+    context = active_context()
+    rows = [
+        item
+        for item in st.session_state.get("ceg_runs") or []
+        if item.get("creator_id") == creator_id
+        and item.get("entry_type") == context["entry_type"]
+        and item.get("entry_id") == context["entry_id"]
+    ]
+    return deepcopy(rows[-1]) if rows else None
+
+
 def record_evidence_gate_override(
     creator_id: str,
     *,
@@ -1236,6 +1316,8 @@ def save_decision(
         )
     st.session_state.decision_log.append(record)
     repository.append_decision(creator_id, decision, reason)
+    if decision == "Approved":
+        record_ceg_run(creator_id)
     persist_state()
     return deepcopy(record)
 
@@ -1655,6 +1737,7 @@ def save_content_asset(
     }
     st.session_state.content_assets.append(record)
     _advance_toward_content_in_review(creator_id)
+    record_ceg_run(creator_id, artifact=record)
     persist_state()
     return deepcopy(record)
 

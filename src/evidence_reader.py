@@ -146,16 +146,28 @@ def _strip_json(text: str) -> str:
 
 
 class GroundingStats(dict):
-    """Counters for the grounding validator. Rejections are reported, not hidden."""
+    """Counters for the grounding validator. Rejections are reported, not hidden.
+
+    The rejection reasons are deliberately separate. A model that honestly reports
+    "this clip does not support the claim" is not hallucinating, and a quote stitched
+    across two caption lines is a contract violation rather than an invention.
+    Collapsing all three into one counter would overstate the hallucination rate.
+    """
+
+    KEYS = (
+        "kept",
+        "declared_unsupported",
+        "rejected_missing_quote",
+        "rejected_hallucinated_quotes",
+        "rejected_cross_line_quotes",
+        "rejected_unknown_timestamps",
+        "rejected_unknown_claim_ids",
+        "retimed_quotes",
+        "case_normalized_quotes",
+    )
 
     def __init__(self) -> None:
-        super().__init__(
-            rejected_hallucinated_quotes=0,
-            rejected_unknown_timestamps=0,
-            rejected_unknown_claim_ids=0,
-            retimed_quotes=0,
-            kept=0,
-        )
+        super().__init__({key: 0 for key in self.KEYS})
 
     def bump(self, key: str, amount: int = 1) -> None:
         self[key] = int(self.get(key, 0)) + amount
@@ -165,13 +177,25 @@ def _line_index(lines: Sequence[Mapping[str, Any]]) -> list[tuple[str, str]]:
     return [(_as_text(item.get("t")), _normalize(item.get("text"))) for item in lines or []]
 
 
+def _spans_multiple_lines(needle: str, index: Sequence[tuple[str, str]]) -> bool:
+    """True when the quote only exists once neighbouring caption lines are joined."""
+
+    joined = _normalize(" ".join(text for _, text in index))
+    return needle.casefold() in joined.casefold()
+
+
 def ground_quote(
     quote: Any,
     timestamp: Any,
     lines: Sequence[Mapping[str, Any]],
     stats: GroundingStats | None = None,
 ) -> dict[str, str] | None:
-    """Return the grounded quote/timestamp, or None when the model invented it."""
+    """Return the grounded quote/timestamp, or None when the quote is not in one line.
+
+    A quote is only kept when it is literally present inside a single supplied caption
+    line. Casing is the one difference tolerated, and even then the caption line's own
+    text is what gets stored, so a kept quote is always real transcript text.
+    """
 
     stats = stats if stats is not None else GroundingStats()
     index = _line_index(lines)
@@ -179,11 +203,22 @@ def ground_quote(
     needle = _normalize(quote)[:MAX_QUOTE_CHARS]
     stamp = _as_text(timestamp)
     if not needle:
-        stats.bump("rejected_hallucinated_quotes")
+        stats.bump("rejected_missing_quote")
         return None
-    matches = [(line_stamp, text) for line_stamp, text in index if needle and needle in text]
+    matches = [(line_stamp, text, needle) for line_stamp, text in index if needle in text]
     if not matches:
-        stats.bump("rejected_hallucinated_quotes")
+        folded = needle.casefold()
+        matches = [
+            (line_stamp, text, text[text.casefold().find(folded) : text.casefold().find(folded) + len(needle)])
+            for line_stamp, text in index
+            if folded in text.casefold()
+        ]
+        if matches:
+            stats.bump("case_normalized_quotes")
+    if not matches:
+        stats.bump(
+            "rejected_cross_line_quotes" if _spans_multiple_lines(needle, index) else "rejected_hallucinated_quotes"
+        )
         return None
     if stamp and stamp not in stamps:
         stats.bump("rejected_unknown_timestamps")
@@ -192,7 +227,7 @@ def ground_quote(
     if exact is None:
         stats.bump("retimed_quotes")
         exact = matches[0]
-    return {"quote": needle, "timestamp": exact[0], "line_text": exact[1]}
+    return {"quote": exact[2], "timestamp": exact[0], "line_text": exact[1]}
 
 
 def validate_extraction(
@@ -218,6 +253,12 @@ def validate_extraction(
         if claim_id not in allowed:
             stats.bump("rejected_unknown_claim_ids")
             continue
+        supported = bool(item.get("supported", True))
+        if not supported and not _normalize(item.get("quote")):
+            # The model was asked to omit unsupported claims but is allowed to say so
+            # explicitly. An honest "no evidence here" is not a rejected quote.
+            stats.bump("declared_unsupported")
+            continue
         grounded = ground_quote(item.get("quote"), item.get("timestamp"), lines, stats)
         if grounded is None:
             continue
@@ -232,7 +273,7 @@ def validate_extraction(
         claims.append(
             {
                 "claim_id": claim_id,
-                "supported": bool(item.get("supported", True)),
+                "supported": supported,
                 "confidence": round(min(max(confidence, 0.0), 1.0), 2),
                 "quote": grounded["quote"],
                 "timestamp": grounded["timestamp"],
@@ -408,10 +449,21 @@ def extract_pack(
         "grounded_creators": len(grounded_creators),
         "contradictions": sum(len(row["contradictions"]) for row in results),
         "brand_safety_flags": sum(len(row["brand_safety_flags"]) for row in results),
-        "rejected_hallucinated_quotes": sum(int(row["grounding"].get("rejected_hallucinated_quotes", 0)) for row in results),
-        "rejected_unknown_timestamps": sum(int(row["grounding"].get("rejected_unknown_timestamps", 0)) for row in results),
-        "rejected_unknown_claim_ids": sum(int(row["grounding"].get("rejected_unknown_claim_ids", 0)) for row in results),
-        "retimed_quotes": sum(int(row["grounding"].get("retimed_quotes", 0)) for row in results),
+        **{
+            key: sum(int(row["grounding"].get(key, 0)) for row in results)
+            for key in GroundingStats.KEYS
+            if key != "kept"
+        },
+        "rejected_quotes_total": sum(
+            int(row["grounding"].get(key, 0))
+            for row in results
+            for key in (
+                "rejected_missing_quote",
+                "rejected_hallucinated_quotes",
+                "rejected_cross_line_quotes",
+                "rejected_unknown_timestamps",
+            )
+        ),
     }
     return {
         "pack_id": PACK_ID,

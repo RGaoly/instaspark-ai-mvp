@@ -24,6 +24,7 @@ from src.domain import PERIOD_WINDOW_DAYS, attributed_roi, filter_dated_records,
 from src.content_evidence import load_creator_content
 from src.evaluation import acceptance_matrix
 from src.budget import propose_budget_decision
+from src.benchmark import load_report
 
 _OUTREACH_STATES = {
     "approved",
@@ -313,6 +314,57 @@ def _acceptance_html(rows: list[dict]) -> str:
     )
 
 
+def _benchmark_html(report: dict) -> str:
+    """Render the committed gold-set report. Numbers come from the file, never from copy."""
+
+    def cell(value) -> str:
+        if isinstance(value, float):
+            return f"{value:.4f}"
+        return str(value if value is not None else "")
+
+    arms = list(report.get("arms") or [])
+    note = str(report.get("note") or t("No benchmark report. Run scripts/run_benchmark.py."))
+    if not arms:
+        return (
+            '<div class="is-card" id="claim-evidence-benchmark" style="margin-top:10px">'
+            f'<div class="is-panel-head"><span class="is-panel-title">{t("Claim-evidence benchmark")}</span>'
+            f'<span class="is-panel-link">{t("Gold set is operator-read timedtext")}</span></div>'
+            f'<div class="is-panel-body"><small>{esc(note)}</small></div></div>'
+        )
+    cells = []
+    for arm in arms:
+        metrics = arm.get("metrics") or {}
+        cells.append(
+            "<tr>"
+            f"<td>{esc(arm.get('arm', ''))}</td>"
+            f"<td>{esc(arm.get('status', ''))}</td>"
+            f"<td>{esc(cell(metrics.get('precision')))}</td>"
+            f"<td>{esc(cell(metrics.get('recall')))}</td>"
+            f"<td>{esc(cell(metrics.get('f1')))}</td>"
+            f"<td>{esc(cell(metrics.get('quote_grounding_accuracy')))}</td>"
+            f"<td><small>tp {esc(str(metrics.get('tp', '')))} · fp {esc(str(metrics.get('fp', '')))} · "
+            f"fn {esc(str(metrics.get('fn', '')))} · {esc(str(arm.get('model') or '—'))}</small></td>"
+            "</tr>"
+        )
+    gold = (
+        f'{t("Clips")} {esc(str(report.get("gold_n_clips") or ""))} · '
+        f'{t("Method")} {esc(str(report.get("gold_method") or ""))} · '
+        f'{esc(str(report.get("gold_pack_id") or ""))}'
+    )
+    return (
+        '<div class="is-card" id="claim-evidence-benchmark" style="margin-top:10px">'
+        f'<div class="is-panel-head"><span class="is-panel-title">{t("Claim-evidence benchmark")}</span>'
+        f'<span class="is-panel-link">{gold}</span></div>'
+        '<div class="is-panel-body">'
+        f"<small>{esc(note)}</small>"
+        '<table class="is-table"><thead><tr>'
+        f"<th>{t('Arm')}</th><th>{t('Status')}</th><th>{t('Precision')}</th>"
+        f"<th>{t('Recall')}</th><th>{t('F1')}</th><th>{t('Quote grounding')}</th><th>{t('Detail')}</th>"
+        "</tr></thead>"
+        f"<tbody>{''.join(cells)}</tbody></table></div></div>"
+    )
+
+
 def render() -> None:
     render_topbar()
     context = active_context()
@@ -435,5 +487,6 @@ def render() -> None:
         f"{_acceptance_html(rows)}</div></div>",
         unsafe_allow_html=True,
     )
+    md(_benchmark_html(load_report()), unsafe_allow_html=True)
 
     render_demo_notice()

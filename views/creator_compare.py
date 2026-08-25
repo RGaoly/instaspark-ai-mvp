@@ -12,6 +12,7 @@ from components.state import (
     creator_state,
     evidence_gate_message,
     evidence_gate_state,
+    latest_ceg_run,
     live_evidence_for,
     next_outreach_action_page,
     prepare_next_action_jump,
@@ -214,6 +215,37 @@ def evidence_gate_panel_html(gate: dict) -> str:
     )
 
 
+def ceg_trace_panel_html(trace: dict | None) -> str:
+    """Named Claim-Evidence-Guardrail run on Compare. Not an eighth page."""
+
+    if not trace:
+        return (
+            '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
+            f'<span class="is-panel-title">{t("Claim-Evidence-Guardrail run")}</span>'
+            f'{badge(t("No run recorded yet"), "gray")}</div>'
+            f'<div class="is-panel-body"><small>{t("Approve a creator or save a brief to record Scout → EvidenceReader → MatchArbiter → BriefWriter → ComplianceGuard.")}</small></div></div>'
+        )
+    tone = "green" if trace.get("status") == "ok" else "orange"
+    steps = "".join(
+        f'<div class="is-risk"><div><b>{esc(str(step.get("role")))} · {esc(str(step.get("engine")))} · '
+        f'{esc(str(step.get("status")))}</b>'
+        f'<small style="margin-top:4px">{t("Claims")}: {esc(", ".join(step.get("claim_ids") or []) or t("none"))}'
+        f'{(" · " + t("Degraded") + ": " + esc(str(step.get("degraded_reason")))) if step.get("degraded_reason") else ""}'
+        f"</small></div></div>"
+        for step in (trace.get("steps") or [])
+    )
+    footer = t(
+        "Named CEG workflow. EvidenceReader is the only role that can advance a claim_id. Ranking stays rule_mix_tfidf_v1."
+    )
+    return (
+        '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
+        f'<span class="is-panel-title">{t("Claim-Evidence-Guardrail run")}</span>'
+        f'{badge(esc(str(trace.get("status") or "")) + " · " + esc(str(trace.get("run_id") or "")), tone)}</div>'
+        f'<div class="is-panel-body">{steps}'
+        f'<small style="color:#879198;display:block;margin-top:6px">{esc(footer)}</small></div></div>'
+    )
+
+
 def open_search_youtube_lookup() -> None:
     """Keep the focused creator and open Search with the live YouTube expander."""
 
@@ -378,6 +410,7 @@ def render() -> None:
 
     gate = evidence_gate_state(str(focus["creator_id"]))
     md(evidence_gate_panel_html(gate), unsafe_allow_html=True)
+    md(ceg_trace_panel_html(latest_ceg_run(str(focus["creator_id"]))), unsafe_allow_html=True)
     if gate["blocked"]:
         st.warning(t(evidence_gate_message(gate)))
     md(

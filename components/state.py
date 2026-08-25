@@ -27,6 +27,7 @@ from src.domain import (
     pipeline_counts,
     transition_event,
 )
+from src import evidence_reader
 from src.scoring import rank_creators
 
 
@@ -57,6 +58,8 @@ _PERSISTED_KEYS = (
     "inbound_messages",
     "routing_decisions",
     "opportunity_mission_links",
+    "evidence_gate_overrides",
+    "ceg_runs",
 )
 
 ENTRY_ALIASES = {
@@ -217,6 +220,8 @@ def bootstrap_state() -> None:
         "brief_version": 1,
         "show_mission_form": False,
         "live_evidence": [],
+        "evidence_gate_overrides": [],
+        "ceg_runs": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -231,6 +236,8 @@ def bootstrap_state() -> None:
         if not stored:
             persist_state()
     st.session_state.setdefault("live_evidence", [])
+    st.session_state.setdefault("evidence_gate_overrides", [])
+    st.session_state.setdefault("ceg_runs", [])
     _merge_inbound_seed()
 
 
@@ -442,6 +449,41 @@ def save_opportunity(opportunity: dict[str, Any]) -> dict[str, Any]:
     return deepcopy(opportunity)
 
 
+def save_scout_card(card: dict[str, Any]) -> dict[str, Any]:
+    """Persist a Genome 7/30/90 scout card as a signal opportunity. Not a live crawl."""
+
+    require_write()
+    from services.opportunity_service import create_opportunity
+
+    creator_id = str(card.get("creator_id") or "").strip()
+    if not creator_id:
+        raise ValueError("creator_id is required")
+    name = str(card.get("creator_name") or creator_id)
+    opportunity = create_opportunity(
+        st.session_state.opportunities,
+        creator_id=creator_id,
+        title=f"Scout: {name}",
+        source="catalog_momentum",
+        market=str(card.get("market") or "United States"),
+        language=str(card.get("language") or "English"),
+        hypothesis="Catalog momentum proxy rose on 7/30/90 windows. Not a live crawl.",
+        evidence=[
+            str(card.get("note") or "Catalog proxies, not a live 7/30/90 crawl."),
+            f"scout_score={card.get('scout_score')}",
+            f"window_7d={card.get('window_7d')}",
+            f"window_30d={card.get('window_30d')}",
+            f"window_90d={card.get('window_90d')}",
+            f"genome_id={card.get('genome_id') or 'none'}",
+        ],
+        owner="Scout desk",
+        opportunity_type="creator_signal",
+        suggested_action="Qualify this scout card against the active launch mission.",
+    )
+    saved = save_opportunity(opportunity)
+    persist_state()
+    return saved
+
+
 def link_opportunity_to_mission(opportunity_id: str, mission_id: str) -> dict[str, Any]:
     require_write()
     if mission_id not in st.session_state.missions:
@@ -648,7 +690,22 @@ def ranking():
             "score": float(row["total_score"]),
             "gate_passed": True,
             "rationale": list(row.get("positives", [])),
+            "warnings": list(row.get("warnings", [])),
             "evidence": list(row.get("evidence", [])),
+            "breakdown": {
+                "mission_fit": float(row.get("mission_fit") or 0),
+                "topic_overlap": float(row.get("topic_overlap") or 0),
+                "momentum": float(row.get("momentum") or 0),
+                "commercial_fit": float(row.get("commercial_fit") or 0),
+                "brand_safety": float(row.get("brand_safety") or 0),
+                "query_boost": float(row.get("query_boost") or 0),
+                "live_proof_bonus": float(row.get("live_proof_bonus") or 0),
+                "tfidf_boost": float(row.get("tfidf_boost") or 0),
+            },
+            "model_version": str(row.get("ranking_model_version") or "rule_mix_tfidf_v1"),
+            "confidence": str(row.get("match_confidence") or "deterministic_rule"),
+            "genome_id": row.get("genome_id"),
+            "genome_version": row.get("genome_version"),
         }
     return ranked
 
@@ -935,6 +992,206 @@ def transition_creator_state(
     return deepcopy(record)
 
 
+class EvidenceGateBlocked(RuntimeError):
+    """Approval is blocked because no claim-grounded evidence exists for this creator."""
+
+
+EVIDENCE_GATE_BLOCKED_NO_MODEL = (
+    "Claim-grounded evidence extraction is unavailable: no model is configured. "
+    "Rules and keyword matching cannot satisfy this gate. Record an audited operator "
+    "override with a reason, or configure a model and run the Evidence Reader."
+)
+EVIDENCE_GATE_BLOCKED_NO_EVIDENCE = (
+    "The Evidence Reader found no supported Product DNA claim with a validated quote and "
+    "timestamp for this creator. Record an audited operator override with a reason, or run "
+    "the Evidence Reader over this creator's public caption bodies."
+)
+
+
+@st.cache_data(show_spinner=False)
+def _cached_evidence_pack() -> dict[str, Any]:
+    return evidence_reader.load_pack()
+
+
+def evidence_extraction_pack() -> dict[str, Any]:
+    """Cached Evidence Reader pack. Missing cache stays an honest empty pack."""
+
+    try:
+        return _cached_evidence_pack()
+    except Exception:
+        return evidence_reader.empty_pack()
+
+
+def evidence_gate_overrides() -> list[dict[str, Any]]:
+    entry_type, entry_id = _current_root()
+    return [
+        deepcopy(item)
+        for item in st.session_state.get("evidence_gate_overrides") or []
+        if item.get("entry_type") == entry_type and item.get("entry_id") == entry_id
+    ]
+
+
+def _override_for(creator_id: str) -> dict[str, Any] | None:
+    rows = [item for item in evidence_gate_overrides() if item.get("creator_id") == str(creator_id)]
+    return rows[-1] if rows else None
+
+
+def evidence_gate_state(creator_id: str) -> dict[str, Any]:
+    """Approval gate verdict for one creator: model-grounded evidence or audited override."""
+
+    return evidence_reader.gate_state(
+        creator_id,
+        evidence_extraction_pack(),
+        override=_override_for(creator_id),
+    )
+
+
+def evidence_gate_message(gate: dict[str, Any]) -> str:
+    if gate.get("status") == evidence_reader.GATE_BLOCKED_NO_MODEL:
+        return EVIDENCE_GATE_BLOCKED_NO_MODEL
+    return EVIDENCE_GATE_BLOCKED_NO_EVIDENCE
+
+
+def record_ceg_run(creator_id: str, *, artifact: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Persist one Claim-Evidence-Guardrail trace for the active root.
+
+    This is the real execution path for EvidenceReader → MatchArbiter → BriefWriter:
+    it reads the live evidence gate, the live match record, and the latest brief
+    (or the one just saved). It does not re-rank creators.
+    """
+
+    from src.ceg import run as run_ceg
+    from src.product_dna import load_product_dna
+    from services.llm_service import generation_mode_label, is_llm_available
+
+    context = active_context()
+    gate = evidence_gate_state(creator_id)
+    match = match_for_creator(creator_id) or {}
+    match_payload = {
+        "match_id": match.get("match_id"),
+        "score": match.get("total_score", match.get("score")),
+        "model_version": match.get("model_version") or match.get("ranking_model_version") or "rule_mix_tfidf_v1",
+    }
+    brief = artifact
+    if brief is None:
+        assets = content_assets_for(creator_id)
+        brief = assets[-1] if assets else None
+    artifact_payload = None
+    if brief:
+        artifact_payload = {
+            "kind": "brief",
+            "text": str(brief.get("body") or ""),
+            "artifact_id": brief.get("asset_id") or brief.get("content_asset_id"),
+            "title": brief.get("title"),
+            "source_label": generation_mode_label(),
+        }
+    st.session_state.setdefault("ceg_runs", [])
+    seq = 1 + sum(
+        1
+        for item in st.session_state.ceg_runs
+        if item.get("creator_id") == creator_id
+        and item.get("entry_id") == context["entry_id"]
+        and item.get("entry_type") == context["entry_type"]
+    )
+    trace = run_ceg(
+        creator_id=creator_id,
+        entry_type=context["entry_type"],
+        entry_id=context["entry_id"],
+        dna=load_product_dna(),
+        gate=gate,
+        match=match_payload,
+        scout={"source": "catalog_momentum", "score": match_payload.get("score")},
+        artifact=artifact_payload,
+        model_available=is_llm_available(),
+        seq=seq,
+    )
+    payload = trace.to_dict()
+    st.session_state.ceg_runs.append(payload)
+    repository.append_creator_event(
+        str(creator_id),
+        "CEG",
+        "Claim-Evidence-Guardrail run",
+        f'{payload["status"]} · claims {",".join(payload["claim_ids"]) or "none"}',
+        str(context.get("owner") or "Operator"),
+    )
+    return deepcopy(payload)
+
+
+def latest_ceg_run(creator_id: str) -> dict[str, Any] | None:
+    context = active_context()
+    rows = [
+        item
+        for item in st.session_state.get("ceg_runs") or []
+        if item.get("creator_id") == creator_id
+        and item.get("entry_type") == context["entry_type"]
+        and item.get("entry_id") == context["entry_id"]
+    ]
+    return deepcopy(rows[-1]) if rows else None
+
+
+def record_evidence_gate_override(
+    creator_id: str,
+    *,
+    reason: str,
+    actor: str | None = None,
+) -> dict[str, Any]:
+    """Record an audited operator override of the claim-grounded evidence gate."""
+
+    require_write()
+    text = str(reason or "").strip()
+    if len(text) < 8:
+        raise ValueError("An override of the evidence gate requires an operator reason")
+    gate = evidence_gate_state(creator_id)
+    if gate["grounded"]:
+        raise ValueError("Claim-grounded evidence already satisfies the gate; no override is needed")
+    context = active_context()
+    entry_type, entry_id = _current_root()
+    resolved_actor = str(actor or context.get("owner") or "Operator")
+    record = {
+        "override_id": f'gate_override_{len(st.session_state.get("evidence_gate_overrides") or []) + 1:04d}',
+        "creator_id": str(creator_id),
+        "entry_type": entry_type,
+        "entry_id": entry_id,
+        "mission_id": context.get("mission_id"),
+        "opportunity_id": context.get("opportunity_id"),
+        "actor": resolved_actor,
+        "reason": text,
+        "gate_status": gate["status"],
+        "model_available": bool(gate["model_available"]),
+        "prompt_version": gate["prompt_version"],
+        "pack_id": gate["pack_id"],
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+    }
+    st.session_state.setdefault("evidence_gate_overrides", [])
+    st.session_state["evidence_gate_overrides"].append(record)
+    repository.append_approval_audit(
+        f"evidence_gate::{entry_type}:{entry_id}:{creator_id}",
+        "evidence_gate_override",
+        text,
+        resolved_actor,
+    )
+    repository.append_creator_event(
+        str(creator_id),
+        "Evidence gate",
+        "Claim-grounded evidence override",
+        f'{gate["status"]} · {text}',
+        resolved_actor,
+    )
+    persist_state()
+    return deepcopy(record)
+
+
+def _gate_evidence_refs(gate: dict[str, Any], limit: int = 3) -> list[str]:
+    refs = [
+        f'evidence_reader://{item["creator_id"]}/{item["post_id"]}#{item["timestamp"]}·{item["claim_id"]}'
+        for item in gate.get("claims") or []
+    ][:limit]
+    override = gate.get("override")
+    if not refs and override:
+        return [f'evidence_gate_override://{override.get("override_id")}']
+    return refs
+
+
 def save_decision(
     creator_id: str,
     decision: str,
@@ -959,6 +1216,9 @@ def save_decision(
     stable_reason_code = (reason_code or default_codes.get(decision, "operator_decision")).strip()
     if not stable_reason_code:
         raise ValueError("reason_code is required")
+    gate = evidence_gate_state(creator_id) if decision == "Approved" else None
+    if gate is not None and gate["blocked"]:
+        raise EvidenceGateBlocked(evidence_gate_message(gate))
     existing = next(
         (
             item
@@ -988,6 +1248,7 @@ def save_decision(
             existing["utm_content"] = case.get("utm_content")
             persist_state()
         return deepcopy(existing)
+    gate_refs = _gate_evidence_refs(gate) if gate is not None else []
     record = {
         "decision_id": f'decision_{len(st.session_state.decision_log) + 1:04d}',
         "creator_id": creator_id,
@@ -996,7 +1257,7 @@ def save_decision(
         "reason_code": stable_reason_code,
         "reason": reason,
         "note": note if note is not None else reason,
-        "evidence": list(evidence or []),
+        "evidence": list(evidence or []) + [ref for ref in gate_refs if ref not in list(evidence or [])],
         "actor": context.get("owner", "Operator"),
         "decided_at": datetime.now(timezone.utc).isoformat(),
         "entry_type": context["entry_type"],
@@ -1004,13 +1265,31 @@ def save_decision(
         "mission_id": context.get("mission_id"),
         "opportunity_id": context.get("opportunity_id"),
     }
-    if decision == "Approved":
+    if decision == "Approved" and gate is not None:
+        record["evidence_gate"] = {
+            "status": gate["status"],
+            "grounded": gate["grounded"],
+            "model": gate["model"],
+            "prompt_version": gate["prompt_version"],
+            "pack_id": gate["pack_id"],
+            "claims": [
+                {
+                    "claim_id": item["claim_id"],
+                    "quote": item["quote"],
+                    "timestamp": item["timestamp"],
+                    "post_id": item["post_id"],
+                    "source_label": item["source_label"],
+                }
+                for item in gate.get("claims") or []
+            ],
+            "override": gate.get("override"),
+        }
         transition_creator_state(
             creator_id,
             "approved",
             actor=record["actor"],
             reason=reason,
-            evidence=evidence or ["decision://human-approval"],
+            evidence=(list(evidence or []) + gate_refs) or ["decision://human-approval"],
         )
         case = next(
             (
@@ -1037,6 +1316,8 @@ def save_decision(
         )
     st.session_state.decision_log.append(record)
     repository.append_decision(creator_id, decision, reason)
+    if decision == "Approved":
+        record_ceg_run(creator_id)
     persist_state()
     return deepcopy(record)
 
@@ -1424,21 +1705,39 @@ def save_content_asset(
         raise ValueError("content asset title and body are required")
     context = active_context()
     excerpt = " ".join(body_text.split())[:280]
+    asset_id = f"asset_{len(st.session_state.content_assets) + 1:04d}"
+    genome_id = None
+    try:
+        from src.creator_genome import genome_for
+
+        genome = genome_for(creator_id)
+        genome_id = genome.get("genome_id") if genome else None
+    except (OSError, ValueError):
+        genome_id = None
     record = {
-        "asset_id": f"asset_{len(st.session_state.content_assets) + 1:04d}",
+        "asset_id": asset_id,
+        "content_asset_id": asset_id,
         "creator_id": creator_id,
         "title": title_text,
         "body": body_text,
         "excerpt": excerpt,
+        "asset_type": "brief",
         "status": str(status or "in_review").strip() or "in_review",
+        "review_status": str(status or "in_review").strip() or "in_review",
+        "version": 1,
+        "locale": str(context.get("language") or context.get("market") or ""),
+        "platform": "not_declared",
+        "usage_rights_status": "not_collected",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "entry_type": context["entry_type"],
         "entry_id": context["entry_id"],
         "mission_id": context.get("mission_id"),
         "opportunity_id": context.get("opportunity_id"),
+        "genome_id": genome_id,
     }
     st.session_state.content_assets.append(record)
     _advance_toward_content_in_review(creator_id)
+    record_ceg_run(creator_id, artifact=record)
     persist_state()
     return deepcopy(record)
 

@@ -1,0 +1,146 @@
+{
+  "pack_id": "gold_evidence_x5_v1",
+  "version": 1,
+  "labeled_by": "operator_manual_read",
+  "method": "manual_read",
+  "labeled_at": "2026-08-25T12:00:00+00:00",
+  "dna_id": "dna_x5_v1",
+  "dna_version": 1,
+  "n_clips": 12,
+  "n_claim_labels": 48,
+  "note": "Twelve public-caption clips × four Product DNA claims. Labels come from reading the timedtext lines, not from the Evidence Reader and not from the keyword baseline. A small truly-read N beats a large invented one.",
+  "labels": [
+    {
+      "post_id": "POST-C001-01",
+      "creator_id": "C001",
+      "channel_title": "Peak Design",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C002-01",
+      "creator_id": "C002",
+      "channel_title": "Action Cam Guy",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C004-01",
+      "creator_id": "C004",
+      "channel_title": "Haze Outdoors",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": true, "quote": "a 360 camera. Insta 360 reached out and", "timestamp": "00:22"}
+      ]
+    },
+    {
+      "post_id": "POST-C005-01",
+      "creator_id": "C005",
+      "channel_title": "Backcountry Exposure",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C006-01",
+      "creator_id": "C006",
+      "channel_title": "Peter McKinnon",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": true, "quote": "I'm looking around cuz that 360 camera", "timestamp": "00:30"}
+      ]
+    },
+    {
+      "post_id": "POST-C007-01",
+      "creator_id": "C007",
+      "channel_title": "Ben Claremont",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C008-01",
+      "creator_id": "C008",
+      "channel_title": "Berm Peak",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C010-01",
+      "creator_id": "C010",
+      "channel_title": "BuzzAlong",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C011-01",
+      "creator_id": "C011",
+      "channel_title": "Global Cycling Network",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C012-01",
+      "creator_id": "C012",
+      "channel_title": "Surfing With Noz",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": true, "quote": "using POV with the mouth mount for this", "timestamp": "00:33"},
+        {"claim_id": "rugged", "supported": true, "quote": "Today I'm surfing with Insta3's X5 at", "timestamp": "00:00"},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C013-01",
+      "creator_id": "C013",
+      "channel_title": "Best360",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    },
+    {
+      "post_id": "POST-C014-01",
+      "creator_id": "C014",
+      "channel_title": "GT Biking",
+      "claims": [
+        {"claim_id": "all_day", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "pov", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "rugged", "supported": false, "quote": "", "timestamp": ""},
+        {"claim_id": "360", "supported": false, "quote": "", "timestamp": ""}
+      ]
+    }
+  ]
+}

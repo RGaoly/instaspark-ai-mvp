@@ -1,6 +1,6 @@
-"""Rule-based creator matching. Lexical only — not LLM, not embeddings.
+"""Hybrid recall: hard gates + named rule mix + sparse TF-IDF cosine.
 
-``total_score`` is a weighted sum of 0–100 mix drivers, plus two small additive
+``total_score`` is a weighted sum of 0–100 mix drivers, plus three small additive
 bonuses, then clamped to 0–100:
 
     mission_fit      * 0.20   market (65%) + language (35%)
@@ -10,10 +10,12 @@ bonuses, then clamped to 0–100:
     brand_safety     * 0.20   catalog safety score
     + query_boost             0–4 when an NL query token hits name/topics/styles/country
     + live_proof_bonus        +3 only after an operator attaches live YouTube evidence
+    + tfidf_boost             0–3 sparse TF-IDF cosine vs mission + Product DNA + Creator Genome (+ query)
 
-Query boost is a lexical filter+boost, not semantic search. Live YouTube hits
-never enter the ranked catalog as new creators; the bonus applies only to a
-demo-catalog row the operator already selected.
+Query boost is a lexical filter+boost, not semantic search. TF-IDF cosine is a
+real sparse-vector pass, not a neural embedding and not an LLM ranker. Live
+YouTube hits never enter the ranked catalog as new creators; the bonus applies
+only to a demo-catalog row the operator already selected.
 """
 
 from __future__ import annotations
@@ -21,6 +23,10 @@ from __future__ import annotations
 from typing import Any, Iterable, Mapping
 
 import pandas as pd
+
+from src.retrieval import TFIDF_BOOST_CAP, tfidf_boosts
+
+RANKING_MODEL_VERSION = "rule_mix_tfidf_v1"
 
 # Mix weights must sum to 1.0. Additive bonuses are documented separately.
 DEFAULT_WEIGHTS = {
@@ -129,7 +135,26 @@ def additive_driver_display(row: Mapping[str, Any]) -> list[tuple[str, float, st
     return [
         ("Query boost", float(row.get("query_boost") or 0), f"cap +{QUERY_BOOST_CAP:g} · lexical filter+boost"),
         ("Live proof bonus", float(row.get("live_proof_bonus") or 0), f"cap +{LIVE_PROOF_BONUS:g} · after attach"),
+        ("TF-IDF cosine", float(row.get("tfidf_boost") or 0), f"cap +{TFIDF_BOOST_CAP:g} · sparse vector, not neural"),
     ]
+
+
+def _default_dna_text() -> str:
+    try:
+        from src.product_dna import dna_document, load_product_dna
+
+        return dna_document(load_product_dna())
+    except (OSError, ValueError):
+        return ""
+
+
+def _genome_texts() -> dict[str, str]:
+    try:
+        from src.creator_genome import genome_document, genomes_by_id
+
+        return {creator_id: genome_document(item) for creator_id, item in genomes_by_id().items()}
+    except (OSError, ValueError):
+        return {}
 
 
 def passes_hard_gates(row: pd.Series, mission: dict) -> tuple[bool, list[str]]:
@@ -152,6 +177,7 @@ def score_creator(
     *,
     query: str = "",
     has_live_evidence: bool = False,
+    tfidf_boost: float = 0.0,
 ) -> dict:
     weights = weights or DEFAULT_WEIGHTS
     topics = _as_list(row.get("topics"))
@@ -178,6 +204,7 @@ def score_creator(
     brand_safety = _clamp(float(row["brand_safety_score"]))
     query_boost = query_boost_for(row, query)
     live_proof_bonus = LIVE_PROOF_BONUS if has_live_evidence else 0.0
+    tfidf_boost = min(TFIDF_BOOST_CAP, max(0.0, float(tfidf_boost or 0.0)))
 
     total = (
         mission_fit * _weight(weights, "mission_fit")
@@ -187,6 +214,7 @@ def score_creator(
         + brand_safety * _weight(weights, "brand_safety")
         + query_boost
         + live_proof_bonus
+        + tfidf_boost
     )
     total = _clamp(total)
 
@@ -205,6 +233,8 @@ def score_creator(
         positives.append("Query tokens hit name, topics, styles, or country")
     if has_live_evidence:
         positives.append("Live YouTube evidence attached")
+    if tfidf_boost > 0:
+        positives.append("TF-IDF cosine with mission/DNA tokens (sparse vector, not neural)")
 
     warnings = list(row["risks"]) if row.get("risks") is not None else []
     if not isinstance(warnings, list):
@@ -228,6 +258,9 @@ def score_creator(
         "brand_safety": round(brand_safety, 1),
         "query_boost": round(query_boost, 1),
         "live_proof_bonus": round(live_proof_bonus, 1),
+        "tfidf_boost": round(tfidf_boost, 3),
+        "ranking_model_version": RANKING_MODEL_VERSION,
+        "match_confidence": "deterministic_rule",
         "total_score": round(total, 1),
         "positives": positives or ["具备基础匹配条件，需进一步人工核验"],
         "warnings": warnings,
@@ -241,20 +274,46 @@ def rank_creators(
     *,
     query: str = "",
     live_evidence_ids: Iterable[str] | None = None,
+    dna_text: str | None = None,
 ) -> pd.DataFrame:
     live_ids = {str(item) for item in (live_evidence_ids or []) if str(item).strip()}
+    dna = _default_dna_text() if dna_text is None else dna_text
+    genome_texts = _genome_texts()
+    boosts = (
+        tfidf_boosts(df, mission, dna_text=dna, query=query, genome_texts=genome_texts)
+        if df is not None and not df.empty
+        else {}
+    )
+    genomes: dict[str, Any] = {}
+    try:
+        from src.creator_genome import genomes_by_id
+
+        genomes = genomes_by_id()
+    except (OSError, ValueError):
+        genomes = {}
     records = []
     for _, row in df.iterrows():
         passed, gate_reasons = passes_hard_gates(row, mission)
         if passed:
+            creator_id = str(row.get("creator_id", ""))
             scored = score_creator(
                 row,
                 mission,
                 weights,
                 query=query,
-                has_live_evidence=str(row.get("creator_id", "")) in live_ids,
+                has_live_evidence=creator_id in live_ids,
+                tfidf_boost=boosts.get(creator_id, 0.0),
             )
-            records.append({**row.to_dict(), **scored, "gate_reasons": gate_reasons})
+            genome = genomes.get(creator_id) or {}
+            records.append(
+                {
+                    **row.to_dict(),
+                    **scored,
+                    "gate_reasons": gate_reasons,
+                    "genome_id": genome.get("genome_id"),
+                    "genome_version": genome.get("version"),
+                }
+            )
     if not records:
         return pd.DataFrame()
     result = pd.DataFrame(records)

@@ -1,0 +1,5361 @@
+{
+  "genome_pack_id": "genome_x5_v1",
+  "version": 1,
+  "sku": "Insta360 X5",
+  "updated_at": "2026-08-01T00:00:00+00:00",
+  "source": "Synthetic GTM pack. Structured JSON + clip index. Sparse TF-IDF is the vector, not a neural embedding.",
+  "ranking_model_version": "rule_mix_tfidf_v1",
+  "genomes": [
+    {
+      "genome_id": "genome_C001_v1",
+      "creator_id": "C001",
+      "creator_name": "Peak Design",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "tech"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 89,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 57.0,
+        "window_90d": 67.0,
+        "scout_score": 81.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.73,
+        "collaboration_openness": 0.5,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C001-01",
+        "POST-C001-02",
+        "POST-C001-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCCXxVerycxB08muPJta5WBQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C002_v1",
+      "creator_id": "C002",
+      "creator_name": "Action Cam Guy",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "motorcycle"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 71,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "vlog",
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 40.0,
+        "window_30d": 20.0,
+        "window_90d": 74.0,
+        "scout_score": 40.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.9,
+        "collaboration_openness": 0.61,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 9500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C002-01",
+        "POST-C002-02",
+        "POST-C002-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCV4mfcfhglnnD_zSa_qUYwA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C003_v1",
+      "creator_id": "C003",
+      "creator_name": "AuthenTech - Ben Schmanke",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "tech",
+          "surfing",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 82,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 51.0,
+        "window_90d": 70.0,
+        "scout_score": 63.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.66,
+        "collaboration_openness": 0.64,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 9500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C003-01",
+        "POST-C003-02",
+        "POST-C003-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCgyvzxg11MtNDfgDQKqlPvQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C004_v1",
+      "creator_id": "C004",
+      "creator_name": "Haze Outdoors",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "outdoor"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 88,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog",
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 59.0,
+        "window_90d": 54.0,
+        "scout_score": 72.3,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.76,
+        "collaboration_openness": 0.53,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 11000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C004-01",
+        "POST-C004-02",
+        "POST-C004-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCDzwHsfeQcQJ_0FDnLheU9w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C005_v1",
+      "creator_id": "C005",
+      "creator_name": "Backcountry Exposure",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "outdoor"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 66,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "comparison",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 46.0,
+        "window_90d": 48.0,
+        "scout_score": 64.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.98,
+        "collaboration_openness": 0.79,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 10500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C005-01",
+        "POST-C005-02",
+        "POST-C005-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCVyZtccA-oMchXHai-CJyPA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C006_v1",
+      "creator_id": "C006",
+      "creator_name": "Peter McKinnon",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "tech",
+          "skiing",
+          "cycling"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 77,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 47.0,
+        "window_90d": 66.0,
+        "scout_score": 60.7,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.74,
+        "collaboration_openness": 0.49,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 14500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C006-01",
+        "POST-C006-02",
+        "POST-C006-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC3DkFux8Iv-aYnTRWzwaiBA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C007_v1",
+      "creator_id": "C007",
+      "creator_name": "Ben Claremont",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 76,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "review",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 40.0,
+        "window_30d": 50.0,
+        "window_90d": 46.0,
+        "scout_score": 50.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.67,
+        "collaboration_openness": 0.55,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C007-01",
+        "POST-C007-02",
+        "POST-C007-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCAjSHLRJcDfhDSu7WRpOu-w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C008_v1",
+      "creator_id": "C008",
+      "creator_name": "Berm Peak",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "skiing",
+          "outdoor",
+          "tech",
+          "motorcycle"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 87,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 58.0,
+        "window_90d": 50.0,
+        "scout_score": 63.0,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.58,
+        "collaboration_openness": 0.48,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 9000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C008-01",
+        "POST-C008-02",
+        "POST-C008-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCu8YylsPiu9XfaQC74Hr_Gw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C009_v1",
+      "creator_id": "C009",
+      "creator_name": "Boards, Bikes, And Hikes",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 75,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "comparison",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 45.0,
+        "window_90d": 78.0,
+        "scout_score": 78.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.96,
+        "collaboration_openness": 0.79,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C009-01",
+        "POST-C009-02",
+        "POST-C009-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC1z-gUuii-DiEaWGfaP_5jg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C010_v1",
+      "creator_id": "C010",
+      "creator_name": "BuzzAlong",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "motorcycle",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 72,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 33.0,
+        "window_90d": 72.0,
+        "scout_score": 70.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.78,
+        "collaboration_openness": 0.95,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 14000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C010-01",
+        "POST-C010-02",
+        "POST-C010-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCsTFnv1ocECk4TUjx8PfnKA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C011_v1",
+      "creator_id": "C011",
+      "creator_name": "Global Cycling Network",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "outdoor",
+          "skiing",
+          "motorcycle"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 76,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "vlog",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 61.0,
+        "window_90d": 78.0,
+        "scout_score": 86.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.9,
+        "collaboration_openness": 0.88,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 13000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C011-01",
+        "POST-C011-02",
+        "POST-C011-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCuTaETsuCOkJ0H_GAztWt0Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C012_v1",
+      "creator_id": "C012",
+      "creator_name": "Surfing With Noz",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "skiing",
+          "cycling",
+          "outdoor"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 76,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 27.0,
+        "window_90d": 50.0,
+        "scout_score": 47.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.64,
+        "collaboration_openness": 0.55,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C012-01",
+        "POST-C012-02",
+        "POST-C012-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCoicMEw3njXscfwHlaAJVcQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C013_v1",
+      "creator_id": "C013",
+      "creator_name": "Best360",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "tech"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 89,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 57.0,
+        "window_90d": 87.0,
+        "scout_score": 77.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.96,
+        "collaboration_openness": 0.5,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C013-01",
+        "POST-C013-02",
+        "POST-C013-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCeqky0tc84Ezl0CYMW3xKkA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C014_v1",
+      "creator_id": "C014",
+      "creator_name": "GT Biking",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "cycling",
+          "surfing"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 84,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 40.0,
+        "window_30d": 19.0,
+        "window_90d": 53.0,
+        "scout_score": 36.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.56,
+        "collaboration_openness": 0.52,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 13500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C014-01",
+        "POST-C014-02",
+        "POST-C014-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCgTuPR4j8EGqO53tPSc2jGA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C015_v1",
+      "creator_id": "C015",
+      "creator_name": "The Tech Chap",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "travel",
+          "motorcycle",
+          "outdoor"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 88,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 28.0,
+        "window_90d": 89.0,
+        "scout_score": 71.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.7,
+        "collaboration_openness": 0.93,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 11500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C015-01",
+        "POST-C015-02",
+        "POST-C015-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzlXf-yUIaOpOjEjPrOO9TA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C016_v1",
+      "creator_id": "C016",
+      "creator_name": "Oscar Hikes",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "outdoor",
+          "travel",
+          "surfing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 92,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial",
+        "vlog",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 59.0,
+        "window_90d": 78.0,
+        "scout_score": 85.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.69,
+        "collaboration_openness": 0.74,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C016-01",
+        "POST-C016-02",
+        "POST-C016-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCGQNEhX3SQw3jkcQoHTipvQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C017_v1",
+      "creator_id": "C017",
+      "creator_name": "DC Rainmaker",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "cycling",
+          "outdoor",
+          "tech"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 94,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 31.0,
+        "window_90d": 77.0,
+        "scout_score": 70.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.74,
+        "collaboration_openness": 0.82,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 8000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C017-01",
+        "POST-C017-02",
+        "POST-C017-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC6y_DbpezOinlzHv8O092zw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C018_v1",
+      "creator_id": "C018",
+      "creator_name": "Chris Brockhurst",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "tech",
+          "outdoor",
+          "skiing"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 66,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial",
+        "review",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 38.0,
+        "window_90d": 56.0,
+        "scout_score": 62.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.94,
+        "collaboration_openness": 0.87,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 9500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C018-01",
+        "POST-C018-02",
+        "POST-C018-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCt1XbJt5FxMBLsQAsWHap_w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C019_v1",
+      "creator_id": "C019",
+      "creator_name": "HondaFanboy35",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "skiing",
+          "surfing",
+          "motorcycle"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 89,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 28.0,
+        "window_90d": 98.0,
+        "scout_score": 57.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.63,
+        "collaboration_openness": 0.63,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C019-01",
+        "POST-C019-02",
+        "POST-C019-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCO6kFdgKBYR_GsDcGhBeMjQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C020_v1",
+      "creator_id": "C020",
+      "creator_name": "Chris Rogers",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "skiing",
+          "cycling",
+          "motorcycle",
+          "travel"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 68,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 36.0,
+        "window_90d": 49.0,
+        "scout_score": 59.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.88,
+        "collaboration_openness": 0.47,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C020-01",
+        "POST-C020-02",
+        "POST-C020-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCey7V2zwnjaxPKhfJ0sYE4g",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C021_v1",
+      "creator_id": "C021",
+      "creator_name": "JCUTMoto",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "tech",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 73,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 61.0,
+        "window_90d": 68.0,
+        "scout_score": 84.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.56,
+        "collaboration_openness": 0.59,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C021-01",
+        "POST-C021-02",
+        "POST-C021-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCUFfJeoyaYzFN7K8H5tYMQg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C022_v1",
+      "creator_id": "C022",
+      "creator_name": "Dork in the Road",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "surfing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 70,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 59.0,
+        "window_90d": 47.0,
+        "scout_score": 78.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.97,
+        "collaboration_openness": 0.95,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 12500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C022-01",
+        "POST-C022-02",
+        "POST-C022-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCrKYAp8fkN8yCbxcNK375rA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C023_v1",
+      "creator_id": "C023",
+      "creator_name": "Kitesurfing Official",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "skiing"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 62,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "vlog",
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 40.0,
+        "window_30d": 32.0,
+        "window_90d": 46.0,
+        "scout_score": 41.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.63,
+        "collaboration_openness": 0.74,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C023-01",
+        "POST-C023-02",
+        "POST-C023-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCYknsvYYY7RruvsZPEGay5Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C024_v1",
+      "creator_id": "C024",
+      "creator_name": "Dots on a Map",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "tech",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 70,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "vlog",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 64.0,
+        "window_90d": 66.0,
+        "scout_score": 77.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.91,
+        "collaboration_openness": 0.97,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C024-01",
+        "POST-C024-02",
+        "POST-C024-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCmf0FVB5zt6Ltq7RooWvc0g",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C025_v1",
+      "creator_id": "C025",
+      "creator_name": "Emory, By Land",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "skiing",
+          "travel",
+          "surfing"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 73,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 49.0,
+        "window_90d": 53.0,
+        "scout_score": 59.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.71,
+        "collaboration_openness": 0.45,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 10000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C025-01",
+        "POST-C025-02",
+        "POST-C025-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UChSSISEgIfwYz2cc0aHQj3g",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C026_v1",
+      "creator_id": "C026",
+      "creator_name": "Her Two Wheels",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "cycling",
+          "skiing"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 74,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 27.0,
+        "window_90d": 58.0,
+        "scout_score": 65.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.9,
+        "collaboration_openness": 0.5,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 13000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C026-01",
+        "POST-C026-02",
+        "POST-C026-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzMAG_9ikEm6P60GBpDIqqg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C027_v1",
+      "creator_id": "C027",
+      "creator_name": "Frost Ops",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "travel",
+          "motorcycle",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 93,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison",
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 40.0,
+        "window_30d": 22.0,
+        "window_90d": 53.0,
+        "scout_score": 37.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.57,
+        "collaboration_openness": 0.79,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 14500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C027-01",
+        "POST-C027-02",
+        "POST-C027-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCILeen7hCqbM8kEwCWDcZ9Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C028_v1",
+      "creator_id": "C028",
+      "creator_name": "Geekyranjit",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "motorcycle",
+          "outdoor"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 64,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 53.0,
+        "window_90d": 52.0,
+        "scout_score": 68.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.71,
+        "collaboration_openness": 0.96,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C028-01",
+        "POST-C028-02",
+        "POST-C028-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCO2WJZKQoDW4Te6NHx4KfTg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C029_v1",
+      "creator_id": "C029",
+      "creator_name": "Sulit Tech Reviews",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "cycling"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 95,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog",
+        "tutorial",
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 30.0,
+        "window_90d": 49.0,
+        "scout_score": 48.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.58,
+        "collaboration_openness": 0.58,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 13500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C029-01",
+        "POST-C029-02",
+        "POST-C029-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCa8g_5cRhATCMNMI7xlLJzQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C030_v1",
+      "creator_id": "C030",
+      "creator_name": "JB Outside",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "surfing",
+          "tech",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 71,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 41.0,
+        "window_90d": 63.0,
+        "scout_score": 65.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.61,
+        "collaboration_openness": 0.78,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 12500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C030-01",
+        "POST-C030-02",
+        "POST-C030-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzQF1LBCzur1ioS-g9g9NaA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C031_v1",
+      "creator_id": "C031",
+      "creator_name": "NorCal Cycling",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "outdoor"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 88,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 48.0,
+        "window_90d": 81.0,
+        "scout_score": 80.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.8,
+        "collaboration_openness": 0.72,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5200,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C031-01",
+        "POST-C031-02",
+        "POST-C031-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCIfRR1N2Gm1vjj9X955iWSQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C032_v1",
+      "creator_id": "C032",
+      "creator_name": "Patagonia",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "outdoor"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 84,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 34.0,
+        "window_90d": 70.0,
+        "scout_score": 63.0,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.77,
+        "collaboration_openness": 0.66,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 7800,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C032-01",
+        "POST-C032-02",
+        "POST-C032-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCl3xZ-f3cQhOHvH6f-7-ssQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C033_v1",
+      "creator_id": "C033",
+      "creator_name": "Insta360 Moto",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "skiing",
+          "outdoor"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 79,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 52.0,
+        "window_90d": 64.0,
+        "scout_score": 74.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.7,
+        "collaboration_openness": 0.8,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6100,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C033-01",
+        "POST-C033-02",
+        "POST-C033-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC9rhVOE9V5abTKrDGFeRZWg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C034_v1",
+      "creator_id": "C034",
+      "creator_name": "JORDAN HETRICK",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 76,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 70.0,
+        "window_30d": 29.0,
+        "window_90d": 58.0,
+        "scout_score": 54.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.82,
+        "collaboration_openness": 0.6,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 8800,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C034-01",
+        "POST-C034-02",
+        "POST-C034-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCaLCRvvau4acqQ4eLGZUywA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C035_v1",
+      "creator_id": "C035",
+      "creator_name": "MountMedia",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "outdoor"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 91,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 64.0,
+        "window_90d": 77.0,
+        "scout_score": 87.4,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.74,
+        "collaboration_openness": 0.85,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4300,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C035-01",
+        "POST-C035-02",
+        "POST-C035-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC_Nql0AlGzl7dSAuTqBUPEA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C036_v1",
+      "creator_id": "C036",
+      "creator_name": "The Skiing Ram",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "cycling"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 83,
+        "catalog_risks": [
+          "近期商业内容比例偏高"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 31.0,
+        "window_90d": 69.0,
+        "scout_score": 61.3,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.88,
+        "collaboration_openness": 0.58,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 9900,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C036-01",
+        "POST-C036-02",
+        "POST-C036-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCIj8c5QtM74AFS5RaESr90Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C037_v1",
+      "creator_id": "C037",
+      "creator_name": "Insta360 Tutorials",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "cycling"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 86,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog",
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 41.0,
+        "window_90d": 73.0,
+        "scout_score": 71.1,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.81,
+        "collaboration_openness": 0.7,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 7200,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C037-01",
+        "POST-C037-02",
+        "POST-C037-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCFeUhzdN15jFTuT-ZruAqVw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C038_v1",
+      "creator_id": "C038",
+      "creator_name": "DJI",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 90,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 55.0,
+        "window_90d": 84.0,
+        "scout_score": 84.3,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.69,
+        "collaboration_openness": 0.78,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3900,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C038-01",
+        "POST-C038-02",
+        "POST-C038-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCsNGtpqGsyw0U6qEG-WHadA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C039_v1",
+      "creator_id": "C039",
+      "creator_name": "GoPronaut",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "outdoor"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 74,
+        "catalog_risks": [
+          "报价接近预算上限"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 24.0,
+        "window_90d": 52.0,
+        "scout_score": 46.4,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.9,
+        "collaboration_openness": 0.5,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 11500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C039-01",
+        "POST-C039-02",
+        "POST-C039-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCmNGXnhayQaAN28W2KzzxXA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C040_v1",
+      "creator_id": "C040",
+      "creator_name": "Chaseontwowheels",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 87,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 46.0,
+        "window_90d": 75.0,
+        "scout_score": 74.0,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.76,
+        "collaboration_openness": 0.73,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6400,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C040-01",
+        "POST-C040-02",
+        "POST-C040-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCidMMQafCAomjuD_a3DcdHw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C041_v1",
+      "creator_id": "C041",
+      "creator_name": "Life at Lean",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 85,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 58.0,
+        "window_90d": 71.0,
+        "scout_score": 83.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.72,
+        "collaboration_openness": 0.77,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4100,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C041-01",
+        "POST-C041-02",
+        "POST-C041-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzjILZxaqNI0FM_XPPkcRJw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C042_v1",
+      "creator_id": "C042",
+      "creator_name": "Insta360 Shorts",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 80,
+        "catalog_risks": [
+          "档期存在不确定性"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 33.0,
+        "window_90d": 60.0,
+        "scout_score": 60.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.7,
+        "collaboration_openness": 0.62,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 8600,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C042-01",
+        "POST-C042-02",
+        "POST-C042-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCGxOU4ewSI3huRjE5wEXZoQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C043_v1",
+      "creator_id": "C043",
+      "creator_name": "Nick Kendall",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "outdoor"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 89,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 60.0,
+        "window_90d": 82.0,
+        "scout_score": 86.4,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.68,
+        "collaboration_openness": 0.88,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C043-01",
+        "POST-C043-02",
+        "POST-C043-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCTyuUxbflOZ0nESSnJBMpbg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C044_v1",
+      "creator_id": "C044",
+      "creator_name": "Lost LeBlanc",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "travel"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 82,
+        "catalog_risks": [
+          "素材授权范围需确认"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 44.0,
+        "window_90d": 66.0,
+        "scout_score": 71.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.75,
+        "collaboration_openness": 0.71,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5700,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C044-01",
+        "POST-C044-02",
+        "POST-C044-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCt_NLJ4McJlCyYM-dSPRo7Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C045_v1",
+      "creator_id": "C045",
+      "creator_name": "MyLifeOutdoors",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "outdoor"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 86,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 51.0,
+        "window_90d": 79.0,
+        "scout_score": 81.3,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.73,
+        "collaboration_openness": 0.8,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4800,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C045-01",
+        "POST-C045-02",
+        "POST-C045-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCmor-2SRB1E9dHMbcr397_Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C046_v1",
+      "creator_id": "C046",
+      "creator_name": "OTM Cars & Motorcycles",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 77,
+        "catalog_risks": [
+          "需确认竞品合作排他"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": "需确认竞品合作排他",
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 70.0,
+        "window_30d": 28.0,
+        "window_90d": 55.0,
+        "scout_score": 53.0,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.8,
+        "collaboration_openness": 0.54,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 10200,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C046-01",
+        "POST-C046-02",
+        "POST-C046-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC7PPYQ9_p_ALxx7msmhvCQQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C047_v1",
+      "creator_id": "C047",
+      "creator_name": "Tahoe Meg",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "tech"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 81,
+        "catalog_risks": [
+          "预计成本超预算"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 37.0,
+        "window_90d": 50.0,
+        "scout_score": 60.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.71,
+        "collaboration_openness": 0.6,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 15500,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C047-01",
+        "POST-C047-02",
+        "POST-C047-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCRslQ1rjzN0YhleSooqMf-A",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C048_v1",
+      "creator_id": "C048",
+      "creator_name": "Open Air Problems",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "outdoor"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 73,
+        "catalog_risks": [
+          "预计成本超预算"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison"
+      ],
+      "momentum": {
+        "window_7d": 50.0,
+        "window_30d": 18.0,
+        "window_90d": 44.0,
+        "scout_score": 37.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.65,
+        "collaboration_openness": 0.4,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 14800,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C048-01",
+        "POST-C048-02",
+        "POST-C048-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCn_lFpUEwTR9iH_FrggJm1w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C049_v1",
+      "creator_id": "C049",
+      "creator_name": "Scrambler POV",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "fashion",
+          "beauty"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 58,
+        "catalog_risks": [
+          "品牌安全低于门槛"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 40.0,
+        "window_90d": 61.0,
+        "scout_score": 64.2,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.6,
+        "collaboration_openness": 0.9,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6200,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C049-01",
+        "POST-C049-02",
+        "POST-C049-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCGqdR-kobDziIGQYEZSk_Yg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C050_v1",
+      "creator_id": "C050",
+      "creator_name": "The Bergreens",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "skiing",
+          "outdoor"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "Germany",
+        "markets": [
+          "Germany"
+        ],
+        "language": "German",
+        "languages": [
+          "German"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 84,
+        "catalog_risks": [
+          "目标市场不匹配"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 42.0,
+        "window_90d": 70.0,
+        "scout_score": 71.0,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.78,
+        "collaboration_openness": 0.67,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 7000,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C050-01",
+        "POST-C050-02",
+        "POST-C050-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC-x1jy1EzBbAcBo158hOSOA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C051_v1",
+      "creator_id": "C051",
+      "creator_name": "GoPro",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "outdoor",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 93,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 68.0,
+        "window_90d": 88.0,
+        "scout_score": 91.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.84,
+        "collaboration_openness": 0.92,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3200,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C051-01",
+        "POST-C051-02",
+        "POST-C051-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCqhnX4jA0A5paNd1v-zEysw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C052_v1",
+      "creator_id": "C052",
+      "creator_name": "The North Face",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "travel",
+          "outdoor"
+        ],
+        "scenes": [
+          "wide establishing rotate",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico",
+          "United States"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish",
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 85,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 49.0,
+        "window_90d": 72.0,
+        "scout_score": 74.9,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.79,
+        "collaboration_openness": 0.74,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 6900,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C052-01",
+        "POST-C052-02",
+        "POST-C052-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCNfWDbERpf34FsSWIpqGD0Q",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C053_v1",
+      "creator_id": "C053",
+      "creator_name": "Becca Farsace",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "skiing"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 78,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "review",
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 80.0,
+        "window_30d": 38.0,
+        "window_90d": 63.0,
+        "scout_score": 63.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.77,
+        "collaboration_openness": 0.69,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 8100,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C053-01",
+        "POST-C053-02",
+        "POST-C053-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCEbFX3P9ADiJvle5Z0Qyw2A",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C054_v1",
+      "creator_id": "C054",
+      "creator_name": "The Ride with Ben Delaney",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "motorcycle"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 80,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 54.0,
+        "window_90d": 68.0,
+        "scout_score": 80.6,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.7,
+        "collaboration_openness": 0.76,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4400,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C054-01",
+        "POST-C054-02",
+        "POST-C054-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCKYS6ajrNo932AGe47kQLSg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C055_v1",
+      "creator_id": "C055",
+      "creator_name": "Insta360",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "travel",
+          "cycling"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 92,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 59.0,
+        "window_90d": 86.0,
+        "scout_score": 86.7,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.8,
+        "collaboration_openness": 0.83,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 4100,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C055-01",
+        "POST-C055-02",
+        "POST-C055-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC3qWcF49rv8VMZO7Vg6kj5w",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C056_v1",
+      "creator_id": "C056",
+      "creator_name": "TheCuriousEngineer",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "tech",
+          "travel"
+        ],
+        "scenes": [
+          "eye-line / handlebar pov",
+          "detail cutaway",
+          "creator-facing cut then back to pov"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 75,
+        "catalog_risks": [
+          "近期表现存在下滑"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "tutorial"
+      ],
+      "momentum": {
+        "window_7d": 60.0,
+        "window_30d": 26.0,
+        "window_90d": 49.0,
+        "scout_score": 46.8,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.83,
+        "collaboration_openness": 0.51,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 10800,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C056-01",
+        "POST-C056-02",
+        "POST-C056-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzPIROESJK4uLg1UquMwQxA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C057_v1",
+      "creator_id": "C057",
+      "creator_name": "Global Mountain Bike Network",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "cycling",
+          "travel",
+          "outdoor"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States",
+          "Mexico"
+        ],
+        "language": "English",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 88,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV",
+        "review"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 43.0,
+        "window_90d": 76.0,
+        "scout_score": 72.7,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.82,
+        "collaboration_openness": 0.7,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 7400,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C057-01",
+        "POST-C057-02",
+        "POST-C057-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC_A--fhX5gea0i4UtpD99Gg",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C058_v1",
+      "creator_id": "C058",
+      "creator_name": "Brandon Li",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "surfing",
+          "outdoor"
+        ],
+        "scenes": [
+          "water or dust contact",
+          "detail cutaway",
+          "same take continues past the first minute"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 90,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "POV"
+      ],
+      "momentum": {
+        "window_7d": 100.0,
+        "window_30d": 61.0,
+        "window_90d": 80.0,
+        "scout_score": 86.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.71,
+        "collaboration_openness": 0.86,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 3600,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C058-01",
+        "POST-C058-02",
+        "POST-C058-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UC3stPIuUoCDHG7COfwr0tEA",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C059_v1",
+      "creator_id": "C059",
+      "creator_name": "Surf Life Siargao",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "outdoor",
+          "travel"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "rotate then cut to a product detail"
+        ]
+      },
+      "audience": {
+        "country": "Mexico",
+        "markets": [
+          "Mexico"
+        ],
+        "language": "Spanish",
+        "languages": [
+          "Spanish"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 83,
+        "catalog_risks": [],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "cinematic"
+      ],
+      "momentum": {
+        "window_7d": 90.0,
+        "window_30d": 47.0,
+        "window_90d": 70.0,
+        "scout_score": 73.5,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.74,
+        "collaboration_openness": 0.68,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 5900,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C059-01",
+        "POST-C059-02",
+        "POST-C059-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCzGjw0SHiJctuX1k2iEdkSQ",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    },
+    {
+      "genome_id": "genome_C060_v1",
+      "creator_id": "C060",
+      "creator_name": "Weekend On Wheels #Wow",
+      "version": 1,
+      "updated_at": "2026-08-01T00:00:00+00:00",
+      "source": "synthetic_catalog",
+      "source_note": "Derived from the demo catalog plus authored clip ids. Not a live platform genome.",
+      "topic_scene": {
+        "topics": [
+          "motorcycle",
+          "outdoor",
+          "tech"
+        ],
+        "scenes": [
+          "long take still rolling",
+          "detail cutaway",
+          "splash or grit on the housing"
+        ]
+      },
+      "audience": {
+        "country": "United States",
+        "markets": [
+          "United States"
+        ],
+        "language": "English",
+        "languages": [
+          "English"
+        ],
+        "age": null,
+        "age_status": "not_collected",
+        "interest": null,
+        "interest_status": "not_collected"
+      },
+      "commerce": {
+        "clicks": null,
+        "coupon_redemptions": null,
+        "affiliate": null,
+        "orders": null,
+        "status": "not_collected",
+        "note": "Commerce is written only from PerformanceEvent rows. Empty until an operator records an event."
+      },
+      "safety": {
+        "brand_safety_score": 72,
+        "catalog_risks": [
+          "报价接近预算上限"
+        ],
+        "controversy": null,
+        "controversy_status": "not_collected",
+        "competitor_note": null,
+        "fake_traffic_status": "not_collected",
+        "disclosure_status": "not_collected"
+      },
+      "visual_style": [
+        "comparison",
+        "vlog"
+      ],
+      "momentum": {
+        "window_7d": 70.0,
+        "window_30d": 30.0,
+        "window_90d": 57.0,
+        "scout_score": 54.4,
+        "source": "catalog_proxy",
+        "note": "Catalog proxies, not a live 7/30/90 crawl."
+      },
+      "reliability": {
+        "historical_reliability": 0.86,
+        "collaboration_openness": 0.55,
+        "reply_status": "not_collected",
+        "revision_status": "not_collected",
+        "authorization_status": "not_collected"
+      },
+      "cost": {
+        "quote_usd": 11900,
+        "sample_status": "not_collected",
+        "commission_status": "not_collected",
+        "usage_rights_status": "not_collected"
+      },
+      "clip_ids": [
+        "POST-C060-01",
+        "POST-C060-02",
+        "POST-C060-03"
+      ],
+      "vector_ref": "sparse_tfidf_catalog_document",
+      "asr_status": "not_collected",
+      "comment_status": "not_collected",
+      "keyframe_status": "not_collected",
+      "youtube_channel_id": "UCpq4pXQWRG3kZE2L-wJditw",
+      "identity_note": "Catalog row identity is this public YouTube channel. Not KYC."
+    }
+  ]
+}

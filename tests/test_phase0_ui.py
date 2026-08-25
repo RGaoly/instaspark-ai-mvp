@@ -33,7 +33,7 @@ def test_shared_ui_files_exist():
 
 
 def test_python_sources_compile(tmp_path):
-    for path in [ROOT / "app.py", *ROOT.glob("components/*.py"), *ROOT.glob("views/*.py")]:
+    for path in [ROOT / "app.py", *ROOT.glob("components/*.py"), *ROOT.glob("views/*.py"), *ROOT.glob("src/*.py")]:
         py_compile.compile(str(path), cfile=str(tmp_path / f"{path.stem}.pyc"), doraise=True)
 
 
@@ -164,6 +164,34 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "match_label" in search
     assert "Modeled est. views" in search
     assert "NL query is a lexical filter + small boost, not semantic search." in search
+    assert "TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA." in search
+    assert "Top 10 working cut" in search
+    assert "intensive_read_html" in search
+    assert "intensive_read_pack" in search
+    assert "attached_by_creator" in search
+    assert "hydrate_channel_clips" in search
+    assert "captions_for_channel" in search
+    assert "LEGEND" in search
+    assert "YT_LEGEND" in search
+    assert 'st.expander(t("Top 20 intensive-read clips")' not in search
+    assert "intensive_inspect_" in search
+    intensive = (ROOT / "src/intensive_read.py").read_text(encoding="utf-8")
+    assert "Top 20 intensive-read clips" in intensive
+    assert 'id="intensive-read-board"' in intensive
+    assert "asr_status" in intensive
+    assert "This is not multimodal ASR" in intensive
+    assert "Labeled demo evidence — not ASR, not scraped comments." in intensive
+    assert "youtube_data_api" in intensive
+    assert "youtube_thumbnail" in intensive
+    assert "caption_source" in intensive
+    assert "keyframe_note" in intensive
+    assert "comment_themes" in intensive
+    assert "clips_for" in search
+    assert "not LLM / not neural embeddings" in search
+    assert "recall_pool_caption" in search
+    verified = (ROOT / "src" / "verified_channels.py").read_text(encoding="utf-8")
+    assert "public YouTube channel rows" in verified
+    assert "catalog_channel +" in verified
     assert "Topic overlap" in search
     assert "search_filter_markets" in search
     assert "filter_ranked_creators" in search
@@ -210,6 +238,13 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "Linked creator opportunities" in launch
     assert "launch_cta_page" in launch
     assert "open_launch_cta" in launch
+    assert "load_product_dna" in launch
+    assert "_dna_card" in launch
+    assert 't("Product DNA")' in launch
+    assert "Versionable SKU object" in launch
+    assert "genome_panel_html" in search
+    assert "genome_panel_html" in compare
+    assert "genome_panel_html" in studio
     assert "launch_cta_creator" in launch
     assert "next_outreach_action_page" in launch
     assert "prepare_next_action_jump" in launch
@@ -250,6 +285,15 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert "approve_inbound_for_outreach" in opportunity
     assert "generate_inbound_reply" in opportunity
     assert "_render_inbound_list" in opportunity
+    assert "_render_scout_cards" in opportunity
+    render_body = opportunity.split("def render()")[-1]
+    assert render_body.index("_render_inbound_list") < render_body.index("_render_scout_cards")
+    assert "Always-on scout cards" in opportunity
+    assert "save_scout_card" in opportunity
+    assert 'id="always-on-scout"' in opportunity
+    assert 'st.expander(t("Always-on scout cards")' not in opportunity
+    assert "catalog_momentum" in opportunity
+    assert "Not a live crawl" in opportunity
     assert "labeled footer" in opportunity or "labeled-footer" in opportunity
     assert "not a live mailbox" in opportunity.lower()
     assert "next_outreach_action_page" in opportunity
@@ -271,7 +315,28 @@ def test_honesty_chrome_is_not_hardcoded_pretty():
     assert 'open_workspace_page("outreach-operations")' in growth
     assert "Go to Outreach" not in growth
     assert "_performance_table(filtered_events, names)" in growth
+    assert "acceptance_matrix" in growth
+    assert "Pilot acceptance matrix" in growth
+    assert 'id="pilot-acceptance-matrix"' in growth
+    assert "src/evaluation.py" in growth
+    assert 'st.expander(t("Pilot acceptance matrix")' not in growth
+    assert "Not operator interviews" in growth
+    assert "catalog_channel" in growth
+    assert "not KYC" in growth
+    assert "propose_budget_decision" in growth
+    assert "Budget decision" in growth
+    assert "Not a modeled forecast" in growth
+    assert "load_report" in growth
+    assert "_benchmark_html" in growth
+    assert 'id="claim-evidence-benchmark"' in growth
+    assert "Claim-evidence benchmark" in growth
+    assert "Command Center" not in (ROOT / "app.py").read_text(encoding="utf-8")
+    assert "Knowledge Hub" not in (ROOT / "app.py").read_text(encoding="utf-8")
+    assert (ROOT / "app.py").read_text(encoding="utf-8").count("st.Page(") == 7
     compare_src = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
     assert "resolve_compare_focus" in compare_src
     assert 'key="compare_focus_name"' in compare_src
     assert "_compare_grid(compare, focus" in compare_src
+    assert "ceg_trace_panel_html" in compare_src
+    assert 'id="ceg-run-trace"' in compare_src
+    assert "latest_ceg_run" in compare_src

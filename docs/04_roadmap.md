@@ -12,8 +12,8 @@
 
 ## V0.1 — Portfolio polish
 - [ ] 产品截图与 2 分钟演示视频
-- [ ] 英文 README
-- [ ] 评测结果页面
+- [x] 英文 README
+- [x] 验收矩阵在 Growth Review（不是第八页评测中心）
 - [ ] 真实用户访谈记录
 
 ## P0 — Dual-entry product foundation

@@ -35,6 +35,23 @@ def test_style_and_risk_tabs_use_catalog():
     assert "TikTok" not in style
     empty_style = _content_style_html({"styles": [], "topics": None})
     assert "Not specified in the catalog" in empty_style
+    assert "No authored clips for this creator" in empty_style
+    timed = _content_style_html(
+        {"styles": ["POV"], "topics": ["cycling"]},
+        [
+            {
+                "post_id": "POST-C031-01",
+                "title": "Jordan Ridge · catalog clip 01",
+                "url": "https://example.com/demo/c031/clip-01",
+                "source": "synthetic_catalog",
+                "timestamps": [{"t": "00:08", "label": "Long take still rolling", "claim_id": "all_day"}],
+                "note": "Authored demo timestamps. Not ASR.",
+            }
+        ],
+    )
+    assert "00:08" in timed
+    assert "all_day" in timed
+    assert "Not ASR" in timed
     empty_risk = _risk_html({})
     assert "No catalog warnings for this creator" in empty_risk
     risk = _risk_html({"warnings": ["需确认竞品合作排他"]})

@@ -160,6 +160,19 @@ def _normalize_name(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip().lower()
 
 
+def _former_catalog_ids() -> dict[str, str]:
+    """Synthetic inbound names still route to the stable creator_id after a channel rename."""
+
+    from src.verified_channels import binds_by_creator_id
+
+    aliases: dict[str, str] = {}
+    for bind in binds_by_creator_id().values():
+        former = _normalize_name(str(bind.get("former_catalog_name") or ""))
+        if former:
+            aliases[former] = str(bind["creator_id"])
+    return aliases
+
+
 def resolve_identity(
     sender_name: str,
     catalog: Iterable[Mapping[str, Any]],
@@ -171,6 +184,7 @@ def resolve_identity(
     claimed = _strip(sender_name)
     normalized = _normalize_name(claimed)
     records = list(catalog)
+    by_id = {str(row.get("creator_id") or ""): row for row in records}
     exact = next(
         (
             row
@@ -179,13 +193,22 @@ def resolve_identity(
         ),
         None,
     )
+    if exact is None:
+        former_id = _former_catalog_ids().get(normalized)
+        if former_id:
+            exact = by_id.get(former_id)
     extra_tokens = bool(re.search(r"\b(official|team|staff|admin|support)\b", normalized))
     if persona == "impersonation" or extra_tokens:
         suspected = exact
         if suspected is None:
+            former_names_by_id: dict[str, list[str]] = {}
+            for name, cid in _former_catalog_ids().items():
+                former_names_by_id.setdefault(cid, []).append(name)
             for row in records:
-                catalog_name = _normalize_name(str(row.get("creator_name") or ""))
-                if catalog_name and catalog_name in normalized:
+                cid = str(row.get("creator_id") or "")
+                aliases = [_normalize_name(str(row.get("creator_name") or ""))]
+                aliases.extend(former_names_by_id.get(cid) or [])
+                if any(alias and alias in normalized for alias in aliases):
                     suspected = row
                     break
         return {

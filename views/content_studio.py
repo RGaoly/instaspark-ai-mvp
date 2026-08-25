@@ -15,6 +15,8 @@ from components.state import (
 )
 from components.ui import labels, md
 from src.domain import declared_platforms, match_tier
+from src.creator_genome import genome_panel_html
+from src.product_dna import load_product_dna
 from services.llm_service import (
     generate_brief,
     generate_hooks,
@@ -100,6 +102,26 @@ def _mission_creator_cards(mission, creator, live_evidence=None) -> str:
       <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · {match_tier(creator.get('total_score', 0))}</p>
     </div>
     {_platform_requirements_html(creator, live_evidence)}
+    {_dna_shot_list_html()}
+    {genome_panel_html(str(creator.get("creator_id") or ""))}
+    """
+
+
+def _dna_shot_list_html() -> str:
+    dna = load_product_dna()
+    items = []
+    for claim in dna.get("claims") or []:
+        proof = " · ".join(str(item) for item in (claim.get("visual_proof") or []) if str(item).strip())
+        items.append(
+            f'<p><b>{esc(claim.get("claim", ""))}</b><br/>{esc(proof)}'
+            f'<br/><small>{esc(claim.get("guardrail", ""))}</small></p>'
+        )
+    return f"""
+    <div class="is-studio-card">
+      <h4>Product DNA shot list</h4>
+      {''.join(items)}
+      <p><small>Must-show visual proof from {esc(dna.get("dna_id", ""))} v{esc(str(dna.get("version", "")))}. Not invented specs.</small></p>
+    </div>
     """
 
 

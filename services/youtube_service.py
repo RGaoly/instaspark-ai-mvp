@@ -12,7 +12,7 @@ import logging
 import urllib.error
 import urllib.parse
 import urllib.request
-from typing import Any
+from typing import Any, Sequence
 
 from infra.config import YOUTUBE_API_TIMEOUT_SECONDS, _resolve_secret
 
@@ -38,15 +38,16 @@ def youtube_status_label() -> str:
     return "YouTube Data API live" if is_youtube_available() else "YouTube lookup off"
 
 
-def _request(path: str, params: dict[str, str]) -> dict[str, Any]:
+def _request(path: str, params: dict[str, str], *, timeout: int | None = None) -> dict[str, Any]:
     query = urllib.parse.urlencode({**params, "key": _youtube_api_key()})
     url = f"{YOUTUBE_API_BASE}/{path}?{query}"
     request = urllib.request.Request(
         url,
         headers={"Accept": "application/json", "User-Agent": "InstaSparkAI/1.0"},
     )
+    wait = timeout if timeout is not None else YOUTUBE_API_TIMEOUT_SECONDS
     try:
-        with urllib.request.urlopen(request, timeout=YOUTUBE_API_TIMEOUT_SECONDS) as response:
+        with urllib.request.urlopen(request, timeout=wait) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
@@ -145,3 +146,449 @@ def search_channels(query: str, *, max_results: int = 6) -> dict[str, Any]:
             "items": [],
             "error": str(exc),
         }
+
+
+def captions_for_channel(channel_id: str) -> dict[str, Any]:
+    """List caption tracks for a channel's latest public video. Never ranks.
+
+    Transcript bodies are not downloaded. Missing keys stay empty with an error.
+    """
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "video_id": None,
+        "items": [],
+        "transcript": None,
+        "error": None,
+        "note": "Caption tracks are listed only. Transcript text is not downloaded. This block never enters ranking.",
+    }
+    if not cleaned:
+        result["error"] = "A live channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        search_payload = _request(
+            "search",
+            {
+                "part": "snippet",
+                "type": "video",
+                "channelId": cleaned,
+                "maxResults": "1",
+                "order": "date",
+            },
+        )
+        video_id = ""
+        items = search_payload.get("items") or []
+        if items:
+            video_id = str((items[0].get("id") or {}).get("videoId") or "")
+        result["video_id"] = video_id or None
+        if not video_id:
+            result["error"] = "No public video found on this channel to list caption tracks."
+            return result
+        caption_payload = _request("captions", {"part": "snippet", "videoId": video_id})
+        tracks = []
+        for item in caption_payload.get("items") or []:
+            snippet = item.get("snippet") or {}
+            tracks.append(
+                {
+                    "id": item.get("id"),
+                    "language": snippet.get("language"),
+                    "name": snippet.get("name"),
+                    "track_kind": snippet.get("trackKind"),
+                    "source": "youtube_data_api",
+                }
+            )
+        result["items"] = tracks
+        if not tracks:
+            result["error"] = "API returned no caption tracks for the latest public video."
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def search_videos(query: str, *, max_results: int = 25) -> dict[str, Any]:
+    """Search public videos. Never invents rows and never enters ranking."""
+
+    cleaned = " ".join(str(query).split())
+    empty = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "query": cleaned,
+        "items": [],
+        "error": None,
+    }
+    if not cleaned:
+        empty["error"] = "Enter a search query."
+        return empty
+    if not is_youtube_available():
+        empty["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return empty
+    try:
+        payload = _request(
+            "search",
+            {
+                "part": "snippet",
+                "type": "video",
+                "q": cleaned,
+                "maxResults": str(max(1, min(max_results, 25))),
+                "safeSearch": "strict",
+                "videoEmbeddable": "true",
+            },
+            timeout=20,
+        )
+        items = []
+        for raw in payload.get("items") or []:
+            video_id = str((raw.get("id") or {}).get("videoId") or "")
+            snippet = raw.get("snippet") or {}
+            if not video_id:
+                continue
+            items.append(
+                {
+                    "video_id": video_id,
+                    "title": snippet.get("title") or video_id,
+                    "channel_title": snippet.get("channelTitle") or "",
+                    "channel_id": snippet.get("channelId") or "",
+                    "url": f"https://www.youtube.com/watch?v={video_id}",
+                    "source": "youtube_data_api",
+                    "query": cleaned,
+                }
+            )
+        empty["items"] = items
+        return empty
+    except RuntimeError as exc:
+        empty["error"] = str(exc)
+        return empty
+
+
+def videos_for_channel(channel_id: str, *, max_results: int = 3) -> dict[str, Any]:
+    """Public uploads for a channel via search.list + videos.list. Never ranked."""
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "items": [],
+        "error": None,
+    }
+    if not cleaned:
+        result["error"] = "channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        payload = _request(
+            "search",
+            {
+                "part": "snippet",
+                "type": "video",
+                "channelId": cleaned,
+                "order": "date",
+                "maxResults": str(max(1, min(max_results, 10))),
+            },
+            timeout=20,
+        )
+        video_ids = [
+            str((raw.get("id") or {}).get("videoId") or "")
+            for raw in payload.get("items") or []
+        ]
+        video_ids = [item for item in video_ids if item]
+        if not video_ids:
+            result["error"] = "No public uploads returned for this channel."
+            return result
+        listed = videos_list(video_ids[: max(1, min(max_results, 10))])
+        result["items"] = list(listed.get("items") or [])
+        result["error"] = listed.get("error")
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def videos_list(video_ids: list[str]) -> dict[str, Any]:
+    """Hydrate public video metadata and thumbnails. Does not download captions."""
+
+    ids = [str(item).strip() for item in video_ids if str(item).strip()]
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "items": [],
+        "error": None,
+    }
+    if not ids:
+        result["error"] = "video_ids are required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    items: list[dict[str, Any]] = []
+    try:
+        for start in range(0, len(ids), 50):
+            chunk = ids[start : start + 50]
+            payload = _request(
+                "videos",
+                {
+                    "part": "snippet,contentDetails,status",
+                    "id": ",".join(chunk),
+                },
+                timeout=20,
+            )
+            for raw in payload.get("items") or []:
+                video_id = str(raw.get("id") or "")
+                snippet = raw.get("snippet") or {}
+                details = raw.get("contentDetails") or {}
+                status = raw.get("status") or {}
+                privacy = str(status.get("privacyStatus") or "")
+                if privacy and privacy != "public":
+                    continue
+                thumbs = snippet.get("thumbnails") or {}
+                thumb = (thumbs.get("high") or thumbs.get("medium") or thumbs.get("default") or {}).get("url")
+                items.append(
+                    {
+                        "video_id": video_id,
+                        "title": snippet.get("title") or video_id,
+                        "channel_title": snippet.get("channelTitle") or "",
+                        "channel_id": snippet.get("channelId") or "",
+                        "duration": details.get("duration"),
+                        "privacy": "public",
+                        "thumbnail_url": thumb,
+                        "url": f"https://www.youtube.com/watch?v={video_id}",
+                        "keyframe_source": "youtube_thumbnail",
+                        "source": "youtube_data_api",
+                    }
+                )
+        result["items"] = items
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        result["items"] = items
+        return result
+
+
+def channels_list(channel_ids: Sequence[str]) -> dict[str, Any]:
+    """Hydrate public channel snippet + uploads playlist. Does not use search.list."""
+
+    ids = [str(item).strip() for item in channel_ids if str(item).strip()]
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "items": [],
+        "error": None,
+    }
+    if not ids:
+        result["error"] = "channel_ids are required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    items: list[dict[str, Any]] = []
+    try:
+        for start in range(0, len(ids), 50):
+            chunk = ids[start : start + 50]
+            payload = _request(
+                "channels",
+                {"part": "snippet,contentDetails", "id": ",".join(chunk)},
+                timeout=20,
+            )
+            for raw in payload.get("items") or []:
+                snippet = raw.get("snippet") or {}
+                related = ((raw.get("contentDetails") or {}).get("relatedPlaylists") or {})
+                items.append(
+                    {
+                        "channel_id": str(raw.get("id") or ""),
+                        "title": snippet.get("title") or str(raw.get("id") or ""),
+                        "uploads_playlist_id": str(related.get("uploads") or ""),
+                        "source": "youtube_data_api",
+                    }
+                )
+        result["items"] = items
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def uploads_via_playlist(
+    channel_id: str,
+    *,
+    max_results: int = 3,
+    uploads_playlist_id: str | None = None,
+) -> dict[str, Any]:
+    """Public uploads via channels.list + playlistItems + videos.list. Never ranked.
+
+    Avoids search.list. Empty when the key is missing. Does not invent rows.
+    """
+
+    cleaned = str(channel_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "available": is_youtube_available(),
+        "channel_id": cleaned,
+        "items": [],
+        "error": None,
+        "via": "playlistItems",
+    }
+    if not cleaned:
+        result["error"] = "channel_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured. Labeled demo layer stays in place."
+        return result
+    try:
+        playlist_id = str(uploads_playlist_id or "").strip()
+        if not playlist_id:
+            listed = channels_list([cleaned])
+            if listed.get("error") and not listed.get("items"):
+                result["error"] = listed.get("error")
+                return result
+            found = next(
+                (item for item in (listed.get("items") or []) if str(item.get("channel_id") or "") == cleaned),
+                None,
+            )
+            playlist_id = str((found or {}).get("uploads_playlist_id") or "")
+        if not playlist_id:
+            result["error"] = "No uploads playlist on this channel."
+            return result
+        payload = _request(
+            "playlistItems",
+            {
+                "part": "contentDetails,snippet",
+                "playlistId": playlist_id,
+                "maxResults": str(max(1, min(max_results, 10))),
+            },
+            timeout=20,
+        )
+        video_ids = [
+            str((raw.get("contentDetails") or {}).get("videoId") or "")
+            for raw in payload.get("items") or []
+        ]
+        video_ids = [item for item in video_ids if item]
+        if not video_ids:
+            result["error"] = "No public uploads returned for this channel."
+            return result
+        listed = videos_list(video_ids[: max(1, min(max_results, 10))])
+        owned = [
+            item
+            for item in (listed.get("items") or [])
+            if str(item.get("channel_id") or "") == cleaned
+        ]
+        result["items"] = owned or list(listed.get("items") or [])
+        result["error"] = listed.get("error")
+        if not result["items"] and not result["error"]:
+            result["error"] = "No public uploads returned for this channel."
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def comment_threads_for_video(video_id: str, *, max_results: int = 20) -> dict[str, Any]:
+    """Public comment snippets. Empty when comments are off. Never ranked."""
+
+    cleaned = str(video_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "video_id": cleaned,
+        "snippets": [],
+        "themes": [],
+        "error": None,
+    }
+    if not cleaned:
+        result["error"] = "video_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured."
+        return result
+    try:
+        payload = _request(
+            "commentThreads",
+            {
+                "part": "snippet",
+                "videoId": cleaned,
+                "maxResults": str(max(1, min(max_results, 20))),
+                "textFormat": "plainText",
+                "order": "relevance",
+            },
+            timeout=20,
+        )
+        snippets = []
+        for raw in payload.get("items") or []:
+            top = ((raw.get("snippet") or {}).get("topLevelComment") or {}).get("snippet") or {}
+            text = str(top.get("textDisplay") or "").strip()
+            if text:
+                snippets.append(text[:280])
+        result["snippets"] = snippets[:3]
+        result["themes"] = _comment_themes(snippets)
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def caption_tracks_for_video(video_id: str) -> dict[str, Any]:
+    """List caption tracks. Does not download bodies (OAuth). ASR stays not_collected."""
+
+    cleaned = str(video_id or "").strip()
+    result: dict[str, Any] = {
+        "source": "youtube_data_api",
+        "video_id": cleaned,
+        "items": [],
+        "transcript": None,
+        "caption_body_status": "not_downloaded",
+        "error": None,
+        "note": "Caption tracks listed only. Body not downloaded. Not ASR.",
+    }
+    if not cleaned:
+        result["error"] = "video_id is required."
+        return result
+    if not is_youtube_available():
+        result["error"] = "YOUTUBE_API_KEY is not configured."
+        return result
+    try:
+        payload = _request("captions", {"part": "snippet", "videoId": cleaned}, timeout=20)
+        tracks = []
+        for item in payload.get("items") or []:
+            snippet = item.get("snippet") or {}
+            tracks.append(
+                {
+                    "id": item.get("id"),
+                    "language": snippet.get("language"),
+                    "name": snippet.get("name"),
+                    "track_kind": snippet.get("trackKind"),
+                    "source": "youtube_data_api",
+                }
+            )
+        result["items"] = tracks
+        if not tracks:
+            result["error"] = "API returned no caption tracks."
+        return result
+    except RuntimeError as exc:
+        result["error"] = str(exc)
+        return result
+
+
+def _comment_themes(snippets: list[str]) -> list[str]:
+    blob = " ".join(snippets).lower()
+    lexicon = (
+        "insta360",
+        "360",
+        "pov",
+        "camera",
+        "battery",
+        "quality",
+        "travel",
+        "cycling",
+        "motorcycle",
+        "surf",
+        "ski",
+        "outdoor",
+    )
+    themes = [f"Public comment theme: {word}" for word in lexicon if word in blob]
+    return themes[:3]

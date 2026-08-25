@@ -66,6 +66,9 @@ def test_identity_matches_catalog_and_flags_impersonation():
     diego = resolve_identity("Diego Trail", catalog, persona="kol")
     assert diego["identity_status"] == "matched"
     assert diego["creator_id"] == "C003"
+    alex = resolve_identity("Alex Rides", catalog, persona="kol")
+    assert alex["identity_status"] == "matched"
+    assert alex["creator_id"] == "C001"
 
     lucia = resolve_identity("Lucía García", catalog, persona="kol")
     assert lucia["identity_status"] == "new"

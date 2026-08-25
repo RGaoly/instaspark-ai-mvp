@@ -24,6 +24,23 @@ def session(monkeypatch):
     return fake
 
 
+GATE_FIXTURE_REASON = (
+    "Audited override: this environment has no model-grounded claim evidence for the fixture creator."
+)
+
+
+def approve_with_gate(creator_id, decision, reason, **kwargs):
+    """Approve through the claim-grounded evidence gate, overriding it on the audit trail.
+
+    The gate is real: without an Evidence Reader extraction that grounds a Product DNA
+    claim in a verbatim caption quote, ``save_decision`` refuses to approve outreach.
+    """
+
+    if decision == "Approved" and state.evidence_gate_state(creator_id)["blocked"]:
+        state.record_evidence_gate_override(creator_id, reason=GATE_FIXTURE_REASON)
+    return state.save_decision(creator_id, decision, reason, **kwargs)
+
+
 def test_dual_entry_context_preserves_opportunity_and_linked_mission(session):
     mission_context = state.active_context()
     assert mission_context["entry_type"] == "mission"
@@ -52,7 +69,7 @@ def test_unlinked_opportunity_does_not_materialize_mission_match(session):
 
 def test_unlinked_opportunity_decision_uses_reason_code_without_match(session):
     state.set_active_context("opportunity", "OPP-003")
-    decision = state.save_decision(
+    decision = approve_with_gate(
         "C009",
         "Rejected",
         "Evidence did not pass qualification",
@@ -141,8 +158,8 @@ def test_ranking_materializes_match_and_decision_references_it(session):
     assert match["mission_id"] == "launch_x5_us_001"
     assert match["evidence"]
 
-    first = state.save_decision(creator_id, "Approved", "Top-ranked shortlisted creator approved")
-    second = state.save_decision(creator_id, "Approved", "Repeated approval request")
+    first = approve_with_gate(creator_id, "Approved", "Top-ranked shortlisted creator approved")
+    second = approve_with_gate(creator_id, "Approved", "Repeated approval request")
     assert first == second
     assert session.decision_log[-1]["match_id"] == match["match_id"]
     assert session.decision_log[-1]["reason_code"] == "strong_fit"
@@ -188,7 +205,7 @@ def test_human_decision_is_written_to_sqlite(session):
     from infra import repository
 
     state.set_active_context("opportunity", "OPP-003")
-    state.save_decision(
+    approve_with_gate(
         "C009",
         "Rejected",
         "Evidence did not pass qualification",
@@ -204,7 +221,7 @@ def test_human_decision_is_written_to_sqlite(session):
 
 def test_operator_work_survives_a_new_session(session, monkeypatch):
     state.set_active_context("opportunity", "OPP-002")
-    state.save_decision(
+    approve_with_gate(
         "C003",
         "Approved",
         "Evidence and commercial fit approved",
@@ -235,8 +252,8 @@ def test_approval_issues_unique_coupons_per_creator(session):
     ranked = state.ranking()
     first_id = ranked.iloc[0]["creator_id"]
     second_id = ranked.iloc[1]["creator_id"]
-    first = state.save_decision(first_id, "Approved", "Approve first shortlist")
-    second = state.save_decision(second_id, "Approved", "Approve second shortlist")
+    first = approve_with_gate(first_id, "Approved", "Approve first shortlist")
+    second = approve_with_gate(second_id, "Approved", "Approve second shortlist")
     assert first["coupon"] != second["coupon"]
     assert first["deeplink"] != second["deeplink"]
     assert first["coupon"].startswith(f"X5-{first_id}-")
@@ -247,7 +264,7 @@ def test_approval_issues_unique_coupons_per_creator(session):
 def test_record_performance_event_drives_roi_and_survives_reload(session, monkeypatch):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    decision = state.save_decision(creator_id, "Approved", "Approve so a coupon exists")
+    decision = approve_with_gate(creator_id, "Approved", "Approve so a coupon exists")
 
     assert state.performance_events() == []
     assert decision["coupon"].startswith(f"X5-{creator_id}-")
@@ -288,7 +305,7 @@ def test_record_performance_event_drives_roi_and_survives_reload(session, monkey
 def test_viewer_cannot_record_performance_event(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve before viewer tries to record")
+    approve_with_gate(creator_id, "Approved", "Approve before viewer tries to record")
     _advance_linear(creator_id, "published", reason="Walk legal hops to published")
     assert state.creator_state(creator_id) == "published"
     session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
@@ -374,7 +391,7 @@ def test_live_evidence_is_visible_on_compare_and_outreach(session):
     assert "78s" not in panel
     assert "View more content (not wired)" not in panel
 
-    state.save_decision(creator_id, "Approved", "Need the creator on the outreach board")
+    approve_with_gate(creator_id, "Approved", "Need the creator on the outreach board")
     html = outreach_operations._kanban(state.workflow_board())
     assert "Live evidence: 1 attached" in html
 
@@ -404,7 +421,7 @@ def test_mission_health_moves_with_shortlist_approve_and_performance_event(sessi
     assert matching["counts"]["shortlisted"] >= 1
     assert matching["counts"]["approved"] == 0
 
-    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    decision = approve_with_gate(creator_id, "Approved", "Approve so tracking exists")
     live = state.mission_health_snapshot()
     assert live["band"] == "outreach_live"
     assert live["score"] == 72
@@ -460,7 +477,7 @@ def test_launch_checklist_moves_after_shortlist_approve_and_event(session):
     assert matching["steps"][0]["status"] == "done"
     assert matching["steps"][1]["status"] == "current"
 
-    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    decision = approve_with_gate(creator_id, "Approved", "Approve so tracking exists")
     live = _launch_progress_snapshot()
     assert live["upcoming"][0]["title"] == "Record a conversion on Growth Review"
     assert live["steps"][1]["status"] == "done"
@@ -527,7 +544,7 @@ def test_launch_pipeline_notes_follow_live_counts(session):
     assert f'{matching["steps"][0]["count"]} currently shortlisted creators' in html
     assert "Approve one creator" not in html
 
-    decision = state.save_decision(creator_id, "Approved", "Approve so tracking exists")
+    decision = approve_with_gate(creator_id, "Approved", "Approve so tracking exists")
     live = _launch_progress_snapshot()
     html = _launch_pipeline_notes_html()
     assert f'{live["steps"][1]["count"]} currently approved creators' in html
@@ -556,8 +573,8 @@ def test_growth_filters_exclude_other_market_and_old_window(session):
     ranked = state.ranking()
     first_id = ranked.iloc[0]["creator_id"]
     second_id = ranked.iloc[1]["creator_id"]
-    first = state.save_decision(first_id, "Approved", "Approve US conversion path")
-    second = state.save_decision(second_id, "Approved", "Approve Mexico conversion path")
+    first = approve_with_gate(first_id, "Approved", "Approve US conversion path")
+    second = approve_with_gate(second_id, "Approved", "Approve Mexico conversion path")
     now = datetime(2026, 8, 17, 12, 0, tzinfo=timezone.utc)
 
     state.record_performance_event(
@@ -665,7 +682,7 @@ def test_viewer_cannot_save_content_asset(session):
 def test_saving_brief_advances_approved_creator_to_content_in_review(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    approve_with_gate(creator_id, "Approved", "Approve so outreach exists")
     assert state.creator_state(creator_id) == "approved"
 
     asset = state.save_content_asset(
@@ -712,7 +729,7 @@ def test_saving_brief_is_noop_when_not_in_outreach_or_already_past_review(sessio
     assert state.creator_state(creator_id) == "shortlisted"
     assert state.workflow_events() == []
 
-    state.save_decision(second_id, "Approved", "Approve second creator")
+    approve_with_gate(second_id, "Approved", "Approve second creator")
     state.transition_creator_state(
         second_id,
         "contacted",
@@ -755,7 +772,7 @@ def test_saving_brief_is_noop_when_not_in_outreach_or_already_past_review(sessio
 
     state.set_active_context("opportunity", "OPP-003")
     lost_id = "C009"
-    state.save_decision(
+    approve_with_gate(
         lost_id,
         "Rejected",
         "Evidence did not pass qualification",
@@ -771,7 +788,7 @@ def test_saving_brief_is_noop_when_not_in_outreach_or_already_past_review(sessio
 def test_viewer_cannot_advance_outreach_by_saving_a_brief(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve before viewer tries to write")
+    approve_with_gate(creator_id, "Approved", "Approve before viewer tries to write")
     assert state.creator_state(creator_id) == "approved"
     session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
     with pytest.raises(PermissionError, match="read-only"):
@@ -856,7 +873,7 @@ def test_switching_to_opportunity_replaces_then_restores_mission_shortlist(sessi
 def test_contact_pack_includes_coupon_and_utm_for_approved_creator(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so the contact pack exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the contact pack exists")
     pack = state.contact_pack_for(creator_id)
     blob = state.format_contact_pack(pack)
 
@@ -882,7 +899,7 @@ def test_contact_pack_includes_coupon_and_utm_for_approved_creator(session):
 def test_contact_pack_includes_brief_excerpt_and_live_evidence(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve before attaching evidence")
+    approve_with_gate(creator_id, "Approved", "Approve before attaching evidence")
     state.save_content_asset(
         creator_id,
         "X5 brief · Adventurous",
@@ -914,7 +931,7 @@ def test_contact_pack_includes_brief_excerpt_and_live_evidence(session):
 def test_viewer_cannot_regenerate_outreach_message(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve before viewer tries to regenerate")
+    approve_with_gate(creator_id, "Approved", "Approve before viewer tries to regenerate")
     original = session.outreach_cases[0]["outreach_message"]
     session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
 
@@ -946,7 +963,7 @@ def _advance_linear(creator_id: str, to_state: str, *, reason: str) -> None:
 def test_advance_approved_to_contacted_records_reason_on_timeline(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    approve_with_gate(creator_id, "Approved", "Approve so outreach exists")
     assert state.creator_state(creator_id) == "approved"
     assert state.next_linear_creator_state(creator_id) == "contacted"
 
@@ -971,7 +988,7 @@ def test_advance_approved_to_contacted_records_reason_on_timeline(session):
 def test_illegal_skip_from_approved_raises_and_does_not_mutate(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so outreach exists")
+    approve_with_gate(creator_id, "Approved", "Approve so outreach exists")
     before = list(state.workflow_events_for(creator_id))
 
     with pytest.raises(ValueError, match="illegal collaboration transition"):
@@ -989,7 +1006,7 @@ def test_illegal_skip_from_approved_raises_and_does_not_mutate(session):
 def test_viewer_cannot_advance_creator_state(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve before viewer tries to advance")
+    approve_with_gate(creator_id, "Approved", "Approve before viewer tries to advance")
     session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
 
     with pytest.raises(PermissionError, match="read-only"):
@@ -1006,7 +1023,7 @@ def test_viewer_cannot_advance_creator_state(session):
 def test_published_does_not_create_performance_events_and_measured_needs_one(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "published", reason="Walk legal hops to published")
 
     assert state.creator_state(creator_id) == "published"
@@ -1037,7 +1054,7 @@ def test_published_does_not_create_performance_events_and_measured_needs_one(ses
 def test_approved_record_does_not_skip_to_measured(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so a coupon exists")
+    approve_with_gate(creator_id, "Approved", "Approve so a coupon exists")
     assert state.creator_state(creator_id) == "approved"
 
     state.record_performance_event(creator_id, orders=1, revenue_usd=80, spend_usd=20)
@@ -1048,7 +1065,7 @@ def test_approved_record_does_not_skip_to_measured(session):
 def test_second_event_on_measured_is_idempotent(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "published", reason="Walk legal hops to published")
     state.record_performance_event(creator_id, orders=1, revenue_usd=120, spend_usd=40)
     assert state.creator_state(creator_id) == "measured"
@@ -1082,7 +1099,7 @@ def test_kanban_keeps_empty_domain_columns_and_shows_growth_next_after_published
     assert "Measured" in html
     assert "in_outreach" not in html
 
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "published", reason="Walk legal hops to published")
     published_board = state.workflow_board()
     assert published_board["published"]
@@ -1095,7 +1112,7 @@ def test_published_with_zero_events_next_action_page_is_growth_review(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
     name = ranked.iloc[0]["creator_name"]
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "published", reason="Walk legal hops to published")
 
     assert state.performance_events_for(creator_id) == []
@@ -1114,7 +1131,7 @@ def test_published_with_zero_events_next_action_page_is_growth_review(session):
 def test_content_in_review_without_asset_next_action_page_is_content_studio(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
 
     from views import outreach_operations
@@ -1241,7 +1258,7 @@ def test_search_and_compare_cta_targets_match_helper(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
     name = str(ranked.iloc[0]["creator_name"])
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
     assert state.content_assets_for(creator_id) == []
 
@@ -1285,7 +1302,7 @@ def test_launch_cta_targets_match_helper(session):
     ranked = state.ranking()
     creator_id = ranked.iloc[0]["creator_id"]
     name = str(ranked.iloc[0]["creator_name"])
-    state.save_decision(creator_id, "Approved", "Approve so the case exists")
+    approve_with_gate(creator_id, "Approved", "Approve so the case exists")
     _advance_linear(creator_id, "content_in_review", reason="Walk legal hops to review")
     assert state.content_assets_for(creator_id) == []
 
@@ -1330,7 +1347,7 @@ def test_launch_cta_prefers_selected_then_workflow_creator(session):
     assert launch_mission.launch_cta_page(selected_id) is None
     assert launch_mission.launch_cta_creator() is None
 
-    state.save_decision(workflow_id, "Approved", "Approve so the case exists")
+    approve_with_gate(workflow_id, "Approved", "Approve so the case exists")
     _advance_linear(workflow_id, "content_in_review", reason="Walk legal hops to review")
     assert state.content_assets_for(workflow_id) == []
     state.select_creator(selected_id)
@@ -1480,4 +1497,48 @@ def test_viewer_cannot_import_or_approve_inbound(session):
             actor="Demo Viewer",
             reason="Viewer should not approve inbound",
         )
+
+
+def test_save_scout_card_creates_signal_opportunity_from_genome_windows(session):
+    from src.scouting import scout_cards
+
+    cards = scout_cards(state.creators(), limit=1)
+    assert cards
+    card = cards[0]
+    assert card.get("genome_id")
+    before = {item["opportunity_id"] for item in session.opportunities}
+    saved = state.save_scout_card(card)
+    assert saved["opportunity_id"] not in before
+    assert saved["source"] == "catalog_momentum"
+    assert saved["opportunity_type"] == "creator_signal"
+    assert saved["creator_id"] == card["creator_id"]
+    assert "not a live crawl" in saved["hypothesis"].lower()
+    assert any(str(item).startswith("window_7d=") for item in saved["evidence"])
+    assert any(str(item).startswith("window_30d=") for item in saved["evidence"])
+    assert any(str(item).startswith("window_90d=") for item in saved["evidence"])
+    assert session.active_opportunity_id == saved["opportunity_id"]
+    assert saved["opportunity_id"] in {item["opportunity_id"] for item in session.opportunities}
+
+
+def test_save_scout_card_survives_sqlite_reload(session):
+    from infra import repository
+    from src.scouting import scout_cards
+
+    cards = scout_cards(state.creators(), limit=1)
+    saved = state.save_scout_card(cards[0])
+    stored = repository.load_all_state()
+    ids = {item["opportunity_id"] for item in stored.get("opportunities") or []}
+    assert saved["opportunity_id"] in ids
+    assert any(item.get("source") == "catalog_momentum" for item in stored["opportunities"] if item["opportunity_id"] == saved["opportunity_id"])
+
+
+def test_viewer_cannot_save_scout_card(session):
+    from src.scouting import scout_cards
+
+    session.auth_user = {"username": "demo", "role": "viewer", "display_name": "Demo Viewer"}
+    cards = scout_cards(state.creators(), limit=1)
+    count = len(session.opportunities)
+    with pytest.raises(PermissionError, match="read-only"):
+        state.save_scout_card(cards[0])
+    assert len(session.opportunities) == count
 

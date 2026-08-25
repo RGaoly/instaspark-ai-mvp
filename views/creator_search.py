@@ -21,6 +21,10 @@ from components.state import (
     active_context,
     active_context_label,
     attach_live_evidence,
+    creators,
+    evidence_extraction_pack,
+    evidence_gate_message,
+    evidence_gate_state,
     live_evidence_for,
     next_outreach_action_page,
     prepare_next_action_jump,
@@ -32,9 +36,21 @@ from components.state import (
 from components.ui import labels, md
 from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
+from src.content_evidence import clips_for
+from src.creator_genome import genome_panel_html
+from src import evidence_reader
+from src.intensive_read import (
+    EVIDENCE_READER_LEGEND,
+    LEGEND,
+    YT_LEGEND,
+    intensive_read_html,
+    intensive_read_pack,
+)
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
-from services.youtube_service import search_channels, youtube_status_label
+from src.verified_channels import binds_by_creator_id, recall_pool_caption
+from src.youtube_channel_fetch import hydrate_channel_clips
+from services.youtube_service import captions_for_channel, search_channels, youtube_status_label
 from views.content_studio import _catalog_join
 
 
@@ -42,6 +58,48 @@ def search_cta_page(creator_id: str) -> str | None:
     """Jump target for Search. Same rules as Outreach; do not fork them."""
 
     return next_outreach_action_page(creator_id)
+
+
+def evidence_reader_caption(pack: dict) -> str:
+    """One honest line about the Evidence Reader cache backing the board."""
+
+    coverage = dict(pack.get("coverage") or {})
+    extracted = int(coverage.get("extracted") or 0)
+    eligible = int(coverage.get("eligible_clips") or 0)
+    if not extracted:
+        return t(
+            "Evidence Reader: 0 of {eligible} public caption bodies have model-grounded claim evidence. "
+            "Claim-grounded extraction is unavailable without a configured model; keyword rules are not evidence.",
+            eligible=eligible,
+        )
+    return t(
+        "Evidence Reader: {extracted} of {eligible} public caption bodies read by {model} "
+        "({prompt}) · {supported} supported DNA claims · {rejected} ungrounded quotes dropped by the validator.",
+        extracted=extracted,
+        eligible=eligible,
+        model=str(pack.get("model") or "model"),
+        prompt=str(pack.get("prompt_version") or ""),
+        supported=int(coverage.get("supported_claims") or 0),
+        rejected=int(coverage.get("rejected_hallucinated_quotes") or 0)
+        + int(coverage.get("rejected_unknown_timestamps") or 0),
+    )
+
+
+def evidence_gate_line(creator_id: str) -> str:
+    """Approval-gate status for the inspected creator, in plain words."""
+
+    gate = evidence_gate_state(str(creator_id))
+    if gate["grounded"]:
+        first = gate["claims"][0]
+        return t(
+            "Approval gate: claim-grounded · DNA claim {claim} at {stamp} · source {source}",
+            claim=str(first.get("claim_id")),
+            stamp=str(first.get("timestamp")),
+            source=str(first.get("source_label")),
+        )
+    if gate["override"]:
+        return t("Approval gate: overridden on the audit trail by {actor}", actor=str(gate["override"].get("actor")))
+    return t("Approval gate: blocked") + " · " + t(evidence_gate_message(gate))
 
 
 def _platform_line(creator: dict, live_rows: list) -> str:
@@ -69,6 +127,30 @@ def select_search_creator(creator_id: str) -> str:
 
     select_creator(creator_id)
     return creator_id
+
+
+def _attached_overlays_for_pack(visible) -> dict[str, list[dict]]:
+    """Operator-attached channel uploads for intensive-read. Empty list means attached but no public uploads."""
+
+    cache = st.session_state.setdefault("_attached_channel_clips", {})
+    bound: dict[str, list[dict]] = {}
+    if visible is None or getattr(visible, "empty", True):
+        return bound
+    for creator_id in list(visible.head(20)["creator_id"]):
+        creator_id = str(creator_id)
+        rows = live_evidence_for(creator_id)
+        if not rows:
+            continue
+        channel = rows[0]
+        key = f"{creator_id}:{channel.get('channel_id')}"
+        if key not in cache:
+            cache[key] = hydrate_channel_clips(
+                channel,
+                clips_for(creator_id),
+                ownership="attached_channel",
+            )
+        bound[creator_id] = cache[key]
+    return bound
 
 
 def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
@@ -111,7 +193,14 @@ def _render_live_lookup(context: dict) -> None:
                 disabled=writes_locked() or not st.session_state.get("selected_creator_id"),
             ):
                 try:
-                    attach_live_evidence(st.session_state.selected_creator_id, item)
+                    creator_id = st.session_state.selected_creator_id
+                    attach_live_evidence(creator_id, item)
+                    key = f"{creator_id}:{item['channel_id']}"
+                    st.session_state.setdefault("_attached_channel_clips", {})[key] = hydrate_channel_clips(
+                        item,
+                        clips_for(creator_id),
+                        ownership="attached_channel",
+                    )
                     st.toast(t("YouTube channel attached as evidence"))
                 except (ValueError, PermissionError) as exc:
                     st.error(str(exc))
@@ -232,6 +321,12 @@ def _live_evidence_html(live_rows: list) -> str:
 
 def _detail_header_html(creator: dict, live_rows: list) -> str:
     score = float(creator["total_score"])
+    channel_id = str(creator.get("youtube_channel_id") or "").strip()
+    catalog_chip = (
+        badge("Public YouTube channel", "green")
+        if channel_id.startswith("UC")
+        else badge("Demo catalog", "gray")
+    )
     live_chip = (
         badge("Live YouTube evidence attached", "green")
         if live_rows or float(creator.get("live_proof_bonus") or 0) > 0
@@ -243,7 +338,7 @@ def _detail_header_html(creator: dict, live_rows: list) -> str:
         <div class="is-profile-head">
           {avatar(creator['creator_name'], 2, 'profile')}
           <div>
-            <div class="is-profile-name">{esc(creator['creator_name'])} {badge('Demo catalog','gray')} {live_chip}</div>
+            <div class="is-profile-name">{esc(creator['creator_name'])} {catalog_chip} {live_chip}</div>
             <div class="is-socials">{esc(_platform_line(creator, live_rows))}</div>
           </div>
           <div class="is-detail-score">
@@ -319,7 +414,48 @@ def _audience_html(creator: dict, cohort: list[dict]) -> str:
     """
 
 
-def _content_style_html(creator: dict) -> str:
+def _clips_html(clips: list) -> str:
+    if not clips:
+        return (
+            '<small style="color:#879198">'
+            "No authored clips for this creator. Timestamps are catalog labels, not ASR."
+            "</small>"
+        )
+    blocks = []
+    for clip in clips[:3]:
+        stamps = "".join(
+            "<li>"
+            f'<b>{esc(stamp.get("t", ""))}</b> · claim {esc(stamp.get("claim_id", ""))}'
+            + (
+                f'<br/><small>Caption ({esc(stamp.get("caption_source") or clip.get("caption_source") or "labeled_demo")}): '
+                f"{esc(stamp.get('caption', ''))}</small>"
+                if stamp.get("caption")
+                else f' {esc(stamp.get("label", ""))}'
+            )
+            + (
+                f"<br/><small>Keyframe: {esc(stamp.get('keyframe_note', ''))}</small>"
+                if stamp.get("keyframe_note")
+                else ""
+            )
+            + "</li>"
+            for stamp in clip.get("timestamps") or []
+        )
+        themes = ", ".join(esc(theme) for theme in clip.get("comment_themes") or [])
+        blocks.append(
+            '<div style="margin-top:8px">'
+            f'<b>{esc(clip.get("title") or clip.get("post_id") or "Clip")}</b><br/>'
+            f'<small><a href="{esc(clip.get("url", ""))}">{esc(clip.get("url", ""))}</a>'
+            f' · {esc(clip.get("source", "synthetic_catalog"))}'
+            f' · ASR {esc(str(clip.get("asr_status") or "not_collected"))}</small>'
+            f'<ul style="margin:4px 0 0 16px">{stamps}</ul>'
+            + (f"<small>Comment themes: {themes}</small><br/>" if themes else "")
+            + f'<small style="color:#879198">{esc(clip.get("note", ""))}</small>'
+            "</div>"
+        )
+    return "".join(blocks)
+
+
+def _content_style_html(creator: dict, clips: list | None = None) -> str:
     styles = esc(_catalog_join(creator.get("styles")))
     topics = esc(_catalog_join(creator.get("topics")))
     return f"""
@@ -330,6 +466,9 @@ def _content_style_html(creator: dict) -> str:
         <div class="is-card-title" style="margin:10px 0 6px">Topics</div>
         <p>{topics}</p>
         <small style="color:#879198">Same catalog fields as Content Studio.</small>
+        <div class="is-card-title" style="margin:10px 0 6px">Intensive-read clips</div>
+        {_clips_html(list(clips or []))}
+        {genome_panel_html(str(creator.get("creator_id") or ""))}
       </div>
     </div>
     """
@@ -369,7 +508,7 @@ def _render_detail_aside(creator: dict, cohort: list[dict]) -> None:
     with audience_tab:
         md(_audience_html(creator, cohort), unsafe_allow_html=True)
     with style_tab:
-        md(_content_style_html(creator), unsafe_allow_html=True)
+        md(_content_style_html(creator, clips_for(creator.get("creator_id", ""))), unsafe_allow_html=True)
     with risk_tab:
         md(_risk_html(creator), unsafe_allow_html=True)
 
@@ -434,6 +573,7 @@ def render() -> None:
         key="creator_nl_query",
     )
     st.caption(t("NL query is a lexical filter + small boost, not semantic search."))
+    st.caption(t("TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA. Not a neural embedding and not an LLM ranker."))
     markets, languages, topics = _render_catalog_filters(ranked)
     visible = filter_ranked_creators(
         ranked,
@@ -451,11 +591,14 @@ def render() -> None:
     selected_id = st.session_state.get("selected_creator_id")
     if selected_id not in visible_ids:
         select_creator(visible_ids[0])
+    catalog_n = len(creators())
+    gated_n = len(ranked)
+    pool = recall_pool_caption(catalog_n, len(binds_by_creator_id()))
     toolbar_left, toolbar_right = st.columns([0.85, 0.15], vertical_alignment="center")
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{len(visible)} creators found · rule-based ranking · not LLM / embeddings · demo catalog · {ai_badge("Not an LLM ranker")}'
+            f'{pool} · {gated_n} gated · Top 10 working cut · hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -468,8 +611,46 @@ def render() -> None:
         )
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
+    working = visible.head(10)
+    rest = visible.iloc[10:]
     with main:
-        _render_creator_table(visible)
+        st.caption(t("Top 10 is the working cut. Remaining gated rows stay available below."))
+        _render_creator_table(working)
+        if not rest.empty:
+            with st.expander(t("Additional gated candidates"), expanded=False):
+                _render_creator_table(rest)
+        extraction_pack = evidence_extraction_pack()
+        pack = intensive_read_pack(
+            visible,
+            n=20,
+            attached_by_creator=_attached_overlays_for_pack(visible),
+            evidence_by_post_id=evidence_reader.extractions_by_post_id(extraction_pack),
+        )
+        st.caption(evidence_reader_caption(extraction_pack))
+        selected_id = st.session_state.get("selected_creator_id")
+        live_rows = live_evidence_for(selected_id) if selected_id else []
+        if live_rows:
+            overlay = captions_for_channel(str(live_rows[0].get("channel_id") or ""))
+            for item in pack:
+                if item.get("creator_id") == selected_id:
+                    item["youtube_captions"] = overlay
+                    break
+        has_youtube = any(clip.get("video_id") for item in pack for clip in item.get("clips") or [])
+        st.caption(t(YT_LEGEND if has_youtube else LEGEND))
+        st.caption(t(EVIDENCE_READER_LEGEND))
+        md(intensive_read_html(pack), unsafe_allow_html=True)
+        if pack:
+            inspect_cols = st.columns(5)
+            for index, item in enumerate(pack):
+                creator_id = str(item.get("creator_id") or "")
+                with inspect_cols[index % 5]:
+                    if st.button(
+                        t("Inspect {creator_id}", creator_id=creator_id),
+                        key=f"intensive_inspect_{creator_id}",
+                        use_container_width=True,
+                    ):
+                        select_creator(creator_id)
+                        st.rerun()
         st.caption(
             t("Click a row to inspect that creator.")
             + " "
@@ -484,6 +665,7 @@ def render() -> None:
         if not cohort:
             cohort = visible.head(3).to_dict("records")
         _render_detail_aside(creator, cohort)
+        st.caption(evidence_gate_line(str(creator["creator_id"])))
         jump_page = search_cta_page(creator["creator_id"])
         if jump_page:
             jump_label = (

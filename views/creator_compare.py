@@ -6,19 +6,25 @@ from components.html import avatar, badge, esc, mission_chip, page_header, score
 from components.i18n import t
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
+    EvidenceGateBlocked,
     active_context,
     active_context_label,
     creator_state,
+    evidence_gate_message,
+    evidence_gate_state,
+    latest_ceg_run,
     live_evidence_for,
     next_outreach_action_page,
     prepare_next_action_jump,
     ranking,
+    record_evidence_gate_override,
     save_decision,
     select_creator,
     transition_creator_state,
 )
 from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
+from src.creator_genome import genome_panel_html
 from src.domain import match_fit_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 
@@ -163,6 +169,80 @@ def _evidence_panel(creator, context: dict) -> str:
         '<div class="is-card"><div class="is-panel-head">'
         '<span class="is-panel-title">Evidence explorer</span></div>'
         f'<div class="is-panel-body">{"".join(items)}</div></div>'
+    )
+
+
+def evidence_gate_panel_html(gate: dict) -> str:
+    """Claim-grounded evidence panel. Blocked states are stated, never hidden."""
+
+    status = str(gate.get("status") or "")
+    claims = list(gate.get("claims") or [])
+    override = gate.get("override")
+    if claims:
+        tone, headline = "green", t("Claim-grounded evidence attached")
+    elif override:
+        tone, headline = "orange", t("Approval gate overridden by an audited operator decision")
+    elif status == "blocked_no_model":
+        tone, headline = "orange", t("Claim-grounded evidence extraction unavailable")
+    else:
+        tone, headline = "orange", t("No claim-grounded evidence for this creator")
+    rows = "".join(
+        f'<div class="is-risk"><div><b>{t("DNA claim")} {esc(str(item.get("claim_id")))} · '
+        f'{esc(str(item.get("timestamp")))}</b>'
+        f'<small style="margin-top:4px">&quot;{esc(str(item.get("quote")))}&quot;</small>'
+        f'<div class="is-evidence-meta"><span class="is-evidence-tag">'
+        f'{esc(str(item.get("source_label")))}</span>'
+        f'<span class="is-evidence-tag">{esc(str(item.get("post_id")))}</span></div></div></div>'
+        for item in claims[:4]
+    )
+    if not rows:
+        detail = evidence_gate_message(gate)
+        if override:
+            detail = (
+                f'{t("Override reason")}: {override.get("reason")} · '
+                f'{t("Recorded by")} {override.get("actor")} · {override.get("recorded_at")}'
+            )
+        rows = f'<div class="is-risk"><div><b>{esc(detail)}</b></div></div>'
+    footer = (
+        f'{t("Extraction reads public YouTube timedtext only. Quotes are validated verbatim caption substrings. Not ASR, not labeled_demo, not a ranking input.")}'
+    )
+    return (
+        '<div class="is-card"><div class="is-panel-head">'
+        f'<span class="is-panel-title">{t("Outreach approval gate")}</span>'
+        f'{badge(headline, tone)}</div>'
+        f'<div class="is-panel-body">{rows}'
+        f'<small style="color:#879198;display:block;margin-top:6px">{esc(footer)}</small></div></div>'
+    )
+
+
+def ceg_trace_panel_html(trace: dict | None) -> str:
+    """Named Claim-Evidence-Guardrail run on Compare. Not an eighth page."""
+
+    if not trace:
+        return (
+            '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
+            f'<span class="is-panel-title">{t("Claim-Evidence-Guardrail run")}</span>'
+            f'{badge(t("No run recorded yet"), "gray")}</div>'
+            f'<div class="is-panel-body"><small>{t("Approve a creator or save a brief to record Scout → EvidenceReader → MatchArbiter → BriefWriter → ComplianceGuard.")}</small></div></div>'
+        )
+    tone = "green" if trace.get("status") == "ok" else "orange"
+    steps = "".join(
+        f'<div class="is-risk"><div><b>{esc(str(step.get("role")))} · {esc(str(step.get("engine")))} · '
+        f'{esc(str(step.get("status")))}</b>'
+        f'<small style="margin-top:4px">{t("Claims")}: {esc(", ".join(step.get("claim_ids") or []) or t("none"))}'
+        f'{(" · " + t("Degraded") + ": " + esc(str(step.get("degraded_reason")))) if step.get("degraded_reason") else ""}'
+        f"</small></div></div>"
+        for step in (trace.get("steps") or [])
+    )
+    footer = t(
+        "Named CEG workflow. EvidenceReader is the only role that can advance a claim_id. Ranking stays rule_mix_tfidf_v1."
+    )
+    return (
+        '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
+        f'<span class="is-panel-title">{t("Claim-Evidence-Guardrail run")}</span>'
+        f'{badge(esc(str(trace.get("status") or "")) + " · " + esc(str(trace.get("run_id") or "")), tone)}</div>'
+        f'<div class="is-panel-body">{steps}'
+        f'<small style="color:#879198;display:block;margin-top:6px">{esc(footer)}</small></div></div>'
     )
 
 
@@ -320,6 +400,7 @@ def render() -> None:
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")
     with c1:
         md(_evidence_panel(focus, context), unsafe_allow_html=True)
+        md(genome_panel_html(str(focus["creator_id"])), unsafe_allow_html=True)
         if st.button(t("Look up YouTube on Search"), use_container_width=True, key="compare_youtube_lookup"):
             open_search_youtube_lookup()
     with c2:
@@ -327,6 +408,11 @@ def render() -> None:
     with c3:
         md(_risk_panel(focus), unsafe_allow_html=True)
 
+    gate = evidence_gate_state(str(focus["creator_id"]))
+    md(evidence_gate_panel_html(gate), unsafe_allow_html=True)
+    md(ceg_trace_panel_html(latest_ceg_run(str(focus["creator_id"]))), unsafe_allow_html=True)
+    if gate["blocked"]:
+        st.warning(t(evidence_gate_message(gate)))
     md(
         f'<div class="is-action-bar">'
         f'<div><b>Ready to take action on {esc(focus["creator_name"])}?</b>'
@@ -336,6 +422,32 @@ def render() -> None:
     )
     locked = writes_locked()
     render_write_guard()
+    if gate["blocked"]:
+        with st.expander(t("Record an audited override of the approval gate"), expanded=False):
+            st.caption(
+                t("Overrides are written to the approval audit trail with the operator, the reason and the gate status. Rules alone never satisfy this gate.")
+            )
+            override_reason = st.text_input(
+                t("Operator override reason"),
+                key=f'gate_override_reason_{focus["creator_id"]}',
+                disabled=locked,
+            )
+            if st.button(
+                t("Record audited override"),
+                key=f'gate_override_button_{focus["creator_id"]}',
+                disabled=locked,
+                use_container_width=True,
+            ):
+                try:
+                    record_evidence_gate_override(
+                        str(focus["creator_id"]),
+                        reason=override_reason,
+                        actor=context.get("owner", "Operator"),
+                    )
+                    st.success(t("Override recorded on the approval audit trail."))
+                    st.rerun()
+                except (ValueError, PermissionError) as exc:
+                    st.info(str(exc))
     jump_page = compare_cta_page(focus["creator_id"])
     jump_col, a, b, c = st.columns([1, 0.24, 0.22, 0.18])
     with jump_col:
@@ -374,18 +486,23 @@ def render() -> None:
                 t("Approve Outreach"),
                 type="primary" if not jump_page else "secondary",
                 use_container_width=True,
-                disabled=locked,
+                disabled=locked or gate["blocked"],
+                help=t(evidence_gate_message(gate)) if gate["blocked"] else None,
             ):
-                save_decision(
-                    focus["creator_id"],
-                    "Approved",
-                    "Strong evidence and active-entry fit",
-                    reason_code="strong_fit",
-                    note="Evidence, score drivers and risks reviewed in Creator Compare.",
-                    evidence=list(focus.get("evidence", [])),
-                )
-                st.success("Approved and linked to one OutreachCase with a unique coupon and UTM deeplink.")
-                st.rerun()
+                try:
+                    save_decision(
+                        focus["creator_id"],
+                        "Approved",
+                        "Strong evidence and active-entry fit",
+                        reason_code="strong_fit",
+                        note="Evidence, score drivers and risks reviewed in Creator Compare.",
+                        evidence=list(focus.get("evidence", [])),
+                    )
+                except EvidenceGateBlocked as exc:
+                    st.error(str(exc))
+                else:
+                    st.success("Approved and linked to one OutreachCase with a unique coupon and UTM deeplink.")
+                    st.rerun()
         else:
             st.button(t("Approval recorded"), disabled=True, use_container_width=True)
     with b:

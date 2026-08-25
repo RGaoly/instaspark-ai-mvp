@@ -18,6 +18,17 @@ def test_core_navigation_has_chinese_labels():
     assert translate("Topic overlap", language="zh") == "主题重合"
     assert translate("Query boost", language="zh") == "查询加权"
     assert translate("Live YouTube evidence attached", language="zh") == "已挂接 YouTube 实时证据"
+    assert translate("Product DNA", language="zh") == "产品 DNA"
+    assert translate("Always-on scout cards", language="zh") == "持续侦察卡片"
+    assert "not KYC" in translate(
+        "Hard gates, evidence, stability, attribution, recall 60, intensive-read Top 20 with labeled_demo timestamps. YouTube overlay: all 60 recalled rows are public channels (catalog_channel), not KYC. Catalog videos, Creator Genome. Human interview adoption ≥70% is not_collected.",
+        language="en",
+    )
+    assert translate(
+        "This catalog row is this public YouTube channel: {channel_title}",
+        language="zh",
+        channel_title="GoPro",
+    ) == "该目录行就是这个公开 YouTube 频道：GoPro"
     assert (
         translate(
             "NL query is a lexical filter + small boost, not semantic search.",
@@ -70,6 +81,15 @@ def test_core_navigation_has_chinese_labels():
         == "留在搜索页。详情、短名单、对比和简报都针对该创作者。"
     )
     assert translate("Click a row to inspect that creator.", language="zh") == "点击一行即可查看该创作者。"
+    assert translate("Inspect {creator_id}", language="zh", creator_id="C051") == "精读 C051"
+    assert (
+        translate("Labeled demo evidence — not ASR, not scraped comments.", language="zh")
+        == "标注演示证据 — 不是语音转写，不是抓取评论。"
+    )
+    assert "youtube_data_api" in translate(
+        "youtube_data_api: public video link, thumbnail keyframe proxy, comment snippets. youtube_public_timedtext: caption lines when YouTube exposes them. ownership attached_channel = operator-attached channel uploads; catalog_channel = this catalog row is that public YouTube channel, not KYC; channel_search_match = leftover name match if an unbound row remains; public_search_hit = topic search, not the catalog creator. labeled_demo: DNA claim timestamps (separate layer). Not ranked.",
+        language="en",
+    )
     assert translate("Selected creator", language="zh") == "已选择该创作者"
     assert (
         translate(

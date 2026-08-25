@@ -1,0 +1,4510 @@
+{
+  "pack_id": "deep_read_x5_v1",
+  "version": 1,
+  "layer": "labeled_demo",
+  "sku": "Insta360 X5",
+  "updated_at": "2026-08-24T00:00:00+00:00",
+  "source": "Human-labeler demo layer grounded in Product DNA claim_id. Not ASR, not Whisper, not YouTube captions, not scraped comments, not OCR.",
+  "clips": [
+    {
+      "post_id": "POST-C001-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Alex · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Alex · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C001-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Alex · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Alex · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C001-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Alex · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Alex · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C002-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Sofia · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Sofia · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C002-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Sofia · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Sofia · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C002-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Sofia · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Sofia · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C003-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Diego · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Diego · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C003-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Diego · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Diego · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C003-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Diego · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Diego · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C004-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Maya · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Maya · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C004-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Maya · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Maya · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C004-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Maya · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Maya · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C005-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Liam · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Liam · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C005-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Liam · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Liam · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C005-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Liam · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Liam · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C006-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Yuki · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Yuki · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C006-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Yuki · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Yuki · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C006-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Yuki · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Yuki · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C007-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Noah · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Noah · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C007-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Noah · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Noah · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C007-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Noah · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Noah · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C008-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Camila · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Camila · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C008-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Camila · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Camila · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C008-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Camila · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Camila · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C009-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Ethan · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ethan · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C009-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Ethan · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Ethan · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C009-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Ethan · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Ethan · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C010-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Isabella · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Isabella · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C010-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Isabella · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Isabella · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C010-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Isabella · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Isabella · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C011-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Lucas · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Lucas · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C011-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Lucas · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Lucas · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C011-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Lucas · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Lucas · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C012-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Emma · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Emma · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C012-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Emma · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Emma · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C012-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Emma · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Emma · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C013-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Mateo · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Mateo · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C013-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Mateo · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Mateo · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C013-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Mateo · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Mateo · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C014-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Olivia · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Olivia · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C014-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Olivia · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Olivia · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C014-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Olivia · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Olivia · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C015-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Daniel · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Daniel · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C015-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Daniel · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Daniel · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C015-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Daniel · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Daniel · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C016-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Valeria · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Valeria · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C016-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Valeria · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Valeria · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C016-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Valeria · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Valeria · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C017-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Ryan · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ryan · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C017-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Ryan · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Ryan · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C017-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Ryan · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Ryan · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C018-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Ava · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ava · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C018-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Ava · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Ava · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C018-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Ava · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Ava · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C019-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Samuel · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Samuel · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C019-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Samuel · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Samuel · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C019-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Samuel · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Samuel · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C020-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Chloe · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Chloe · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C020-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Chloe · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Chloe · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C020-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Chloe · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Chloe · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C021-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Leo · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Leo · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C021-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Leo · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Leo · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C021-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Leo · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Leo · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C022-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Mia · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Mia · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C022-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Mia · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Mia · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C022-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Mia · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Mia · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C023-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Gabriel · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Gabriel · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C023-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Gabriel · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Gabriel · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C023-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Gabriel · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Gabriel · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C024-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Zoe · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Zoe · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C024-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Zoe · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Zoe · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C024-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Zoe · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Zoe · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C025-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Nico · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Nico · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C025-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Nico · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Nico · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C025-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Nico · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Nico · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C026-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Ella · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ella · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C026-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Ella · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Ella · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C026-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Ella · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Ella · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C027-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Marco · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Marco · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C027-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Marco · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Marco · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C027-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Marco · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Marco · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C028-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Luna · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Luna · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C028-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Luna · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Luna · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C028-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Luna · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Luna · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C029-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ben · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Ben · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C029-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Ben · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Ben · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C029-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Ben · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Ben · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C030-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Sara · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Sara · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C030-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Sara · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Sara · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C030-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Sara · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Sara · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C031-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Jordan · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Jordan · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C031-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Jordan · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Jordan · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C031-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Jordan · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Jordan · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C032-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Harper · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Harper · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C032-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Harper · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Harper · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C032-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Harper · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Harper · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C033-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Quinn · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Quinn · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C033-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Quinn · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Quinn · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C033-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Quinn · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Quinn · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C034-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Riley · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Riley · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C034-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Riley · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Riley · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C034-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Riley · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Riley · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C035-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Avery · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Avery · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C035-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Avery · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Avery · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C035-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Avery · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Avery · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C036-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Casey · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Casey · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C036-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Casey · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Casey · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C036-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Casey · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Casey · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C037-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Morgan · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Morgan · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C037-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Morgan · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Morgan · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C037-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Morgan · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Morgan · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C038-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Reese · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Reese · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C038-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Reese · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Reese · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C038-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Reese · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Reese · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C039-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Skyler · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Skyler · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C039-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Skyler · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Skyler · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C039-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Skyler · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Skyler · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C040-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Hayden · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Hayden · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C040-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Hayden · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Hayden · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C040-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Hayden · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Hayden · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C041-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Valentina · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Valentina · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C041-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Valentina · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Valentina · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C041-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Valentina · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Valentina · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C042-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Santiago · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Santiago · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C042-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Santiago · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Santiago · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C042-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Santiago · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Santiago · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C043-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Regina · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Regina · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C043-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Regina · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Regina · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C043-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Regina · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Regina · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C044-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Pablo · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Pablo · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C044-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Pablo · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Pablo · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C044-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Pablo · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Pablo · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C045-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Jimena · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Jimena · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C045-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Jimena · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Jimena · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C045-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Jimena · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Jimena · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C046-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Andres · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Andres · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C046-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Andres · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Andres · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C046-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Andres · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Andres · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C047-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Fernanda · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Fernanda · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C047-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Fernanda · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Fernanda · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C047-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Fernanda · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Fernanda · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C048-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Hector · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Hector · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C048-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Hector · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Hector · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C048-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Hector · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Hector · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C049-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): fashion setup questions",
+        "Catalog label (not scraped): beauty setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Daniela · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Daniela · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C049-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): fashion setup questions",
+        "Catalog label (not scraped): beauty setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Daniela · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Daniela · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C049-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): fashion setup questions",
+        "Catalog label (not scraped): beauty setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Daniela · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Daniela · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C050-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Bruno · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Bruno · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C050-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Bruno · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Bruno · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C050-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Bruno · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Bruno · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C051-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Catalina · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Catalina · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C051-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Catalina · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Catalina · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C051-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Catalina · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Catalina · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C052-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Ignacio · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Ignacio · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C052-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "360",
+          "caption": "Ignacio · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Ignacio · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C052-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this wide establishing rotate was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Ignacio · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "360",
+          "caption": "Ignacio · On-screen label: full-surround establish of a real location.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C053-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Paula · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Paula · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C053-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Paula · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Paula · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C053-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): skiing setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Paula · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Paula · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C054-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Tomas · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Tomas · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C054-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Tomas · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Tomas · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C054-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Tomas · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Tomas · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C055-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Nia · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Nia · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C055-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Nia · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Nia · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C055-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Nia · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Nia · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C056-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Owen · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:05",
+          "claim_id": "360",
+          "caption": "Owen · Labeler caption: 360 rotate, then a detail cut. No resolution number.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C056-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "pov",
+          "caption": "Owen · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "360",
+          "caption": "Owen · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C056-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): tech setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this eye-line / handlebar pov was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:17",
+          "claim_id": "pov",
+          "caption": "Owen · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "pov",
+          "caption": "Owen · On-screen label: handlebar POV, trail filling the frame.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C057-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Mila · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Mila · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C057-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Mila · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Mila · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C057-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): cycling setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Mila · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Mila · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C058-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Kai · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Kai · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C058-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "rugged",
+          "caption": "Kai · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Kai · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C058-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): surfing setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this water or dust contact was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:54",
+          "claim_id": "all_day",
+          "caption": "Kai · On-screen: all-day outdoor shooting in real use. No amp-hour figure.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "rugged",
+          "caption": "Kai · On-screen label: water or grit on the housing; take does not cut.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C059-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Yara · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:41",
+          "claim_id": "rugged",
+          "caption": "Yara · Labeler caption: dusty outdoor trail, camera still in the shot.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C059-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Yara · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "rugged",
+          "caption": "Yara · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C059-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): travel setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "01:18",
+          "claim_id": "360",
+          "caption": "Yara · On-screen: place captured in the round, then a tight cutaway.",
+          "keyframe_note": "Would show: 360 room or location rotate; no resolution number on screen."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Yara · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C060-01",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:08",
+          "claim_id": "all_day",
+          "caption": "Felix · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:22",
+          "claim_id": "pov",
+          "caption": "Felix · Labeler caption: first-person eye-line at rider height.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C060-02",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:11",
+          "claim_id": "all_day",
+          "caption": "Felix · Labeler caption: daylight trail; camera stays on through the ride.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        },
+        {
+          "t": "00:36",
+          "claim_id": "pov",
+          "caption": "Felix · On-screen: immersive POV of the path. Not a platform-exclusive format.",
+          "keyframe_note": "Would show: POV handle or rider eye-line; trail filling the frame."
+        }
+      ]
+    },
+    {
+      "post_id": "POST-C060-03",
+      "caption_source": "labeled_demo",
+      "keyframe_status": "labeled_demo_note",
+      "comment_status": "labeled_demo_themes",
+      "comment_themes": [
+        "Catalog label (not scraped): motorcycle setup questions",
+        "Catalog label (not scraped): outdoor setup questions",
+        "Catalog label (not scraped): where this long take still rolling was filmed"
+      ],
+      "stamps": [
+        {
+          "t": "00:33",
+          "claim_id": "rugged",
+          "caption": "Felix · On-screen: splash contact without an IP rating claim.",
+          "keyframe_note": "Would show: rugged outdoor splash or dust on the housing."
+        },
+        {
+          "t": "01:42",
+          "claim_id": "all_day",
+          "caption": "Felix · On-screen label: long outdoor take still rolling. No battery minutes.",
+          "keyframe_note": "Would show: long outdoor take still rolling; no battery graphic in frame."
+        }
+      ]
+    }
+  ]
+}

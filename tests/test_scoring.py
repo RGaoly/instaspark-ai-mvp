@@ -109,7 +109,7 @@ def test_topic_overlap_ranks_closer_creators_higher():
     assert close_score["topic_overlap"] > far_score["topic_overlap"]
     assert close_score["total_score"] > far_score["total_score"]
 
-    ranked = rank_creators(pd.DataFrame([far.to_dict(), close.to_dict()]), mission)
+    ranked = rank_creators(pd.DataFrame([far.to_dict(), close.to_dict()]), mission, dna_text="")
     assert list(ranked["creator_id"]) == ["CLOSE", "FAR"]
 
 
@@ -127,9 +127,12 @@ def test_attaching_live_evidence_increases_score():
         pd.DataFrame([row.to_dict()]),
         mission,
         live_evidence_ids=["T1"],
+        dna_text="",
     )
+    boost = float(ranked.iloc[0]["tfidf_boost"])
+    attached_with = score_creator(row, mission, has_live_evidence=True, tfidf_boost=boost)
     assert float(ranked.iloc[0]["live_proof_bonus"]) == LIVE_PROOF_BONUS
-    assert float(ranked.iloc[0]["total_score"]) == attached["total_score"]
+    assert float(ranked.iloc[0]["total_score"]) == attached_with["total_score"]
 
 
 def test_query_boost_is_lexical_and_capped():
@@ -153,7 +156,7 @@ def test_named_drivers_are_aligned_for_search_and_compare():
         "Commercial fit",
         "Brand safety",
     ]
-    assert additive_labels == ["Query boost", "Live proof bonus"]
+    assert additive_labels == ["Query boost", "Live proof bonus", "TF-IDF cosine"]
     assert all(tag.startswith("w ") for _label, _score, tag in mix_driver_display(scored))
 
 

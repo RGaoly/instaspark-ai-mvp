@@ -89,7 +89,7 @@ All configuration is managed via `.env`. See `.env.example` for the full referen
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LLM_API_KEY` | _(empty)_ | LLM API key. When empty, app runs in Demo Mode with mock content. |
+| `LLM_API_KEY` | _(empty)_ | LLM API key. When empty, Evidence Reader and the approval gate stay blocked (no keyword fallback). Content Studio uses the deterministic template and records the degrade. |
 | `LLM_BASE_URL` | `https://api.deepseek.com` | API endpoint. Supports any OpenAI-compatible provider. |
 | `LLM_MODEL` | `deepseek-chat` | Model name for content generation. |
 | `DEFAULT_ADMIN_PASSWORD` | `admin123` | Admin password. **Change in production.** |

@@ -106,7 +106,8 @@ def test_views_do_not_render_literal_mission_context_chips():
 
 
 def test_readme_describes_dual_entry_product_and_current_tree():
-    readme = (ROOT / "README.md").read_text(encoding="utf-8").lower()
+    readme_raw = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme = readme_raw.lower()
 
     assert "launch mission" in readme
     assert "creator opportunity" in readme
@@ -114,6 +115,10 @@ def test_readme_describes_dual_entry_product_and_current_tree():
     assert "send to creator" in readme
     assert "growth review" in readme
     assert "measured" in readme
+    assert "Inbound inbox" in readme_raw
+    assert "Top 20 intensive-read" in readme_raw
+    assert "There is no Evaluation page" in readme_raw
+    assert "没有单独评测页" in readme_raw
     for directory in ("components/", "services/", "views/", "tests/"):
         assert directory in readme, f"README repository tree is missing {directory}"
 

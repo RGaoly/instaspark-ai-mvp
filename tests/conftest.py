@@ -31,6 +31,13 @@ def fresh_db():
     _db_module.reset_db()
 
 
+@pytest.fixture(autouse=True)
+def no_live_llm(monkeypatch):
+    """Tests must not call a live model. A local .env key must not change assertions."""
+
+    monkeypatch.setattr("services.llm_service._llm_api_key", lambda: "")
+
+
 def pytest_sessionfinish(session, exitstatus):
     """Clean up temp directory after all tests complete."""
     _tmpdir.cleanup()

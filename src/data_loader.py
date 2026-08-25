@@ -11,6 +11,10 @@ def load_creators(path: str | Path) -> pd.DataFrame:
         df[col] = df[col].fillna("").apply(
             lambda value: [item.strip() for item in str(value).split("|") if item.strip()]
         )
+    if "youtube_channel_id" in df.columns:
+        df["youtube_channel_id"] = df["youtube_channel_id"].fillna("").astype(str).replace({"nan": ""})
+    else:
+        df["youtube_channel_id"] = ""
     return df
 
 

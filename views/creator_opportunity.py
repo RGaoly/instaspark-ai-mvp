@@ -10,6 +10,7 @@ from components.i18n import t
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.ui import md
 from src.inbound import OWNERS
+from src.scouting import scout_cards
 from services.opportunity_service import (
     OPPORTUNITY_STATUSES,
     create_opportunity,
@@ -752,6 +753,47 @@ def _render_create_form(creators: list[dict]) -> None:
                 st.rerun()
 
 
+def _render_scout_cards(opportunities: list[dict]) -> None:
+    exclude = {str(item.get("creator_id") or "") for item in opportunities if item.get("creator_id")}
+    cards = scout_cards(state_store.creators(), exclude_ids=exclude)
+    with st.container(border=True):
+        md(
+            '<div class="is-card" id="always-on-scout">'
+            f'<div class="is-panel-head"><span class="is-panel-title">{t("Always-on scout cards")}</span>'
+            f'<span class="is-panel-link">{t("Genome 7/30/90 · not a crawler")}</span></div>'
+            '<div class="is-panel-body">'
+            f"<small>{t('Source catalog_momentum. Catalog momentum proxies from Creator Genome windows. Not a live daily crawl.')}</small>"
+            "</div></div>",
+            unsafe_allow_html=True,
+        )
+        st.caption(
+            t("Catalog momentum proxies (7d ≈ inverted decline, 30d ≈ engagement, 90d ≈ consistency). Not a live crawl.")
+        )
+        if not cards:
+            st.info(t("No additional scout cards in this catalog."))
+            return
+        for card in cards:
+            row, action = st.columns([0.78, 0.22], vertical_alignment="center")
+            row.markdown(
+                f"**{card['creator_name']}** · {card['creator_id']}  \n"
+                f"{card['market']} · {card.get('genome_id') or 'no genome'} · scout {card['scout_score']} · "
+                f"7d {card['window_7d']} · 30d {card['window_30d']} · 90d {card['window_90d']}"
+            )
+            if action.button(
+                t("Save as opportunity"),
+                key=f"scout_save_{card['creator_id']}",
+                disabled=writes_locked(),
+                use_container_width=True,
+            ):
+                try:
+                    opportunity = state_store.save_scout_card(card)
+                    st.session_state.opportunity_detail_id = opportunity["opportunity_id"]
+                    st.success(t("Saved scout card as {opportunity_id}.", opportunity_id=opportunity["opportunity_id"]))
+                    st.rerun()
+                except (ValueError, PermissionError) as exc:
+                    st.error(str(exc))
+
+
 def render() -> None:
     render_topbar()
     _bootstrap_opportunity_state()
@@ -802,7 +844,6 @@ def render() -> None:
     if inbound:
         _render_inbound_kpis(inbound)
 
-    _render_create_form(creators)
     list_col, detail_col = st.columns([0.48, 0.52], gap="small", vertical_alignment="top")
     with list_col:
         if inbound:
@@ -814,5 +855,8 @@ def render() -> None:
             _render_detail(selected, creators_by_id.get(selected.get("creator_id")))
         else:
             st.info("Create an opportunity to begin the creator-first workflow.")
+
+    _render_scout_cards(opportunities)
+    _render_create_form(creators)
 
     render_demo_notice()

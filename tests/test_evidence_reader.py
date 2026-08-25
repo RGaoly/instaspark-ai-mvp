@@ -171,6 +171,69 @@ def test_honest_unsupported_claim_is_not_counted_as_a_hallucination():
     assert result["grounding"]["rejected_missing_quote"] == 0
 
 
+def test_adjacent_caption_lines_are_kept_as_verbatim_transcript():
+    clip = _clip_with_body()
+    lines = evidence_reader.caption_lines_of(clip)
+    assert len(lines) >= 2
+    joined = f"{lines[0]['text']} {lines[1]['text']}"
+
+    def call(system_prompt: str, user_prompt: str) -> str:
+        return json.dumps(
+            {
+                "claims": [
+                    {
+                        "claim_id": "pov",
+                        "supported": True,
+                        "confidence": 0.8,
+                        "quote": joined,
+                        "timestamp": lines[0]["t"],
+                        "note": "YouTube split this sentence across two chunks",
+                    }
+                ]
+            }
+        )
+
+    result = evidence_reader.extract_clip(clip, _dna(), call=call, model=FAKE_MODEL, available=True)
+    assert [item["claim_id"] for item in result["claims"]] == ["pov"]
+    assert result["claims"][0]["quote"] == joined
+    assert result["claims"][0]["timestamp"] == lines[0]["t"]
+    assert result["grounding"]["joined_adjacent_lines"] == 1
+    assert result["grounding"]["rejected_cross_line_quotes"] == 0
+    assert result["grounding"]["rejected_hallucinated_quotes"] == 0
+
+
+def test_three_line_stitches_are_still_rejected():
+    clip = _clip_with_body()
+    lines = evidence_reader.caption_lines_of(clip)
+    if len(lines) < 3:
+        pytest.skip("need a clip with at least three caption lines")
+    stitched = f"{lines[0]['text']} {lines[1]['text']} {lines[2]['text']}"
+    pair = f"{lines[0]['text']} {lines[1]['text']}"
+    assert stitched != pair
+    assert stitched not in pair
+
+    def call(system_prompt: str, user_prompt: str) -> str:
+        return json.dumps(
+            {
+                "claims": [
+                    {
+                        "claim_id": "pov",
+                        "supported": True,
+                        "confidence": 0.8,
+                        "quote": stitched,
+                        "timestamp": lines[0]["t"],
+                        "note": "joined three caption chunks",
+                    }
+                ]
+            }
+        )
+
+    result = evidence_reader.extract_clip(clip, _dna(), call=call, model=FAKE_MODEL, available=True)
+    assert result["claims"] == []
+    assert result["grounding"]["rejected_cross_line_quotes"] == 1
+    assert result["grounding"]["joined_adjacent_lines"] == 0
+
+
 def test_grounding_validator_drops_timestamps_and_claim_ids_not_in_the_input():
     clip = _clip_with_body()
     lines = evidence_reader.caption_lines_of(clip)
@@ -374,7 +437,13 @@ def test_committed_cache_covers_the_public_caption_bodies_and_stays_grounded():
         assert row["prompt_version"] == evidence_reader.PROMPT_VERSION
         for claim in row["claims"]:
             assert claim["timestamp"] in stamps
-            assert any(claim["quote"] in text for text in texts)
+            texts_list = [item["text"] for item in lines]
+            in_one = any(claim["quote"] in text for text in texts_list)
+            in_adjacent = any(
+                claim["quote"] in f"{left} {right}"
+                for left, right in zip(texts_list, texts_list[1:])
+            )
+            assert in_one or in_adjacent
     blob = json.dumps(pack).lower()
     for token in ("api_key", "authorization", "bearer ", "sk-"):
         assert token not in blob

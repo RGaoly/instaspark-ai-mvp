@@ -35,7 +35,7 @@ assert the same five roles, the same engines, and the same degrade reasons.
 | Role | No `LLM_API_KEY` | No grounded extraction | Human override |
 |---|---|---|---|
 | Scout | Still rule. Never needs a model. | Unchanged. | Unchanged. |
-| EvidenceReader | **Blocks.** `no_model_configured`. Zero claims. **No keyword fallback.** | Blocks. `no_grounded_extraction_for_creator`. | Not this role. |
+| EvidenceReader | **Blocks.** `no_model_configured`. Zero claims. **No keyword fallback.** Quotes may span two adjacent timedtext chunks. | Blocks. `no_grounded_extraction_for_creator`. | Not this role. |
 | MatchArbiter | Blocks with the gate (`evidence_gate_blocked`). | Same block. | Engine → `human`. Advances **zero** claims. Reason on the audit trail. |
 | BriefWriter | Engine → rule template. `no_model_configured`. | Writing before the gate opens is `artifact_written_before_a_claim_was_grounded`. | Template still used if no model. |
 | ComplianceGuard | Still rule. Never needs a model. | Skips if no artifact. | A hard finding still blocks; a soft finding needs a human fix. |

@@ -22,6 +22,9 @@ from components.state import (
     active_context_label,
     attach_live_evidence,
     creators,
+    evidence_extraction_pack,
+    evidence_gate_message,
+    evidence_gate_state,
     live_evidence_for,
     next_outreach_action_page,
     prepare_next_action_jump,
@@ -35,7 +38,14 @@ from src.audience import overlap_vs_cohort
 from src.catalog_filters import filter_ranked_creators, unique_catalog_values
 from src.content_evidence import clips_for
 from src.creator_genome import genome_panel_html
-from src.intensive_read import LEGEND, YT_LEGEND, intensive_read_html, intensive_read_pack
+from src import evidence_reader
+from src.intensive_read import (
+    EVIDENCE_READER_LEGEND,
+    LEGEND,
+    YT_LEGEND,
+    intensive_read_html,
+    intensive_read_pack,
+)
 from src.domain import declared_platforms, match_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 from src.verified_channels import binds_by_creator_id, recall_pool_caption
@@ -48,6 +58,48 @@ def search_cta_page(creator_id: str) -> str | None:
     """Jump target for Search. Same rules as Outreach; do not fork them."""
 
     return next_outreach_action_page(creator_id)
+
+
+def evidence_reader_caption(pack: dict) -> str:
+    """One honest line about the Evidence Reader cache backing the board."""
+
+    coverage = dict(pack.get("coverage") or {})
+    extracted = int(coverage.get("extracted") or 0)
+    eligible = int(coverage.get("eligible_clips") or 0)
+    if not extracted:
+        return t(
+            "Evidence Reader: 0 of {eligible} public caption bodies have model-grounded claim evidence. "
+            "Claim-grounded extraction is unavailable without a configured model; keyword rules are not evidence.",
+            eligible=eligible,
+        )
+    return t(
+        "Evidence Reader: {extracted} of {eligible} public caption bodies read by {model} "
+        "({prompt}) · {supported} supported DNA claims · {rejected} ungrounded quotes dropped by the validator.",
+        extracted=extracted,
+        eligible=eligible,
+        model=str(pack.get("model") or "model"),
+        prompt=str(pack.get("prompt_version") or ""),
+        supported=int(coverage.get("supported_claims") or 0),
+        rejected=int(coverage.get("rejected_hallucinated_quotes") or 0)
+        + int(coverage.get("rejected_unknown_timestamps") or 0),
+    )
+
+
+def evidence_gate_line(creator_id: str) -> str:
+    """Approval-gate status for the inspected creator, in plain words."""
+
+    gate = evidence_gate_state(str(creator_id))
+    if gate["grounded"]:
+        first = gate["claims"][0]
+        return t(
+            "Approval gate: claim-grounded · DNA claim {claim} at {stamp} · source {source}",
+            claim=str(first.get("claim_id")),
+            stamp=str(first.get("timestamp")),
+            source=str(first.get("source_label")),
+        )
+    if gate["override"]:
+        return t("Approval gate: overridden on the audit trail by {actor}", actor=str(gate["override"].get("actor")))
+    return t("Approval gate: blocked") + " · " + t(evidence_gate_message(gate))
 
 
 def _platform_line(creator: dict, live_rows: list) -> str:
@@ -567,7 +619,14 @@ def render() -> None:
         if not rest.empty:
             with st.expander(t("Additional gated candidates"), expanded=False):
                 _render_creator_table(rest)
-        pack = intensive_read_pack(visible, n=20, attached_by_creator=_attached_overlays_for_pack(visible))
+        extraction_pack = evidence_extraction_pack()
+        pack = intensive_read_pack(
+            visible,
+            n=20,
+            attached_by_creator=_attached_overlays_for_pack(visible),
+            evidence_by_post_id=evidence_reader.extractions_by_post_id(extraction_pack),
+        )
+        st.caption(evidence_reader_caption(extraction_pack))
         selected_id = st.session_state.get("selected_creator_id")
         live_rows = live_evidence_for(selected_id) if selected_id else []
         if live_rows:
@@ -578,6 +637,7 @@ def render() -> None:
                     break
         has_youtube = any(clip.get("video_id") for item in pack for clip in item.get("clips") or [])
         st.caption(t(YT_LEGEND if has_youtube else LEGEND))
+        st.caption(t(EVIDENCE_READER_LEGEND))
         md(intensive_read_html(pack), unsafe_allow_html=True)
         if pack:
             inspect_cols = st.columns(5)
@@ -605,6 +665,7 @@ def render() -> None:
         if not cohort:
             cohort = visible.head(3).to_dict("records")
         _render_detail_aside(creator, cohort)
+        st.caption(evidence_gate_line(str(creator["creator_id"])))
         jump_page = search_cta_page(creator["creator_id"])
         if jump_page:
             jump_label = (

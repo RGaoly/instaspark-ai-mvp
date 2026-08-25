@@ -11,6 +11,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 import pandas as pd
 
+from src import evidence_reader
 from src.content_evidence import clips_for, load_creator_content
 from src.verified_channels import (
     LEFTOVER_SEARCH_NOTE,
@@ -33,6 +34,11 @@ YT_LEGEND = (
     "public_search_hit = topic search, not the catalog creator. "
     "labeled_demo: DNA claim timestamps (separate layer). Not ranked."
 )
+EVIDENCE_READER_LEGEND = (
+    "evidence_reader: DNA claims a model read out of the public timedtext body. "
+    "Every quote is validated as a verbatim caption substring with its own timestamp; "
+    "ungrounded quotes are dropped. Never applied to labeled_demo captions. Not ranked."
+)
 
 
 def intensive_read_pack(
@@ -42,16 +48,21 @@ def intensive_read_pack(
     n: int = INTENSIVE_N,
     youtube_clips: Mapping[str, Mapping[str, Any]] | None = None,
     attached_by_creator: Mapping[str, Sequence[Mapping[str, Any]]] | None = None,
+    evidence_by_post_id: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Return one inspectable row per Top-N ranked creator. Empty ranking is [].
 
     attached_by_creator wins over a verified public-channel bind and the topic-search cache.
+    evidence_by_post_id carries Evidence Reader extractions; it never changes ranking.
     """
 
     if ranked is None or ranked.empty:
         return []
     clip_source = list(posts) if posts is not None else load_creator_content()
     overlay = dict(youtube_clips if youtube_clips is not None else youtube_clips_by_post_id())
+    extractions = dict(
+        evidence_by_post_id if evidence_by_post_id is not None else evidence_reader.extractions_by_post_id()
+    )
     attached_by_creator = attached_by_creator or {}
     verified_binds = binds_by_creator_id()
     cache_by_video = cache_clips_by_video_id(overlay.values())
@@ -118,7 +129,11 @@ def intensive_read_pack(
                 "comment_status": str(clip.get("comment_status") or ""),
                 "comment_themes": [str(item) for item in (clip.get("comment_themes") or []) if str(item).strip()],
             }
-            clips.append(attach_youtube_overlay(base, overlay.get(base["post_id"])))
+            merged = attach_youtube_overlay(base, overlay.get(base["post_id"]))
+            merged["evidence_reader"] = attach_evidence_reader(
+                merged, extractions.get(merged["post_id"])
+            )
+            clips.append(merged)
         rows.append(
             {
                 "rank": rank,
@@ -135,6 +150,52 @@ def intensive_read_pack(
             }
         )
     return rows
+
+
+def attach_evidence_reader(
+    clip: Mapping[str, Any],
+    extraction: Mapping[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Display block for the Evidence Reader. None when the clip has no public body.
+
+    A cached row is only trusted when its quotes still ground into the clip's own
+    caption lines, so a stale cache can never show a quote the clip does not contain.
+    """
+
+    lines = evidence_reader.caption_lines_of(clip)
+    if not lines:
+        return None
+    if not extraction:
+        return {
+            "status": "not_run",
+            "model": "",
+            "prompt_version": evidence_reader.PROMPT_VERSION,
+            "claims": [],
+            "contradictions": [],
+            "brand_safety_flags": [],
+            "source_label": evidence_reader.CAPTION_SOURCE,
+        }
+    status = str(extraction.get("status") or "")
+    texts = {item["text"] for item in lines}
+    stamps = {item["t"] for item in lines}
+
+    def grounded(entry: Mapping[str, Any]) -> bool:
+        quote = str(entry.get("quote") or "")
+        stamp = str(entry.get("timestamp") or "")
+        return bool(quote) and stamp in stamps and any(quote in text for text in texts)
+
+    claims = [dict(item) for item in extraction.get("claims") or [] if grounded(item)]
+    return {
+        "status": status,
+        "model": str(extraction.get("model") or ""),
+        "prompt_version": str(extraction.get("prompt_version") or evidence_reader.PROMPT_VERSION),
+        "claims": claims,
+        "contradictions": [dict(item) for item in extraction.get("contradictions") or [] if grounded(item)],
+        "brand_safety_flags": [dict(item) for item in extraction.get("brand_safety_flags") or [] if grounded(item)],
+        "dropped_stale_claims": len(extraction.get("claims") or []) - len(claims),
+        "source_label": evidence_reader.source_label(extraction.get("model")),
+        "error": extraction.get("error"),
+    }
 
 
 def _stamp_seconds(value: str) -> int | None:
@@ -209,6 +270,64 @@ def _clip_timedtext_html(clip: Mapping[str, Any], esc) -> str:
     )
 
 
+def _clip_evidence_reader_html(clip: Mapping[str, Any], esc) -> str:
+    block = clip.get("evidence_reader")
+    if not isinstance(block, Mapping):
+        return ""
+    status = str(block.get("status") or "")
+    if status == evidence_reader.STATUS_NO_MODEL:
+        return (
+            '<div class="is-evidence-reader"><small><b>Evidence Reader</b> · '
+            "unavailable_no_model. No model is configured, so claim-grounded evidence cannot be "
+            "extracted. Keyword rules are not evidence and do not satisfy the approval gate."
+            "</small></div>"
+        )
+    if status == "not_run":
+        return (
+            '<div class="is-evidence-reader"><small><b>Evidence Reader</b> · not_run for this clip. '
+            "Run scripts/run_evidence_reader.py to read the public timedtext body.</small></div>"
+        )
+    if status == evidence_reader.STATUS_ERROR:
+        return (
+            '<div class="is-evidence-reader"><small><b>Evidence Reader</b> · error: '
+            f'{esc(str(block.get("error") or "unknown"))}. No claim is asserted from this clip.</small></div>'
+        )
+    label = esc(str(block.get("source_label") or evidence_reader.SOURCE_LABEL))
+    claims = list(block.get("claims") or [])
+    if not claims:
+        return (
+            f'<div class="is-evidence-reader"><small><b>Evidence Reader</b> · source: {label} · '
+            "extracted, no DNA claim grounded in this clip.</small></div>"
+        )
+    rows = "".join(
+        "<li><small>"
+        f'claim {esc(str(item.get("claim_id") or ""))} · '
+        f'{"supported" if item.get("supported") else "not supported"} · '
+        f'confidence {float(item.get("confidence") or 0):.2f} · '
+        f'<b>{esc(str(item.get("timestamp") or ""))}</b> · '
+        f'&quot;{esc(str(item.get("quote") or ""))}&quot;'
+        + (f' · {esc(str(item.get("note") or ""))}' if item.get("note") else "")
+        + "</small></li>"
+        for item in claims
+    )
+    extra = "".join(
+        f'<li><small>contradiction · <b>{esc(str(item.get("timestamp") or ""))}</b> · '
+        f'&quot;{esc(str(item.get("quote") or ""))}&quot; · {esc(str(item.get("why") or ""))}</small></li>'
+        for item in block.get("contradictions") or []
+    ) + "".join(
+        f'<li><small>brand_safety · {esc(str(item.get("category") or "other"))} · '
+        f'<b>{esc(str(item.get("timestamp") or ""))}</b> · '
+        f'&quot;{esc(str(item.get("quote") or ""))}&quot;</small></li>'
+        for item in block.get("brand_safety_flags") or []
+    )
+    return (
+        f'<div class="is-evidence-reader"><small><b>Evidence Reader</b> · source: {label} · '
+        f'prompt {esc(str(block.get("prompt_version") or ""))}. Quotes are verbatim caption substrings.'
+        "</small>"
+        f'<ul style="margin:2px 0 0 16px">{rows}{extra}</ul></div>'
+    )
+
+
 def _clip_youtube_html(clip: Mapping[str, Any], esc) -> str:
     if not clip.get("video_id"):
         return ""
@@ -248,6 +367,7 @@ def _clip_youtube_html(clip: Mapping[str, Any], esc) -> str:
         f"<small>Public comments (comment_source: youtube_data_api): {yt_themes}</small>"
         f"<ul style=\"margin:2px 0 0 16px\">{snippets}</ul>"
         f"{_clip_timedtext_html(clip, esc)}"
+        f"{_clip_evidence_reader_html(clip, esc)}"
         "</div>"
     )
 
@@ -261,7 +381,10 @@ def intensive_read_html(pack: Iterable[Mapping[str, Any]]) -> str:
         )
     esc = html.escape
     has_youtube = any(clip.get("video_id") for item in rows for clip in item.get("clips") or [])
+    has_reader = any(clip.get("evidence_reader") for item in rows for clip in item.get("clips") or [])
     legend = YT_LEGEND if has_youtube else LEGEND
+    if has_reader:
+        legend = f"{legend} {EVIDENCE_READER_LEGEND}"
     cards = []
     for item in rows:
         clip_blocks = []

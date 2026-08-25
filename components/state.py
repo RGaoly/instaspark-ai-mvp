@@ -27,6 +27,7 @@ from src.domain import (
     pipeline_counts,
     transition_event,
 )
+from src import evidence_reader
 from src.scoring import rank_creators
 
 
@@ -57,6 +58,7 @@ _PERSISTED_KEYS = (
     "inbound_messages",
     "routing_decisions",
     "opportunity_mission_links",
+    "evidence_gate_overrides",
 )
 
 ENTRY_ALIASES = {
@@ -217,6 +219,7 @@ def bootstrap_state() -> None:
         "brief_version": 1,
         "show_mission_form": False,
         "live_evidence": [],
+        "evidence_gate_overrides": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -231,6 +234,7 @@ def bootstrap_state() -> None:
         if not stored:
             persist_state()
     st.session_state.setdefault("live_evidence", [])
+    st.session_state.setdefault("evidence_gate_overrides", [])
     _merge_inbound_seed()
 
 
@@ -985,6 +989,129 @@ def transition_creator_state(
     return deepcopy(record)
 
 
+class EvidenceGateBlocked(RuntimeError):
+    """Approval is blocked because no claim-grounded evidence exists for this creator."""
+
+
+EVIDENCE_GATE_BLOCKED_NO_MODEL = (
+    "Claim-grounded evidence extraction is unavailable: no model is configured. "
+    "Rules and keyword matching cannot satisfy this gate. Record an audited operator "
+    "override with a reason, or configure a model and run the Evidence Reader."
+)
+EVIDENCE_GATE_BLOCKED_NO_EVIDENCE = (
+    "The Evidence Reader found no supported Product DNA claim with a validated quote and "
+    "timestamp for this creator. Record an audited operator override with a reason, or run "
+    "the Evidence Reader over this creator's public caption bodies."
+)
+
+
+@st.cache_data(show_spinner=False)
+def _cached_evidence_pack() -> dict[str, Any]:
+    return evidence_reader.load_pack()
+
+
+def evidence_extraction_pack() -> dict[str, Any]:
+    """Cached Evidence Reader pack. Missing cache stays an honest empty pack."""
+
+    try:
+        return _cached_evidence_pack()
+    except Exception:
+        return evidence_reader.empty_pack()
+
+
+def evidence_gate_overrides() -> list[dict[str, Any]]:
+    entry_type, entry_id = _current_root()
+    return [
+        deepcopy(item)
+        for item in st.session_state.get("evidence_gate_overrides") or []
+        if item.get("entry_type") == entry_type and item.get("entry_id") == entry_id
+    ]
+
+
+def _override_for(creator_id: str) -> dict[str, Any] | None:
+    rows = [item for item in evidence_gate_overrides() if item.get("creator_id") == str(creator_id)]
+    return rows[-1] if rows else None
+
+
+def evidence_gate_state(creator_id: str) -> dict[str, Any]:
+    """Approval gate verdict for one creator: model-grounded evidence or audited override."""
+
+    return evidence_reader.gate_state(
+        creator_id,
+        evidence_extraction_pack(),
+        override=_override_for(creator_id),
+    )
+
+
+def evidence_gate_message(gate: dict[str, Any]) -> str:
+    if gate.get("status") == evidence_reader.GATE_BLOCKED_NO_MODEL:
+        return EVIDENCE_GATE_BLOCKED_NO_MODEL
+    return EVIDENCE_GATE_BLOCKED_NO_EVIDENCE
+
+
+def record_evidence_gate_override(
+    creator_id: str,
+    *,
+    reason: str,
+    actor: str | None = None,
+) -> dict[str, Any]:
+    """Record an audited operator override of the claim-grounded evidence gate."""
+
+    require_write()
+    text = str(reason or "").strip()
+    if len(text) < 8:
+        raise ValueError("An override of the evidence gate requires an operator reason")
+    gate = evidence_gate_state(creator_id)
+    if gate["grounded"]:
+        raise ValueError("Claim-grounded evidence already satisfies the gate; no override is needed")
+    context = active_context()
+    entry_type, entry_id = _current_root()
+    resolved_actor = str(actor or context.get("owner") or "Operator")
+    record = {
+        "override_id": f'gate_override_{len(st.session_state.get("evidence_gate_overrides") or []) + 1:04d}',
+        "creator_id": str(creator_id),
+        "entry_type": entry_type,
+        "entry_id": entry_id,
+        "mission_id": context.get("mission_id"),
+        "opportunity_id": context.get("opportunity_id"),
+        "actor": resolved_actor,
+        "reason": text,
+        "gate_status": gate["status"],
+        "model_available": bool(gate["model_available"]),
+        "prompt_version": gate["prompt_version"],
+        "pack_id": gate["pack_id"],
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+    }
+    st.session_state.setdefault("evidence_gate_overrides", [])
+    st.session_state["evidence_gate_overrides"].append(record)
+    repository.append_approval_audit(
+        f"evidence_gate::{entry_type}:{entry_id}:{creator_id}",
+        "evidence_gate_override",
+        text,
+        resolved_actor,
+    )
+    repository.append_creator_event(
+        str(creator_id),
+        "Evidence gate",
+        "Claim-grounded evidence override",
+        f'{gate["status"]} · {text}',
+        resolved_actor,
+    )
+    persist_state()
+    return deepcopy(record)
+
+
+def _gate_evidence_refs(gate: dict[str, Any], limit: int = 3) -> list[str]:
+    refs = [
+        f'evidence_reader://{item["creator_id"]}/{item["post_id"]}#{item["timestamp"]}·{item["claim_id"]}'
+        for item in gate.get("claims") or []
+    ][:limit]
+    override = gate.get("override")
+    if not refs and override:
+        return [f'evidence_gate_override://{override.get("override_id")}']
+    return refs
+
+
 def save_decision(
     creator_id: str,
     decision: str,
@@ -1009,6 +1136,9 @@ def save_decision(
     stable_reason_code = (reason_code or default_codes.get(decision, "operator_decision")).strip()
     if not stable_reason_code:
         raise ValueError("reason_code is required")
+    gate = evidence_gate_state(creator_id) if decision == "Approved" else None
+    if gate is not None and gate["blocked"]:
+        raise EvidenceGateBlocked(evidence_gate_message(gate))
     existing = next(
         (
             item
@@ -1038,6 +1168,7 @@ def save_decision(
             existing["utm_content"] = case.get("utm_content")
             persist_state()
         return deepcopy(existing)
+    gate_refs = _gate_evidence_refs(gate) if gate is not None else []
     record = {
         "decision_id": f'decision_{len(st.session_state.decision_log) + 1:04d}',
         "creator_id": creator_id,
@@ -1046,7 +1177,7 @@ def save_decision(
         "reason_code": stable_reason_code,
         "reason": reason,
         "note": note if note is not None else reason,
-        "evidence": list(evidence or []),
+        "evidence": list(evidence or []) + [ref for ref in gate_refs if ref not in list(evidence or [])],
         "actor": context.get("owner", "Operator"),
         "decided_at": datetime.now(timezone.utc).isoformat(),
         "entry_type": context["entry_type"],
@@ -1054,13 +1185,31 @@ def save_decision(
         "mission_id": context.get("mission_id"),
         "opportunity_id": context.get("opportunity_id"),
     }
-    if decision == "Approved":
+    if decision == "Approved" and gate is not None:
+        record["evidence_gate"] = {
+            "status": gate["status"],
+            "grounded": gate["grounded"],
+            "model": gate["model"],
+            "prompt_version": gate["prompt_version"],
+            "pack_id": gate["pack_id"],
+            "claims": [
+                {
+                    "claim_id": item["claim_id"],
+                    "quote": item["quote"],
+                    "timestamp": item["timestamp"],
+                    "post_id": item["post_id"],
+                    "source_label": item["source_label"],
+                }
+                for item in gate.get("claims") or []
+            ],
+            "override": gate.get("override"),
+        }
         transition_creator_state(
             creator_id,
             "approved",
             actor=record["actor"],
             reason=reason,
-            evidence=evidence or ["decision://human-approval"],
+            evidence=(list(evidence or []) + gate_refs) or ["decision://human-approval"],
         )
         case = next(
             (

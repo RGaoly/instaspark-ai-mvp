@@ -57,6 +57,8 @@ This demo does not ingest TikTok or Instagram, does not pay creators, and does n
 - 5 个可解释评分维度（任务匹配、主题重合、动量、商业匹配、品牌安全）
 - 查询词面加权、稀疏 TF-IDF 余弦加分（不是神经网络嵌入，也不是大模型排序），以及挂接 YouTube 证据后的小幅加分；YouTube 结果不进入排序目录
 - Top 10 推荐；Top 20 精读看标注时间戳。60 行目录的 `creator_name` 就是公开频道标题，并带 `youtube_channel_id`；精读 ownership 为 `catalog_channel`（该行就是该频道的公开上传，不是 KYC）。`attached_channel` 仍是运营当场挂接
+- Evidence Reader Agent（`src/evidence_reader.py`）：把公开 YouTube 字幕正文（`downloaded_public_timedtext`，103 条）和 Product DNA claim 一起交给大模型，产出 claim 级结构化证据（claim_id / supported / confidence / 逐字引用 / 时间戳 / 矛盾点 / 品牌安全标记）。落地校验器会丢弃任何不是字幕原文子串的引用和不在输入里的时间戳；没有模型 key 时返回 `unavailable_no_model`，**不会**退化成关键词匹配假装证据。缓存在 `data/evidence_extractions.json`（版本化，无任何密钥），由 `scripts/run_evidence_reader.py` 生成
+- 外联审批闸门：批准某位创作者的外联，必须有 Evidence Reader 给出的 claim 级证据（≥1 条成立的 DNA claim + 通过校验的引用与时间戳）。没有模型时 UI 明说抽取不可用、规则无法替代，闸门进入显式阻断态；只能由带理由的人工覆盖放行，覆盖写入审批审计流水；Viewer 仍然只读
 - pytest 验收矩阵（硬门槛、证据覆盖、稳定性、归因、召回 60、精读 Top 20、180 条视频）；展示在 Growth Review，不是第八页
 - 人工采纳/驳回与 Reason Code
 - 英语/西班牙语 Brief 生成；镜头清单来自 Product DNA
@@ -118,6 +120,7 @@ pytest -q
 │   ├── creator_opportunities.json
 │   ├── inbound_messages.json
 │   ├── launch_mission.json
+│   ├── evidence_extractions.json  # Evidence Reader 缓存（版本化，无密钥）
 │   └── product_dna.json           # versionable SKU visual-proof object
 ├── docs/
 │   ├── 00_project_charter.md
@@ -146,6 +149,7 @@ pytest -q
 │   ├── data_loader.py
 │   ├── domain.py                  # 核心对象与统一状态机
 │   ├── evaluation.py              # pytest acceptance matrix
+│   ├── evidence_reader.py         # Evidence Reader Agent + 引用落地校验 + 审批闸门判定
 │   ├── inbound.py                 # 入站来信抽取、身份、评分、派单
 │   ├── product_dna.py
 │   ├── retrieval.py               # sparse TF-IDF cosine, not neural embeddings

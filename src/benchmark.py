@@ -4,7 +4,7 @@ The gold set is operator-read public timedtext, not model output. The baseline
 is a keyword matcher over the same caption lines. The model arm reads the
 cached Evidence Reader pack. Metrics are precision / recall / F1 plus
 quote-grounding accuracy (predicted-positive quotes that are a verbatim
-substring of one caption line).
+substring of one caption line or two adjacent caption lines).
 """
 
 from __future__ import annotations
@@ -145,6 +145,7 @@ def prf(tp: int, fp: int, fn: int) -> dict[str, float]:
 
 def _grounding_hits(preds: Sequence[Mapping[str, Any]], lines: Sequence[Mapping[str, Any]]) -> tuple[int, int]:
     texts = [_as_text(item.get("text")) for item in lines]
+    adjacent = [f"{left} {right}" for left, right in zip(texts, texts[1:])]
     ok = 0
     n = 0
     for item in preds:
@@ -152,7 +153,7 @@ def _grounding_hits(preds: Sequence[Mapping[str, Any]], lines: Sequence[Mapping[
         if not quote:
             continue
         n += 1
-        if any(quote in text for text in texts):
+        if any(quote in text for text in texts) or any(quote in text for text in adjacent):
             ok += 1
     return ok, n
 

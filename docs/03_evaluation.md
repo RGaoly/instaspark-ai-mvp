@@ -43,7 +43,8 @@ Twelve clips × four Product DNA claims = 48 claim labels.
    keywords.
 
 Metrics are precision / recall / F1 plus quote-grounding accuracy (predicted
-positive quotes that are a verbatim substring of one caption line). Growth
+positive quotes that are a verbatim substring of one caption line or two
+adjacent caption lines). Growth
 Review renders `data/benchmark_report.json` at `#claim-evidence-benchmark`.
 The view does not hard-code the numbers.
 

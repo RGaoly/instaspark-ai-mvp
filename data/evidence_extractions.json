@@ -1,14 +1,14 @@
 {
   "pack_id": "evidence_reader_x5_v1",
   "version": 1,
-  "prompt_version": "evidence_reader_v1",
+  "prompt_version": "evidence_reader_v2",
   "extractor": "evidence_reader",
   "model": "deepseek-chat",
   "caption_source": "youtube_public_timedtext",
   "dna_id": "dna_x5_v1",
   "dna_version": 1,
-  "extracted_at": "2026-08-25T13:08:53.159816+00:00",
-  "note": "Model-grounded DNA claim evidence read from public YouTube timedtext. Every quote is validated as a verbatim substring of a supplied caption line; ungrounded quotes are dropped, not repaired. Not ASR, not labeled_demo, not ranking input.",
+  "extracted_at": "2026-08-25T13:30:50.524319+00:00",
+  "note": "Model-grounded DNA claim evidence read from public YouTube timedtext. Every quote is validated as a verbatim substring of one caption line or two adjacent caption lines; ungrounded quotes are dropped, not repaired. Not ASR, not labeled_demo, not ranking input.",
   "coverage": {
     "eligible_clips": 103,
     "attempted_clips": 103,
@@ -16,35 +16,42 @@
     "extracted": 103,
     "unavailable_no_model": 0,
     "error": 0,
-    "supported_claims": 28,
-    "grounded_clips": 21,
-    "grounded_creators": 14,
-    "contradictions": 4,
-    "brand_safety_flags": 26,
-    "declared_unsupported": 217,
-    "rejected_missing_quote": 3,
-    "rejected_hallucinated_quotes": 2,
-    "rejected_cross_line_quotes": 122,
-    "rejected_unknown_timestamps": 0,
+    "supported_claims": 49,
+    "grounded_clips": 32,
+    "grounded_creators": 20,
+    "contradictions": 9,
+    "brand_safety_flags": 47,
+    "declared_unsupported": 208,
+    "rejected_missing_quote": 2,
+    "rejected_hallucinated_quotes": 8,
+    "rejected_cross_line_quotes": 58,
+    "rejected_unknown_timestamps": 2,
     "rejected_unknown_claim_ids": 0,
     "retimed_quotes": 3,
-    "case_normalized_quotes": 1,
-    "rejected_quotes_total": 127
+    "case_normalized_quotes": 0,
+    "joined_adjacent_lines": 55,
+    "rejected_quotes_total": 70
   },
   "grounded_creator_ids": [
     "C004",
     "C006",
+    "C010",
     "C012",
+    "C016",
     "C017",
+    "C021",
     "C022",
-    "C025",
+    "C024",
     "C026",
-    "C030",
+    "C028",
     "C031",
     "C034",
+    "C035",
     "C037",
     "C039",
+    "C047",
     "C055",
+    "C058",
     "C059"
   ],
   "clips": [
@@ -61,20 +68,21 @@
       "caption_lines_read": 32,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -92,7 +100,7 @@
       "caption_lines_read": 39,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -111,7 +119,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -129,7 +138,7 @@
       "caption_lines_read": 2,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -142,7 +151,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -160,20 +170,21 @@
       "caption_lines_read": 187,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -191,35 +202,50 @@
       "caption_lines_read": 178,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "I can just spin it and take any shot that I want.",
+          "timestamp": "05:28",
+          "note": "Describes immersive ability to choose shots, though not explicitly first-person."
+        },
         {
           "claim_id": "360",
           "supported": true,
           "confidence": 0.9,
           "quote": "This thing shoots in 8K 360°.",
           "timestamp": "04:24",
-          "note": "Explicitly states 360 capture."
+          "note": "Explicitly states 360° capture capability."
         }
       ],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "I'm not a tech reviewer. I don't review tech.",
+          "timestamp": "06:40",
+          "why": "The video is presented as a tech review, contradicting this statement."
+        }
+      ],
       "brand_safety_flags": [
         {
-          "quote": "I'll be fine.",
-          "timestamp": "09:26",
-          "category": "unsafe_act"
+          "quote": "It was cold, mate. I slept well.",
+          "timestamp": "06:11",
+          "category": "other"
         }
       ],
       "grounding": {
-        "kept": 1,
+        "kept": 2,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 3
       },
       "status": "extracted",
       "error": null
@@ -237,29 +263,38 @@
       "caption_lines_read": 21,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "all_day",
           "supported": true,
-          "confidence": 0.6,
+          "confidence": 0.8,
           "quote": "I spent a couple of days in the lakes",
           "timestamp": "00:00",
-          "note": "Mentions multiple days of use, but no explicit outdoor scenes."
+          "note": "Mentions multi-day use but not explicit all-day scenes."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "It shoots 8K 360° cinematic video",
+          "timestamp": "00:02",
+          "note": "Explicitly states 360 capture capability."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
+        "kept": 2,
         "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -277,7 +312,7 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -290,7 +325,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -308,20 +344,32 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "monuments being reduced",
+          "timestamp": "00:14",
+          "category": "political"
+        },
+        {
+          "quote": "boundaries of the monuments being reduced",
+          "timestamp": "00:12",
+          "category": "political"
+        }
+      ],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -339,20 +387,21 @@
       "caption_lines_read": 45,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -370,29 +419,38 @@
       "caption_lines_read": 34,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "pov",
           "supported": true,
-          "confidence": 0.7,
-          "quote": "you're flying through the air.",
-          "timestamp": "00:28",
-          "note": "First-person flying action suggests immersive POV."
+          "confidence": 0.5,
+          "quote": "I'm looking around cuz that 360 camera can see everything.",
+          "timestamp": "00:30",
+          "note": "Mentions 360 camera seeing everything, implying immersive POV."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.5,
+          "quote": "I'm looking around cuz that 360 camera can see everything.",
+          "timestamp": "00:30",
+          "note": "Directly refers to 360 camera capability."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
+        "kept": 2,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -410,53 +468,21 @@
       "caption_lines_read": 390,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [
-        {
-          "claim_id": "all_day",
-          "supported": true,
-          "confidence": 0.6,
-          "quote": "Every day, all day.",
-          "timestamp": "07:10",
-          "note": "Mentions all-day but refers to wall rattle, not camera use."
-        },
-        {
-          "claim_id": "360",
-          "supported": true,
-          "confidence": 0.8,
-          "quote": "It films everything around you.",
-          "timestamp": "00:45",
-          "note": "Describes 360 capture capability."
-        }
-      ],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [
-        {
-          "quote": "that's what she said.",
-          "timestamp": "01:53",
-          "category": "other"
-        },
-        {
-          "quote": "Shut up.",
-          "timestamp": "03:00",
-          "category": "profanity"
-        },
-        {
-          "quote": "That's freaking cinematic.",
-          "timestamp": "03:32",
-          "category": "profanity"
-        }
-      ],
+      "brand_safety_flags": [],
       "grounding": {
-        "kept": 2,
-        "declared_unsupported": 2,
+        "kept": 0,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 1
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -474,20 +500,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 3,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -505,7 +532,7 @@
       "caption_lines_read": 9,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -518,7 +545,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -536,7 +564,7 @@
       "caption_lines_read": 379,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -549,7 +577,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -567,20 +596,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -598,20 +628,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -629,20 +660,38 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "A bike packing adventure Patagonia where the world ends me right to the end",
+          "timestamp": "00:20",
+          "note": "Captions describe multi-day bike packing trips in daylight and sunrise-like settings."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "So, muddy for cleaning.",
+          "timestamp": "07:24",
+          "note": "Muddy conditions and wet environment shown during bike packing."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 0,
+        "kept": 2,
+        "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -660,26 +709,36 @@
       "caption_lines_read": 15,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.4,
+          "quote": "Well, this is what it takes to cross",
+          "timestamp": "00:10",
+          "note": "Outdoor journey but no explicit all-day duration shown."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [
         {
-          "quote": "there's one hell of a reward waiting.",
+          "quote": "there's one hell of a reward waiting",
           "timestamp": "00:28",
-          "category": "other"
+          "category": "profanity"
         }
       ],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 1,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -697,7 +756,7 @@
       "caption_lines_read": 32,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -710,7 +769,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -728,20 +788,21 @@
       "caption_lines_read": 39,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -759,20 +820,21 @@
       "caption_lines_read": 375,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -790,20 +852,38 @@
       "caption_lines_read": 127,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.95,
+          "quote": "using POV with the mouth mount for this first session",
+          "timestamp": "00:33",
+          "note": "Creator explicitly states using POV with mouth mount."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "See how the X5 looks in the cloudy conditions, too.",
+          "timestamp": "05:55",
+          "note": "Used in cloudy outdoor conditions, though not explicitly wet/dusty."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 1,
+        "kept": 2,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -821,21 +901,18 @@
       "caption_lines_read": 80,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [
+      "prompt_version": "evidence_reader_v2",
+      "claims": [],
+      "contradictions": [],
+      "brand_safety_flags": [
         {
-          "claim_id": "all_day",
-          "supported": true,
-          "confidence": 0.7,
-          "quote": "we are at the beach it is so small is",
-          "timestamp": "00:13",
-          "note": "Beach scene suggests outdoor daylight use, but not full day."
+          "quote": "PW woo",
+          "timestamp": "01:11",
+          "category": "other"
         }
       ],
-      "contradictions": [],
-      "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
+        "kept": 0,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
@@ -843,7 +920,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -861,29 +939,38 @@
       "caption_lines_read": 61,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "pov",
           "supported": true,
-          "confidence": 0.8,
+          "confidence": 0.9,
           "quote": "Let's go get some 360 POV.",
           "timestamp": "03:47",
-          "note": "Explicit mention of 360 POV capture."
+          "note": "Explicitly mentions 360 POV while using X5 in surf."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.95,
+          "quote": "The Insta360 X5 is a 360° action camera that films everything around you.",
+          "timestamp": "03:52",
+          "note": "Directly describes 360-degree capture of surroundings."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
-        "declared_unsupported": 2,
+        "kept": 2,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -901,7 +988,7 @@
       "caption_lines_read": 3,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -914,7 +1001,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -932,7 +1020,7 @@
       "caption_lines_read": 6,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -942,21 +1030,37 @@
           "category": "other"
         },
         {
+          "quote": "But you can whip your loving on me,",
+          "timestamp": "00:04",
+          "category": "other"
+        },
+        {
+          "quote": "baby. Whip your loving on me, baby.",
+          "timestamp": "00:06",
+          "category": "other"
+        },
+        {
           "quote": "I'm vanilla, baby. I'll choke you, but I",
           "timestamp": "00:09",
+          "category": "other"
+        },
+        {
+          "quote": "ain't no killer.",
+          "timestamp": "00:11",
           "category": "other"
         }
       ],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -974,7 +1078,7 @@
       "caption_lines_read": 2,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -987,7 +1091,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1005,7 +1110,7 @@
       "caption_lines_read": 10,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -1015,11 +1120,6 @@
           "category": "profanity"
         },
         {
-          "quote": "your I'm vanilla baby I'll choke you but",
-          "timestamp": "00:08",
-          "category": "other"
-        },
-        {
           "quote": "I ain't no killer baby she 28 telling me",
           "timestamp": "00:11",
           "category": "other"
@@ -1027,14 +1127,15 @@
       ],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1052,13 +1153,13 @@
       "caption_lines_read": 386,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
         {
-          "quote": "This is so silly.",
-          "timestamp": "02:11",
+          "quote": ">> [snorts]",
+          "timestamp": "01:37",
           "category": "other"
         }
       ],
@@ -1071,7 +1172,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1089,7 +1191,7 @@
       "caption_lines_read": 370,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1102,7 +1204,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1120,7 +1223,7 @@
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1129,11 +1232,12 @@
         "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1151,20 +1255,36 @@
       "caption_lines_read": 241,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.95,
+          "quote": "with the new backpack Mount you can also make POV shots very easily",
+          "timestamp": "02:19",
+          "note": "Explicitly describes POV shots using backpack mount."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "thank you insta 360 for sponsoring this",
+          "timestamp": "09:40",
+          "category": "other"
+        }
+      ],
       "grounding": {
-        "kept": 0,
+        "kept": 1,
         "declared_unsupported": 1,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
-        "rejected_unknown_timestamps": 0,
+        "rejected_cross_line_quotes": 1,
+        "rejected_unknown_timestamps": 1,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -1182,7 +1302,7 @@
       "caption_lines_read": 219,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1191,11 +1311,12 @@
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 5,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1213,20 +1334,27 @@
       "caption_lines_read": 319,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "today insta 360 is releasing a new action camera the Ace Pro 2",
+          "timestamp": "00:00",
+          "why": "Video is about Ace Pro 2, not Insta360 X5."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 1,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 0,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -1244,26 +1372,30 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
-      "contradictions": [],
-      "brand_safety_flags": [
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
         {
-          "quote": "which drives me bonkers.",
-          "timestamp": "06:31",
-          "category": "other"
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "both underwater as well as above water,",
+          "timestamp": "00:16",
+          "note": "Mentions testing underwater and above water, implying wet conditions."
         }
       ],
+      "contradictions": [],
+      "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 4,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1281,43 +1413,41 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "all_day",
           "supported": true,
           "confidence": 0.7,
-          "quote": "I've been using this a ton.",
-          "timestamp": "02:20",
-          "note": "Implies extensive use across scenarios, but no explicit time duration."
-        },
-        {
-          "claim_id": "rugged",
-          "supported": true,
-          "confidence": 0.8,
-          "quote": "Underwater, on the water, on the ground,",
-          "timestamp": "00:07",
-          "note": "Mentions use in wet and ground scenarios, implying ruggedness."
+          "quote": "over the last month and a half across all sorts of different scenarios.",
+          "timestamp": "00:04",
+          "note": "Reviewer mentions extended testing across scenarios, implying all-day use."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [
         {
-          "quote": "marketing junk they want you to hear",
-          "timestamp": "00:16",
+          "quote": "that is super critical in this space.",
+          "timestamp": "00:28",
+          "category": "other"
+        },
+        {
+          "quote": "nobody actually supports it for the most part.",
+          "timestamp": "05:04",
           "category": "other"
         }
       ],
       "grounding": {
-        "kept": 2,
-        "declared_unsupported": 1,
+        "kept": 1,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_hallucinated_quotes": 2,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 3
       },
       "status": "extracted",
       "error": null
@@ -1335,20 +1465,46 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "guide between the three main 360 cameras on the market today.",
+          "timestamp": "00:01",
+          "note": "Discusses 360 cameras but not specific real locations."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "all three of these have sucky things",
+          "timestamp": "00:32",
+          "category": "profanity"
+        },
+        {
+          "quote": "They just suck at that.",
+          "timestamp": "10:55",
+          "category": "profanity"
+        },
+        {
+          "quote": "GoPro just sucks here.",
+          "timestamp": "11:17",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 4,
+        "kept": 1,
+        "declared_unsupported": 1,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 0,
+        "rejected_cross_line_quotes": 4,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -1366,20 +1522,21 @@
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1397,7 +1554,7 @@
       "caption_lines_read": 1,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1410,7 +1567,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1428,20 +1586,27 @@
       "caption_lines_read": 179,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": ">> I like China.",
+          "timestamp": "07:25",
+          "category": "political"
+        }
+      ],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1459,7 +1624,7 @@
       "caption_lines_read": 106,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -1478,7 +1643,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1496,7 +1662,7 @@
       "caption_lines_read": 110,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1505,11 +1671,12 @@
         "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1527,7 +1694,7 @@
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1540,7 +1707,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1558,20 +1726,21 @@
       "caption_lines_read": 3,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1589,10 +1758,15 @@
       "caption_lines_read": 45,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
+        {
+          "quote": "the brand new GoPro Mission [music] 1 Pro.",
+          "timestamp": "00:10",
+          "category": "competitor_claim"
+        },
         {
           "quote": "Next up is my GoPro Max 2.",
           "timestamp": "00:32",
@@ -1604,11 +1778,12 @@
         "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -1626,7 +1801,7 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1639,7 +1814,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1657,20 +1833,30 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "So ibig sabihin mga 360 videos yan.",
+          "timestamp": "03:50",
+          "note": "Captions discuss and show 360 videos from Insta360 X5, demonstrating 360 capture."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
+        "kept": 1,
         "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -1688,20 +1874,38 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "Tapos sa third person POV naman gamit natin is Insta 360 X5.",
+          "timestamp": "00:49",
+          "note": "Mentions third-person POV usage with the camera."
+        },
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "kung uulan man, hindi tayo mangangamba kasi waterproof yung setup natin.",
+          "timestamp": "14:04",
+          "note": "Mentions waterproof setup; does not specify dust resilience."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
+        "kept": 2,
         "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -1719,7 +1923,7 @@
       "caption_lines_read": 378,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1732,7 +1936,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1750,18 +1955,48 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "Today, we are in beautiful, beautiful Sisters, Oregon.",
+          "timestamp": "00:39",
+          "note": "Video shows outdoor riding in daylight; no explicit all-day claim."
+        },
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "So, this road is a little bit more difficult.",
+          "timestamp": "00:00",
+          "note": "First-person narration while riding, but no explicit POV claim."
+        },
         {
           "claim_id": "rugged",
           "supported": true,
-          "confidence": 0.7,
-          "quote": "There's a creek, very pretty.",
-          "timestamp": "02:01",
-          "note": "Mentions creek, but no explicit wet/dusty scene; dusty trail implied."
+          "confidence": 0.9,
+          "quote": "It's real smokey, cuz like I said, there's a fire very close.",
+          "timestamp": "00:11",
+          "note": "Dusty and smoky outdoor conditions shown; no explicit rugged claim."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "It's just not 360 like up there.",
+          "timestamp": "09:47",
+          "note": "Mentions 360 view; implies 360 capture but not explicit."
         }
       ],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "It's just not 360 like up there.",
+          "timestamp": "09:47",
+          "why": "This line suggests a location is not 360, potentially undermining the 360 claim for that scene."
+        }
+      ],
       "brand_safety_flags": [
         {
           "quote": "pretty damn cool",
@@ -1772,18 +2007,24 @@
           "quote": "Damn.",
           "timestamp": "05:08",
           "category": "profanity"
+        },
+        {
+          "quote": "Damn.",
+          "timestamp": "09:00",
+          "category": "profanity"
         }
       ],
       "grounding": {
-        "kept": 1,
+        "kept": 4,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 1,
-        "case_normalized_quotes": 0
+        "retimed_quotes": 0,
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 5
       },
       "status": "extracted",
       "error": null
@@ -1801,7 +2042,7 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1814,7 +2055,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1832,7 +2074,7 @@
       "caption_lines_read": 4,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -1845,7 +2087,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1863,7 +2106,7 @@
       "caption_lines_read": 347,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -1878,11 +2121,12 @@
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_cross_line_quotes": 5,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1900,8 +2144,17 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.3,
+          "quote": "SO RIGHT now we're really sailing through the center of the city.",
+          "timestamp": "02:28",
+          "note": "First-person narration while on boat, but not clear POV shot."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [
         {
@@ -1913,18 +2166,24 @@
           "quote": "Holy [ __ ]",
           "timestamp": "01:57",
           "category": "profanity"
+        },
+        {
+          "quote": "sex work is completely legal.",
+          "timestamp": "09:04",
+          "category": "other"
         }
       ],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 1,
+        "kept": 1,
+        "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -1942,20 +2201,27 @@
       "caption_lines_read": 64,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "kill the absolute success of this video",
+          "timestamp": "00:46",
+          "category": "other"
+        }
+      ],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -1973,21 +2239,12 @@
       "caption_lines_read": 73,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [
-        {
-          "claim_id": "360",
-          "supported": true,
-          "confidence": 0.6,
-          "quote": "As you kind of go through the gauntlet,",
-          "timestamp": "00:00",
-          "note": "Implies trail context but no explicit 360 capture mention."
-        }
-      ],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
+        "kept": 0,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
@@ -1995,7 +2252,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2013,7 +2271,7 @@
       "caption_lines_read": 84,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2026,7 +2284,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2044,37 +2303,36 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "all_day",
           "supported": true,
-          "confidence": 0.9,
-          "quote": "I've ridden my motorcycle to the",
-          "timestamp": "00:00",
-          "note": "Depicts long-distance motorcycle trip over multiple days."
-        },
-        {
-          "claim_id": "rugged",
-          "supported": true,
           "confidence": 0.7,
-          "quote": "they're in a pretty bad drought here.",
-          "timestamp": "07:17",
-          "note": "Mentions dusty conditions and gravel road riding."
+          "quote": "Sweating your tits off in the sunshine all day on a motorcycle.",
+          "timestamp": "12:09",
+          "note": "Implies all-day outdoor activity but not explicitly camera usage."
         }
       ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "Sweating your tits off in the sunshine",
+          "timestamp": "12:09",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
-        "kept": 2,
-        "declared_unsupported": 0,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 1,
-        "case_normalized_quotes": 0
+        "retimed_quotes": 0,
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -2092,20 +2350,27 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "There was a really wicked hailstorm that popped up near Nemo.",
+          "timestamp": "03:47",
+          "category": "unsafe_act"
+        }
+      ],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -2123,12 +2388,12 @@
       "caption_lines_read": 311,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "all_day",
           "supported": true,
-          "confidence": 0.9,
+          "confidence": 0.7,
           "quote": "nicer to carry around all day.",
           "timestamp": "00:57",
           "note": "Mentions carrying all day, but not explicitly shooting all day."
@@ -2137,21 +2402,22 @@
       "contradictions": [],
       "brand_safety_flags": [
         {
-          "quote": "I like to drop my cameras.",
-          "timestamp": "10:33",
-          "category": "unsafe_act"
+          "quote": ">> [snorts]",
+          "timestamp": "01:26",
+          "category": "other"
         }
       ],
       "grounding": {
         "kept": 1,
-        "declared_unsupported": 1,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2169,7 +2435,7 @@
       "caption_lines_read": 266,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [
@@ -2184,11 +2450,12 @@
         "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2206,20 +2473,21 @@
       "caption_lines_read": 24,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 3,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2237,10 +2505,22 @@
       "caption_lines_read": 17,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
-      "contradictions": [],
-      "brand_safety_flags": [],
+      "contradictions": [
+        {
+          "quote": "First, I used the Insta360 X6",
+          "timestamp": "00:03",
+          "why": "The SKU is Insta360 X5, but the caption mentions X6, a potential product mismatch."
+        }
+      ],
+      "brand_safety_flags": [
+        {
+          "quote": "I raced an airplane on my dirt bike",
+          "timestamp": "00:00",
+          "category": "unsafe_act"
+        }
+      ],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 2,
@@ -2250,7 +2530,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2268,20 +2549,41 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.95,
+          "quote": "And we also have a vent over here. And here, again, this has changed.",
+          "timestamp": "03:39",
+          "note": "Mentions 360° camera, but not of a real location."
+        }
+      ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "And as you can see, I went over a big crater, and it easily handled it.",
+          "timestamp": "10:24",
+          "category": "unsafe_act"
+        },
+        {
+          "quote": "going over some really shitty broken roads.",
+          "timestamp": "10:18",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 4,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 3
       },
       "status": "extracted",
       "error": null
@@ -2299,20 +2601,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2330,7 +2633,7 @@
       "caption_lines_read": 203,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2343,7 +2646,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2361,20 +2665,21 @@
       "caption_lines_read": 286,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2392,26 +2697,21 @@
       "caption_lines_read": 74,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
-      "contradictions": [
-        {
-          "quote": "pwede ka na makabili ng flagship level",
-          "timestamp": "00:03",
-          "why": "Captions are about a phone (Redmi K90 Ultra), not an Insta360 X5 camera."
-        }
-      ],
+      "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 4,
-        "rejected_missing_quote": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2429,20 +2729,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2460,7 +2761,7 @@
       "caption_lines_read": 78,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2473,7 +2774,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2491,29 +2793,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [
-        {
-          "claim_id": "all_day",
-          "supported": true,
-          "confidence": 0.6,
-          "quote": "Today on the channel, and yes, I'm back",
-          "timestamp": "00:01",
-          "note": "Video opens outdoors, but no explicit all-day shooting duration mentioned."
-        }
-      ],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
-        "declared_unsupported": 3,
+        "kept": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2531,7 +2825,7 @@
       "caption_lines_read": 31,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2544,7 +2838,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2562,7 +2857,7 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2575,7 +2870,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2593,29 +2889,44 @@
       "caption_lines_read": 181,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "still gives you that really cool perspective.",
+          "timestamp": "02:17",
+          "note": "Mentions perspective but not explicitly first-person or waterline."
+        },
         {
           "claim_id": "360",
           "supported": true,
           "confidence": 0.9,
           "quote": "This is my new 360 camera setup",
           "timestamp": "00:24",
-          "note": "Explicitly states 360 camera setup; not a specific real location."
+          "note": "Explicitly mentions 360 camera setup."
         }
       ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "no more risking a $500 camera because your mount",
+          "timestamp": "01:24",
+          "category": "other"
+        }
+      ],
       "grounding": {
-        "kept": 1,
+        "kept": 2,
         "declared_unsupported": 1,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -2633,20 +2944,21 @@
       "caption_lines_read": 4,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2664,20 +2976,30 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "These two different images are stitched together in the camera to create a full 360 spherical photo or video.",
+          "timestamp": "05:40",
+          "note": "Directly describes 360 capture capability."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 1,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -2695,29 +3017,38 @@
       "caption_lines_read": 227,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.9,
+          "quote": "Both of these cameras are waterproof as is without an extra case.",
+          "timestamp": "01:55",
+          "note": "Explicitly states waterproof capability without extra case, implying wet use."
+        },
         {
           "claim_id": "360",
           "supported": true,
-          "confidence": 0.9,
-          "quote": "You can either record 360, full spherical 360 photos and videos",
-          "timestamp": "02:58",
-          "note": "Directly states 360 recording capability."
+          "confidence": 0.95,
+          "quote": "Both of these Insta360 360 cameras are top-notch cameras that are going to give you the best 360 footage.",
+          "timestamp": "00:27",
+          "note": "Directly confirms 360 capture capability for both cameras."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
-        "declared_unsupported": 1,
-        "rejected_missing_quote": 1,
-        "rejected_hallucinated_quotes": 1,
-        "rejected_cross_line_quotes": 2,
+        "kept": 2,
+        "declared_unsupported": 2,
+        "rejected_missing_quote": 0,
+        "rejected_hallucinated_quotes": 0,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 1,
-        "case_normalized_quotes": 0
+        "retimed_quotes": 0,
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -2735,7 +3066,7 @@
       "caption_lines_read": 33,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -2748,7 +3079,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2766,26 +3098,55 @@
       "caption_lines_read": 244,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
-      "contradictions": [
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
         {
+          "claim_id": "rugged",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "Incidentally, the X6 is waterproof to a depth of up to 20 metres without an additional dive case.",
+          "timestamp": "03:10",
+          "note": "Waterproof claim supports wet use; dust not mentioned."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 1.0,
           "quote": "The Insta360 X6 is here. And this clip was created automatically by the camera and the app.",
           "timestamp": "00:00",
-          "why": "The video discusses X6, but the SKU is X5. This may be a mismatch, but not a direct contradiction of claims."
+          "note": "Clip shown is 360 footage from the camera."
         }
       ],
-      "brand_safety_flags": [],
+      "contradictions": [
+        {
+          "quote": "The X6 was provided to me by Insta360 for testing purposes, but this video does not include any additional paid sponsorship!",
+          "timestamp": "00:57",
+          "why": "Potential conflict of interest due to free product, but not a claim contradiction."
+        },
+        {
+          "quote": "Unfortunately, 3D Spatial Capture is not available in the US at launch for technical reasons.",
+          "timestamp": "18:25",
+          "why": "Contradicts any claim of full feature availability."
+        }
+      ],
+      "brand_safety_flags": [
+        {
+          "quote": "The X5 and the DJI Osmo360. The Osmo360 2 is due to be released soon, but only in China.",
+          "timestamp": "00:27",
+          "category": "competitor_claim"
+        }
+      ],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 3,
+        "kept": 2,
+        "declared_unsupported": 1,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 3
       },
       "status": "extracted",
       "error": null
@@ -2803,20 +3164,21 @@
       "caption_lines_read": 7,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2834,20 +3196,21 @@
       "caption_lines_read": 111,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 2,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2865,20 +3228,38 @@
       "caption_lines_read": 22,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "ultra stable third person angle to get footage of yourself",
+          "timestamp": "00:27",
+          "note": "Third-person angle implies immersive POV but not explicit first-person."
+        },
+        {
+          "claim_id": "360",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "making 360 writing footage easier than ever",
+          "timestamp": "00:32",
+          "note": "Mentions 360 footage but not explicit real-location capture."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 0,
+        "kept": 2,
+        "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -2896,20 +3277,21 @@
       "caption_lines_read": 15,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 0,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2927,37 +3309,30 @@
       "caption_lines_read": 120,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
-        {
-          "claim_id": "all_day",
-          "supported": true,
-          "confidence": 0.7,
-          "quote": "This is the camera that I use for the POV videos,",
-          "timestamp": "00:03",
-          "note": "Creator mentions using camera for POV videos, not explicitly all-day shooting."
-        },
         {
           "claim_id": "pov",
           "supported": true,
           "confidence": 0.9,
           "quote": "This is the camera that I use for the POV videos,",
           "timestamp": "00:03",
-          "note": "Directly references POV videos and onboard footage."
+          "note": "Explicitly states use for POV videos."
         }
       ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 2,
-        "declared_unsupported": 2,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -2975,43 +3350,38 @@
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "pov",
           "supported": true,
-          "confidence": 0.5,
-          "quote": "I'm going to be mounting mine front and center, so I can capture forward-facing point of view",
+          "confidence": 0.6,
+          "quote": "I'm going to be mounting mine front and center, so I can capture forward-facing point of view footage, as well as self portrait type footage.",
           "timestamp": "00:57",
-          "note": "Mentions POV but captions show mounting tutorial, not actual scenes."
+          "note": "Discusses POV footage but not immersive storytelling or specific scenes."
         },
         {
           "claim_id": "rugged",
           "supported": true,
-          "confidence": 0.4,
-          "quote": "stand up to the most extreme environments.",
-          "timestamp": "00:15",
-          "note": "Vague reference to extreme environments, not specific wet/dusty scenes."
+          "confidence": 0.7,
+          "quote": "Follow these very simple steps for optimal attachment and your mount will be able to stand up to the most extreme environments.",
+          "timestamp": "00:11",
+          "note": "Mentions extreme environments but no wet/dusty scenes."
         }
       ],
-      "contradictions": [
-        {
-          "quote": "GoPro's adhesive mounts are arguably the most versatile option for mounting your GoPro to",
-          "timestamp": "00:04",
-          "why": "Video promotes GoPro mounts, not Insta360 X5, contradicting product focus."
-        }
-      ],
+      "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 2,
         "declared_unsupported": 2,
-        "rejected_missing_quote": 1,
+        "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -3029,29 +3399,36 @@
       "caption_lines_read": 47,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "360",
           "supported": true,
-          "confidence": 0.6,
-          "quote": "Arguably, the best feature of this tripod, is the integrated aluminum ballhead - giving",
+          "confidence": 0.9,
+          "quote": "Arguably, the best feature of this tripod, is the integrated aluminum ballhead - giving you the flexibility to 360 degree panning and 90 degree tilting.",
           "timestamp": "00:55",
-          "note": "Mentions 360-degree panning capability but not specifically 360 video capture."
+          "note": "Mentions 360-degree panning capability, but not 360 capture."
         }
       ],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "Arguably, the best feature of this tripod, is the integrated aluminum ballhead - giving you the flexibility to 360 degree panning and 90 degree tilting.",
+          "timestamp": "00:55",
+          "why": "The claim of 360 capture is contradicted by the actual capability being 360-degree panning, not 360-degree spherical capture."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 1,
         "declared_unsupported": 3,
-        "rejected_missing_quote": 0,
+        "rejected_missing_quote": 1,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -3069,20 +3446,21 @@
       "caption_lines_read": 397,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 2,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3100,31 +3478,21 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [
-        {
-          "quote": ">> Hell no, man. What the man?",
-          "timestamp": "09:27",
-          "category": "profanity"
-        },
-        {
-          "quote": ">> Get your ass off.",
-          "timestamp": "09:30",
-          "category": "profanity"
-        }
-      ],
+      "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 1,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3142,20 +3510,27 @@
       "caption_lines_read": 400,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "the whole freaking point of the name",
+          "timestamp": "08:08",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 3,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -3173,20 +3548,21 @@
       "caption_lines_read": 251,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3204,20 +3580,21 @@
       "caption_lines_read": 308,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 1,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3235,20 +3612,21 @@
       "caption_lines_read": 307,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 4,
+        "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3266,26 +3644,30 @@
       "caption_lines_read": 18,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
-      "contradictions": [],
-      "brand_safety_flags": [
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
         {
-          "quote": "straight dude there's so many fun kants",
-          "timestamp": "00:24",
-          "category": "other"
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.8,
+          "quote": "favorite way to shoot POV footage with",
+          "timestamp": "00:02",
+          "note": "Mentions POV footage with Insta360 camera."
         }
       ],
+      "contradictions": [],
+      "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
-        "declared_unsupported": 1,
+        "kept": 1,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3303,20 +3685,21 @@
       "caption_lines_read": 385,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 0,
+        "declared_unsupported": 3,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3334,7 +3717,7 @@
       "caption_lines_read": 49,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
@@ -3347,7 +3730,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3365,15 +3749,15 @@
       "caption_lines_read": 169,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "pov",
           "supported": true,
-          "confidence": 0.95,
+          "confidence": 0.9,
           "quote": "the best settings to capture POV surfing",
           "timestamp": "00:02",
-          "note": "Explicitly discusses POV surfing settings and techniques."
+          "note": "Video is explicitly about POV surfing settings and techniques."
         }
       ],
       "contradictions": [],
@@ -3381,13 +3765,14 @@
       "grounding": {
         "kept": 1,
         "declared_unsupported": 2,
-        "rejected_missing_quote": 0,
+        "rejected_missing_quote": 1,
         "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3405,20 +3790,32 @@
       "caption_lines_read": 110,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "Insta360 1 Ultra",
+          "timestamp": "00:17",
+          "category": "competitor_claim"
+        },
+        {
+          "quote": "Luna Ultra is compatible with ASUS workflows",
+          "timestamp": "02:53",
+          "category": "competitor_claim"
+        }
+      ],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 3,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 1,
+        "rejected_hallucinated_quotes": 0,
         "rejected_cross_line_quotes": 1,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -3436,45 +3833,36 @@
       "caption_lines_read": 217,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
         {
           "claim_id": "all_day",
           "supported": true,
-          "confidence": 0.9,
-          "quote": "Hey, I'm Brandon Lee and I am here in",
-          "timestamp": "00:00",
-          "note": "Clip opens with Paris at sunrise, indicating daylight start."
-        },
-        {
-          "claim_id": "pov",
-          "supported": true,
-          "confidence": 0.8,
-          "quote": "Something I really like to do with",
-          "timestamp": "07:50",
-          "note": "Demonstrates first-person POV over water using selfie stick."
-        },
-        {
-          "claim_id": "360",
-          "supported": true,
-          "confidence": 0.9,
-          "quote": "360 cameras are best for shots",
-          "timestamp": "02:05",
-          "note": "Shows wide establishing shots of Paris and group ride."
+          "confidence": 0.7,
+          "quote": "Paris at sunrise with the new Insta3 X5.",
+          "timestamp": "00:03",
+          "note": "Mentions sunrise but no explicit all-day shooting."
         }
       ],
-      "contradictions": [],
+      "contradictions": [
+        {
+          "quote": "It's basically the same size and the same weight as the X4",
+          "timestamp": "01:35",
+          "why": "The claim 'all_day' implies extended use, but no contradiction found. However, this quote contradicts any claim of a new form factor."
+        }
+      ],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 3,
+        "kept": 1,
         "declared_unsupported": 1,
         "rejected_missing_quote": 0,
-        "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 0,
+        "rejected_hallucinated_quotes": 1,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -3492,20 +3880,21 @@
       "caption_lines_read": 354,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
         "kept": 0,
-        "declared_unsupported": 2,
+        "declared_unsupported": 4,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 5,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 0
       },
       "status": "extracted",
       "error": null
@@ -3523,20 +3912,30 @@
       "caption_lines_read": 397,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
-      "claims": [],
+      "prompt_version": "evidence_reader_v2",
+      "claims": [
+        {
+          "claim_id": "all_day",
+          "supported": true,
+          "confidence": 0.7,
+          "quote": "I shot all of it on the new Insta360 X6 360 camera.",
+          "timestamp": "01:54",
+          "note": "Creator shot a travel film over a month, implying all-day usage."
+        }
+      ],
       "contradictions": [],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 0,
+        "kept": 1,
         "declared_unsupported": 0,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 4,
-        "rejected_unknown_timestamps": 0,
+        "rejected_cross_line_quotes": 2,
+        "rejected_unknown_timestamps": 1,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 2
       },
       "status": "extracted",
       "error": null
@@ -3554,10 +3953,16 @@
       "caption_lines_read": 117,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "That's what she said.",
+          "timestamp": "04:43",
+          "category": "other"
+        }
+      ],
       "grounding": {
         "kept": 0,
         "declared_unsupported": 4,
@@ -3567,7 +3972,8 @@
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -3585,35 +3991,44 @@
       "caption_lines_read": 82,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.6,
+          "quote": "Honest review for Insta 360 X4. As",
+          "timestamp": "00:00",
+          "note": "First-person surf clips implied, but quote does not explicitly show POV."
+        },
         {
           "claim_id": "rugged",
           "supported": true,
           "confidence": 0.8,
-          "quote": "sadly we don't have a waterproof camera.",
-          "timestamp": "00:08",
-          "note": "Implies need for waterproof; later use in water suggests rugged use."
+          "quote": "Finally, we have invested into one and",
+          "timestamp": "00:10",
+          "note": "Used in water and mentions lack of waterproof camera; implies wet use."
         }
       ],
       "contradictions": [
         {
-          "quote": "sadly we don't have a waterproof camera.",
-          "timestamp": "00:08",
-          "why": "Implies camera is waterproof, but captions later mention water droplets on lens causing blur, suggesting not fully waterproof in practice."
+          "quote": "It's already heavy as it is.",
+          "timestamp": "00:15",
+          "why": "Claims camera is heavy, which may contradict rugged outdoor usability."
         }
       ],
       "brand_safety_flags": [],
       "grounding": {
-        "kept": 1,
-        "declared_unsupported": 1,
+        "kept": 2,
+        "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 3,
+        "rejected_cross_line_quotes": 2,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
         "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null
@@ -3631,29 +4046,49 @@
       "caption_lines_read": 398,
       "extractor": "evidence_reader",
       "model": "deepseek-chat",
-      "prompt_version": "evidence_reader_v1",
+      "prompt_version": "evidence_reader_v2",
       "claims": [
+        {
+          "claim_id": "pov",
+          "supported": true,
+          "confidence": 0.5,
+          "quote": "I'll try it as my helmet cam",
+          "timestamp": "10:06",
+          "note": "Mentions using as helmet cam, implying POV but not explicit."
+        },
         {
           "claim_id": "360",
           "supported": true,
-          "confidence": 0.9,
-          "quote": "well I got it works great as a 360 Cam",
+          "confidence": 0.8,
+          "quote": "works great as a 360 Cam",
           "timestamp": "10:09",
-          "note": "Explicitly states 360 capability, but no specific location scenes described."
+          "note": "Explicitly states 360 functionality works great."
         }
       ],
       "contradictions": [],
-      "brand_safety_flags": [],
+      "brand_safety_flags": [
+        {
+          "quote": "screw it",
+          "timestamp": "10:01",
+          "category": "profanity"
+        },
+        {
+          "quote": "screw around with it",
+          "timestamp": "12:09",
+          "category": "profanity"
+        }
+      ],
       "grounding": {
-        "kept": 1,
-        "declared_unsupported": 1,
+        "kept": 2,
+        "declared_unsupported": 2,
         "rejected_missing_quote": 0,
         "rejected_hallucinated_quotes": 0,
-        "rejected_cross_line_quotes": 2,
+        "rejected_cross_line_quotes": 0,
         "rejected_unknown_timestamps": 0,
         "rejected_unknown_claim_ids": 0,
-        "retimed_quotes": 0,
-        "case_normalized_quotes": 0
+        "retimed_quotes": 3,
+        "case_normalized_quotes": 0,
+        "joined_adjacent_lines": 1
       },
       "status": "extracted",
       "error": null

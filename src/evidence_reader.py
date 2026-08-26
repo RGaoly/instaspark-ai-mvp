@@ -5,7 +5,8 @@ downloaded_public_timedtext``) together with the Product DNA claim set and asks
 the configured LLM which claims the clip actually demonstrates. Every returned
 quote is validated against the supplied caption lines before it is kept:
 
-* a quote that is not a verbatim substring of one supplied caption line is dropped
+* a quote that is not a verbatim substring of one supplied caption line, or of
+  two adjacent caption lines joined with a space, is dropped
 * a timestamp that is not one of the supplied caption timestamps is dropped
 
 There is no keyword fallback. Without a model key the agent returns
@@ -28,7 +29,7 @@ DEFAULT_EXTRACTIONS_PATH = ROOT / "data" / "evidence_extractions.json"
 
 PACK_ID = "evidence_reader_x5_v1"
 PACK_VERSION = 1
-PROMPT_VERSION = "evidence_reader_v1"
+PROMPT_VERSION = "evidence_reader_v2"
 EXTRACTOR = "evidence_reader"
 CAPTION_SOURCE = "youtube_public_timedtext"
 ELIGIBLE_BODY_STATUS = "downloaded_public_timedtext"
@@ -149,9 +150,9 @@ class GroundingStats(dict):
     """Counters for the grounding validator. Rejections are reported, not hidden.
 
     The rejection reasons are deliberately separate. A model that honestly reports
-    "this clip does not support the claim" is not hallucinating, and a quote stitched
-    across two caption lines is a contract violation rather than an invention.
-    Collapsing all three into one counter would overstate the hallucination rate.
+    "this clip does not support the claim" is not hallucinating. Two neighbouring
+    YouTube caption chunks joined with a space are still transcript. A stitch across
+    three or more lines, or an invented sentence, is dropped.
     """
 
     KEYS = (
@@ -164,6 +165,7 @@ class GroundingStats(dict):
         "rejected_unknown_claim_ids",
         "retimed_quotes",
         "case_normalized_quotes",
+        "joined_adjacent_lines",
     )
 
     def __init__(self) -> None:
@@ -184,17 +186,44 @@ def _spans_multiple_lines(needle: str, index: Sequence[tuple[str, str]]) -> bool
     return needle.casefold() in joined.casefold()
 
 
+def _slice_in(haystack: str, needle: str) -> str | None:
+    if needle in haystack:
+        start = haystack.find(needle)
+        return haystack[start : start + len(needle)]
+    folded_hay, folded_needle = haystack.casefold(), needle.casefold()
+    start = folded_hay.find(folded_needle)
+    if start < 0:
+        return None
+    return haystack[start : start + len(needle)]
+
+
+def _adjacent_matches(needle: str, index: Sequence[tuple[str, str]]) -> list[tuple[str, str, str]]:
+    """Quotes YouTube split across two neighbouring caption chunks. Still real transcript."""
+
+    found: list[tuple[str, str, str]] = []
+    for i in range(len(index) - 1):
+        stamp_a, text_a = index[i]
+        _, text_b = index[i + 1]
+        joined = _normalize(f"{text_a} {text_b}")
+        slice_ = _slice_in(joined, needle)
+        if slice_ is None:
+            continue
+        found.append((stamp_a, joined, slice_))
+    return found
+
+
 def ground_quote(
     quote: Any,
     timestamp: Any,
     lines: Sequence[Mapping[str, Any]],
     stats: GroundingStats | None = None,
 ) -> dict[str, str] | None:
-    """Return the grounded quote/timestamp, or None when the quote is not in one line.
+    """Return the grounded quote/timestamp, or None when the quote is not in the captions.
 
-    A quote is only kept when it is literally present inside a single supplied caption
-    line. Casing is the one difference tolerated, and even then the caption line's own
-    text is what gets stored, so a kept quote is always real transcript text.
+    Preferred match is a single caption line. YouTube timedtext often splits one spoken
+    sentence across two neighbouring chunks; that pair, joined with a space, is still
+    verbatim transcript and is kept. Three-or-more-line stitches and invented sentences
+    are dropped.
     """
 
     stats = stats if stats is not None else GroundingStats()
@@ -206,6 +235,7 @@ def ground_quote(
         stats.bump("rejected_missing_quote")
         return None
     matches = [(line_stamp, text, needle) for line_stamp, text in index if needle in text]
+    adjacent = False
     if not matches:
         folded = needle.casefold()
         matches = [
@@ -216,6 +246,11 @@ def ground_quote(
         if matches:
             stats.bump("case_normalized_quotes")
     if not matches:
+        matches = _adjacent_matches(needle, index)
+        if matches:
+            adjacent = True
+            stats.bump("joined_adjacent_lines")
+    if not matches:
         stats.bump(
             "rejected_cross_line_quotes" if _spans_multiple_lines(needle, index) else "rejected_hallucinated_quotes"
         )
@@ -225,7 +260,8 @@ def ground_quote(
         return None
     exact = next((item for item in matches if item[0] == stamp), None)
     if exact is None:
-        stats.bump("retimed_quotes")
+        if not adjacent:
+            stats.bump("retimed_quotes")
         exact = matches[0]
     return {"quote": exact[2], "timestamp": exact[0], "line_text": exact[1]}
 
@@ -477,8 +513,9 @@ def extract_pack(
         "extracted_at": datetime.now(timezone.utc).isoformat(),
         "note": (
             "Model-grounded DNA claim evidence read from public YouTube timedtext. "
-            "Every quote is validated as a verbatim substring of a supplied caption line; "
-            "ungrounded quotes are dropped, not repaired. Not ASR, not labeled_demo, not ranking input."
+            "Every quote is validated as a verbatim substring of one caption line or two "
+            "adjacent caption lines; ungrounded quotes are dropped, not repaired. Not ASR, "
+            "not labeled_demo, not ranking input."
         ),
         "coverage": coverage,
         "grounded_creator_ids": grounded_creators,

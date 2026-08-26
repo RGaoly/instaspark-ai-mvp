@@ -449,10 +449,10 @@ def test_committed_cache_covers_the_public_caption_bodies_and_stays_grounded():
         assert token not in blob
 
 
-# ── Ranking is untouched ─────────────────────────────────────────
+# ── Ranking uses the committed underwrite book, not an unsaved pack ──
 
 
-def test_extractions_never_change_ranking_ids_or_model_version():
+def test_unsaved_extraction_pack_does_not_mutate_ranking_as_a_side_effect():
     catalog = load_creators(ROOT / "data" / "creators.csv")
     mission = load_mission(ROOT / "data" / "launch_mission.json")
     baseline = rank_creators(catalog, mission)
@@ -462,7 +462,7 @@ def test_extractions_never_change_ranking_ids_or_model_version():
     pack = _grounded_pack(clip)
     after = rank_creators(catalog, mission)
     assert [str(item) for item in after["creator_id"].tolist()] == baseline_ids
-    assert (after["ranking_model_version"] == "rule_mix_tfidf_v1").all()
+    assert (after["ranking_model_version"] == "claim_underwrite_v1").all()
 
     read_pack = intensive_read_pack(
         baseline,
@@ -567,6 +567,15 @@ def test_approval_gate_blocks_without_grounded_evidence_and_records_an_audited_o
     assert after["blocked"] is False
     assert after["status"] == "overridden"
 
+    if state.creator_state(creator_id) == "qualified":
+        state.transition_creator_state(
+            creator_id,
+            "shortlisted",
+            actor="Olivia Chen",
+            reason="Shortlisted before override approval",
+            evidence=["catalog://evidence"],
+        )
+
     decision = state.save_decision(creator_id, "Approved", "Approve on an audited override")
     assert decision["evidence_gate"]["status"] == "overridden"
     assert decision["evidence_gate"]["grounded"] is False
@@ -616,6 +625,7 @@ def test_grounded_extraction_satisfies_the_gate_and_lands_on_the_decision(sessio
         "MatchArbiter",
         "BriefWriter",
         "ComplianceGuard",
+        "Calibrator",
     ]
     assert "pov" in trace["claim_ids"]
 
@@ -642,7 +652,12 @@ def test_viewer_cannot_override_the_gate_or_approve(session):
 
 
 def test_override_is_scoped_to_the_active_root_entry(session):
-    creator_id = str(state.ranking().iloc[0]["creator_id"])
+    ranked = state.ranking()
+    creator_id = next(
+        str(row["creator_id"])
+        for _, row in ranked.iterrows()
+        if state.evidence_gate_state(str(row["creator_id"]))["blocked"]
+    )
     state.record_evidence_gate_override(creator_id, reason="Mission-scoped audited override")
     assert state.evidence_gate_state(creator_id)["blocked"] is False
 

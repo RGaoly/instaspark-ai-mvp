@@ -7,13 +7,14 @@ specific ``claim_id`` values, on a named engine, with a recorded degraded reason
 whenever the model was absent. A launch decision is therefore traceable
 claim-by-claim.
 
-Five roles, in order, each with a typed step contract:
+Six named roles, in order, each with a typed step contract:
 
 1. ``Scout``           - rule  - proposes the candidate from catalog momentum / inbound routing.
 2. ``EvidenceReader``  - model - reads real public caption lines into grounded claim evidence.
-3. ``MatchArbiter``    - rule  - ``rule_mix_tfidf_v1`` fit plus the claim-evidence approval gate.
+3. ``MatchArbiter``    - rule  - claim-underwrite score plus the claim-evidence approval gate.
 4. ``BriefWriter``     - model - writes the operator artifact, degrading to the rule template.
 5. ``ComplianceGuard`` - rule  - checks the artifact against per-claim DNA guardrails.
+6. ``Calibrator``      - rule  - reason codes become a weight proposal; never auto-applies.
 
 Two invariants hold everywhere in this module:
 
@@ -39,13 +40,14 @@ from typing import Any, Iterable, Mapping, Sequence
 
 WORKFLOW_ID = "ceg"
 WORKFLOW_NAME = "Claim-Evidence-Guardrail"
-WORKFLOW_VERSION = "ceg_v1"
+WORKFLOW_VERSION = "ceg_v2"
 
 ROLE_SCOUT = "Scout"
 ROLE_EVIDENCE_READER = "EvidenceReader"
 ROLE_MATCH_ARBITER = "MatchArbiter"
 ROLE_BRIEF_WRITER = "BriefWriter"
 ROLE_COMPLIANCE_GUARD = "ComplianceGuard"
+ROLE_CALIBRATOR = "Calibrator"
 
 ENGINE_MODEL = "model"
 ENGINE_RULE = "rule"
@@ -61,7 +63,8 @@ STATUSES = (STATUS_OK, STATUS_DEGRADED, STATUS_BLOCKED, STATUS_SKIPPED)
 ARTIFACT_BRIEF = "brief"
 ARTIFACT_OUTREACH_MESSAGE = "outreach_message"
 
-RANKING_MODEL_VERSION = "rule_mix_tfidf_v1"
+RANKING_MODEL_VERSION = "claim_underwrite_v1"
+RULE_MIX_VERSION = "rule_mix_tfidf_v1"
 
 # Degraded reasons. Stable strings so docs, UI and tests agree.
 REASON_NO_MODEL = "no_model_configured"
@@ -72,6 +75,7 @@ REASON_NO_ARTIFACT = "artifact_not_produced_in_this_run"
 REASON_UNGROUNDED_ARTIFACT = "artifact_written_before_a_claim_was_grounded"
 REASON_GUARDRAIL_FINDINGS = "guardrail_findings_require_human_fix"
 REASON_NO_MATCH = "no_match_record_in_active_root"
+REASON_NO_DECISIONS = "no_reason_codes_to_calibrate"
 
 
 # ── Step contracts ───────────────────────────────────────────────
@@ -122,7 +126,7 @@ CONTRACT: tuple[StepContract, ...] = (
         inputs=("match_score", "hard_gates", "evidence_gate", "grounded_claim_ids"),
         outputs=("score", "ranking_model_version", "gate_status", "unevidenced_claim_ids"),
         advances_claims=True,
-        purpose="Combine rule_mix_tfidf_v1 fit with the claim-evidence approval gate.",
+        purpose="Combine claim-underwrite coverage with the claim-evidence approval gate. Rule mix is the Scout constraint, not the product.",
         degraded_behaviour=(
             "Blocks when no claim is grounded. An audited human override switches the "
             "engine to human and advances zero claims."
@@ -150,6 +154,16 @@ CONTRACT: tuple[StepContract, ...] = (
         advances_claims=False,
         purpose="Check the artifact against the per-claim DNA guardrails before a human sends it.",
         degraded_behaviour="Never degrades. A hard finding blocks; a soft finding needs a human fix.",
+    ),
+    StepContract(
+        role=ROLE_CALIBRATOR,
+        engine=ENGINE_RULE,
+        degraded_engine=None,
+        inputs=("decision_reason_codes", "current_weights"),
+        outputs=("proposed_weights", "deltas", "reason_counts"),
+        advances_claims=False,
+        purpose="Turn recorded reason codes into a mix-weight proposal for the next book. Never auto-applies.",
+        degraded_behaviour="Skips with no_reason_codes_to_calibrate when the decision log is empty. Never invents a proposal.",
     ),
 )
 
@@ -367,7 +381,7 @@ class CegRun:
         statuses = {item.status for item in self.steps}
         if STATUS_BLOCKED in statuses:
             return STATUS_BLOCKED
-        if STATUS_DEGRADED in statuses or STATUS_SKIPPED in statuses:
+        if STATUS_DEGRADED in statuses:
             return STATUS_DEGRADED
         return STATUS_OK
 
@@ -508,7 +522,7 @@ def match_arbiter_step(
     grounded_claim_ids: Sequence[str],
     target_claim_ids: Sequence[str],
 ) -> CegStep:
-    """Rule step. rule_mix_tfidf_v1 fit plus the claim-evidence gate verdict."""
+    """Rule step. Claim-underwrite coverage plus the claim-evidence gate verdict."""
 
     record = dict(match or {})
     override = gate.get("override")
@@ -520,7 +534,7 @@ def match_arbiter_step(
         "gate_status": _as_text(gate.get("status")),
         "evidenced_claim_ids": list(grounded),
         "unevidenced_claim_ids": [item for item in target_claim_ids if item not in grounded],
-        "note": "YouTube evidence never enters ranking; the gate is a separate veto.",
+        "note": "Claim coverage is the underwriting book. Rule mix is the Scout constraint. YouTube overlay never enters the catalog.",
     }
     inputs_digest = digest(
         {
@@ -675,6 +689,38 @@ def compliance_guard_step(
     )
 
 
+def calibrator_step(
+    run_id: str,
+    *,
+    decisions: Sequence[Mapping[str, Any]] | None = None,
+    current_weights: Mapping[str, float] | None = None,
+) -> CegStep:
+    """Rule step. Reason codes become a weight proposal. Never mints a claim."""
+
+    from src.calibrator import propose
+
+    proposal = propose(decisions, current_weights)
+    outputs = {
+        "status": proposal["status"],
+        "reason_counts": proposal["reason_counts"],
+        "proposed_weights": proposal["proposed_weights"],
+        "deltas": proposal["deltas"],
+        "auto_applied": False,
+        "note": proposal["note"],
+    }
+    skipped = proposal["status"] == "skipped"
+    return CegStep(
+        step_id=_step_id(run_id, 6, ROLE_CALIBRATOR),
+        role=ROLE_CALIBRATOR,
+        engine=ENGINE_RULE,
+        inputs_digest=digest({"reason_counts": proposal["reason_counts"]}),
+        outputs=outputs,
+        status=STATUS_SKIPPED if skipped else STATUS_OK,
+        claim_ids=(),
+        degraded_reason=REASON_NO_DECISIONS if skipped else None,
+    )
+
+
 # ── Orchestrator ─────────────────────────────────────────────────
 
 
@@ -697,6 +743,8 @@ def run(
     signed_off_by: str | None = None,
     run_id: str | None = None,
     seq: int = 1,
+    decisions: Sequence[Mapping[str, Any]] | None = None,
+    current_weights: Mapping[str, float] | None = None,
 ) -> CegRun:
     """Execute the five typed steps over already-loaded inputs and return the trace.
 
@@ -749,6 +797,11 @@ def run(
             artifact=artifact,
             dna=dna,
             signed_off_by=signed_off_by,
+        ),
+        calibrator_step(
+            resolved_run_id,
+            decisions=decisions,
+            current_weights=current_weights,
         ),
     ]
     return CegRun(

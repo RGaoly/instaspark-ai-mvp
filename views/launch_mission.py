@@ -6,7 +6,7 @@ import streamlit as st
 
 from components.html import badge, esc, metric_cards, page_header
 from components.i18n import t
-from components.positioning import why_not_ttcm_html
+from components.positioning import paradigm_html, rubric_scorecard_html, why_not_ttcm_html
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
@@ -28,7 +28,9 @@ from components.state import (
 )
 from components.ui import md
 from src.domain import launch_progress, pipeline_counts
+from src.landing_path import landing_path
 from src.product_dna import load_product_dna
+from src.rubric_scorecard import prove as prove_rubric
 
 
 def launch_cta_page(creator_id: str) -> str | None:
@@ -258,6 +260,23 @@ def _render_next_action_cta(progress: dict, *, tracking_n: int) -> None:
     md(_activity_html(workflow_events(), _creator_names()), unsafe_allow_html=True)
 
 
+def _landing_html() -> str:
+    path = landing_path()
+    phases = "".join(
+        f'<div class="is-workflow-item pending"><div class="is-workflow-icon">{esc(str(item["week"]))}</div>'
+        f'<b>{esc(item["title"])}</b><small>{esc(item["owner"])} · {esc(item["exit_gate"])}</small></div>'
+        for item in path["phases"]
+    )
+    return (
+        '<div class="is-card" id="pilot-landing-path"><div class="is-panel-head">'
+        f'<span class="is-panel-title">{t("2-week pilot landing path")}</span>'
+        f'<span class="is-panel-link">{esc(path["horizon"])}</span></div>'
+        f'<div class="is-panel-body"><small>{esc(path["closed_loop"])}</small>'
+        f'<div class="is-workflow is-workflow-live" style="margin-top:8px">{phases}</div>'
+        f"<small>{esc(path['note'])}</small></div></div>"
+    )
+
+
 def render() -> None:
     render_topbar()
     mission_records = missions()
@@ -284,9 +303,9 @@ def render() -> None:
     with left:
         md(
             page_header(
-                "Launch Mission Dashboard",
-                "Realtime overview of global creator growth operations.",
-                "Operations overview",
+                "Claim-underwriting desk",
+                "Authorize spend against named Product DNA claims on public captions — not lookalike retrieval.",
+                "Industry paradigm",
             ),
             unsafe_allow_html=True,
         )
@@ -298,6 +317,8 @@ def render() -> None:
             if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form
     render_write_guard()
+    md(rubric_scorecard_html(prove_rubric(creators(), mission)), unsafe_allow_html=True)
+    md(paradigm_html(), unsafe_allow_html=True)
     with st.expander(t("Why this is not TikTok Creator Marketplace"), expanded=False):
         md(why_not_ttcm_html(), unsafe_allow_html=True)
 
@@ -335,6 +356,7 @@ def render() -> None:
 
     md(_product_card(mission, health), unsafe_allow_html=True)
     md(_dna_card(), unsafe_allow_html=True)
+    md(_landing_html(), unsafe_allow_html=True)
     metrics = [
         ("Candidates Pool", str(len(ranked)), "Eligible for this mission", ""),
         ("Shortlisted", str(summary.get("shortlisted", 0)), "Unified workflow", ""),

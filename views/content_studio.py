@@ -14,6 +14,7 @@ from components.state import (
     select_creator,
 )
 from components.ui import labels, md
+from src.claim_underwrite import display_score
 from src.domain import declared_platforms, match_tier
 from src.creator_genome import genome_panel_html
 from src.product_dna import load_product_dna
@@ -99,7 +100,7 @@ def _mission_creator_cards(mission, creator, live_evidence=None) -> str:
         <span><b>{esc(creator['creator_name'])}</b><small>{esc(creator['primary_market'])}</small></span></div>
       <p><b>Content style</b><br/>{styles}</p>
       <p><b>Topics</b><br/>{topics}</p>
-      <p><b>Match score</b><br/>{creator.get('total_score', 0):.0f}/100 · {match_tier(creator.get('total_score', 0))}</p>
+      <p><b>Match score</b><br/>{display_score(creator):.0f}/100 · {match_tier(display_score(creator))} · claim-underwrite</p>
     </div>
     {_platform_requirements_html(creator, live_evidence)}
     {_dna_shot_list_html()}

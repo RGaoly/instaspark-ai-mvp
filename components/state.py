@@ -60,6 +60,7 @@ _PERSISTED_KEYS = (
     "opportunity_mission_links",
     "evidence_gate_overrides",
     "ceg_runs",
+    "calibrated_weights",
 )
 
 ENTRY_ALIASES = {
@@ -222,6 +223,7 @@ def bootstrap_state() -> None:
         "live_evidence": [],
         "evidence_gate_overrides": [],
         "ceg_runs": [],
+        "calibrated_weights": None,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -238,6 +240,7 @@ def bootstrap_state() -> None:
     st.session_state.setdefault("live_evidence", [])
     st.session_state.setdefault("evidence_gate_overrides", [])
     st.session_state.setdefault("ceg_runs", [])
+    st.session_state.setdefault("calibrated_weights", None)
     _merge_inbound_seed()
 
 
@@ -666,6 +669,31 @@ def _live_evidence_creator_ids() -> set[str]:
     }
 
 
+def active_score_weights() -> dict[str, float]:
+    """Human-applied Calibrator weights, else the config mix."""
+
+    proposed = st.session_state.get("calibrated_weights")
+    if isinstance(proposed, dict) and proposed:
+        return dict(proposed)
+    return dict(SCORE_WEIGHTS)
+
+
+def apply_calibrator_weights(weights: dict[str, float]) -> dict[str, float]:
+    """Persist a human-accepted Calibrator proposal. Never auto-applies."""
+
+    require_write()
+    from src.scoring import DEFAULT_WEIGHTS
+
+    cleaned = {key: float(weights[key]) for key in DEFAULT_WEIGHTS if key in weights}
+    if len(cleaned) != len(DEFAULT_WEIGHTS):
+        raise ValueError("Calibrator weights must include every mix driver")
+    if abs(sum(cleaned.values()) - 1.0) > 0.02:
+        raise ValueError("Calibrator weights must sum to 1.0")
+    st.session_state.calibrated_weights = cleaned
+    persist_state()
+    return dict(cleaned)
+
+
 def ranking():
     context = active_context()
     if context["entry_type"] == EntryType.OPPORTUNITY.value and not context.get("mission_id"):
@@ -673,9 +701,10 @@ def ranking():
     ranked = rank_creators(
         creators(),
         active_mission(),
-        SCORE_WEIGHTS,
+        active_score_weights(),
         query=str(st.session_state.get("creator_nl_query") or ""),
         live_evidence_ids=_live_evidence_creator_ids(),
+        evidence_pack=evidence_extraction_pack(),
     )
     for _, row in ranked.iterrows():
         creator_id = row["creator_id"]
@@ -687,7 +716,7 @@ def ranking():
             "entry_id": context["entry_id"],
             "mission_id": context.get("mission_id"),
             "opportunity_id": context.get("opportunity_id"),
-            "score": float(row["total_score"]),
+            "score": float(row.get("underwrite_score") or row["total_score"]),
             "gate_passed": True,
             "rationale": list(row.get("positives", [])),
             "warnings": list(row.get("warnings", [])),
@@ -701,9 +730,14 @@ def ranking():
                 "query_boost": float(row.get("query_boost") or 0),
                 "live_proof_bonus": float(row.get("live_proof_bonus") or 0),
                 "tfidf_boost": float(row.get("tfidf_boost") or 0),
+                "claim_coverage": float(row.get("claim_coverage") or 0),
+                "underwrite_score": float(row.get("underwrite_score") or 0),
+                "rule_mix_score": float(row.get("total_score") or 0),
             },
             "model_version": str(row.get("ranking_model_version") or "rule_mix_tfidf_v1"),
             "confidence": str(row.get("match_confidence") or "deterministic_rule"),
+            "spend_ready": bool(row.get("spend_ready")),
+            "grounded_claim_ids": list(row.get("grounded_claim_ids") or []),
             "genome_id": row.get("genome_id"),
             "genome_version": row.get("genome_version"),
         }
@@ -1069,8 +1103,8 @@ def record_ceg_run(creator_id: str, *, artifact: dict[str, Any] | None = None) -
     match = match_for_creator(creator_id) or {}
     match_payload = {
         "match_id": match.get("match_id"),
-        "score": match.get("total_score", match.get("score")),
-        "model_version": match.get("model_version") or match.get("ranking_model_version") or "rule_mix_tfidf_v1",
+        "score": match.get("underwrite_score", match.get("total_score", match.get("score"))),
+        "model_version": match.get("model_version") or match.get("ranking_model_version") or "claim_underwrite_v1",
     }
     brief = artifact
     if brief is None:
@@ -1104,6 +1138,8 @@ def record_ceg_run(creator_id: str, *, artifact: dict[str, Any] | None = None) -
         artifact=artifact_payload,
         model_available=is_llm_available(),
         seq=seq,
+        decisions=list(st.session_state.get("decision_log") or []),
+        current_weights=active_score_weights(),
     )
     payload = trace.to_dict()
     st.session_state.ceg_runs.append(payload)

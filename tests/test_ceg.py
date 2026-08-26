@@ -10,6 +10,7 @@ from src.ceg import (
     REASON_HUMAN_OVERRIDE,
     REASON_NO_MODEL,
     ROLE_BRIEF_WRITER,
+    ROLE_CALIBRATOR,
     ROLE_COMPLIANCE_GUARD,
     ROLE_EVIDENCE_READER,
     ROLE_MATCH_ARBITER,
@@ -66,7 +67,7 @@ def _gate(*, grounded: bool = False, model: bool = True, override: dict | None =
     }
 
 
-def test_contract_names_five_roles_and_only_the_reader_mints_claims():
+def test_contract_names_six_roles_and_only_the_reader_mints_claims():
     assert WORKFLOW_ID == "ceg"
     assert ROLES == (
         ROLE_SCOUT,
@@ -74,6 +75,7 @@ def test_contract_names_five_roles_and_only_the_reader_mints_claims():
         ROLE_MATCH_ARBITER,
         ROLE_BRIEF_WRITER,
         ROLE_COMPLIANCE_GUARD,
+        ROLE_CALIBRATOR,
     )
     advancing = [item.role for item in CONTRACT if item.advances_claims]
     assert advancing[0] == ROLE_EVIDENCE_READER
@@ -184,7 +186,7 @@ def test_compliance_guard_flags_an_invented_ip_rating():
     assert step.engine == ENGINE_RULE
 
 
-def test_run_returns_five_typed_steps_and_blocks_without_evidence():
+def test_run_returns_six_typed_steps_and_blocks_without_evidence():
     trace = run(
         creator_id="C001",
         entry_type="mission",
@@ -221,7 +223,20 @@ def test_run_advances_grounded_claims_when_the_reader_succeeds():
     assert payload["claim_ids"] == list(trace.claim_ids)
 
 
-def test_degraded_matrix_matches_the_contract():
+def test_calibrator_never_advances_a_claim():
+    from src.ceg import calibrator_step
+
+    skipped = calibrator_step("ceg_test", decisions=[], current_weights=None)
+    assert skipped.role == ROLE_CALIBRATOR
+    assert skipped.claim_ids == ()
+    assert skipped.engine == ENGINE_RULE
+    moved = calibrator_step(
+        "ceg_test",
+        decisions=[{"reason_code": "risk_or_cost"}],
+        current_weights=None,
+    )
+    assert moved.claim_ids == ()
+    assert moved.outputs["auto_applied"] is False
     matrix = degraded_matrix()
     assert [row["role"] for row in matrix] == list(ROLES)
     reader = next(row for row in matrix if row["role"] == ROLE_EVIDENCE_READER)

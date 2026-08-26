@@ -47,6 +47,8 @@ from src.intensive_read import (
     intensive_read_pack,
 )
 from src.domain import declared_platforms, match_label, match_tier
+from src.claim_underwrite import claim_matrix, display_score, pack_is_available, underwrite_driver_display
+from src.product_dna import claim_ids, load_product_dna
 from src.scoring import additive_driver_display, mix_driver_display
 from src.verified_channels import binds_by_creator_id, recall_pool_caption
 from src.youtube_channel_fetch import hydrate_channel_clips
@@ -213,19 +215,25 @@ _TABLE_HEADERS = [
     "Followers",
     "Modeled est. views",
     "Eng. rate",
+    "DNA claims",
     "Mission fit",
     "Topic overlap",
     "Commercial",
-    "Match score",
+    "Underwrite",
 ]
 
 
 def _creator_row_html(row, idx: int, *, selected: bool = False) -> str:
     name = row["creator_name"]
     topics = " · ".join(row["topics"][:2])
-    tier = match_tier(row["total_score"])
+    score = display_score(row)
+    tier = match_tier(score)
     mission_fit = float(row.get("mission_fit", row.get("audience_fit", 0)))
     topic_overlap = float(row.get("topic_overlap", row.get("content_fit", 0)))
+    grounded = int(row.get("grounded_claim_count") or 0)
+    target = int(row.get("target_claim_count") or 0)
+    ready = bool(row.get("spend_ready"))
+    claim_chip = badge("Spend-ready", "green") if ready else badge("Unevidenced", "gray")
     live_chip = (
         f'<div style="margin-top:2px">{badge("Live YouTube evidence attached", "green")}</div>'
         if float(row.get("live_proof_bonus") or 0) > 0
@@ -242,11 +250,12 @@ def _creator_row_html(row, idx: int, *, selected: bool = False) -> str:
         f'<td>{int(row["followers"]) / 1000:.0f}K</td>'
         f'<td>{int(row["followers"] * row["engagement_rate"] / 100 * 4) / 1000:.0f}K</td>'
         f'<td>{row["engagement_rate"]:.1f}%</td>'
+        f'<td><b>{grounded}/{target}</b><div style="margin-top:2px">{claim_chip}</div></td>'
         f'<td><b>{mission_fit:.1f}</b>{dots(mission_fit)}</td>'
         f'<td><b>{topic_overlap:.1f}</b>{dots(topic_overlap)}</td>'
         f'<td><b>{row["commercial_fit"]:.1f}</b>{dots(row["commercial_fit"])}</td>'
         f'<td><div style="display:flex;align-items:center;gap:5px">'
-        f'{score_ring(row["total_score"])}'
+        f'{score_ring(score)}'
         f'<small style="color:#16825D;font-weight:850">{tier}</small></div>{live_chip}</td>'
         "</tr>"
     )
@@ -320,7 +329,7 @@ def _live_evidence_html(live_rows: list) -> str:
 
 
 def _detail_header_html(creator: dict, live_rows: list) -> str:
-    score = float(creator["total_score"])
+    score = display_score(creator)
     channel_id = str(creator.get("youtube_channel_id") or "").strip()
     catalog_chip = (
         badge("Public YouTube channel", "green")
@@ -351,6 +360,39 @@ def _detail_header_html(creator: dict, live_rows: list) -> str:
     """
 
 
+def _claim_matrix_html(matrix: dict) -> str:
+    claim_ids = list(matrix.get("claim_ids") or [])
+    head = "".join(f"<th>{esc(item)}</th>" for item in ["Creator", *claim_ids, "Coverage"])
+    body_rows = []
+    for row in matrix.get("rows") or []:
+        cells = []
+        for cell in row.get("cells") or []:
+            if cell.get("grounded"):
+                stamp = esc(cell.get("timestamp") or "✓")
+                quote = esc(cell.get("quote") or "")
+                cells.append(f'<td><b>{stamp}</b><br/><small>{quote}</small></td>')
+            else:
+                cells.append("<td><small>—</small></td>")
+        ready = "Spend-ready" if row.get("spend_ready") else "Unevidenced"
+        body_rows.append(
+            "<tr>"
+            f'<td><b>{esc(row.get("creator_name") or "")}</b><br/><small>{esc(ready)}</small></td>'
+            + "".join(cells)
+            + f'<td><b>{float(row.get("claim_coverage") or 0):.0f}%</b></td></tr>'
+        )
+    if not body_rows:
+        body_rows.append(f'<tr><td colspan="{len(claim_ids) + 2}">No spend-ready cut yet.</td></tr>')
+    return (
+        '<div class="is-card" id="claim-underwrite-matrix" style="margin-bottom:10px">'
+        f'<div class="is-panel-head"><span class="is-panel-title">{esc(t("Claim-underwrite matrix"))}</span>'
+        f'<span class="is-panel-link">{esc(t("Cells are grounded public-caption quotes, never keyword overlap"))}</span></div>'
+        '<div class="is-panel-body">'
+        f"<small>{esc(matrix.get('note') or '')}</small>"
+        f'<table class="is-table"><thead><tr>{head}</tr></thead><tbody>{"".join(body_rows)}</tbody></table>'
+        "</div></div>"
+    )
+
+
 def _why_recommended_html(creator: dict, live_rows: list) -> str:
     reasons = _scored_reasons(creator)
     if reasons:
@@ -365,6 +407,11 @@ def _why_recommended_html(creator: dict, live_rows: list) -> str:
             "<span><b>No scored reasons for this creator.</b>"
             "<small>Score drivers below still come from the rule-based mix.</small></span></div>"
         )
+    underwrite_html = "".join(
+        f'<div class="is-driver-row">{scorebar(label, value)}'
+        f'<span class="is-weight-tag">{esc(note)}</span></div>'
+        for label, value, note in underwrite_driver_display(creator)
+    )
     mix_html = "".join(
         f'<div class="is-driver-row">{scorebar(label, value)}'
         f'<span class="is-weight-tag">{esc(weight)}</span></div>'
@@ -380,7 +427,9 @@ def _why_recommended_html(creator: dict, live_rows: list) -> str:
       <div class="is-panel-body">
         <div class="is-card-title" style="margin-bottom:6px">Top reasons</div>
         {reason_html}
-        <div class="is-card-title" style="margin:10px 0 6px">Score drivers</div>
+        <div class="is-card-title" style="margin:10px 0 6px">Claim underwrite</div>
+        {underwrite_html}
+        <div class="is-card-title" style="margin:10px 0 6px">Scout constraint layer</div>
         {mix_html}
         {additive_html}
         <div class="is-card-title" style="margin:10px 0 6px">Live platform evidence</div>
@@ -523,8 +572,8 @@ def render() -> None:
         md(
             page_header(
                 "Creator Search & Match",
-                "Find creators whose content, audience and commercial readiness fit the active entry.",
-                "Creator discovery",
+                "Underwrite Product DNA claims against public captions. Rule mix is the Scout constraint, not the product.",
+                "Claim-underwriting desk",
             ),
             unsafe_allow_html=True,
         )
@@ -561,10 +610,10 @@ def render() -> None:
         render_demo_notice()
         return
 
-        md(
-            nl_search_shell("Lexical filter + small boost against the demo catalog — not semantic search"),
-            unsafe_allow_html=True,
-        )
+    md(
+        nl_search_shell("Lexical filter + small boost against the demo catalog — not semantic search"),
+        unsafe_allow_html=True,
+    )
     query = st.text_input(
         t("Search creators"),
         value="",
@@ -574,6 +623,7 @@ def render() -> None:
     )
     st.caption(t("NL query is a lexical filter + small boost, not semantic search."))
     st.caption(t("TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA. Not a neural embedding and not an LLM ranker."))
+    st.caption(t("Spend-ready order is claim-underwritten from the Evidence Reader cache (0.70 coverage + 0.30 rule mix). Without that cache the spend-ready cut is blocked."))
     markets, languages, topics = _render_catalog_filters(ranked)
     visible = filter_ranked_creators(
         ranked,
@@ -598,7 +648,7 @@ def render() -> None:
     with toolbar_left:
         md(
             f'<div style="font-size:12px;color:#69757E;padding-top:6px">'
-            f'{pool} · {gated_n} gated · Top 10 working cut · hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · {ai_badge("Not an LLM ranker")}'
+            f'{pool} · {gated_n} gated · Top 10 working cut · claim-underwrite from Evidence Reader · Scout = hard gates + rule mix + TF-IDF cosine · not LLM / not neural embeddings · {ai_badge("Not an LLM ranker")}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -607,19 +657,38 @@ def render() -> None:
             t("Sort: Match score"),
             use_container_width=True,
             disabled=True,
-            help=t("Results are already ranked by match score"),
+            help=t("Results are already ranked by claim-underwrite score"),
         )
 
     main, aside = st.columns([1, 0.36], gap="small", vertical_alignment="top")
     working = visible.head(10)
     rest = visible.iloc[10:]
+    extraction_pack = evidence_extraction_pack()
     with main:
+        if not pack_is_available(extraction_pack):
+            st.warning(
+                t(
+                    "Spend-ready cut is blocked: Evidence Reader cache has no model-grounded claims. "
+                    "Catalog browse below is the Scout constraint layer only. Keyword rules cannot open this cut."
+                )
+            )
+        else:
+            md(
+                _claim_matrix_html(
+                    claim_matrix(
+                        working.to_dict("records"),
+                        claim_ids(load_product_dna()),
+                        pack=extraction_pack,
+                        limit=10,
+                    )
+                ),
+                unsafe_allow_html=True,
+            )
         st.caption(t("Top 10 is the working cut. Remaining gated rows stay available below."))
         _render_creator_table(working)
         if not rest.empty:
             with st.expander(t("Additional gated candidates"), expanded=False):
                 _render_creator_table(rest)
-        extraction_pack = evidence_extraction_pack()
         pack = intensive_read_pack(
             visible,
             n=20,
@@ -654,7 +723,7 @@ def render() -> None:
         st.caption(
             t("Click a row to inspect that creator.")
             + " "
-            + t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
+            + t("Mission fit is market + language. Topic overlap is Jaccard. Spend-ready ranking is claim-underwrite, not LLM.")
         )
     with aside:
         creator = selected_creator()

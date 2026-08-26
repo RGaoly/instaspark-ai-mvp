@@ -48,8 +48,21 @@ adjacent caption lines). Growth
 Review renders `data/benchmark_report.json` at `#claim-evidence-benchmark`.
 The view does not hard-code the numbers.
 
-Ranking is not part of this benchmark. YouTube overlay is not part of this
-benchmark. Empty performance events still keep ROI at 0x.
+Ranking is the Scout constraint layer, not the claim-evidence gold-set
+benchmark. The spend-ready cut is claim-underwritten from the Evidence Reader
+cache and is a separate gate in the acceptance matrix. YouTube overlay is not
+part of this benchmark. Empty performance events still keep ROI at 0x.
+
+Growth Review also renders a quantified value board (`#business-value-board`)
+from catalog costs, the extraction cache, and the gold-set report. Hours use a
+documented process-time model (120 seconds per public caption body). Spend uses
+`estimated_cost_usd`. Neither is a customer ROI or an operator interview.
+The headline number is unevidenced spend blocked versus the Scout lookalike
+Top 10, not hours.
+
+Launch Mission and Growth Review both render `#rubric-scorecard`: four contest
+dimensions with live 5 / 3 / 1 gates from `src/rubric_scorecard.py`. A 5 is
+claimed only when the artifacts pass, not when the copy says so.
 
 ## MVP 目标
 

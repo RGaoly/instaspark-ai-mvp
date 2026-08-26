@@ -1,7 +1,7 @@
-"""Hybrid recall: hard gates + named rule mix + sparse TF-IDF cosine.
+"""Hybrid recall: hard gates + named rule mix + sparse TF-IDF cosine, then claim-underwrite.
 
-``total_score`` is a weighted sum of 0–100 mix drivers, plus three small additive
-bonuses, then clamped to 0–100:
+``total_score`` is the Scout constraint layer — a weighted sum of 0–100 mix
+drivers, plus three small additive bonuses, then clamped to 0–100:
 
     mission_fit      * 0.20   market (65%) + language (35%)
     topic_overlap    * 0.30   Jaccard(mission topics, creator topics ∪ styles)
@@ -12,10 +12,11 @@ bonuses, then clamped to 0–100:
     + live_proof_bonus        +3 only after an operator attaches live YouTube evidence
     + tfidf_boost             0–3 sparse TF-IDF cosine vs mission + Product DNA + Creator Genome (+ query)
 
-Query boost is a lexical filter+boost, not semantic search. TF-IDF cosine is a
-real sparse-vector pass, not a neural embedding and not an LLM ranker. Live
-YouTube hits never enter the ranked catalog as new creators; the bonus applies
-only to a demo-catalog row the operator already selected.
+The spend-ready cut is **not** this mix. ``rank_creators`` attaches the Evidence
+Reader book and sorts by ``underwrite_score`` (0.70 claim coverage + 0.30 rule
+mix) whenever the cache exists. ``total_score`` stays the rule mix so tests and
+the Scout layer remain honest. Live YouTube hits never enter the ranked catalog
+as new creators. Keyword overlap never mints a DNA claim.
 """
 
 from __future__ import annotations
@@ -26,7 +27,8 @@ import pandas as pd
 
 from src.retrieval import TFIDF_BOOST_CAP, tfidf_boosts
 
-RANKING_MODEL_VERSION = "rule_mix_tfidf_v1"
+RULE_MIX_VERSION = "rule_mix_tfidf_v1"
+RANKING_MODEL_VERSION = RULE_MIX_VERSION  # score_creator is the rule mix; rank_creators may stamp claim_underwrite_v1
 
 # Mix weights must sum to 1.0. Additive bonuses are documented separately.
 DEFAULT_WEIGHTS = {
@@ -259,12 +261,31 @@ def score_creator(
         "query_boost": round(query_boost, 1),
         "live_proof_bonus": round(live_proof_bonus, 1),
         "tfidf_boost": round(tfidf_boost, 3),
-        "ranking_model_version": RANKING_MODEL_VERSION,
+        "ranking_model_version": RULE_MIX_VERSION,
+        "rule_mix_version": RULE_MIX_VERSION,
         "match_confidence": "deterministic_rule",
         "total_score": round(total, 1),
+        "underwrite_score": round(total, 1),
+        "claim_coverage": 0.0,
+        "grounded_claim_ids": [],
+        "grounded_claim_count": 0,
+        "target_claim_count": 0,
+        "underwrite_status": "blocked_no_ai",
+        "spend_ready": False,
         "positives": positives or ["具备基础匹配条件，需进一步人工核验"],
         "warnings": warnings,
     }
+
+
+def _default_evidence_pack() -> dict[str, Any]:
+    try:
+        from src.evidence_reader import load_pack
+
+        return load_pack()
+    except (OSError, ValueError):
+        from src.evidence_reader import empty_pack
+
+        return empty_pack()
 
 
 def rank_creators(
@@ -275,6 +296,8 @@ def rank_creators(
     query: str = "",
     live_evidence_ids: Iterable[str] | None = None,
     dna_text: str | None = None,
+    evidence_pack: Mapping[str, Any] | None = None,
+    sort: str = "underwrite",
 ) -> pd.DataFrame:
     live_ids = {str(item) for item in (live_evidence_ids or []) if str(item).strip()}
     dna = _default_dna_text() if dna_text is None else dna_text
@@ -291,6 +314,16 @@ def rank_creators(
         genomes = genomes_by_id()
     except (OSError, ValueError):
         genomes = {}
+    try:
+        from src.product_dna import claim_ids, load_product_dna
+
+        target_claim_ids = list(claim_ids(load_product_dna()))
+    except (OSError, ValueError):
+        target_claim_ids = []
+    pack = _default_evidence_pack() if evidence_pack is None else evidence_pack
+    from src.claim_underwrite import attach_underwrite, ledger_for_creator, pack_is_available
+
+    available = pack_is_available(pack)
     records = []
     for _, row in df.iterrows():
         passed, gate_reasons = passes_hard_gates(row, mission)
@@ -305,18 +338,29 @@ def rank_creators(
                 tfidf_boost=boosts.get(creator_id, 0.0),
             )
             genome = genomes.get(creator_id) or {}
+            ledger = ledger_for_creator(creator_id, pack, target_claim_ids)
             records.append(
-                {
-                    **row.to_dict(),
-                    **scored,
-                    "gate_reasons": gate_reasons,
-                    "genome_id": genome.get("genome_id"),
-                    "genome_version": genome.get("version"),
-                }
+                attach_underwrite(
+                    {
+                        **row.to_dict(),
+                        **scored,
+                        "gate_reasons": gate_reasons,
+                        "genome_id": genome.get("genome_id"),
+                        "genome_version": genome.get("version"),
+                    },
+                    ledger,
+                    pack_available=available,
+                )
             )
     if not records:
         return pd.DataFrame()
     result = pd.DataFrame(records)
+    use_underwrite = available and str(sort or "underwrite") != "rule_mix"
+    if use_underwrite:
+        return result.sort_values(
+            by=["underwrite_score", "claim_coverage", "total_score", "brand_safety"],
+            ascending=[False, False, False, False],
+        ).reset_index(drop=True)
     return result.sort_values(
         by=["total_score", "brand_safety", "engagement_rate"],
         ascending=[False, False, False],

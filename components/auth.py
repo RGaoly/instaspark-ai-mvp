@@ -309,11 +309,11 @@ def render_login_page() -> None:
               </div>
               <div class="auth-why">
                 <b>{esc(t("Not TikTok Creator Marketplace"))}</b>
-                <p>{esc(t("TTCM sells a TikTok slot. This workspace decides a cross-platform launch mix."))}</p>
+                <p>{esc(t("TTCM sells a TikTok slot. This workspace underwrites a cross-platform launch mix against Product DNA claims."))}</p>
                 <ul>
                   <li>{esc(t("TTCM books TikTok inventory"))}: {esc(t("TikTok Creator Marketplace already has live TikTok creators, payouts and first-party attribution. This product does not replace that booking rail."))}</li>
-                  <li>{esc(t("InstaSpark decides the mix"))}: {esc(t("A hardware launch needs mission-first and inbound-first work on one state machine, across YouTube, Instagram and TikTok — including creators who came to you."))}</li>
-                  <li>{esc(t("Spend follows a governed shortlist"))}: {esc(t("Overlap, product-grounded briefs and unique UTM coupons exist so the team does not pay eight creators for two audiences. Live YouTube lookup is optional and labeled; ranking in this demo stays a synthetic catalog unless a key is set."))}</li>
+                  <li>{esc(t("InstaSpark underwrites the mix"))}: {esc(t("A hardware launch needs mission-first and inbound-first work on one state machine. Spend is authorized against named Product DNA claims on public captions, not against a similarity score."))}</li>
+                  <li>{esc(t("Spend follows a governed shortlist"))}: {esc(t("Claim coverage, mix overlap, product-grounded briefs and unique UTM coupons exist so the team does not pay eight creators for two audiences or for a claim nobody filmed. Live YouTube lookup is optional and labeled; it never becomes a new ranked catalog row."))}</li>
                 </ul>
               </div>
             </div>

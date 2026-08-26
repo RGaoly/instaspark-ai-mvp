@@ -3,12 +3,15 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import esc, mission_chip, page_header
+from components.positioning import rubric_scorecard_html
 from components.i18n import t
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
     active_context_label,
     active_mission,
+    active_score_weights,
+    apply_calibrator_weights,
     creator_state,
     creators,
     performance_events,
@@ -25,6 +28,10 @@ from src.content_evidence import load_creator_content
 from src.evaluation import acceptance_matrix
 from src.budget import propose_budget_decision
 from src.benchmark import load_report
+from src.business_value import compute as compute_business_value
+from src.calibrator import propose as propose_calibration
+from src.landing_path import landing_path
+from src.rubric_scorecard import prove as prove_rubric
 
 _OUTREACH_STATES = {
     "approved",
@@ -314,6 +321,109 @@ def _acceptance_html(rows: list[dict]) -> str:
     )
 
 
+def _pct(value) -> str:
+    if value is None:
+        return "—"
+    return f"{float(value) * 100:.0f}%"
+
+
+def _money(value) -> str:
+    return f"${float(value or 0):,.0f}"
+
+
+def _business_value_html(board: dict) -> str:
+    metrics = [
+        (t("Unevidenced spend blocked"), _money(board.get("unevidenced_spend_blocked_usd")), t("Catalog estimated cost")),
+        (
+            t("Rule-mix Top 10 unevidenced"),
+            f"{int(board.get('rule_top10_unevidenced_n') or 0)} · {_money(board.get('rule_top10_unevidenced_spend_usd'))}",
+            t("Would have been authorized"),
+        ),
+        (t("Top 10 spend-ready"), str(board.get("top10_spend_ready", 0)), t("Grounded DNA claim")),
+        (t("Gold-set F1 lift"), f"{float(board.get('gold_f1_lift') or 0):+.4f}", t("vs keyword baseline")),
+        (t("False-positive reduction"), _pct(board.get("gold_fp_reduction")), t("Gold set FP")),
+        (t("Hours of caption reading replaced"), f"{board.get('hours_saved', 0):.2f} h", t("Process-time model")),
+    ]
+    kpi = '<div class="is-kpi-strip">' + "".join(
+        f'<div class="is-kpi-mini"><label>{esc(label)}</label><strong>{esc(value)}</strong><small>{esc(note)}</small></div>'
+        for label, value, note in metrics
+    ) + "</div>"
+    formulas = "".join(f"<li><small>{esc(item)}</small></li>" for item in board.get("formulas") or [])
+    return (
+        '<div class="is-card" id="business-value-board" style="margin-top:10px">'
+        f'<div class="is-panel-head"><span class="is-panel-title">{t("Quantified business value")}</span>'
+        f'<span class="is-panel-link">{esc(str(board.get("ranking_model_version") or ""))}</span></div>'
+        '<div class="is-panel-body">'
+        f"<p>{esc(board.get('pain') or '')}</p>"
+        f"{kpi}"
+        f"<ul>{formulas}</ul>"
+        f"<small>{esc(board.get('note') or '')} {esc(board.get('process_model') or '')}</small>"
+        "</div></div>"
+    )
+
+
+def _landing_html() -> str:
+    path = landing_path()
+    phases = "".join(
+        "<tr>"
+        f"<td>{esc(item['week'])}</td>"
+        f"<td><b>{esc(item['title'])}</b><br/><small>{esc(item['owner'])}</small></td>"
+        f"<td>{esc(item['artifact'])}</td>"
+        f"<td><small>{esc(item['exit_gate'])}</small></td>"
+        f"<td><small>{esc(item['in_this_demo'])}</small></td>"
+        "</tr>"
+        for item in path["phases"]
+    )
+    nxt = "".join(f"<li>{esc(item)}</li>" for item in path["scale_next"])
+    out = "".join(f"<li>{esc(item)}</li>" for item in path["out_of_scope"])
+    return (
+        '<div class="is-card" id="pilot-landing-path" style="margin-top:10px">'
+        f'<div class="is-panel-head"><span class="is-panel-title">{t("2-week pilot landing path")}</span>'
+        f'<span class="is-panel-link">{esc(path["horizon"])}</span></div>'
+        '<div class="is-panel-body">'
+        f"<small>{esc(path['closed_loop'])}</small>"
+        '<table class="is-table"><thead><tr>'
+        f"<th>{t('When')}</th><th>{t('Phase')}</th><th>{t('Artifact')}</th><th>{t('Exit gate')}</th><th>{t('In this demo')}</th>"
+        "</tr></thead>"
+        f"<tbody>{phases}</tbody></table>"
+        f"<p><b>{esc(t('Scale next'))}</b></p><ul>{nxt}</ul>"
+        f"<p><b>{esc(t('Out of scope'))}</b></p><ul>{out}</ul>"
+        f"<small>{esc(path['note'])}</small>"
+        "</div></div>"
+    )
+
+
+def _calibrator_html(proposal: dict) -> str:
+    counts = proposal.get("reason_counts") or {}
+    count_line = ", ".join(f"{key} ×{value}" for key, value in counts.items()) or t("none")
+    rows = []
+    current = proposal.get("current_weights") or {}
+    proposed = proposal.get("proposed_weights") or {}
+    deltas = proposal.get("deltas") or {}
+    for key in current:
+        rows.append(
+            "<tr>"
+            f"<td>{esc(key)}</td>"
+            f"<td>{current[key]:.2%}</td>"
+            f"<td>{proposed.get(key, current[key]):.2%}</td>"
+            f"<td>{deltas.get(key, 0):+.2%}</td>"
+            "</tr>"
+        )
+    return (
+        '<div class="is-card" id="reason-code-calibrator" style="margin-top:10px">'
+        f'<div class="is-panel-head"><span class="is-panel-title">{t("Reason-code calibrator")}</span>'
+        f'<span class="is-panel-link">{esc(str(proposal.get("version") or ""))} · {esc(str(proposal.get("status") or ""))}</span></div>'
+        '<div class="is-panel-body">'
+        f"<small>{esc(t('Reason codes'))}: {esc(count_line)}</small>"
+        '<table class="is-table"><thead><tr>'
+        f"<th>{t('Driver')}</th><th>{t('Current')}</th><th>{t('Proposed')}</th><th>{t('Delta')}</th>"
+        "</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
+        f"<small>{esc(proposal.get('note') or '')}</small>"
+        "</div></div>"
+    )
+
+
 def _benchmark_html(report: dict) -> str:
     """Render the committed gold-set report. Numbers come from the file, never from copy."""
 
@@ -380,12 +490,17 @@ def render() -> None:
     md(
         page_header(
             "Growth Review",
-            "Validate outcomes linked to the active entry; missing data remains explicit.",
-            "Outcome learning",
+            "Quantified value, 2-week landing path, and the Calibrator close the loop. ROI is recorded events only.",
+            "Closed loop",
             "blue",
         ),
         unsafe_allow_html=True,
     )
+
+    value_board = compute_business_value(creators(), active_mission())
+    md(rubric_scorecard_html(prove_rubric(creators(), active_mission())), unsafe_allow_html=True)
+    md(_business_value_html(value_board), unsafe_allow_html=True)
+    md(_landing_html(), unsafe_allow_html=True)
 
     controls = st.columns([0.48, 0.24, 0.18, 0.1], vertical_alignment="center")
     with controls[0]:
@@ -488,5 +603,25 @@ def render() -> None:
         unsafe_allow_html=True,
     )
     md(_benchmark_html(load_report()), unsafe_allow_html=True)
+    proposal = propose_calibration(
+        list(st.session_state.get("decision_log") or []),
+        active_score_weights(),
+    )
+    md(_calibrator_html(proposal), unsafe_allow_html=True)
+    if proposal.get("status") in {"ok", "unchanged"}:
+        locked = writes_locked() or proposal.get("status") != "ok"
+        if st.button(
+            t("Apply calibrator weights"),
+            type="primary",
+            disabled=locked,
+            help=t("Human must apply. Never auto-trades. Empty decision log stays skipped."),
+        ):
+            try:
+                apply_calibrator_weights(proposal["proposed_weights"])
+            except (ValueError, PermissionError) as exc:
+                st.error(str(exc))
+            else:
+                st.toast(t("Calibrator weights applied to the Scout mix. Claim coverage still leads the spend-ready cut."))
+                st.rerun()
 
     render_demo_notice()

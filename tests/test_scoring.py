@@ -51,8 +51,11 @@ def _row(**overrides) -> pd.Series:
 
 def test_ranking_is_descending():
     ranked = rank_creators(_catalog(), _mission())
-    scores = ranked["total_score"].tolist()
+    scores = ranked["underwrite_score"].tolist()
     assert scores == sorted(scores, reverse=True)
+    rule = rank_creators(_catalog(), _mission(), sort="rule_mix")
+    rule_scores = rule["total_score"].tolist()
+    assert rule_scores == sorted(rule_scores, reverse=True)
 
 
 def test_all_ranked_creators_pass_hard_gates():

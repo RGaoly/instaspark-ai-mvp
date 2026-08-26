@@ -12,14 +12,15 @@ This is not an eighth navigation page. Compare shows the latest run
 
 | Role | Engine | Advances claims | Purpose |
 |---|---|---|---|
-| Scout | rule | no | Propose the candidate from catalog momentum or inbound routing. |
+| Scout | rule | no | Propose the candidate from catalog momentum or inbound routing. Rule mix is a constraint layer. |
 | EvidenceReader | model | **yes — the only mint** | Read public YouTube timedtext into grounded claim evidence. |
-| MatchArbiter | rule → human | yes (only claims the reader already grounded) | `rule_mix_tfidf_v1` fit plus the claim-evidence approval gate. YouTube never enters ranking. |
+| MatchArbiter | rule → human | yes (only claims the reader already grounded) | `claim_underwrite_v1` coverage plus the claim-evidence approval gate. YouTube overlay never becomes a catalog row. |
 | BriefWriter | model → rule template | yes (only grounded claims) | Write the operator artifact. |
 | ComplianceGuard | rule | no | Check the artifact against per-claim DNA guardrails. |
+| Calibrator | rule | no | Reason codes → mix-weight proposal. Never auto-applies. Never mints a claim. |
 
 Typed contracts live in `src/ceg.py` (`CONTRACT`). Tests in `tests/test_ceg.py`
-assert the same five roles, the same engines, and the same degrade reasons.
+assert the same six roles, the same engines, and the same degrade reasons.
 
 ## Two invariants
 
@@ -39,16 +40,20 @@ assert the same five roles, the same engines, and the same degrade reasons.
 | MatchArbiter | Blocks with the gate (`evidence_gate_blocked`). | Same block. | Engine → `human`. Advances **zero** claims. Reason on the audit trail. |
 | BriefWriter | Engine → rule template. `no_model_configured`. | Writing before the gate opens is `artifact_written_before_a_claim_was_grounded`. | Template still used if no model. |
 | ComplianceGuard | Still rule. Never needs a model. | Skips if no artifact. | A hard finding still blocks; a soft finding needs a human fix. |
+| Calibrator | Still rule. Skips when the decision log has no reason codes. | Unchanged. | Human must apply the proposal on Growth Review. |
 
 Source of truth: `src.ceg.degraded_matrix()`.
 
-## Approval gate
+## Spend-ready cut vs Scout mix
 
-`components/state.save_decision(..., "Approved")` raises `EvidenceGateBlocked`
-unless EvidenceReader grounded ≥1 DNA claim with a verbatim caption quote and
-timestamp, or an operator recorded an audited override with a reason.
+`rank_creators` keeps `total_score` as `rule_mix_tfidf_v1` (hard gates, commercial
+fit, brand safety, sparse TF-IDF). That is the Scout constraint layer.
 
-The gate is independent of ranking. Ranking stays `rule_mix_tfidf_v1`.
+The working cut on Search is `claim_underwrite_v1`: 0.70 × DNA claim coverage
+from the Evidence Reader cache + 0.30 × rule mix. Without the cache the
+spend-ready cut is blocked and labeled. Keyword overlap never opens it.
+
+Approve still requires a grounded claim or an audited override.
 
 ## One-command start and expected degrade
 
@@ -59,10 +64,11 @@ pip install -r requirements-dev.txt
 streamlit run app.py
 ```
 
-Without `LLM_API_KEY` the app still opens. Search, Compare, ranking, and the
-state machine work. Content Studio uses the deterministic template. Evidence
-Reader and the approval gate stay **blocked** and say so. They do not pretend
-keyword overlap is claim evidence.
+Without `LLM_API_KEY` the app still opens. Search can browse the Scout layer.
+Content Studio uses the deterministic template. Evidence Reader, the approval
+gate, and the spend-ready cut stay **blocked** and say so. They do not pretend
+keyword overlap is claim evidence. The committed extraction cache
+(`data/evidence_extractions.json`) is a prior model run, not a keyword fallback.
 
 With a key:
 
@@ -72,5 +78,5 @@ python -m scripts.run_benchmark
 ```
 
 The extraction cache is `data/evidence_extractions.json` (no secrets). The
-benchmark report is `data/benchmark_report.json`, shown on Growth Review
-(`#claim-evidence-benchmark`).
+benchmark report is `data/benchmark_report.json`. Quantified value, the 2-week
+landing path, and the Calibrator live on Growth Review.

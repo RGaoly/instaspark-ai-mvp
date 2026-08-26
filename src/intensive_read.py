@@ -37,7 +37,9 @@ YT_LEGEND = (
 EVIDENCE_READER_LEGEND = (
     "evidence_reader: DNA claims a model read out of the public timedtext body. "
     "Every quote is validated as a verbatim caption substring with its own timestamp; "
-    "ungrounded quotes are dropped. Never applied to labeled_demo captions. Not ranked."
+    "ungrounded quotes are dropped. Never applied to labeled_demo captions. "
+    "This cache is the claim-underwrite book for the spend-ready cut. "
+    "It does not add YouTube channels to the ranked catalog."
 )
 
 

@@ -39,6 +39,8 @@ def test_acceptance_matrix_passes_on_demo_catalog():
     assert rows["catalog_videos"]["value"] == 180
     assert rows["creator_genome"]["passed"] is True
     assert rows["creator_genome"]["value"] == 60
+    assert rows["claim_underwrite"]["passed"] is True
+    assert rows["claim_underwrite"]["value"] >= 1
 
 
 def test_attribution_fails_when_event_missing_source():

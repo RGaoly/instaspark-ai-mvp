@@ -1,4 +1,4 @@
-from views.creator_compare import _compare_grid, open_search_youtube_lookup, resolve_compare_focus
+from views.creator_compare import _compare_grid, compare_picker_names, open_search_youtube_lookup, resolve_compare_focus
 import pandas as pd
 
 
@@ -59,3 +59,18 @@ def test_open_search_youtube_lookup_opens_search_expander(monkeypatch):
 
     assert fake["search_youtube_open"] is True
     assert opened == ["creator-search"]
+
+
+def test_compare_picker_keeps_defaults_inside_options():
+    ranked = pd.DataFrame(
+        [
+            {"creator_id": "C017", "creator_name": "DC Rainmaker"},
+            {"creator_id": "C012", "creator_name": "Kara"},
+            {"creator_id": "C004", "creator_name": "Maya"},
+        ]
+    )
+    options, defaults = compare_picker_names(ranked, ["C051", "C017"], limit=3)
+    assert defaults
+    assert set(defaults) <= set(options)
+    assert "DC Rainmaker" in defaults
+    assert "GoPro" not in defaults

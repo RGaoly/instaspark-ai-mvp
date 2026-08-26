@@ -27,14 +27,16 @@
 - [ ] 公开、无需登录的 Pilot 环境（P2）
 
 ## V1 — Evidence-grounded matching
-- [ ] 接入公开达人主页和公开视频
+- [x] 接入公开达人主页和公开视频（YouTube catalog_channel + timedtext）
 - [ ] ASR / OCR / 视觉标签
-- [ ] 证据时间戳
+- [x] 证据时间戳（公开字幕逐字引用 + labeled_demo 独立层）
+- [x] Claim-underwrite spend-ready 切片（覆盖为主，规则混合为约束）
 - [ ] 混合召回与向量排序
-- [ ] 人工标注集
+- [x] 人工标注集（gold_evidence_labels.json manual_read）
 
 ## V2 — Workflow and learning
 - [ ] 飞书多维表格回写
-- [ ] 审批和 SLA
-- [ ] Reason Code 聚合
-- [ ] 结果回流与权重校准
+- [x] 审批闸门和 Reason Code
+- [x] Reason Code 校准提案（Calibrator，人工应用）
+- [x] 两周试点落地路径写进产品
+- [ ] 结果回流自动改权重（本演示不自动交易）

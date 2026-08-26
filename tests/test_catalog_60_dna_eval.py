@@ -92,7 +92,9 @@ def test_hybrid_recall_gates_then_ranks_top_ten():
     ranked = rank_creators(catalog, mission)
     assert len(catalog) == 60
     assert 10 <= len(ranked) < 60
-    assert (ranked["ranking_model_version"] == "rule_mix_tfidf_v1").all()
+    assert (ranked["ranking_model_version"] == "claim_underwrite_v1").all()
+    assert ranked["spend_ready"].dtype == bool
+    assert int(ranked.head(10)["spend_ready"].sum()) >= 1
     assert ranked["genome_id"].notna().all()
     for _, row in ranked.head(10).iterrows():
         passed, reasons = passes_hard_gates(row, mission)

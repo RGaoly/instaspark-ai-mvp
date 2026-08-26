@@ -515,7 +515,8 @@ def extract_pack(
             "Model-grounded DNA claim evidence read from public YouTube timedtext. "
             "Every quote is validated as a verbatim substring of one caption line or two "
             "adjacent caption lines; ungrounded quotes are dropped, not repaired. Not ASR, "
-            "not labeled_demo, not ranking input."
+            "not labeled_demo. Feeds the claim-underwrite book for the spend-ready cut; "
+            "does not add YouTube channels to the ranked catalog."
         ),
         "coverage": coverage,
         "grounded_creator_ids": grounded_creators,

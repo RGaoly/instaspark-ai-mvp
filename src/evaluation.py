@@ -14,6 +14,7 @@ from src.content_evidence import clips_for
 from src.creator_genome import genome_for, genomes_by_id
 from src.intensive_read import intensive_read_pack
 from src.scoring import passes_hard_gates
+from src.claim_underwrite import UNDERWRITE_VERSION
 
 
 def _as_list(value: Any) -> list[str]:
@@ -187,6 +188,16 @@ def acceptance_matrix(
     attribution = attribution_completeness(events, sku=str(mission.get("product") or ""))
     video_n = len(list(posts or []))
     genomes = genome_coverage(ranked, n=10)
+    spend_ready = 0
+    underwrite_n = 0
+    if ranked is not None and not ranked.empty:
+        top = _top_n(ranked)
+        underwrite_n = len(top)
+        if "spend_ready" in top.columns:
+            spend_ready = int(top["spend_ready"].sum())
+        version = str(top.iloc[0].get("ranking_model_version") or "") if underwrite_n else ""
+    else:
+        version = ""
     return [
         {
             "id": "hard_gates",
@@ -257,5 +268,20 @@ def acceptance_matrix(
             "value": genomes["pack_size"],
             "passed": genomes["rate"] >= 1.0 and genomes["total"] >= 1 and genomes["pack_size"] >= 60,
             "detail": f"{genomes['covered']}/{genomes['total']} Top 10 covered · pack {genomes['pack_size']}. Missing: {', '.join(genomes['missing']) or 'none'}.",
+        },
+        {
+            "id": "claim_underwrite",
+            "dimension": "Claim-underwrite spend-ready cut",
+            "target": "Top 10 sorted by Evidence Reader claim coverage; ≥1 spend-ready when the book exists",
+            "value": spend_ready,
+            "passed": (
+                version == UNDERWRITE_VERSION
+                and spend_ready >= 1
+                and underwrite_n >= 1
+            ) or (version != UNDERWRITE_VERSION),
+            "detail": (
+                f"{spend_ready}/{underwrite_n} Top 10 are spend-ready (grounded DNA claim). "
+                f"Ranking {version or 'empty'}. Without the Evidence Reader book this gate is not claimed."
+            ),
         },
     ]

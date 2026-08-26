@@ -25,6 +25,7 @@ from components.state import (
 from components.ui import md
 from src.audience import overlap_vs_cohort, shortlist_overlap_report
 from src.creator_genome import genome_panel_html
+from src.claim_underwrite import display_score, underwrite_driver_display
 from src.domain import match_fit_label, match_tier
 from src.scoring import additive_driver_display, mix_driver_display
 
@@ -91,6 +92,23 @@ def _overlap_panel(report: dict, focus: dict) -> str:
     )
 
 
+def compare_picker_names(ranked, compare_ids: list[str], *, limit: int = 3) -> tuple[list[str], list[str]]:
+    """Multiselect options and defaults. Defaults are always a subset of options."""
+
+    name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.iterrows()}
+    option_names = list(name_to_id)
+    default_names = [
+        ranked[ranked["creator_id"] == cid].iloc[0]["creator_name"]
+        for cid in compare_ids
+        if not ranked[ranked["creator_id"] == cid].empty
+    ]
+    default_names = [name for name in default_names if name in name_to_id][:limit]
+    if len(default_names) < limit:
+        default_names.extend(name for name in option_names if name not in default_names)
+        default_names = default_names[:limit]
+    return option_names, default_names
+
+
 def resolve_compare_focus(compare_ids: list[str], selected_id: str | None) -> str | None:
     """Keep focus on a compared creator; fall back to the first column."""
 
@@ -120,7 +138,7 @@ def _compare_grid(rows, focus_id: str | None = None) -> str:
         f'<b>{len(creators)} creators selected</b><br/><small>Select up to 3 to compare</small></div>'
     ]
     for avatar_idx, r in enumerate(creators):
-        score = float(r["total_score"])
+        score = display_score(r)
         fit = match_fit_label(score)
         tier = match_tier(score)
         tone = {"Excellent": "blue", "Strong": "green", "Moderate": "gray", "Weak": "orange"}.get(tier, "gray")
@@ -131,8 +149,8 @@ def _compare_grid(rows, focus_id: str | None = None) -> str:
             f'<span><b>{esc(r["creator_name"])}</b>'
             f'<div class="is-fit-row">{badge(fit, tone)}</div></span></div>'
             f'<div style="font-size:20px;font-weight:900;margin-top:8px;'
-            f'color:{"#16A36A" if r["total_score"] >= 80 else "#F5A623"}">{r["total_score"]:.0f}'
-            f'<small style="font-size:8px;color:#879198;font-weight:650"> /100</small></div></div>'
+            f'color:{"#16A36A" if score >= 80 else "#F5A623"}">{score:.0f}'
+            f'<small style="font-size:8px;color:#879198;font-weight:650"> /100 underwrite</small></div></div>'
         )
     for label, getter in labels:
         cells.append(f'<div class="is-compare-label">{esc(label)}</div>')
@@ -204,7 +222,7 @@ def evidence_gate_panel_html(gate: dict) -> str:
             )
         rows = f'<div class="is-risk"><div><b>{esc(detail)}</b></div></div>'
     footer = (
-        f'{t("Extraction reads public YouTube timedtext only. Quotes are validated verbatim caption substrings. Not ASR, not labeled_demo, not a ranking input.")}'
+        f'{t("Extraction reads public YouTube timedtext only. Quotes are validated verbatim caption substrings. Not ASR, not labeled_demo. Feeds the claim-underwrite book; does not add YouTube channels to the ranked catalog.")}'
     )
     return (
         '<div class="is-card"><div class="is-panel-head">'
@@ -223,7 +241,7 @@ def ceg_trace_panel_html(trace: dict | None) -> str:
             '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
             f'<span class="is-panel-title">{t("Claim-Evidence-Guardrail run")}</span>'
             f'{badge(t("No run recorded yet"), "gray")}</div>'
-            f'<div class="is-panel-body"><small>{t("Approve a creator or save a brief to record Scout → EvidenceReader → MatchArbiter → BriefWriter → ComplianceGuard.")}</small></div></div>'
+            f'<small style="margin-top:4px">{t("Approve a creator or save a brief to record Scout → EvidenceReader → MatchArbiter → BriefWriter → ComplianceGuard → Calibrator.")}</small></div></div>'
         )
     tone = "green" if trace.get("status") == "ok" else "orange"
     steps = "".join(
@@ -235,7 +253,7 @@ def ceg_trace_panel_html(trace: dict | None) -> str:
         for step in (trace.get("steps") or [])
     )
     footer = t(
-        "Named CEG workflow. EvidenceReader is the only role that can advance a claim_id. Ranking stays rule_mix_tfidf_v1."
+        "Named CEG workflow. EvidenceReader is the only role that can advance a claim_id. Spend-ready ranking is claim_underwrite_v1."
     )
     return (
         '<div class="is-card" id="ceg-run-trace"><div class="is-panel-head">'
@@ -254,6 +272,11 @@ def open_search_youtube_lookup() -> None:
 
 
 def _drivers_panel(creator) -> str:
+    underwrite_rows = "".join(
+        f'<div class="is-driver-row">{scorebar(label, score)}'
+        f'<span class="is-weight-tag">{esc(note)}</span></div>'
+        for label, score, note in underwrite_driver_display(creator)
+    )
     mix_rows = "".join(
         f'<div class="is-driver-row">{scorebar(label, score)}'
         f'<span class="is-weight-tag">{esc(weight)}</span></div>'
@@ -269,14 +292,15 @@ def _drivers_panel(creator) -> str:
         if float(creator.get("live_proof_bonus") or 0) > 0
         else ""
     )
+    score = display_score(creator)
     return (
         '<div class="is-card"><div class="is-panel-head">'
         '<span class="is-panel-title">Score drivers</span>'
-        f'<span class="is-panel-link">{creator["total_score"]:.0f}/100 · rule-based, not LLM</span></div>'
-        f'<div class="is-panel-body">{live_chip}{mix_rows}{additive_rows}'
+        f'<span class="is-panel-link">{score:.0f}/100 · claim-underwrite, Scout is rule mix</span></div>'
+        f'<div class="is-panel-body">{live_chip}{underwrite_rows}{mix_rows}{additive_rows}'
         f'<div style="display:flex;justify-content:flex-end;align-items:baseline;gap:4px;'
-        f'margin-top:8px;font-size:22px;font-weight:900;color:#16A36A">{creator["total_score"]:.0f}'
-        f'<small style="font-size:9px;color:#879198;font-weight:650">weighted total</small></div>'
+        f'margin-top:8px;font-size:22px;font-weight:900;color:#16A36A">{score:.0f}'
+        f'<small style="font-size:9px;color:#879198;font-weight:650">underwrite</small></div>'
         "</div></div>"
     )
 
@@ -350,21 +374,9 @@ def render() -> None:
     with head_r:
         st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
 
-    name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
-    default_names = [
-        ranked[ranked["creator_id"] == cid].iloc[0]["creator_name"]
-        for cid in st.session_state.compare_ids
-        if not ranked[ranked["creator_id"] == cid].empty
-    ][:3]
-    if len(default_names) < 3:
-        default_names.extend(
-            name
-            for name in ranked["creator_name"].tolist()
-            if name not in default_names
-        )
-        default_names = default_names[:3]
+    option_names, default_names = compare_picker_names(ranked, list(st.session_state.get("compare_ids") or []))
     selected_names = st.multiselect(
-        "Creators to compare", list(name_to_id), default=default_names, max_selections=3
+        "Creators to compare", option_names, default=default_names, max_selections=3
     )
     compare = (
         ranked.set_index("creator_name").loc[selected_names].reset_index()
@@ -394,7 +406,7 @@ def render() -> None:
     overlap_report["_rows"] = compare_rows
     md(_overlap_panel(overlap_report, focus.to_dict()), unsafe_allow_html=True)
     st.caption(
-        t("Mission fit is market + language. Topic overlap is Jaccard. Ranking is rule-based, not LLM.")
+        t("Mission fit is market + language. Topic overlap is Jaccard. Spend-ready ranking is claim-underwrite, not LLM.")
     )
 
     c1, c2, c3 = st.columns([1.05, 0.9, 0.68], gap="small", vertical_alignment="top")

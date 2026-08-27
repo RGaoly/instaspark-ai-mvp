@@ -15,7 +15,7 @@ from components.html import (
     scorebar,
 )
 from components.i18n import t
-from components.positioning import live_lookup_caption, why_not_ttcm_html
+from components.positioning import live_lookup_caption
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_context,
@@ -173,7 +173,6 @@ def _render_live_lookup(context: dict) -> None:
     )
     open_lookup = bool(st.session_state.pop("search_youtube_open", False))
     with st.expander(f"{t('Live YouTube lookup')} · {t(youtube_status_label())}", expanded=open_lookup):
-        md(why_not_ttcm_html(compact=True), unsafe_allow_html=True)
         st.caption(live_lookup_caption())
         query = st.text_input(t("YouTube query"), value=default_query, key="youtube_lookup_query")
         if st.button(t("Search YouTube"), use_container_width=True, key="youtube_lookup_go"):

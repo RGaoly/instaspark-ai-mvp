@@ -88,12 +88,13 @@ CREATE TABLE IF NOT EXISTS creator_events (
 def get_connection() -> sqlite3.Connection:
     """Return a SQLite connection with row factory enabled."""
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(DB_PATH))
+    conn = sqlite3.connect(str(DB_PATH), timeout=30)
     conn.row_factory = sqlite3.Row
     # Validate journal mode against whitelist to prevent SQL injection
     _valid_journal_modes = {"WAL", "DELETE", "TRUNCATE", "PERSIST", "MEMORY", "OFF"}
     safe_mode = SQLITE_JOURNAL_MODE.upper() if SQLITE_JOURNAL_MODE.upper() in _valid_journal_modes else "WAL"
     conn.execute(f"PRAGMA journal_mode={safe_mode}")
+    conn.execute("PRAGMA busy_timeout=5000")
     return conn
 
 

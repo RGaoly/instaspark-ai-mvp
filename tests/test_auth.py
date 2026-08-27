@@ -84,6 +84,33 @@ def test_seed_default_users_idempotent():
     assert count_users() == 2
 
 
+def test_seed_default_users_fills_missing_demo_when_admin_already_exists():
+    create_user("admin", "Admin", "admin123", role="admin")
+    seed_default_users()
+    assert count_users() == 2
+    assert verify_user("demo", "demo123") is not None
+
+
+def test_seed_default_users_survives_concurrent_boot():
+    import threading
+
+    errors: list[BaseException] = []
+
+    def boot() -> None:
+        try:
+            seed_default_users()
+        except BaseException as exc:  # noqa: BLE001 — any crash here is the Cloud failure
+            errors.append(exc)
+
+    threads = [threading.Thread(target=boot) for _ in range(8)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    assert errors == []
+    assert count_users() == 2
+
+
 def test_create_user_duplicate_username_raises():
     create_user("dup", "First", "pass1")
     with pytest.raises(Exception):
@@ -103,8 +130,9 @@ def test_login_page_does_not_render_an_empty_card():
     assert source.index('st.session_state.get("login_language_switcher")') < source.index(
         "Product finds creator."
     )
-    assert "Not TikTok Creator Marketplace" in source
-    assert "auth-why" in source
+    assert "Not TikTok Creator Marketplace" not in source
+    assert "TTCM" not in source
+    assert "auth-why" not in source
 
 
 def test_password_hash_not_stored_in_plaintext():

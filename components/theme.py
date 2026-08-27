@@ -429,46 +429,6 @@ def inject_theme() -> None:
         .is-kpi-mini strong {{ font-size:16px; color:#1B2024; display:block; margin-top:5px; letter-spacing:-.03em; }}
         .is-kpi-mini small {{ font-size:7.5px; color:#8A949A; }}
 
-        .is-rubric-grid {{
-          display:grid;
-          grid-template-columns:repeat(4,minmax(0,1fr));
-          gap:10px;
-          margin:10px 0 8px;
-        }}
-        .is-rubric-card {{
-          background:var(--surface-2);
-          border:1px solid var(--line);
-          border-radius:12px;
-          padding:12px 12px 10px;
-          min-height:100%;
-        }}
-        .is-rubric-card.is-met {{ border-color:#B7E4CC; background:linear-gradient(180deg,#F4FBF7 0%,#FFFFFF 42%); }}
-        .is-rubric-card.is-gap {{ border-color:#F3D7A4; }}
-        .is-rubric-kicker {{
-          font-size:10px; font-weight:800; letter-spacing:.04em; color:#5B6A74;
-          text-transform:uppercase;
-        }}
-        .is-rubric-score {{
-          font-size:34px; font-weight:800; letter-spacing:-.05em; line-height:1;
-          margin:6px 0 2px; color:var(--green);
-        }}
-        .is-rubric-card.is-gap .is-rubric-score {{ color:var(--orange); }}
-        .is-rubric-card h4 {{
-          font-size:13px; margin:8px 0 6px; letter-spacing:-.02em;
-        }}
-        .is-rubric-card p {{ font-size:12px; color:#3D4A52; margin:0 0 8px; line-height:1.45; }}
-        .is-rubric-card ul {{ margin:0; padding-left:0; list-style:none; }}
-        .is-rubric-card li {{
-          font-size:11px; color:#4A565E; line-height:1.4;
-          padding:5px 0; border-top:1px solid var(--line);
-        }}
-        .is-rubric-card li b {{
-          display:inline-block; min-width:42px; font-size:9px; letter-spacing:.03em;
-          text-transform:uppercase; color:var(--green);
-        }}
-        .is-rubric-card li.fail b {{ color:var(--orange); }}
-        .is-rubric-card > small {{ display:block; margin-top:8px; color:#69757E; font-size:11px; }}
-
         .is-process-scroll {{ overflow-x:auto; padding-bottom:3px; }}
         .is-process {{
           min-width:920px;
@@ -1024,7 +984,6 @@ def inject_theme() -> None:
           .is-product-card {{ grid-template-columns:150px 1fr; }}
           .is-health {{ grid-column:1 / -1; border-left:0; border-top:1px solid var(--line); padding:10px 0 0; flex-direction:row; gap:8px; }}
           .is-kpi-strip {{ grid-template-columns:repeat(4,minmax(0,1fr)); }}
-          .is-rubric-grid {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
         }}
         @media (max-width: 760px) {{
           [data-testid="stSidebar"] {{ min-width:220px !important; max-width:220px !important; }}
@@ -1034,7 +993,6 @@ def inject_theme() -> None:
           .is-page-head {{ flex-direction:column; }}
           .is-metric-grid, .is-grid-2, .is-grid-3, .is-grid-4 {{ grid-template-columns:1fr; }}
           .is-kpi-strip {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
-          .is-rubric-grid {{ grid-template-columns:1fr; }}
           .is-product-card {{ grid-template-columns:1fr; }}
           .is-product-info {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
           .is-brief-grid, .is-localized, .is-budget-actions {{ grid-template-columns:1fr; }}

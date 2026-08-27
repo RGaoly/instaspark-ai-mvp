@@ -31,7 +31,7 @@ scoring.py · retrieval.py · claim_underwrite.py
         Human approve / override → OutreachCase (contact pack + Advance)
                  │
                  ▼
-        Growth Review: rubric scorecard · recorded events · quantified value · landing path · Calibrator
+        Growth Review: recorded events · quantified value · landing path · Calibrator
 ```
 
 Core chain: Evidence Reader reads real caption lines into DNA claim evidence.
@@ -41,8 +41,7 @@ No key is an explicit block plus an audited override — not a keyword fallback.
 
 The spend-ready cut is `claim_underwrite_v1`. The rule mix stays the Scout
 constraint layer (`total_score`). CEG traces live on Creator Compare
-(`#ceg-run-trace`). The gold-set benchmark, quantified value board,
-2-week landing path, and `#rubric-scorecard` live on Launch and Growth Review.
-There is no eighth page.
+(`#ceg-run-trace`). The gold-set benchmark, quantified value board, and
+2-week landing path live on Growth Review. There is no eighth page.
 
 See [`docs/07_ceg.md`](07_ceg.md) for the typed contracts and degrade matrix.

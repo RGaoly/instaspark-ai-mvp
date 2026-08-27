@@ -29,3 +29,15 @@ def test_business_value_board_is_computed_from_committed_artifacts():
     assert board["rule_top10_unevidenced_n"] >= 1
     assert "Not a customer ROI" in board["note"]
     assert "interview" not in board["pain"].lower()
+
+
+def test_value_board_leads_with_blocked_spend():
+    from views.growth_review import _business_value_html
+
+    board = compute(
+        load_creators(ROOT / "data" / "creators.csv"),
+        load_mission(ROOT / "data" / "launch_mission.json"),
+    )
+    html = _business_value_html(board)
+    assert html.index("Unevidenced spend blocked") < html.index("Hours of caption reading replaced")
+    assert board["rule_top10_unevidenced_n"] >= 1

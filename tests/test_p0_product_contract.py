@@ -111,7 +111,7 @@ def test_readme_describes_dual_entry_product_and_current_tree():
 
     assert "launch mission" in readme
     assert "creator opportunity" in readme
-    assert "why this is not tiktok creator marketplace" in readme
+    assert "what this workspace does" in readme
     assert "send to creator" in readme
     assert "growth review" in readme
     assert "measured" in readme

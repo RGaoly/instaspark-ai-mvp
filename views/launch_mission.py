@@ -6,7 +6,7 @@ import streamlit as st
 
 from components.html import badge, esc, metric_cards, page_header
 from components.i18n import t
-from components.positioning import paradigm_html, rubric_scorecard_html, why_not_ttcm_html
+from components.positioning import paradigm_html
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
     active_mission,
@@ -30,7 +30,6 @@ from components.ui import md
 from src.domain import launch_progress, pipeline_counts
 from src.landing_path import landing_path
 from src.product_dna import load_product_dna
-from src.rubric_scorecard import prove as prove_rubric
 
 
 def launch_cta_page(creator_id: str) -> str | None:
@@ -317,10 +316,7 @@ def render() -> None:
             if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form
     render_write_guard()
-    md(rubric_scorecard_html(prove_rubric(creators(), mission)), unsafe_allow_html=True)
     md(paradigm_html(), unsafe_allow_html=True)
-    with st.expander(t("Why this is not TikTok Creator Marketplace"), expanded=False):
-        md(why_not_ttcm_html(), unsafe_allow_html=True)
 
     if st.session_state.show_mission_form:
         with st.expander(t("Create a new launch mission"), expanded=True):

@@ -35,9 +35,9 @@ discovered → qualified → shortlisted → approved → contacted → negotiat
 
 项目使用公开结构和合成数据，不代表 Insta360 官方产品，也不包含任何内部数据。
 
-## Why this is not TikTok Creator Marketplace
+## What this workspace does
 
-TikTok Creator Marketplace books TikTok creators, pays them, and attributes on TikTok. InstaSpark is the brand-side **claim-underwriting desk** that sits **before** that booking rail:
+InstaSpark is a brand-side **claim-underwriting desk**:
 
 1. Dual entry — launch mission and inbound opportunity share one state machine.
 2. Claim underwrite — Search orders the spend-ready cut by Evidence Reader DNA claim coverage, not by embeddings or follower lookalikes. Mix risk (shortlist Jaccard) and product-grounded briefs sit on top.
@@ -88,13 +88,13 @@ Default login: `admin` / `admin123`. A read-only viewer is available as `demo` /
 
 Walk the real operator path. The spend-ready cut is claim-underwritten from the Evidence Reader cache. Scout (rule mix + TF-IDF) is the constraint layer, not an LLM ranker. ROI is recorded events only. **Send to Creator** stays disabled; the contact pack plus Advance is the operational handoff. There is no Evaluation page — the acceptance matrix, quantified value board, and 2-week landing path live on Growth Review.
 
-1. Log in as `admin` / `admin123`. Open **Launch Mission**. The **Scoring rubric evidence** board (`#rubric-scorecard`) maps the four contest 5-point bars to live artifacts. Product DNA is on the dashboard (versioned SKU claims), not hidden. Expand **Why this is not TikTok Creator Marketplace** if needed.
+1. Log in as `admin` / `admin123`. Open **Launch Mission**. Product DNA is on the dashboard (versioned SKU claims), not hidden.
 2. Open **Creator Opportunity**. The default fold is the **Inbound inbox** (30 synthetic EN/ES/DE messages: parse, score, route, mission link). Import email reloads that corpus; it is not a live mailbox. Always-on scout cards sit **below** the inbox and save as catalog-momentum opportunities.
 3. Open **Creator Search & Match**. The catalog recall is **60** public YouTube channel rows (name + channel id, not KYC); hard gates then **claim-underwrite**; Top 10 is the spend-ready working cut with a creator × DNA claim matrix. The **Top 20 intensive-read board** is on this page (not collapsed). Clips are that row's channel uploads (`catalog_channel`).
 4. Optional: Live YouTube lookup → **Attach as evidence**. That is `attached_channel` for intensive-read. Hits do **not** become new ranked creators.
 5. Open **Creator Compare**. Review shortlist overlap (Jaccard) and the **Outreach approval gate**. Approve is enabled only when Evidence Reader grounded a DNA claim (or after an audited override). Approve records a **Claim–Evidence–Guardrail** trace on this page (`#ceg-run-trace`) and mints a unique coupon / UTM tracking asset.
 6. Open **Content Studio** → **Generate Brief** and save it. Shot list comes from Product DNA. Saving a brief appends another CEG run. **Open Outreach** appears after a saved brief. **Send to Creator** stays disabled.
-7. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. When the creator is published with 0 events, open **Growth Review**: the same rubric scorecard, quantified value (blocked unevidenced spend first), and 2-week landing path sit above the funnel. Record a conversion (ROI stays 0x until that event), then read the **Pilot acceptance matrix**, **Claim-evidence benchmark**, and **Reason-code calibrator**.
+7. On **Outreach Operations**, expand **Contact pack** and copy the message + coupon + UTM. **Advance** through legal hops. When the creator is published with 0 events, open **Growth Review**: quantified value (blocked unevidenced spend first) and the 2-week landing path sit above the funnel. Record a conversion (ROI stays 0x until that event), then read the **Pilot acceptance matrix**, **Claim-evidence benchmark**, and **Reason-code calibrator**.
 
 Without `LLM_API_KEY` the app still starts. Scout ranking, Search browse, and the state machine work. Evidence Reader, the approval gate, and the spend-ready cut stay blocked and say so — they do not fall back to keywords. Content Studio uses the deterministic template. The committed extraction cache is a prior model run and keeps the spend-ready cut live for this demo. With a key, regenerate the cache and the report:
 
@@ -123,7 +123,7 @@ pytest -q
 │   ├── state.py                   # 活动上下文、状态迁移、SQLite 镜像
 │   ├── shell.py
 │   ├── html.py
-│   ├── positioning.py             # Why-not-TTCM copy
+│   ├── positioning.py             # Claim-underwriting desk copy
 │   ├── ui.py                      # 本地化 markdown 渲染
 │   └── theme.py
 ├── data/
@@ -175,7 +175,6 @@ pytest -q
 │   ├── landing_path.py            # 2-week pilot operating model
 │   ├── product_dna.py
 │   ├── retrieval.py               # sparse TF-IDF cosine, not neural embeddings
-│   ├── rubric_scorecard.py        # Live 5-point bars vs contest 评分细则
 │   ├── scoring.py
 │   └── scouting.py                # catalog momentum cards, not a live crawl
 ├── views/

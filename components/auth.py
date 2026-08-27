@@ -134,37 +134,6 @@ _LOGIN_CSS = """
   color: #16A36A;
   font-weight: 650;
 }
-.auth-why {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  max-width: 460px;
-}
-.auth-why b {
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #FFD600;
-  margin-bottom: 8px;
-}
-.auth-why p {
-  margin: 0 0 10px !important;
-  font-size: 13px !important;
-  color: rgba(255, 255, 255, 0.82) !important;
-}
-.auth-why ul {
-  margin: 0;
-  padding-left: 16px;
-}
-.auth-why li {
-  font-size: 12px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
-  margin: 0 0 6px;
-}
-
 .auth-form-head {
   display: flex;
   justify-content: flex-end;
@@ -306,15 +275,6 @@ def render_login_page() -> None:
                     <span>{esc(t("They reach out → the same approval"))}</span>
                   </div>
                 </div>
-              </div>
-              <div class="auth-why">
-                <b>{esc(t("Not TikTok Creator Marketplace"))}</b>
-                <p>{esc(t("TTCM sells a TikTok slot. This workspace underwrites a cross-platform launch mix against Product DNA claims."))}</p>
-                <ul>
-                  <li>{esc(t("TTCM books TikTok inventory"))}: {esc(t("TikTok Creator Marketplace already has live TikTok creators, payouts and first-party attribution. This product does not replace that booking rail."))}</li>
-                  <li>{esc(t("InstaSpark underwrites the mix"))}: {esc(t("A hardware launch needs mission-first and inbound-first work on one state machine. Spend is authorized against named Product DNA claims on public captions, not against a similarity score."))}</li>
-                  <li>{esc(t("Spend follows a governed shortlist"))}: {esc(t("Claim coverage, mix overlap, product-grounded briefs and unique UTM coupons exist so the team does not pay eight creators for two audiences or for a claim nobody filmed. Live YouTube lookup is optional and labeled; it never becomes a new ranked catalog row."))}</li>
-                </ul>
               </div>
             </div>
             """,

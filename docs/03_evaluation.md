@@ -60,10 +60,6 @@ documented process-time model (120 seconds per public caption body). Spend uses
 The headline number is unevidenced spend blocked versus the Scout lookalike
 Top 10, not hours.
 
-Launch Mission and Growth Review both render `#rubric-scorecard`: four contest
-dimensions with live 5 / 3 / 1 gates from `src/rubric_scorecard.py`. A 5 is
-claimed only when the artifacts pass, not when the copy says so.
-
 ## MVP 目标
 
 | 指标 | 目标 |

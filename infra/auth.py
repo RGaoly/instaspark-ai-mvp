@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import secrets
+import sqlite3
 from typing import Any
 
 import streamlit as st
@@ -79,12 +80,44 @@ def count_users() -> int:
         conn.close()
 
 
+def _insert_user_if_absent(username: str, display_name: str, password: str, role: str) -> None:
+    """Insert one login. Duplicate usernames are a no-op, not a crash.
+
+    Streamlit Cloud can run ``init_auth`` in overlapping sessions. A count-then-insert
+    seed loses that race and raises ``sqlite3.IntegrityError`` on the UNIQUE username.
+    """
+
+    salt = _generate_salt()
+    password_hash = _hash_password(password, salt)
+    conn = get_connection()
+    try:
+        conn.execute(
+            "INSERT OR IGNORE INTO users (username, display_name, password_hash, salt, role) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (username, display_name, password_hash, salt, role),
+        )
+        conn.commit()
+    except sqlite3.IntegrityError:
+        conn.rollback()
+    finally:
+        conn.close()
+
+
 def seed_default_users() -> None:
-    """Create default admin and demo users if the users table is empty."""
-    if count_users() > 0:
-        return
-    create_user(DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_DISPLAY_NAME, DEFAULT_ADMIN_PASSWORD, role="admin")
-    create_user(DEFAULT_DEMO_USERNAME, DEFAULT_DEMO_DISPLAY_NAME, DEFAULT_DEMO_PASSWORD, role="viewer")
+    """Ensure default admin and demo logins exist. Safe to call on every boot."""
+
+    _insert_user_if_absent(
+        DEFAULT_ADMIN_USERNAME,
+        DEFAULT_ADMIN_DISPLAY_NAME,
+        DEFAULT_ADMIN_PASSWORD,
+        "admin",
+    )
+    _insert_user_if_absent(
+        DEFAULT_DEMO_USERNAME,
+        DEFAULT_DEMO_DISPLAY_NAME,
+        DEFAULT_DEMO_PASSWORD,
+        "viewer",
+    )
 
 
 def is_authenticated() -> bool:

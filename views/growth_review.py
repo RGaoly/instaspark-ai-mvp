@@ -3,7 +3,6 @@ from __future__ import annotations
 import streamlit as st
 
 from components.html import esc, mission_chip, page_header
-from components.positioning import rubric_scorecard_html
 from components.i18n import t
 from components.shell import open_workspace_page, render_demo_notice, render_topbar, render_write_guard, writes_locked
 from components.state import (
@@ -31,7 +30,6 @@ from src.benchmark import load_report
 from src.business_value import compute as compute_business_value
 from src.calibrator import propose as propose_calibration
 from src.landing_path import landing_path
-from src.rubric_scorecard import prove as prove_rubric
 
 _OUTREACH_STATES = {
     "approved",
@@ -498,7 +496,6 @@ def render() -> None:
     )
 
     value_board = compute_business_value(creators(), active_mission())
-    md(rubric_scorecard_html(prove_rubric(creators(), active_mission())), unsafe_allow_html=True)
     md(_business_value_html(value_board), unsafe_allow_html=True)
     md(_landing_html(), unsafe_allow_html=True)
 

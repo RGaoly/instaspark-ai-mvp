@@ -72,22 +72,21 @@ def inject_theme() -> None:
         [data-testid="stToolbar"] {{ display: none; }}
         #MainMenu, footer {{ visibility: hidden; }}
 
-        /* When the sidebar is collapsed (Streamlit remembers that state per
-           browser), its expand button is rendered INSIDE stToolbar, which the
-           rule above hides — leaving no way back. Re-show the toolbar only
-           when it carries the expand button, and keep the rest of the
-           toolbar's actions hidden. */
-        [data-testid="stToolbar"]:has([data-testid="stExpandSidebarButton"]) {{
-          display: flex !important;
+        /* Pin the sidebar open — it is never collapsible. Streamlit collapses
+           it by translating the section off-screen; force it back into the
+           flow and hide both chevrons. For browsers that still carry a
+           persisted collapsed state (they render stExpandSidebarButton),
+           restore the content offset to match the sidebar width. */
+        [data-testid="stSidebar"] {{
+          position: static !important;
+          transform: none !important;
         }}
-        [data-testid="stToolbar"]:has([data-testid="stExpandSidebarButton"]) [data-testid="stToolbarActions"] {{
+        [data-testid="stSidebarCollapseButton"],
+        [data-testid="stExpandSidebarButton"] {{
           display: none !important;
         }}
-        [data-testid="stExpandSidebarButton"] {{
-          background: #FFFFFF;
-          border: 1px solid var(--line);
-          border-radius: 999px;
-          box-shadow: 0 2px 8px rgba(17, 19, 23, .08);
+        .stApp:has([data-testid="stExpandSidebarButton"]) [data-testid="stMain"] {{
+          padding-left: 228px !important;
         }}
 
         .block-container {{
@@ -1005,6 +1004,7 @@ def inject_theme() -> None:
         }}
         @media (max-width: 760px) {{
           [data-testid="stSidebar"] {{ min-width:220px !important; max-width:220px !important; }}
+          .stApp:has([data-testid="stExpandSidebarButton"]) [data-testid="stMain"] {{ padding-left: 220px !important; }}
           .block-container {{ padding:14px 12px 36px; }}
           .is-topbar {{ grid-template-columns:1fr; height:auto; padding-bottom:10px; }}
           .is-userbar {{ display:none; }}

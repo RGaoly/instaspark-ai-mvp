@@ -107,7 +107,11 @@ def _open_search_hit(hit: dict) -> None:
         set_active_context("creator_opportunity", hit["id"])
     else:
         select_creator(hit["id"])
-    st.session_state.global_search = ""
+    # Do NOT assign st.session_state.global_search here: the search widget is
+    # already instantiated in this run, and Streamlit raises
+    # StreamlitWidgetAlreadyInstantiatedError on widget-keyed writes after
+    # instantiation. Defer the clear to the top of the next run's topbar.
+    st.session_state["_clear_global_search"] = True
     open_workspace_page(hit["page"])
 
 
@@ -118,6 +122,10 @@ def open_workspace_page(url_path: str) -> None:
 
 
 def render_topbar() -> None:
+    # Deferred search-box clear (see _open_search_hit): must happen before
+    # the global_search widget is instantiated in this run.
+    if st.session_state.pop("_clear_global_search", None):
+        st.session_state.global_search = ""
     display_name = current_display_name()
     initials = "".join(word[0] for word in display_name.split() if word)[:2].upper() or "?"
     role_label = t("Global Marketing") if current_role() == "admin" else t("Viewer")

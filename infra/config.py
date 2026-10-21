@@ -109,8 +109,10 @@ DEFAULT_DEMO_DISPLAY_NAME: str = _get_str("DEFAULT_DEMO_DISPLAY_NAME", "Demo Vie
 # ─── SMS verification (phone registration) ─────────────────────
 # demo (default) logs codes server-side and mirrors them into session state;
 # twilio sends real SMS via the Twilio Messages API and needs the three
-# secrets below (Streamlit Cloud Secrets / env / .env).
-SMS_PROVIDER: str = _get_str("SMS_PROVIDER", "demo")  # demo | twilio
+# secrets below (Streamlit Cloud Secrets / env / .env); aliyun delegates code
+# generation and checking to the Aliyun PNVS "SMS verification" APIs and needs
+# the four ALIYUN_* values below.
+SMS_PROVIDER: str = _get_str("SMS_PROVIDER", "demo")  # demo | twilio | aliyun
 SMS_CODE_TTL_SECONDS: int = _get_int("SMS_CODE_TTL_SECONDS", 300)
 SMS_CODE_LENGTH: int = _get_int("SMS_CODE_LENGTH", 6)
 SMS_RESEND_COOLDOWN_SECONDS: int = _get_int("SMS_RESEND_COOLDOWN_SECONDS", 60)
@@ -121,6 +123,13 @@ REGISTERED_USER_ROLE: str = _get_str("REGISTERED_USER_ROLE", "admin")
 TWILIO_ACCOUNT_SID: str = _resolve_secret("TWILIO_ACCOUNT_SID", "")
 TWILIO_AUTH_TOKEN: str = _resolve_secret("TWILIO_AUTH_TOKEN", "")
 TWILIO_FROM_NUMBER: str = _resolve_secret("TWILIO_FROM_NUMBER", "")
+# Aliyun PNVS (dypnsapi) — RAM AccessKey pair plus the gifted sign name and
+# template code from the Number Authentication console.
+ALIYUN_ACCESS_KEY_ID: str = _resolve_secret("ALIYUN_ACCESS_KEY_ID", "")
+ALIYUN_ACCESS_KEY_SECRET: str = _resolve_secret("ALIYUN_ACCESS_KEY_SECRET", "")
+ALIYUN_SMS_SIGN_NAME: str = _resolve_secret("ALIYUN_SMS_SIGN_NAME", "")
+ALIYUN_SMS_TEMPLATE_CODE: str = _resolve_secret("ALIYUN_SMS_TEMPLATE_CODE", "")
+ALIYUN_SMS_SCHEME_NAME: str = _get_str("ALIYUN_SMS_SCHEME_NAME", "")  # optional
 
 # ─── Data File Paths ───────────────────────────────────────────
 CREATORS_DATA_PATH: Path = _PROJECT_ROOT / _get_str("CREATORS_DATA_PATH", "data/creators.csv")

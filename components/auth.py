@@ -508,11 +508,19 @@ def _handle_signup_submit() -> None:
     if password != st.session_state.get("reg_password2", ""):
         st.error(t("Passwords do not match"))
         return
-    ok, result = register_with_phone(
-        phone_input,
-        password,
-        st.session_state.get("reg_code", ""),
-    )
+    ok = False
+    result = ""
+    try:
+        ok, result = register_with_phone(
+            phone_input,
+            password,
+            st.session_state.get("reg_code", ""),
+        )
+    except RuntimeError:
+        # e.g. the aliyun CheckSmsVerifyCode call itself failed — the code was
+        # not consumed, so the user can simply retry.
+        st.error(t("Verification service unavailable. Please try again later."))
+        return
     if not ok:
         _signup_error(result)
         return

@@ -34,10 +34,11 @@ from infra.config import (
     SMS_CODE_TTL_SECONDS,
     SMS_DAILY_CAP_PER_PHONE,
     SMS_MAX_VERIFY_ATTEMPTS,
+    SMS_PROVIDER,
     SMS_RESEND_COOLDOWN_SECONDS,
 )
 from infra.database import get_connection, init_db
-from services.sms_service import send_verification_code
+from services.sms_service import check_code_via_aliyun, send_verification_code
 
 
 def _hash_password(password: str, salt: str) -> str:
@@ -357,8 +358,15 @@ def init_auth() -> None:
 # same secret as the auth cookie — the plaintext code exists solely in the
 # SMS itself. Resend cooldown and a per-phone daily cap live in sms_codes /
 # sms_send_log so limits survive page refreshes and reruns.
+#
+# With SMS_PROVIDER == "aliyun" the code is generated and checked Aliyun-side;
+# the sms_codes row then stores _ALIYUN_DELEGATED_HASH instead of an HMAC, but
+# keeps the usual expires_at / attempts bookkeeping so TTL, resend cooldown,
+# daily cap and verify-attempt limits behave exactly like the local path.
 
 _PHONE_PATTERN = re.compile(r"1[3-9]\d{9}")
+
+_ALIYUN_DELEGATED_HASH = "delegated:aliyun"
 
 
 def normalize_phone(phone: str) -> str | None:
@@ -400,7 +408,9 @@ def issue_sms_code(phone: str) -> tuple[bool, str]:
 
     Returns (ok, key) where key is "ok", "cooldown", "daily_cap" or
     "send_failed". The rows written before the send are rolled back when the
-    provider call raises, so a failed send never leaves dirty state.
+    provider call raises, so a failed send never leaves dirty state. With the
+    aliyun provider no code is generated locally — the row delegates
+    generation/checking to Aliyun via _ALIYUN_DELEGATED_HASH.
     """
     now = int(time.time())
     conn = get_connection()
@@ -417,14 +427,21 @@ def issue_sms_code(phone: str) -> tuple[bool, str]:
         ).fetchone()["cnt"]
         if sent_today >= SMS_DAILY_CAP_PER_PHONE:
             return (False, "daily_cap")
-        code = str(secrets.randbelow(10 ** SMS_CODE_LENGTH)).zfill(SMS_CODE_LENGTH)
+        if SMS_PROVIDER == "aliyun":
+            # Aliyun generates and delivers the code itself; the local row is
+            # only a delegation marker carrying TTL/attempt bookkeeping.
+            code = ""
+            code_hash = _ALIYUN_DELEGATED_HASH
+        else:
+            code = str(secrets.randbelow(10 ** SMS_CODE_LENGTH)).zfill(SMS_CODE_LENGTH)
+            code_hash = _hash_sms_code(phone, code)
         conn.execute(
             "INSERT INTO sms_codes (phone, code_hash, expires_at, attempts, created_at) "
             "VALUES (?, ?, ?, 0, ?) "
             "ON CONFLICT(phone) DO UPDATE SET "
             "code_hash = excluded.code_hash, expires_at = excluded.expires_at, "
             "attempts = 0, created_at = excluded.created_at",
-            (phone, _hash_sms_code(phone, code), now + SMS_CODE_TTL_SECONDS, now),
+            (phone, code_hash, now + SMS_CODE_TTL_SECONDS, now),
         )
         conn.execute(
             "INSERT INTO sms_send_log (phone, sent_at) VALUES (?, ?)",
@@ -451,7 +468,12 @@ def issue_sms_code(phone: str) -> tuple[bool, str]:
 
 
 def verify_sms_code(phone: str, code: str) -> bool:
-    """Check a code against the stored hash. A success consumes the code."""
+    """Check a code against the stored hash. A success consumes the code.
+
+    Delegated aliyun rows ask Aliyun instead: a pass consumes the row, a miss
+    spends one attempt, and a failed CheckSmsVerifyCode call raises
+    RuntimeError so the UI can report the service as unavailable.
+    """
     now = int(time.time())
     conn = get_connection()
     try:
@@ -462,6 +484,17 @@ def verify_sms_code(phone: str, code: str) -> bool:
         if not row or int(row["expires_at"]) < now:
             return False
         if int(row["attempts"]) >= SMS_MAX_VERIFY_ATTEMPTS:
+            return False
+        if row["code_hash"] == _ALIYUN_DELEGATED_HASH:
+            if check_code_via_aliyun(phone, code):
+                conn.execute("DELETE FROM sms_codes WHERE phone = ?", (phone,))
+                conn.commit()
+                return True
+            conn.execute(
+                "UPDATE sms_codes SET attempts = attempts + 1 WHERE phone = ?",
+                (phone,),
+            )
+            conn.commit()
             return False
         if not hmac.compare_digest(_hash_sms_code(phone, code), row["code_hash"]):
             conn.execute(

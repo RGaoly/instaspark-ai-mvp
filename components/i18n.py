@@ -1285,6 +1285,7 @@ ZH: dict[str, str] = {
     "Please wait before requesting another code": "请求过于频繁，请稍后再试",
     "Daily verification code limit reached for this phone number": "该手机号今日验证码发送次数已达上限",
     "Failed to send the verification code. Please try again later.": "验证码发送失败，请稍后重试",
+    "Verification service unavailable. Please try again later.": "验证服务暂时不可用，请稍后重试",
     "Verification code sent": "验证码已发送",
     "Demo mode — your verification code is": "演示模式 — 你的验证码是",
     "Account created — logging you in": "注册成功，正在为你登录",

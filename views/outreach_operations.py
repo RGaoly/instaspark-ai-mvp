@@ -400,17 +400,17 @@ def render() -> None:
                 f'{person["creator_name"]} · {_stage_label(person["state"])}': person
                 for person in people
             }
-            labels = list(creator_by_label)
+            creator_labels = list(creator_by_label)
             jumped = bool(st.session_state.pop("outreach_focus_creator_id", None))
             selected_id = st.session_state.get("selected_creator_id")
             preferred = next(
                 (label for label, person in creator_by_label.items() if person["creator_id"] == selected_id),
-                labels[0],
+                creator_labels[0],
             )
             current_choice = st.session_state.get("outreach_creator_workflow")
             if jumped or current_choice not in creator_by_label:
                 st.session_state["outreach_creator_workflow"] = preferred
-            selected_label = st.selectbox(t("Creator workflow"), labels, key="outreach_creator_workflow")
+            selected_label = st.selectbox(t("Creator workflow"), creator_labels, key="outreach_creator_workflow")
             selected = creator_by_label[selected_label]
             select_creator(selected["creator_id"])
             target = next_linear_creator_state(selected["creator_id"])

@@ -72,20 +72,18 @@ def inject_theme() -> None:
         [data-testid="stToolbar"] {{ display: none; }}
         #MainMenu, footer {{ visibility: hidden; }}
 
-        /* The slim header above hides Streamlit's sidebar expand chevron once
-           the sidebar is collapsed (Streamlit remembers that state per browser),
-           so pin a visible round expand button to the top-left corner. */
-        [data-testid="stSidebarCollapsedControl"] {{
+        /* When the sidebar is collapsed (Streamlit remembers that state per
+           browser), its expand button is rendered INSIDE stToolbar, which the
+           rule above hides — leaving no way back. Re-show the toolbar only
+           when it carries the expand button, and keep the rest of the
+           toolbar's actions hidden. */
+        [data-testid="stToolbar"]:has([data-testid="stExpandSidebarButton"]) {{
           display: flex !important;
-          visibility: visible !important;
-          position: fixed !important;
-          top: 10px;
-          left: 10px;
-          z-index: 1000002;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
+        }}
+        [data-testid="stToolbar"]:has([data-testid="stExpandSidebarButton"]) [data-testid="stToolbarActions"] {{
+          display: none !important;
+        }}
+        [data-testid="stExpandSidebarButton"] {{
           background: #FFFFFF;
           border: 1px solid var(--line);
           border-radius: 999px;

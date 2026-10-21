@@ -10,6 +10,8 @@ import hashlib
 import hmac
 import re
 import secrets
+import sqlite3
+import threading
 import time
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -119,12 +121,29 @@ def count_users() -> int:
         conn.close()
 
 
+_SEED_LOCK = threading.Lock()
+
+
 def seed_default_users() -> None:
-    """Create default admin and demo users if the users table is empty."""
-    if count_users() > 0:
-        return
-    create_user(DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_DISPLAY_NAME, DEFAULT_ADMIN_PASSWORD, role="admin")
-    create_user(DEFAULT_DEMO_USERNAME, DEFAULT_DEMO_DISPLAY_NAME, DEFAULT_DEMO_PASSWORD, role="viewer")
+    """Create default admin and demo users if the users table is empty.
+
+    Every browser session runs init_auth() on boot; after a fresh deploy the
+    container's database starts empty and several sessions can pass the
+    count check concurrently, so the second INSERT must tolerate the unique
+    constraint instead of crashing the app with sqlite3.IntegrityError.
+    """
+    with _SEED_LOCK:
+        if count_users() > 0:
+            return
+        for username, display_name, password, role in (
+            (DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_DISPLAY_NAME, DEFAULT_ADMIN_PASSWORD, "admin"),
+            (DEFAULT_DEMO_USERNAME, DEFAULT_DEMO_DISPLAY_NAME, DEFAULT_DEMO_PASSWORD, "viewer"),
+        ):
+            try:
+                create_user(username, display_name, password, role=role)
+            except sqlite3.IntegrityError:
+                # Another session (or process) seeded this user first.
+                pass
 
 
 def is_authenticated() -> bool:

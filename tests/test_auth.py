@@ -84,6 +84,18 @@ def test_seed_default_users_idempotent():
     assert count_users() == 2
 
 
+def test_seed_default_users_tolerates_concurrent_seeding(monkeypatch):
+    """Two sessions booting against an empty DB must not crash each other."""
+    from infra import auth
+
+    monkeypatch.setattr(auth, "count_users", lambda: 0)
+    seed_default_users()
+    seed_default_users()  # second concurrent seeder hits the unique constraint
+    assert auth.count_users.__wrapped__ is not None  # sanity: still patched
+    monkeypatch.undo()
+    assert count_users() == 2
+
+
 def test_create_user_duplicate_username_raises():
     create_user("dup", "First", "pass1")
     with pytest.raises(Exception):

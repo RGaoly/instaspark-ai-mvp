@@ -91,7 +91,6 @@ def test_seed_default_users_tolerates_concurrent_seeding(monkeypatch):
     monkeypatch.setattr(auth, "count_users", lambda: 0)
     seed_default_users()
     seed_default_users()  # second concurrent seeder hits the unique constraint
-    assert auth.count_users.__wrapped__ is not None  # sanity: still patched
     monkeypatch.undo()
     assert count_users() == 2
 

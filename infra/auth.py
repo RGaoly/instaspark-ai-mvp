@@ -11,6 +11,7 @@ import hmac
 import re
 import secrets
 import time
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import streamlit as st
@@ -244,6 +245,12 @@ def init_auth_cookies() -> None:
     duplicate-widget error, so app.py is the single call site. Outside a
     running Streamlit runtime (pytest, scripts) there is no browser and every
     cookie helper degrades to a no-op.
+
+    On the very first run of a session the constructor mounts the component
+    (its key is absent from session_state). On later runs it does not — so we
+    call refresh() to keep the component mounted and the browser cookies
+    synced; skipping the first run avoids a duplicate-key error from mounting
+    twice in one run.
     """
     controller = None
     try:
@@ -253,6 +260,8 @@ def init_auth_cookies() -> None:
             from streamlit_cookies_controller import CookieController
 
             controller = CookieController(key="instaspark_auth_cookie")
+            if "instaspark_auth_cookie" in st.session_state:
+                controller.refresh()
     except Exception:
         controller = None
     st.session_state["_auth_cookie_controller"] = controller
@@ -264,13 +273,15 @@ def _persist_auth_cookie(username: str) -> None:
     if controller is None:
         return
     try:
-        # max_age is in seconds; the library default is only 1 day, so the
-        # configured TTL must be passed explicitly.
-        controller.set(
-            AUTH_COOKIE_NAME,
-            issue_auth_token(username),
-            max_age=float(AUTH_TOKEN_TTL_SECONDS),
-        )
+        # The library defaults `expires` to now+1day whenever it is not passed
+        # explicitly, and an explicit expires wins over max_age — so the
+        # configured TTL must be given as an absolute expiry, not max_age.
+        expires = datetime.now(timezone.utc) + timedelta(seconds=AUTH_TOKEN_TTL_SECONDS)
+        controller.set(AUTH_COOKIE_NAME, issue_auth_token(username), expires=expires)
+        # set() renders a transient component whose JS writes document.cookie.
+        # The caller immediately triggers st.rerun(); give the component a
+        # beat to execute before it is unmounted, or the write is lost.
+        time.sleep(1)
     except Exception:
         # A cookie failure must never break logging in.
         pass
@@ -308,7 +319,7 @@ def restore_session_from_cookie() -> None:
         retries = int(st.session_state.get("_auth_cookie_retries", 0))
         if retries < AUTH_COOKIE_MAX_RETRIES:
             st.session_state["_auth_cookie_retries"] = retries + 1
-            time.sleep(0.4)
+            time.sleep(0.6)
             st.rerun()
         return
     username = verify_auth_token(token)

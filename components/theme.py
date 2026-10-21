@@ -72,6 +72,26 @@ def inject_theme() -> None:
         [data-testid="stToolbar"] {{ display: none; }}
         #MainMenu, footer {{ visibility: hidden; }}
 
+        /* The slim header above hides Streamlit's sidebar expand chevron once
+           the sidebar is collapsed (Streamlit remembers that state per browser),
+           so pin a visible round expand button to the top-left corner. */
+        [data-testid="stSidebarCollapsedControl"] {{
+          display: flex !important;
+          visibility: visible !important;
+          position: fixed !important;
+          top: 10px;
+          left: 10px;
+          z-index: 1000002;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          background: #FFFFFF;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          box-shadow: 0 2px 8px rgba(17, 19, 23, .08);
+        }}
+
         .block-container {{
           max-width: 1480px;
           padding: 18px 28px 48px 28px;

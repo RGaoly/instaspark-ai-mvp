@@ -7,7 +7,7 @@ from components.i18n import set_language
 from components.shell import render_sidebar
 from components.state import bootstrap_state
 from components.theme import inject_theme
-from infra.auth import init_auth, is_authenticated
+from infra.auth import init_auth, init_auth_cookies, is_authenticated
 from infra.config import DEFAULT_LANGUAGE
 from views import (
     content_studio,
@@ -44,6 +44,7 @@ if _requested_language in {"en", "zh"}:
 
 inject_theme()
 init_auth()
+init_auth_cookies()
 
 if not is_authenticated():
     render_login_page()

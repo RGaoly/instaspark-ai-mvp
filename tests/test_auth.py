@@ -160,3 +160,74 @@ def test_admin_can_write(monkeypatch):
     assert can_write() is True
     require_write()
     require_role("admin")
+
+
+# ─── Persistent-login auth tokens ──────────────────────────────
+
+
+def test_auth_token_roundtrip():
+    from infra.auth import issue_auth_token, verify_auth_token
+
+    token = issue_auth_token("admin")
+    assert verify_auth_token(token) == "admin"
+
+
+def test_auth_token_rejects_tampered_signature():
+    from infra.auth import issue_auth_token, verify_auth_token
+
+    token = issue_auth_token("admin")
+    version, username_hex, expires, _sig = token.split(".")
+    forged = ".".join([version, username_hex, expires, "0" * 64])
+    assert verify_auth_token(forged) is None
+
+
+def test_auth_token_rejects_forged_username():
+    """Swapping the username without re-signing must fail."""
+    from infra.auth import issue_auth_token, verify_auth_token
+
+    token = issue_auth_token("demo")
+    version, _username_hex, expires, sig = token.split(".")
+    forged = ".".join([version, "admin".encode("utf-8").hex(), expires, sig])
+    assert verify_auth_token(forged) is None
+
+
+def test_auth_token_rejects_expired():
+    from infra.auth import _sign_token_payload, verify_auth_token
+
+    payload = f"v1.{'admin'.encode('utf-8').hex()}.1"  # expired at epoch 1
+    token = f"{payload}.{_sign_token_payload(payload)}"
+    assert verify_auth_token(token) is None
+
+
+def test_auth_token_rejects_garbage():
+    from infra.auth import verify_auth_token
+
+    assert verify_auth_token("not-a-token") is None
+    assert verify_auth_token("") is None
+    assert verify_auth_token(None) is None
+    assert verify_auth_token("v1.zzz.notanint.abc") is None
+
+
+def test_login_logout_without_browser_runtime(monkeypatch):
+    """login/logout must work with no cookie controller (pytest, scripts)."""
+    from infra import auth
+
+    create_user("nocookie", "No Cookie", "pw12345", role="viewer")
+    fake = _Session()
+    monkeypatch.setattr(auth.st, "session_state", fake)
+    assert auth.login("nocookie", "pw12345") is True
+    assert fake["auth_user"]["username"] == "nocookie"
+    auth.logout()
+    assert "auth_user" not in fake
+    assert fake["_auth_logged_out"] is True
+
+
+def test_restore_skipped_when_logged_out(monkeypatch):
+    """The logout guard blocks cookie restore for the rest of the session."""
+    from infra import auth
+
+    fake = _Session()
+    fake["_auth_logged_out"] = True
+    monkeypatch.setattr(auth.st, "session_state", fake)
+    auth.restore_session_from_cookie()
+    assert "auth_user" not in fake

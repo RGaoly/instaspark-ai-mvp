@@ -90,6 +90,14 @@ PBKDF2_ITERATIONS: int = _get_int("PBKDF2_ITERATIONS", 260_000)
 PBKDF2_HASH_ALGORITHM: str = _get_str("PBKDF2_HASH_ALGORITHM", "sha256")
 SALT_LENGTH: int = _get_int("SALT_LENGTH", 16)
 
+# Persistent-login cookie. The HMAC secret should live in Streamlit Cloud
+# Secrets (or local .env); when unset, infra.auth falls back to an ephemeral
+# per-process secret, which invalidates all cookies on app restart.
+AUTH_TOKEN_SECRET: str = _resolve_secret("AUTH_TOKEN_SECRET", "")
+AUTH_COOKIE_NAME: str = _get_str("AUTH_COOKIE_NAME", "instaspark_auth")
+AUTH_TOKEN_TTL_SECONDS: int = _get_int("AUTH_TOKEN_TTL_SECONDS", 7 * 24 * 3600)
+AUTH_COOKIE_MAX_RETRIES: int = _get_int("AUTH_COOKIE_MAX_RETRIES", 2)
+
 DEFAULT_ADMIN_USERNAME: str = _get_str("DEFAULT_ADMIN_USERNAME", "admin")
 DEFAULT_ADMIN_PASSWORD: str = _get_str("DEFAULT_ADMIN_PASSWORD", "admin123")
 DEFAULT_ADMIN_DISPLAY_NAME: str = _get_str("DEFAULT_ADMIN_DISPLAY_NAME", "Olivia Chen")

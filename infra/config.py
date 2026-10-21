@@ -106,6 +106,22 @@ DEFAULT_DEMO_USERNAME: str = _get_str("DEFAULT_DEMO_USERNAME", "demo")
 DEFAULT_DEMO_PASSWORD: str = _get_str("DEFAULT_DEMO_PASSWORD", "demo123")
 DEFAULT_DEMO_DISPLAY_NAME: str = _get_str("DEFAULT_DEMO_DISPLAY_NAME", "Demo Viewer")
 
+# ─── SMS verification (phone registration) ─────────────────────
+# demo (default) logs codes server-side and mirrors them into session state;
+# twilio sends real SMS via the Twilio Messages API and needs the three
+# secrets below (Streamlit Cloud Secrets / env / .env).
+SMS_PROVIDER: str = _get_str("SMS_PROVIDER", "demo")  # demo | twilio
+SMS_CODE_TTL_SECONDS: int = _get_int("SMS_CODE_TTL_SECONDS", 300)
+SMS_CODE_LENGTH: int = _get_int("SMS_CODE_LENGTH", 6)
+SMS_RESEND_COOLDOWN_SECONDS: int = _get_int("SMS_RESEND_COOLDOWN_SECONDS", 60)
+SMS_MAX_VERIFY_ATTEMPTS: int = _get_int("SMS_MAX_VERIFY_ATTEMPTS", 5)
+SMS_DAILY_CAP_PER_PHONE: int = _get_int("SMS_DAILY_CAP_PER_PHONE", 10)
+# Portfolio demo default: registered users get full access.
+REGISTERED_USER_ROLE: str = _get_str("REGISTERED_USER_ROLE", "admin")
+TWILIO_ACCOUNT_SID: str = _resolve_secret("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN: str = _resolve_secret("TWILIO_AUTH_TOKEN", "")
+TWILIO_FROM_NUMBER: str = _resolve_secret("TWILIO_FROM_NUMBER", "")
+
 # ─── Data File Paths ───────────────────────────────────────────
 CREATORS_DATA_PATH: Path = _PROJECT_ROOT / _get_str("CREATORS_DATA_PATH", "data/creators.csv")
 MISSION_DATA_PATH: Path = _PROJECT_ROOT / _get_str("MISSION_DATA_PATH", "data/launch_mission.json")

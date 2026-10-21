@@ -7,16 +7,28 @@ what produced the empty white box above the old title.
 
 from __future__ import annotations
 
+import time
+
 import streamlit as st
 
 from components.html import esc
 from components.i18n import get_language, set_language, t
-from infra.auth import init_auth, login
+from infra.auth import (
+    _complete_login,
+    get_user_by_username,
+    init_auth,
+    issue_sms_code,
+    login,
+    normalize_phone,
+    register_with_phone,
+)
 from infra.config import (
     DEFAULT_ADMIN_PASSWORD,
     DEFAULT_ADMIN_USERNAME,
     DEFAULT_DEMO_PASSWORD,
     DEFAULT_DEMO_USERNAME,
+    SMS_PROVIDER,
+    SMS_RESEND_COOLDOWN_SECONDS,
 )
 
 _LOGIN_CSS = """
@@ -211,18 +223,30 @@ _LOGIN_CSS = """
 }
 
 .stApp:has(.auth-hero) .st-key-auth_username,
-.stApp:has(.auth-hero) .st-key-auth_password {
+.stApp:has(.auth-hero) .st-key-auth_password,
+.stApp:has(.auth-hero) .st-key-reg_phone,
+.stApp:has(.auth-hero) .st-key-reg_code,
+.stApp:has(.auth-hero) .st-key-reg_password,
+.stApp:has(.auth-hero) .st-key-reg_password2 {
   max-width: 440px;
 }
 .stApp:has(.auth-hero) .st-key-auth_username [data-testid="stTextInput"] label,
-.stApp:has(.auth-hero) .st-key-auth_password [data-testid="stTextInput"] label {
+.stApp:has(.auth-hero) .st-key-auth_password [data-testid="stTextInput"] label,
+.stApp:has(.auth-hero) .st-key-reg_phone [data-testid="stTextInput"] label,
+.stApp:has(.auth-hero) .st-key-reg_code [data-testid="stTextInput"] label,
+.stApp:has(.auth-hero) .st-key-reg_password [data-testid="stTextInput"] label,
+.stApp:has(.auth-hero) .st-key-reg_password2 [data-testid="stTextInput"] label {
   font-size: 14px !important;
   font-weight: 700 !important;
   color: #111317 !important;
   padding-bottom: 4px;
 }
 .stApp:has(.auth-hero) .st-key-auth_username input,
-.stApp:has(.auth-hero) .st-key-auth_password input {
+.stApp:has(.auth-hero) .st-key-auth_password input,
+.stApp:has(.auth-hero) .st-key-reg_phone input,
+.stApp:has(.auth-hero) .st-key-reg_code input,
+.stApp:has(.auth-hero) .st-key-reg_password input,
+.stApp:has(.auth-hero) .st-key-reg_password2 input {
   min-height: 48px !important;
   height: 48px !important;
   border-radius: 8px !important;
@@ -233,16 +257,22 @@ _LOGIN_CSS = """
   padding: 0 14px !important;
 }
 .stApp:has(.auth-hero) .st-key-auth_username input:focus,
-.stApp:has(.auth-hero) .st-key-auth_password input:focus {
+.stApp:has(.auth-hero) .st-key-auth_password input:focus,
+.stApp:has(.auth-hero) .st-key-reg_phone input:focus,
+.stApp:has(.auth-hero) .st-key-reg_code input:focus,
+.stApp:has(.auth-hero) .st-key-reg_password input:focus,
+.stApp:has(.auth-hero) .st-key-reg_password2 input:focus {
   background: #FFFFFF !important;
   border-color: #111317 !important;
   box-shadow: none !important;
 }
-.stApp:has(.auth-hero) .st-key-auth_submit {
+.stApp:has(.auth-hero) .st-key-auth_submit,
+.stApp:has(.auth-hero) .st-key-reg_submit {
   max-width: 440px;
   margin-top: 8px;
 }
-.stApp:has(.auth-hero) .st-key-auth_submit button {
+.stApp:has(.auth-hero) .st-key-auth_submit button,
+.stApp:has(.auth-hero) .st-key-reg_submit button {
   min-height: 48px !important;
   border-radius: 8px !important;
   background: #FFD600 !important;
@@ -252,9 +282,14 @@ _LOGIN_CSS = """
   font-weight: 750 !important;
   box-shadow: none !important;
 }
-.stApp:has(.auth-hero) .st-key-auth_submit button:hover {
+.stApp:has(.auth-hero) .st-key-auth_submit button:hover,
+.stApp:has(.auth-hero) .st-key-reg_submit button:hover {
   background: #F0C800 !important;
   transform: none !important;
+}
+.stApp:has(.auth-hero) .st-key-reg_send_code button {
+  min-height: 48px !important;
+  border-radius: 8px !important;
 }
 .stApp:has(.auth-hero) [data-testid="stAlert"] {
   max-width: 440px;
@@ -341,26 +376,32 @@ def render_login_page() -> None:
             unsafe_allow_html=True,
         )
 
-        st.text_input(
-            t("Username"),
-            key="auth_username",
-            placeholder=t("Enter your username"),
-        )
-        st.text_input(
-            t("Password"),
-            key="auth_password",
-            type="password",
-            placeholder=t("Enter your password"),
-        )
+        login_tab, signup_tab = st.tabs([t("Log in"), t("Sign up")])
 
-        if st.button(t("Log in"), type="primary", use_container_width=True, key="auth_submit"):
-            if login(
-                st.session_state.get("auth_username", ""),
-                st.session_state.get("auth_password", ""),
-            ):
-                st.rerun()
-            else:
-                st.error(t("Invalid username or password"))
+        with login_tab:
+            st.text_input(
+                t("Phone or username"),
+                key="auth_username",
+                placeholder=t("Enter your phone number or username"),
+            )
+            st.text_input(
+                t("Password"),
+                key="auth_password",
+                type="password",
+                placeholder=t("Enter your password"),
+            )
+
+            if st.button(t("Log in"), type="primary", use_container_width=True, key="auth_submit"):
+                if login(
+                    st.session_state.get("auth_username", ""),
+                    st.session_state.get("auth_password", ""),
+                ):
+                    st.rerun()
+                else:
+                    st.error(t("Invalid username or password"))
+
+        with signup_tab:
+            _render_signup_tab()
 
         st.markdown(
             f"""
@@ -377,3 +418,108 @@ def render_login_page() -> None:
             """,
             unsafe_allow_html=True,
         )
+
+
+# ─── Sign-up tab (phone + SMS verification code) ───────────────
+# Failure keys returned by infra.auth mapped to UI-facing English sentences;
+# password-strength keys are already sentences and pass through unchanged.
+
+_SIGNUP_ERROR_MESSAGES = {
+    "invalid_phone": "Enter a valid mainland China phone number",
+    "phone_taken": "This phone number is already registered",
+    "invalid_or_expired_code": "Invalid or expired verification code",
+    "cooldown": "Please wait before requesting another code",
+    "daily_cap": "Daily verification code limit reached for this phone number",
+    "send_failed": "Failed to send the verification code. Please try again later.",
+}
+
+
+def _signup_error(key: str) -> None:
+    st.error(t(_SIGNUP_ERROR_MESSAGES.get(key, key)))
+
+
+def _render_signup_tab() -> None:
+    st.text_input(
+        t("Phone number"),
+        key="reg_phone",
+        placeholder=t("Enter your 11-digit phone number"),
+    )
+
+    sent_at = st.session_state.get("_reg_code_sent_at")
+    cooldown_remaining = 0
+    if sent_at:
+        cooldown_remaining = SMS_RESEND_COOLDOWN_SECONDS - (int(time.time()) - int(sent_at))
+
+    code_col, send_col = st.columns([3, 2], vertical_alignment="bottom")
+    with code_col:
+        st.text_input(
+            t("Verification code"),
+            key="reg_code",
+            placeholder=t("6-digit code"),
+        )
+    with send_col:
+        if st.button(
+            t("Send code"),
+            key="reg_send_code",
+            disabled=cooldown_remaining > 0,
+            use_container_width=True,
+        ):
+            _handle_send_code()
+    if cooldown_remaining > 0:
+        st.caption(t("Resend available in {n}s", n=cooldown_remaining))
+
+    st.text_input(
+        t("Password"),
+        key="reg_password",
+        type="password",
+        placeholder=t("At least 8 characters, letters + numbers"),
+    )
+    st.text_input(
+        t("Confirm password"),
+        key="reg_password2",
+        type="password",
+        placeholder=t("Re-enter your password"),
+    )
+
+    if st.button(t("Sign up"), type="primary", use_container_width=True, key="reg_submit"):
+        _handle_signup_submit()
+
+
+def _handle_send_code() -> None:
+    phone = normalize_phone(st.session_state.get("reg_phone", ""))
+    if phone is None:
+        st.error(t("Enter a valid mainland China phone number"))
+        return
+    ok, result = issue_sms_code(phone)
+    if not ok:
+        _signup_error(result)
+        return
+    st.session_state["_reg_code_sent_at"] = int(time.time())
+    demo_sms = st.session_state.get("_demo_last_sms")
+    if SMS_PROVIDER == "demo" and demo_sms and demo_sms.get("phone") == phone:
+        st.info(t("Demo mode — your verification code is") + " " + demo_sms["code"])
+    else:
+        st.success(t("Verification code sent"))
+
+
+def _handle_signup_submit() -> None:
+    phone_input = st.session_state.get("reg_phone", "")
+    password = st.session_state.get("reg_password", "")
+    if password != st.session_state.get("reg_password2", ""):
+        st.error(t("Passwords do not match"))
+        return
+    ok, result = register_with_phone(
+        phone_input,
+        password,
+        st.session_state.get("reg_code", ""),
+    )
+    if not ok:
+        _signup_error(result)
+        return
+    user = get_user_by_username(normalize_phone(phone_input) or phone_input)
+    if user is None:
+        st.error(t("Registration failed. Please try again."))
+        return
+    _complete_login(user)
+    st.success(t("Account created — logging you in"))
+    st.rerun()

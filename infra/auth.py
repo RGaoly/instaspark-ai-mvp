@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import re
 import secrets
 import time
 from typing import Any
@@ -27,9 +28,16 @@ from infra.config import (
     DEFAULT_DEMO_USERNAME,
     PBKDF2_HASH_ALGORITHM,
     PBKDF2_ITERATIONS,
+    REGISTERED_USER_ROLE,
     SALT_LENGTH,
+    SMS_CODE_LENGTH,
+    SMS_CODE_TTL_SECONDS,
+    SMS_DAILY_CAP_PER_PHONE,
+    SMS_MAX_VERIFY_ATTEMPTS,
+    SMS_RESEND_COOLDOWN_SECONDS,
 )
 from infra.database import get_connection, init_db
+from services.sms_service import send_verification_code
 
 
 def _hash_password(password: str, salt: str) -> str:
@@ -45,26 +53,35 @@ def _generate_salt() -> str:
     return secrets.token_hex(SALT_LENGTH)
 
 
-def create_user(username: str, display_name: str, password: str, role: str = "admin") -> None:
+def create_user(
+    username: str,
+    display_name: str,
+    password: str,
+    role: str = "admin",
+    phone: str | None = None,
+) -> None:
     salt = _generate_salt()
     password_hash = _hash_password(password, salt)
     conn = get_connection()
     try:
         conn.execute(
-            "INSERT INTO users (username, display_name, password_hash, salt, role) VALUES (?, ?, ?, ?, ?)",
-            (username, display_name, password_hash, salt, role),
+            "INSERT INTO users (username, display_name, password_hash, salt, role, phone) VALUES (?, ?, ?, ?, ?, ?)",
+            (username, display_name, password_hash, salt, role, phone),
         )
         conn.commit()
     finally:
         conn.close()
 
 
-def verify_user(username: str, password: str) -> dict[str, Any] | None:
+def verify_user(account: str, password: str) -> dict[str, Any] | None:
+    """Check credentials against either the username or a registered phone."""
+    phone = normalize_phone(account) or account
     conn = get_connection()
     try:
         row = conn.execute(
-            "SELECT id, username, display_name, password_hash, salt, role FROM users WHERE username = ?",
-            (username,),
+            "SELECT id, username, display_name, password_hash, salt, role FROM users "
+            "WHERE username = ? OR (phone IS NOT NULL AND phone = ?)",
+            (account, phone),
         ).fetchone()
         if not row:
             return None
@@ -306,12 +323,17 @@ def restore_session_from_cookie() -> None:
         st.session_state.auth_user = user
 
 
+def _complete_login(user: dict[str, Any]) -> None:
+    """Shared post-login state: session user, logout guard, auth cookie."""
+    st.session_state.auth_user = user
+    st.session_state["_auth_logged_out"] = False
+    _persist_auth_cookie(user["username"])
+
+
 def login(username: str, password: str) -> bool:
     user = verify_user(username, password)
     if user:
-        st.session_state.auth_user = user
-        st.session_state["_auth_logged_out"] = False
-        _persist_auth_cookie(user["username"])
+        _complete_login(user)
         return True
     return False
 
@@ -328,3 +350,162 @@ def init_auth() -> None:
     """Initialize auth — ensure DB and default users exist."""
     init_db()
     seed_default_users()
+
+
+# ─── Phone registration (SMS verification codes) ───────────────
+# Codes are single-use, short-lived and stored only as an HMAC keyed by the
+# same secret as the auth cookie — the plaintext code exists solely in the
+# SMS itself. Resend cooldown and a per-phone daily cap live in sms_codes /
+# sms_send_log so limits survive page refreshes and reruns.
+
+_PHONE_PATTERN = re.compile(r"1[3-9]\d{9}")
+
+
+def normalize_phone(phone: str) -> str | None:
+    """Normalize a mainland-China mobile number to 11 digits, or None.
+
+    Accepts an optional +86 / 86 prefix and ignores spaces and hyphens.
+    """
+    digits = re.sub(r"[\s-]+", "", str(phone or ""))
+    if digits.startswith("+86"):
+        digits = digits[3:]
+    elif digits.startswith("86"):
+        digits = digits[2:]
+    return digits if _PHONE_PATTERN.fullmatch(digits) else None
+
+
+def validate_password_strength(password: str) -> str | None:
+    """Return an error key when the password is too weak, else None.
+
+    The key is an English sentence; the UI layer translates it via t().
+    """
+    candidate = str(password or "")
+    if len(candidate) < 8:
+        return "Password must be at least 8 characters"
+    if not (re.search(r"[A-Za-z]", candidate) and re.search(r"\d", candidate)):
+        return "Password must include both letters and numbers"
+    return None
+
+
+def _hash_sms_code(phone: str, code: str) -> str:
+    return hmac.new(
+        _token_secret().encode("utf-8"),
+        f"{phone}:{code}".encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
+
+
+def issue_sms_code(phone: str) -> tuple[bool, str]:
+    """Generate, store and send a one-time code for an 11-digit phone.
+
+    Returns (ok, key) where key is "ok", "cooldown", "daily_cap" or
+    "send_failed". The rows written before the send are rolled back when the
+    provider call raises, so a failed send never leaves dirty state.
+    """
+    now = int(time.time())
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT created_at FROM sms_codes WHERE phone = ?",
+            (phone,),
+        ).fetchone()
+        if row and now - int(row["created_at"]) < SMS_RESEND_COOLDOWN_SECONDS:
+            return (False, "cooldown")
+        sent_today = conn.execute(
+            "SELECT COUNT(*) AS cnt FROM sms_send_log WHERE phone = ? AND sent_at >= ?",
+            (phone, now - 24 * 3600),
+        ).fetchone()["cnt"]
+        if sent_today >= SMS_DAILY_CAP_PER_PHONE:
+            return (False, "daily_cap")
+        code = str(secrets.randbelow(10 ** SMS_CODE_LENGTH)).zfill(SMS_CODE_LENGTH)
+        conn.execute(
+            "INSERT INTO sms_codes (phone, code_hash, expires_at, attempts, created_at) "
+            "VALUES (?, ?, ?, 0, ?) "
+            "ON CONFLICT(phone) DO UPDATE SET "
+            "code_hash = excluded.code_hash, expires_at = excluded.expires_at, "
+            "attempts = 0, created_at = excluded.created_at",
+            (phone, _hash_sms_code(phone, code), now + SMS_CODE_TTL_SECONDS, now),
+        )
+        conn.execute(
+            "INSERT INTO sms_send_log (phone, sent_at) VALUES (?, ?)",
+            (phone, now),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    try:
+        send_verification_code(phone, code)
+    except Exception:
+        conn = get_connection()
+        try:
+            conn.execute("DELETE FROM sms_codes WHERE phone = ?", (phone,))
+            conn.execute(
+                "DELETE FROM sms_send_log WHERE phone = ? AND sent_at = ?",
+                (phone, now),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+        return (False, "send_failed")
+    return (True, "ok")
+
+
+def verify_sms_code(phone: str, code: str) -> bool:
+    """Check a code against the stored hash. A success consumes the code."""
+    now = int(time.time())
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT code_hash, expires_at, attempts FROM sms_codes WHERE phone = ?",
+            (phone,),
+        ).fetchone()
+        if not row or int(row["expires_at"]) < now:
+            return False
+        if int(row["attempts"]) >= SMS_MAX_VERIFY_ATTEMPTS:
+            return False
+        if not hmac.compare_digest(_hash_sms_code(phone, code), row["code_hash"]):
+            conn.execute(
+                "UPDATE sms_codes SET attempts = attempts + 1 WHERE phone = ?",
+                (phone,),
+            )
+            conn.commit()
+            return False
+        conn.execute("DELETE FROM sms_codes WHERE phone = ?", (phone,))
+        conn.commit()
+        return True
+    finally:
+        conn.close()
+
+
+def register_with_phone(phone: str, password: str, code: str) -> tuple[bool, str]:
+    """Validate phone, password and SMS code, then create the account.
+
+    Returns (ok, key); failure keys are "invalid_phone", a password-strength
+    message, "phone_taken" or "invalid_or_expired_code".
+    """
+    normalized = normalize_phone(phone)
+    if normalized is None:
+        return (False, "invalid_phone")
+    password_error = validate_password_strength(password)
+    if password_error is not None:
+        return (False, password_error)
+    conn = get_connection()
+    try:
+        taken = conn.execute(
+            "SELECT 1 FROM users WHERE phone = ?",
+            (normalized,),
+        ).fetchone()
+    finally:
+        conn.close()
+    if taken:
+        return (False, "phone_taken")
+    if not verify_sms_code(normalized, code):
+        return (False, "invalid_or_expired_code")
+    create_user(
+        username=normalized,
+        display_name=f"User {normalized[-4:]}",
+        password=password,
+        role=REGISTERED_USER_ROLE,
+        phone=normalized,
+    )
+    return (True, "ok")

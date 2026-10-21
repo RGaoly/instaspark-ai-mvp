@@ -72,21 +72,14 @@ def inject_theme() -> None:
         [data-testid="stToolbar"] {{ display: none; }}
         #MainMenu, footer {{ visibility: hidden; }}
 
-        /* Pin the sidebar open — it is never collapsible. Streamlit collapses
-           it by translating the section off-screen; force it back into the
-           flow and hide both chevrons. For browsers that still carry a
-           persisted collapsed state (they render stExpandSidebarButton),
-           restore the content offset to match the sidebar width. */
-        [data-testid="stSidebar"] {{
-          position: static !important;
-          transform: none !important;
-        }}
+        /* The sidebar is pinned open by design: hide both chevrons so it can
+           never be collapsed. Browsers carrying a stale collapsed state are
+           restored by the small script injected in app.py (current Streamlit
+           does not render the sidebar section at all in that state, so CSS
+           alone cannot bring it back). */
         [data-testid="stSidebarCollapseButton"],
         [data-testid="stExpandSidebarButton"] {{
           display: none !important;
-        }}
-        .stApp:has([data-testid="stExpandSidebarButton"]) [data-testid="stMain"] {{
-          padding-left: 228px !important;
         }}
 
         .block-container {{
@@ -1004,7 +997,6 @@ def inject_theme() -> None:
         }}
         @media (max-width: 760px) {{
           [data-testid="stSidebar"] {{ min-width:220px !important; max-width:220px !important; }}
-          .stApp:has([data-testid="stExpandSidebarButton"]) [data-testid="stMain"] {{ padding-left: 220px !important; }}
           .block-container {{ padding:14px 12px 36px; }}
           .is-topbar {{ grid-template-columns:1fr; height:auto; padding-bottom:10px; }}
           .is-userbar {{ display:none; }}

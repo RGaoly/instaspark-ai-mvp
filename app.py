@@ -43,6 +43,40 @@ if _requested_language in {"en", "zh"}:
         pass
 
 inject_theme()
+
+# Pin the sidebar open. Streamlit persists the collapsed state in the
+# browser's localStorage and, when collapsed, never renders the sidebar
+# section — so CSS alone cannot restore it. This hidden same-origin
+# component clears any persisted collapsed state and clicks the expand
+# button once if the page still started collapsed. Both chevrons are
+# hidden via CSS in components/theme.py, so no new collapse can start.
+st.components.v1.html(
+    """
+    <script>
+    (function () {
+      function pinSidebar() {
+        try {
+          var w = window.parent;
+          var ls = w.localStorage;
+          Object.keys(ls).forEach(function (k) {
+            if (k.indexOf('stSidebarCollapsed') === 0) ls.setItem(k, 'false');
+          });
+          var expand = w.document.querySelector('[data-testid="stExpandSidebarButton"]');
+          if (expand) {
+            var btn = expand.querySelector('button') || expand;
+            btn.click();
+          }
+        } catch (e) { /* sandbox or timing — retried below and on next run */ }
+      }
+      pinSidebar();
+      setTimeout(pinSidebar, 800);
+      setTimeout(pinSidebar, 2000);
+    })();
+    </script>
+    """,
+    height=0,
+)
+
 init_auth()
 init_auth_cookies()
 

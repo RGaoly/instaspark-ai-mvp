@@ -303,6 +303,22 @@ _LOGIN_CSS = """
     padding: 24px 20px 40px !important;
   }
 }
+
+/* The hero split rules above use :first-of-type, which also matches nested
+   column rows (e.g. the verification-code row in the sign-up tab).
+   Neutralize those side effects on any horizontal block nested inside
+   another one. */
+.stApp:has(.auth-hero) [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] {
+  min-height: 0 !important;
+  gap: 1rem !important;
+}
+.stApp:has(.auth-hero) [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] > div:first-child {
+  display: block !important;
+}
+.stApp:has(.auth-hero) [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] > div:last-child {
+  background: transparent !important;
+  padding: 0 !important;
+}
 </style>
 """
 
@@ -379,26 +395,30 @@ def render_login_page() -> None:
         login_tab, signup_tab = st.tabs([t("Log in"), t("Sign up")])
 
         with login_tab:
-            st.text_input(
-                t("Phone or username"),
-                key="auth_username",
-                placeholder=t("Enter your phone number or username"),
-            )
-            st.text_input(
-                t("Password"),
-                key="auth_password",
-                type="password",
-                placeholder=t("Enter your password"),
-            )
+            # st.form bundles the inputs and the submit button: typing a
+            # value no longer requires a blur/Enter rerun before the button
+            # click registers, so one click always sees the latest input.
+            with st.form(key="login_form", clear_on_submit=False, border=False):
+                st.text_input(
+                    t("Phone or username"),
+                    key="auth_username",
+                    placeholder=t("Enter your phone number or username"),
+                )
+                st.text_input(
+                    t("Password"),
+                    key="auth_password",
+                    type="password",
+                    placeholder=t("Enter your password"),
+                )
 
-            if st.button(t("Log in"), type="primary", use_container_width=True, key="auth_submit"):
-                if login(
-                    st.session_state.get("auth_username", ""),
-                    st.session_state.get("auth_password", ""),
-                ):
-                    st.rerun()
-                else:
-                    st.error(t("Invalid username or password"))
+                if st.form_submit_button(t("Log in"), type="primary", use_container_width=True, key="auth_submit"):
+                    if login(
+                        st.session_state.get("auth_username", ""),
+                        st.session_state.get("auth_password", ""),
+                    ):
+                        st.rerun()
+                    else:
+                        st.error(t("Invalid username or password"))
 
         with signup_tab:
             _render_signup_tab()
@@ -439,50 +459,54 @@ def _signup_error(key: str) -> None:
 
 
 def _render_signup_tab() -> None:
-    st.text_input(
-        t("Phone number"),
-        key="reg_phone",
-        placeholder=t("Enter your 11-digit phone number"),
-    )
-
     sent_at = st.session_state.get("_reg_code_sent_at")
     cooldown_remaining = 0
     if sent_at:
         cooldown_remaining = SMS_RESEND_COOLDOWN_SECONDS - (int(time.time()) - int(sent_at))
 
-    code_col, send_col = st.columns([3, 2], vertical_alignment="bottom")
-    with code_col:
+    # Same rationale as the login form: the phone/code/password inputs must
+    # be submitted together with either button, or a blur-triggered rerun
+    # swallows the first click (or submits a stale empty phone).
+    with st.form(key="signup_form", clear_on_submit=False, border=False):
         st.text_input(
-            t("Verification code"),
-            key="reg_code",
-            placeholder=t("6-digit code"),
+            t("Phone number"),
+            key="reg_phone",
+            placeholder=t("Enter your 11-digit phone number"),
         )
-    with send_col:
-        if st.button(
-            t("Send code"),
-            key="reg_send_code",
-            disabled=cooldown_remaining > 0,
-            use_container_width=True,
-        ):
-            _handle_send_code()
-    if cooldown_remaining > 0:
-        st.caption(t("Resend available in {n}s", n=cooldown_remaining))
 
-    st.text_input(
-        t("Password"),
-        key="reg_password",
-        type="password",
-        placeholder=t("At least 8 characters, letters + numbers"),
-    )
-    st.text_input(
-        t("Confirm password"),
-        key="reg_password2",
-        type="password",
-        placeholder=t("Re-enter your password"),
-    )
+        code_col, send_col = st.columns([3, 2], vertical_alignment="bottom")
+        with code_col:
+            st.text_input(
+                t("Verification code"),
+                key="reg_code",
+                placeholder=t("6-digit code"),
+            )
+        with send_col:
+            if st.form_submit_button(
+                t("Send code"),
+                key="reg_send_code",
+                disabled=cooldown_remaining > 0,
+                use_container_width=True,
+            ):
+                _handle_send_code()
+        if cooldown_remaining > 0:
+            st.caption(t("Resend available in {n}s", n=cooldown_remaining))
 
-    if st.button(t("Sign up"), type="primary", use_container_width=True, key="reg_submit"):
-        _handle_signup_submit()
+        st.text_input(
+            t("Password"),
+            key="reg_password",
+            type="password",
+            placeholder=t("At least 8 characters, letters + numbers"),
+        )
+        st.text_input(
+            t("Confirm password"),
+            key="reg_password2",
+            type="password",
+            placeholder=t("Re-enter your password"),
+        )
+
+        if st.form_submit_button(t("Sign up"), type="primary", use_container_width=True, key="reg_submit"):
+            _handle_signup_submit()
 
 
 def _handle_send_code() -> None:

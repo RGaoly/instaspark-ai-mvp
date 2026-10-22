@@ -85,8 +85,14 @@ def inject_theme() -> None:
         /* Invisible utility elements (the theme/login <style> carriers, the
            cookie-sync component, the sidebar-pin script) still occupy element
            containers and would otherwise add a blank strip at the top of the
-           page. Their scripts/styles keep working with display: none. */
-        .st-key-theme_style, .st-key-login_style, .st-key-sidebar_pin, .st-key-instaspark_auth_cookie {{
+           page. Their scripts/styles keep working with display: none. The
+           sidebar-pin script lives in an inline-HTML component iframe
+           (srcdoc / empty src), which cannot take a key. */
+        [data-testid="stElementContainer"]:has(style),
+        [data-testid="stElementContainer"]:has(iframe[srcdoc]),
+        [data-testid="stElementContainer"]:has(iframe:not([src])),
+        [data-testid="stElementContainer"]:has(iframe[src=""]),
+        .st-key-instaspark_auth_cookie {{
           display: none !important;
         }}
 
@@ -1018,5 +1024,4 @@ def inject_theme() -> None:
         </style>
         """,
         unsafe_allow_html=True,
-        key="theme_style",
     )

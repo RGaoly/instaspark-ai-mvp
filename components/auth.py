@@ -333,7 +333,7 @@ def render_login_page() -> None:
     elif "login_language_switcher" not in st.session_state:
         st.session_state.login_language_switcher = get_language()
 
-    st.markdown(_LOGIN_CSS, unsafe_allow_html=True, key="login_style")
+    st.markdown(_LOGIN_CSS, unsafe_allow_html=True)
 
     hero, form = st.columns([1.12, 1], gap="small")
 

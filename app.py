@@ -47,9 +47,12 @@ inject_theme()
 # Pin the sidebar open. Streamlit persists the collapsed state in the
 # browser's localStorage and, when collapsed, never renders the sidebar
 # section — so CSS alone cannot restore it. This hidden same-origin
-# component clears any persisted collapsed state and clicks the expand
-# button once if the page still started collapsed. Both chevrons are
-# hidden via CSS in components/theme.py, so no new collapse can start.
+# component clears any persisted collapsed state, clicks the expand
+# button when one is present, and as a last resort reloads the app once
+# (safe: the stored state is already cleared, so the next boot renders
+# the sidebar). Both chevrons are hidden via CSS in components/theme.py,
+# so no new collapse can start. The login page has no sidebar by design
+# and is explicitly excluded from the reload path.
 st.components.v1.html(
     """
     <script>
@@ -57,20 +60,35 @@ st.components.v1.html(
       function pinSidebar() {
         try {
           var w = window.parent;
+          var doc = w.document;
           var ls = w.localStorage;
+          var cleared = false;
           Object.keys(ls).forEach(function (k) {
-            if (k.indexOf('stSidebarCollapsed') === 0) ls.setItem(k, 'false');
+            if (k.indexOf('stSidebarCollapsed') === 0 && ls.getItem(k) === 'true') {
+              ls.setItem(k, 'false');
+              cleared = true;
+            }
           });
-          var expand = w.document.querySelector('[data-testid="stExpandSidebarButton"]');
+          if (doc.querySelector('[data-testid="stSidebar"]')) return true;
+          if (doc.querySelector('.auth-hero')) return true;  // login page: no sidebar by design
+          var expand = doc.querySelector('[data-testid="stExpandSidebarButton"]');
           if (expand) {
             var btn = expand.querySelector('button') || expand;
             btn.click();
+            return true;
           }
-        } catch (e) { /* sandbox or timing — retried below and on next run */ }
+          if (cleared) {
+            w.location.reload();
+            return true;
+          }
+          return false;
+        } catch (e) { return false; }
       }
-      pinSidebar();
-      setTimeout(pinSidebar, 800);
-      setTimeout(pinSidebar, 2000);
+      var tries = 0;
+      var timer = setInterval(function () {
+        tries += 1;
+        if (pinSidebar() || tries >= 15) clearInterval(timer);
+      }, 800);
     })();
     </script>
     """,

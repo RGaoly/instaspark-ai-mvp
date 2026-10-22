@@ -1313,6 +1313,7 @@ ZH: dict[str, str] = {
     "Product, market and budget → shortlist": "产品、市场、预算 → 短名单",
     "They reach out → the same approval": "他们找上门 → 同一套审批",
     "Independent portfolio demo · synthetic data · not affiliated with Insta360.": "独立作品集演示 · 合成数据 · 与 Insta360 无关。",
+    "Demo workspace resets on every restart, so registered accounts are not kept.": "演示工作区每次重启都会重置，注册的账号不会保留。",
     "Open": "打开",
     "Mission": "任务",
     "Creator": "创作者",

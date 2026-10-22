@@ -75,6 +75,7 @@ st.components.v1.html(
     </script>
     """,
     height=0,
+    key="sidebar_pin",
 )
 
 init_auth()

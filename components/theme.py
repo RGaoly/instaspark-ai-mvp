@@ -82,6 +82,14 @@ def inject_theme() -> None:
           display: none !important;
         }}
 
+        /* Invisible utility elements (the theme/login <style> carriers, the
+           cookie-sync component, the sidebar-pin script) still occupy element
+           containers and would otherwise add a blank strip at the top of the
+           page. Their scripts/styles keep working with display: none. */
+        .st-key-theme_style, .st-key-login_style, .st-key-sidebar_pin, .st-key-instaspark_auth_cookie {{
+          display: none !important;
+        }}
+
         .block-container {{
           max-width: 1480px;
           padding: 18px 28px 48px 28px;
@@ -1010,4 +1018,5 @@ def inject_theme() -> None:
         </style>
         """,
         unsafe_allow_html=True,
+        key="theme_style",
     )

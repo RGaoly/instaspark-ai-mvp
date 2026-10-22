@@ -333,7 +333,7 @@ def render_login_page() -> None:
     elif "login_language_switcher" not in st.session_state:
         st.session_state.login_language_switcher = get_language()
 
-    st.markdown(_LOGIN_CSS, unsafe_allow_html=True)
+    st.markdown(_LOGIN_CSS, unsafe_allow_html=True, key="login_style")
 
     hero, form = st.columns([1.12, 1], gap="small")
 
@@ -433,7 +433,8 @@ def render_login_page() -> None:
               {esc(t("Viewer (read-only)"))}
             </div>
             <div class="auth-legal">
-              {esc(t("Independent portfolio demo · synthetic data · not affiliated with Insta360."))}
+              {esc(t("Independent portfolio demo · synthetic data · not affiliated with Insta360."))}<br/>
+              {esc(t("Demo workspace resets on every restart, so registered accounts are not kept."))}
             </div>
             """,
             unsafe_allow_html=True,

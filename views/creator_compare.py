@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 from components.html import avatar, badge, esc, mission_chip, page_header, scorebar
@@ -322,6 +323,31 @@ def _risk_panel(creator) -> str:
     )
 
 
+def _compare_export_csv(compare) -> str:
+    """CSV of the on-screen comparison grid. Same dimensions, same rows."""
+
+    rows = []
+    for _, r in compare.iterrows():
+        rows.append(
+            {
+                "creator_id": r["creator_id"],
+                "creator_name": r["creator_name"],
+                "match_score": round(float(r["total_score"]), 1),
+                "match_tier": match_tier(float(r["total_score"])),
+                "audience_geography": _geo_split(r),
+                "niche": " · ".join(str(item) for item in list(r["topics"])[:3]),
+                "modeled_est_views": f"{int(r['followers'] * r['engagement_rate'] / 100 * 4) / 1000:.0f}K",
+                "engagement_rate_pct": round(float(r["engagement_rate"]), 1),
+                "brand_safety": round(float(r["brand_safety"]), 1),
+                "estimated_cost_usd": int(r["estimated_cost_usd"]),
+                "posting_consistency_pct": round(float(r["posting_consistency"]) * 100),
+                "historical_reliability_pct": round(float(r["historical_reliability"]) * 100),
+                "recommended_market": r["primary_market"],
+            }
+        )
+    return pd.DataFrame(rows).to_csv(index=False)
+
+
 def render() -> None:
     render_topbar()
     context = active_context()
@@ -348,7 +374,8 @@ def render() -> None:
             unsafe_allow_html=True,
         )
     with head_r:
-        st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
+        # Filled after the compare set is resolved; renders in the header slot.
+        export_slot = st.empty()
 
     name_to_id = {row["creator_name"]: row["creator_id"] for _, row in ranked.head(10).iterrows()}
     default_names = [
@@ -373,6 +400,14 @@ def render() -> None:
     )
     if compare.empty:
         compare = ranked.head(3)
+
+    export_slot.download_button(
+        t("Export"),
+        data=_compare_export_csv(compare),
+        file_name="instaspark_compare.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
 
     compare_ids = [str(item) for item in compare["creator_id"].tolist()]
     focus_id = resolve_compare_focus(compare_ids, st.session_state.get("selected_creator_id"))

@@ -60,6 +60,7 @@ _PERSISTED_KEYS = (
     "opportunity_mission_links",
     "evidence_gate_overrides",
     "ceg_runs",
+    "saved_searches",
 )
 
 ENTRY_ALIASES = {
@@ -222,6 +223,7 @@ def bootstrap_state() -> None:
         "live_evidence": [],
         "evidence_gate_overrides": [],
         "ceg_runs": [],
+        "saved_searches": [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -735,6 +737,70 @@ def selected_creator() -> dict[str, Any]:
     if matches.empty:
         return ranked.iloc[0].to_dict()
     return matches.iloc[0].to_dict()
+
+
+# ── Saved searches ──────────────────────────────────────────────
+# Named NL query + catalog filter snapshots, scoped to the active root.
+# Saving/applying a search is a read-only workspace preference — like
+# export, it stays available to the viewer role, so no require_write.
+
+
+def _saved_search_store() -> list[dict[str, Any]]:
+    return st.session_state.setdefault("saved_searches", [])
+
+
+def saved_searches() -> list[dict[str, Any]]:
+    """Saved searches for the active root. Empty is honest."""
+
+    entry_type, entry_id = _current_root()
+    return deepcopy(
+        [
+            item
+            for item in _saved_search_store()
+            if item.get("entry_type") == entry_type and item.get("entry_id") == entry_id
+        ]
+    )
+
+
+def save_search(
+    name: str,
+    *,
+    query: str = "",
+    markets: list[str] | tuple[str, ...] = (),
+    languages: list[str] | tuple[str, ...] = (),
+    topics: list[str] | tuple[str, ...] = (),
+) -> dict[str, Any]:
+    """Persist one named search for the active root. Viewer-safe."""
+
+    text = str(name or "").strip()
+    if not text:
+        raise ValueError("A saved search needs a name")
+    entry_type, entry_id = _current_root()
+    record = {
+        "search_id": f"search_{len(_saved_search_store()) + 1:04d}",
+        "name": text,
+        "query": str(query or ""),
+        "markets": [str(item) for item in markets or () if str(item).strip()],
+        "languages": [str(item) for item in languages or () if str(item).strip()],
+        "topics": [str(item) for item in topics or () if str(item).strip()],
+        "entry_type": entry_type,
+        "entry_id": entry_id,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _saved_search_store().append(record)
+    persist_state()
+    return deepcopy(record)
+
+
+def delete_saved_search(search_id: str) -> None:
+    """Remove one saved search by id. Viewer-safe, like saving."""
+
+    wanted = str(search_id or "").strip()
+    st.session_state["saved_searches"] = [
+        item for item in _saved_search_store() if item.get("search_id") != wanted
+    ]
+    persist_state()
+
 
 
 def _ensure_workflow_record(creator_id: str | None, initial_state: str = "qualified") -> dict[str, Any]:

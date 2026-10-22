@@ -9,7 +9,6 @@ from components.html import (
     dots,
     esc,
     mission_chip,
-    nl_search_shell,
     page_header,
     score_ring,
     scorebar,
@@ -22,6 +21,7 @@ from components.state import (
     active_context_label,
     attach_live_evidence,
     creators,
+    delete_saved_search,
     evidence_extraction_pack,
     evidence_gate_message,
     evidence_gate_state,
@@ -29,6 +29,8 @@ from components.state import (
     next_outreach_action_page,
     prepare_next_action_jump,
     ranking,
+    save_search,
+    saved_searches,
     select_creator,
     selected_creator,
     transition_creator_state,
@@ -162,6 +164,79 @@ def _render_catalog_filters(ranked) -> tuple[list[str], list[str], list[str]]:
     languages = f2.multiselect(t("Language"), language_options, key="search_filter_languages")
     topics = f3.multiselect(t("Topics"), topic_options, key="search_filter_topics")
     return markets, languages, topics
+
+
+def _apply_pending_saved_search(ranked) -> None:
+    """Restore query + filter widget state from an applied saved search.
+
+    Runs before the search widgets are instantiated; values outside the
+    current catalog options are dropped so the multiselects stay valid.
+    """
+
+    pending = st.session_state.pop("_apply_saved_search", None)
+    if not pending:
+        return
+    market_options = unique_catalog_values(ranked, "primary_market") or unique_catalog_values(ranked, "markets")
+    language_options = unique_catalog_values(ranked, "languages")
+    topic_options = unique_catalog_values(ranked, "topics")
+    st.session_state["creator_nl_query"] = str(pending.get("query") or "")
+    st.session_state["search_filter_markets"] = [
+        value for value in pending.get("markets") or [] if value in market_options
+    ]
+    st.session_state["search_filter_languages"] = [
+        value for value in pending.get("languages") or [] if value in language_options
+    ]
+    st.session_state["search_filter_topics"] = [
+        value for value in pending.get("topics") or [] if value in topic_options
+    ]
+
+
+def _render_saved_searches(*, query: str, markets: list, languages: list, topics: list) -> None:
+    """Name + save the current query/filters; apply or delete saved ones."""
+
+    if st.session_state.get("show_save_search_form"):
+        name_col, save_col = st.columns([0.72, 0.28], vertical_alignment="bottom")
+        search_name = name_col.text_input(
+            t("Search name"),
+            key="save_search_name",
+            placeholder=t("Search name"),
+            label_visibility="collapsed",
+        )
+        if save_col.button(t("Save"), key="save_search_confirm", use_container_width=True):
+            try:
+                save_search(
+                    search_name,
+                    query=query,
+                    markets=markets,
+                    languages=languages,
+                    topics=topics,
+                )
+            except ValueError as exc:
+                st.error(str(exc))
+            else:
+                st.session_state.show_save_search_form = False
+                st.toast(t("Saved search for this entry"))
+                st.rerun()
+    saved = saved_searches()
+    if not saved:
+        return
+    st.caption(t("Saved searches"))
+    for item in saved:
+        name_col, apply_col, delete_col = st.columns([0.72, 0.14, 0.14], vertical_alignment="center")
+        bits = []
+        if item.get("query"):
+            bits.append(str(item["query"]))
+        bits.extend(str(value) for value in item.get("markets") or [])
+        bits.extend(str(value) for value in item.get("languages") or [])
+        bits.extend(str(value) for value in item.get("topics") or [])
+        name_col.caption(f'{item["name"]} — ' + (" · ".join(bits) if bits else t("No filters")))
+        if apply_col.button(t("Apply"), key=f"apply_saved_search_{item['search_id']}", use_container_width=True):
+            st.session_state["_apply_saved_search"] = item
+            st.rerun()
+        if delete_col.button(t("Delete"), key=f"delete_saved_search_{item['search_id']}", use_container_width=True):
+            delete_saved_search(item["search_id"])
+            st.rerun()
+
 
 
 def _render_live_lookup(context: dict) -> None:
@@ -517,6 +592,7 @@ def render() -> None:
     render_topbar()
     context = active_context()
     ranked = ranking()
+    _apply_pending_saved_search(ranked)
 
     head_l, head_r = st.columns([1, 0.42], vertical_alignment="top")
     with head_l:
@@ -536,12 +612,10 @@ def render() -> None:
         md('<div class="is-header-actions">', unsafe_allow_html=True)
         b1, b2 = st.columns(2)
         with b1:
-            st.button(
-                t("Save Search"),
-                use_container_width=True,
-                disabled=True,
-                help=t("Not wired in this demo"),
-            )
+            if st.button(t("Save Search"), use_container_width=True):
+                st.session_state.show_save_search_form = not st.session_state.get(
+                    "show_save_search_form", False
+                )
         with b2:
             if st.button(t("Generate Brief"), type="primary", use_container_width=True):
                 if not ranked.empty:
@@ -561,10 +635,6 @@ def render() -> None:
         render_demo_notice()
         return
 
-        md(
-            nl_search_shell("Lexical filter + small boost against the demo catalog — not semantic search"),
-            unsafe_allow_html=True,
-        )
     query = st.text_input(
         t("Search creators"),
         value="",
@@ -575,6 +645,7 @@ def render() -> None:
     st.caption(t("NL query is a lexical filter + small boost, not semantic search."))
     st.caption(t("TF-IDF cosine is an additive sparse-vector boost from mission + Product DNA. Not a neural embedding and not an LLM ranker."))
     markets, languages, topics = _render_catalog_filters(ranked)
+    _render_saved_searches(query=query, markets=markets, languages=languages, topics=topics)
     visible = filter_ranked_creators(
         ranked,
         query=query,

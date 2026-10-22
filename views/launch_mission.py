@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from datetime import datetime, timezone
 from uuid import uuid4
 
 import streamlit as st
@@ -84,6 +86,59 @@ def _progress() -> dict:
         tracking_assets=len(tracking_assets()),
         performance_events=len(performance_events()),
     )
+
+
+def mission_export_payload(
+    mission: dict,
+    summary: dict,
+    ranked,
+    health: dict,
+    *,
+    tracking_n: int,
+    in_review_n: int,
+    events_n: int,
+) -> dict:
+    """Overview of the active mission for the Export download. Live values only."""
+
+    return {
+        "kind": "launch_mission_overview",
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "mission": {
+            "mission_id": mission.get("mission_id"),
+            "name": mission.get("name"),
+            "product": mission.get("product"),
+            "status": mission.get("status"),
+            "owner": mission.get("owner"),
+            "market": mission.get("market"),
+            "markets": list(mission.get("markets") or []),
+            "language": mission.get("language"),
+            "languages": list(mission.get("languages") or []),
+            "campaign_dates": mission.get("campaign_dates"),
+            "budget_usd": mission.get("budget_usd"),
+            "max_cost_usd": mission.get("max_cost_usd"),
+            "min_brand_safety": mission.get("min_brand_safety"),
+            "objective": mission.get("objective"),
+            "target_topics": list(mission.get("target_topics") or []),
+            "target_styles": list(mission.get("target_styles") or []),
+        },
+        "pipeline_snapshot": {state: int(count) for state, count in summary.items()},
+        "metrics": {
+            "candidates_pool": int(len(ranked)),
+            "shortlisted": int(summary.get("shortlisted", 0)),
+            "approved": int(summary.get("approved", 0)),
+            "contacted": int(summary.get("contacted", 0)),
+            "published": int(summary.get("published", 0)),
+            "measured": int(summary.get("measured", 0)),
+            "content_briefs_in_review": int(in_review_n),
+            "tracking_assets": int(tracking_n),
+            "performance_events": int(events_n),
+            "health": {
+                "score": int(health.get("score", 0)),
+                "band": health.get("band"),
+                "label": health.get("label"),
+            },
+        },
+    }
 
 
 def _product_card(mission: dict, health: dict) -> str:
@@ -293,7 +348,22 @@ def render() -> None:
     with right:
         b1, b2 = st.columns(2)
         with b1:
-            st.button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
+            payload = mission_export_payload(
+                mission,
+                summary,
+                ranked,
+                health,
+                tracking_n=tracking_n,
+                in_review_n=in_review_n,
+                events_n=len(performance_events()),
+            )
+            st.download_button(
+                t("Export"),
+                data=json.dumps(payload, ensure_ascii=False, indent=2),
+                file_name=f"instaspark_mission_{mission.get('mission_id', 'active')}.json",
+                mime="application/json",
+                use_container_width=True,
+            )
         with b2:
             if st.button(t("+ New Mission"), type="primary", use_container_width=True, disabled=writes_locked()):
                 st.session_state.show_mission_form = not st.session_state.show_mission_form

@@ -70,21 +70,15 @@ def _assert_label_disabled(source: str, label: str) -> None:
 def test_unwired_chrome_buttons_are_disabled():
     search = (ROOT / "views/creator_search.py").read_text(encoding="utf-8")
     studio = (ROOT / "views/content_studio.py").read_text(encoding="utf-8")
-    launch = (ROOT / "views/launch_mission.py").read_text(encoding="utf-8")
     compare = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
     growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
 
-    _assert_label_disabled(search, "Save Search")
     _assert_label_disabled(search, "Sort: Match score")
-    _assert_label_disabled(studio, "Export Brief")
     _assert_label_disabled(studio, "Send to Creator")
     outreach = (ROOT / "views/outreach_operations.py").read_text(encoding="utf-8")
     _assert_label_disabled(outreach, "Send to Creator")
     opportunity = (ROOT / "views/creator_opportunity.py").read_text(encoding="utf-8")
     _assert_label_disabled(opportunity, "Send to Creator")
-    _assert_label_disabled(launch, "Export")
-    _assert_label_disabled(compare, "Export")
-    _assert_label_disabled(growth, "Export")
 
     assert "Record performance event (demo)" in growth
     assert "Add data source" not in growth
@@ -147,6 +141,47 @@ def test_unwired_chrome_buttons_are_disabled():
     assert "_render_list" in outreach
     assert 'open_workspace_page' not in outreach.split("def _render_list")[1].split("def ")[0]
     assert "prepare_next_action_jump" in outreach
+
+
+def test_export_and_save_search_are_wired():
+    """Export and Save Search are live read-only features, not demo chrome."""
+
+    search = (ROOT / "views/creator_search.py").read_text(encoding="utf-8")
+    studio = (ROOT / "views/content_studio.py").read_text(encoding="utf-8")
+    launch = (ROOT / "views/launch_mission.py").read_text(encoding="utf-8")
+    compare = (ROOT / "views/creator_compare.py").read_text(encoding="utf-8")
+    growth = (ROOT / "views/growth_review.py").read_text(encoding="utf-8")
+
+    for source in (launch, compare, growth, studio):
+        assert ".download_button(" in source
+        assert 'help=t("Not wired in this demo")' not in source
+    assert 'help=t("Not wired in this demo")' not in search
+
+    assert "mission_export_payload" in launch
+    assert 'file_name=f"instaspark_mission_' in launch
+    assert 'mime="application/json"' in launch
+
+    assert "_compare_export_csv" in compare
+    assert 'file_name="instaspark_compare.csv"' in compare
+    assert 'mime="text/csv"' in compare
+
+    assert "_growth_export_csv" in growth
+    assert 'file_name="instaspark_growth_review.csv"' in growth
+    assert "attributed_roi(events)" in growth
+
+    assert "_brief_export_markdown" in studio
+    assert 'file_name=f"instaspark_brief_' in studio
+    assert 'mime="text/markdown"' in studio
+    assert "content_assets_for" in studio
+    assert 't("Generate a brief first")' in studio
+
+    assert "save_search" in search
+    assert "saved_searches" in search
+    assert "delete_saved_search" in search
+    assert "_apply_pending_saved_search" in search
+    assert "_render_saved_searches" in search
+    assert "show_save_search_form" in search
+    assert "nl_search_shell" not in search
 
 
 def test_honesty_chrome_is_not_hardcoded_pretty():

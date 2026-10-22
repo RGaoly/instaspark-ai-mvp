@@ -8,6 +8,7 @@ from components.shell import open_workspace_page, render_demo_notice, render_top
 from components.state import (
     active_context_label,
     active_mission,
+    content_assets_for,
     live_evidence_for,
     ranking,
     save_content_asset,
@@ -166,6 +167,50 @@ def _render_post_brief_handoff() -> None:
         open_workspace_page("outreach-operations")
 
 
+def _brief_export_markdown(mission: dict, creator: dict, pack: dict, *, version: int) -> str:
+    """Markdown export of the five studio tabs for the selected creator."""
+
+    lines = [
+        f"# {mission.get('product', 'Product')} brief · {creator['creator_name']}",
+        "",
+        f"- Creator: {creator['creator_name']} ({creator['creator_id']})",
+        f"- Mission: {mission.get('product', 'Product')} · {mission.get('market', 'Market')}",
+        f"- Tone: {pack.get('tone', '')}",
+        f"- Version: v{version}",
+        f"- Source: {generation_mode_label()}",
+        "",
+        "## Brief",
+        "",
+        str(pack.get("brief") or "").strip(),
+        "",
+        "## Script",
+        "",
+        str(pack.get("script") or "").strip(),
+        "",
+        "## Hooks",
+        "",
+        *[f"{idx}. {text}" for idx, text in enumerate(pack.get("hooks") or [], 1)],
+        "",
+        "## Captions",
+        "",
+        *[f"- {item.get('caption', '')}" for item in pack.get("localized") or []],
+        "",
+        "## Localized variants",
+        "",
+    ]
+    for item in pack.get("localized") or []:
+        lines += [
+            f"### {item.get('market', 'Market')} · {item.get('language', '')}",
+            "",
+            f"- Hook: {item.get('hook', '')}",
+            f"- Caption: {item.get('caption', '')}",
+            f"- CTA: {item.get('cta', '')}",
+            f"- Disclosure: {item.get('disclosure', '#ad')}",
+            "",
+        ]
+    return "\n".join(lines).strip() + "\n"
+
+
 def _localized_html(items: list[dict], mission: dict) -> str:
     cards = []
     for item in items:
@@ -205,6 +250,11 @@ def render() -> None:
     creator = ranked[ranked["creator_name"] == selected_name].iloc[0].to_dict()
     select_creator(creator["creator_id"])
     mode = generation_mode_label()
+    tone = st.session_state.get("studio_brand_tone") or BRAND_TONES[0]
+    checklist = list(st.session_state.get("studio_quality_checklist") or QUALITY_CHECKLIST)
+    pack = _studio_pack(mission, creator, tone=tone, checklist=checklist)
+    brief_version = int(st.session_state.get("brief_version", 1))
+    existing_briefs = content_assets_for(creator["creator_id"])
 
     head_l, head_r = st.columns([1, 0.55], vertical_alignment="top")
     with head_l:
@@ -226,11 +276,14 @@ def render() -> None:
     with head_r:
         e1, e2, e3 = st.columns(3)
         with e1:
-            st.button(
+            st.download_button(
                 t("Export Brief"),
+                data=_brief_export_markdown(mission, creator, pack, version=brief_version),
+                file_name=f"instaspark_brief_{creator['creator_id']}_v{brief_version}.md",
+                mime="text/markdown",
                 use_container_width=True,
-                disabled=True,
-                help=t("Not wired in this demo"),
+                disabled=not existing_briefs,
+                help=None if existing_briefs else t("Generate a brief first"),
             )
         generate_clicked = e2.button(
             t("Generate Brief"),
@@ -275,9 +328,6 @@ def render() -> None:
         )
         st.caption(t("Checklist items are a writing prompt, not an automated pass."))
         md(_right_static(mission), unsafe_allow_html=True)
-    tone = st.session_state.get("studio_brand_tone") or BRAND_TONES[0]
-    checklist = list(st.session_state.get("studio_quality_checklist") or QUALITY_CHECKLIST)
-    pack = _studio_pack(mission, creator, tone=tone, checklist=checklist)
     if generate_clicked:
         try:
             save_content_asset(

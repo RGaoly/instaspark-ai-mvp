@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 from components.html import esc, mission_chip, page_header
@@ -365,6 +366,73 @@ def _benchmark_html(report: dict) -> str:
     )
 
 
+def _growth_export_csv(
+    context: dict,
+    *,
+    period_key: str,
+    market_key: str,
+    events: list[dict],
+    summary: dict[str, int],
+    budget: float,
+) -> str:
+    """CSV export of the filtered performance events plus a KPI summary block."""
+
+    names = _creator_names()
+    columns = [
+        "row_type",
+        "event_id",
+        "creator_id",
+        "creator_name",
+        "content_asset_id",
+        "market",
+        "recorded_at",
+        "orders",
+        "revenue_usd",
+        "spend_usd",
+        "coupon",
+        "note",
+        "metric",
+        "value",
+    ]
+    rows: list[dict] = []
+    for event in events:
+        rows.append(
+            {
+                "row_type": "event",
+                "event_id": event.get("event_id", ""),
+                "creator_id": event.get("creator_id", ""),
+                "creator_name": names.get(event.get("creator_id"), event.get("creator_id", "")),
+                "content_asset_id": event.get("content_asset_id") or "",
+                "market": event.get("market") or "",
+                "recorded_at": event.get("recorded_at") or "",
+                "orders": int(event.get("orders", 0)),
+                "revenue_usd": float(event.get("revenue_usd", 0)),
+                "spend_usd": float(event.get("spend_usd", 0)),
+                "coupon": event.get("coupon") or "",
+                "note": event.get("note") or "",
+            }
+        )
+    orders = sum(int(event.get("orders", 0)) for event in events)
+    revenue = sum(float(event.get("revenue_usd", 0)) for event in events)
+    spend = sum(float(event.get("spend_usd", 0)) for event in events)
+    kpis = [
+        ("context", str(context.get("label") or context.get("entry_id") or "")),
+        ("period", period_key),
+        ("market", market_key),
+        ("filtered_events", len(events)),
+        ("attributed_orders", orders),
+        ("revenue_usd", round(revenue, 2)),
+        ("spend_usd", round(spend, 2)),
+        ("roi", round(attributed_roi(events), 4)),
+        ("measured_creators", int(summary.get("measured", 0))),
+        ("budget_usd", round(float(budget), 2)),
+        ("budget_utilization", round(spend / budget, 4) if budget else ""),
+    ]
+    for metric, value in kpis:
+        rows.append({"row_type": "kpi", "metric": metric, "value": value})
+    return pd.DataFrame(rows, columns=columns).to_csv(index=False)
+
+
 def render() -> None:
     render_topbar()
     context = active_context()
@@ -405,8 +473,6 @@ def render() -> None:
         key="growth_market",
         label_visibility="collapsed",
     )
-    controls[3].button(t("Export"), use_container_width=True, disabled=True, help=t("Not wired in this demo"))
-
     period_days = PERIOD_WINDOW_DAYS[period_key]
     market_filter = None if market_key == "All markets" else market_key
     filtered_events = filter_performance_events(events, period_days=period_days, market=market_filter)
@@ -416,6 +482,20 @@ def render() -> None:
         market=market_filter,
         timestamp_field="created_at",
         market_field="market",
+    )
+    controls[3].download_button(
+        t("Export"),
+        data=_growth_export_csv(
+            context,
+            period_key=period_key,
+            market_key=market_key,
+            events=filtered_events,
+            summary=summary,
+            budget=budget,
+        ),
+        file_name="instaspark_growth_review.csv",
+        mime="text/csv",
+        use_container_width=True,
     )
 
     names = _creator_names()
